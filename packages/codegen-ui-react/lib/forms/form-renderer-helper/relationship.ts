@@ -14,7 +14,6 @@
   limitations under the License.
  */
 import {
-  AwaitExpression,
   CallExpression,
   factory,
   IfStatement,
@@ -1141,7 +1140,7 @@ export const buildGetRelationshipModels = (
                   dataApi === 'GraphQL'
                     ? wrapInParenthesizedExpression(
                         getGraphqlCallExpression(
-                          ActionType.GET_BY_ID,
+                          ActionType.GET_BY_RELATIONSHIP,
                           fieldConfigMetaData.relationship.relatedModelName,
                           importCollection,
                           { inputs },
@@ -1150,7 +1149,7 @@ export const buildGetRelationshipModels = (
                         [
                           'data',
                           getGraphqlQueryForModel(
-                            ActionType.GET_BY_ID,
+                            ActionType.GET_BY_RELATIONSHIP,
                             fieldConfigMetaData.relationship.relatedModelName,
                             relatedModelField,
                           ),
@@ -2208,13 +2207,5 @@ function buildUnlinkForEachBlock(
       ),
     ],
     true,
-  );
-}
-
-function wrapInParenthesizedExpression(callExpression: CallExpression, accessors: string[]): AwaitExpression {
-  return accessors.reduce(
-    (acc: any, _, index: any, initialValue: string[]) =>
-      factory.createPropertyAccessExpression(acc, factory.createIdentifier(initialValue[index])),
-    factory.createAwaitExpression(callExpression),
   );
 }

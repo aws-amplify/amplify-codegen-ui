@@ -34,7 +34,7 @@ export enum ActionType {
   DELETE = 'delete',
   LIST = 'list',
   GET = 'get',
-  GET_BY_ID = 'getById',
+  GET_BY_RELATIONSHIP = 'getByRelationship',
 }
 
 export const getGraphqlQueryForModel = (action: ActionType, model: string, byFieldName = ''): string => {
@@ -49,7 +49,7 @@ export const getGraphqlQueryForModel = (action: ActionType, model: string, byFie
       return `get${model}`;
     case ActionType.LIST:
       return `list${plural(model)}`;
-    case ActionType.GET_BY_ID:
+    case ActionType.GET_BY_RELATIONSHIP:
       return `${lowerCaseFirst(model)}By${capitalizeFirstLetter(byFieldName)}`;
     default:
       throw new InvalidInputError(`Action ${action} has no corresponding GraphQL operation`);
