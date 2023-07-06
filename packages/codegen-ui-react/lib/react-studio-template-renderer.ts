@@ -1338,11 +1338,13 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                       factory.createElementAccessExpression(
                         factory.createPropertyAccessExpression(
                           this.renderConfig.apiConfiguration?.dataApi === 'GraphQL'
-                            ? getGraphqlCallExpression(ActionType.LIST, modelName, this.importCollection, [
-                                factory.createSpreadAssignment(
-                                  factory.createIdentifier(this.getFilterObjName(propName)),
-                                ),
-                              ])
+                            ? getGraphqlCallExpression(ActionType.LIST, modelName, this.importCollection, {
+                                inputs: [
+                                  factory.createSpreadAssignment(
+                                    factory.createIdentifier(this.getFilterObjName(propName)),
+                                  ),
+                                ],
+                              })
                             : this.buildUseDataStoreBindingCall('collection', modelName, this.getFilterName(propName)),
                           factory.createIdentifier('items'),
                         ),

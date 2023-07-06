@@ -196,6 +196,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
           this.component,
           this.componentMetadata.formMetadata,
           this.componentMetadata.dataSchemaMetadata,
+          this.importCollection.rendererConfig?.apiConfiguration?.dataApi,
         ),
       );
     }

@@ -36,7 +36,12 @@ import { ImportCollection } from '../../imports';
 import { getBiDirectionalRelationshipStatements } from './bidirectional-relationship';
 import { generateModelObjectToSave } from './parse-fields';
 import { DataApiKind } from '../../react-render-config';
-import { ActionType, getGraphqlCallExpression } from '../../utils/graphql';
+import {
+  ActionType,
+  getGraphqlCallExpression,
+  getGraphqlQueryForModel,
+  wrapInParenthesizedExpression,
+} from '../../utils/graphql';
 
 const getRecordCreateCallExpression = ({
   savedObjectName,
@@ -52,7 +57,7 @@ const getRecordCreateCallExpression = ({
   if (dataApi === 'GraphQL') {
     const inputs = [factory.createSpreadAssignment(factory.createIdentifier(savedObjectName))];
 
-    return getGraphqlCallExpression(ActionType.CREATE, importedModelName, importCollection, inputs);
+    return getGraphqlCallExpression(ActionType.CREATE, importedModelName, importCollection, { inputs });
   }
 
   return factory.createCallExpression(
@@ -68,6 +73,8 @@ const getRecordCreateCallExpression = ({
 
 const getRecordUpdateDataStoreCallExpression = ({
   savedObjectName,
+  savedRecordName,
+  thisModelPrimaryKeys,
   modelName,
   importedModelName,
   fieldConfigs,
@@ -75,6 +82,8 @@ const getRecordUpdateDataStoreCallExpression = ({
   dataApi,
 }: {
   savedObjectName: string;
+  savedRecordName: string;
+  thisModelPrimaryKeys: string[];
   modelName: string;
   importedModelName: string;
   fieldConfigs: Record<string, FieldConfigMetadata>;
@@ -91,9 +100,17 @@ const getRecordUpdateDataStoreCallExpression = ({
   });
 
   if (dataApi === 'GraphQL') {
-    const inputs = [factory.createSpreadAssignment(factory.createIdentifier(savedObjectName))];
+    const inputs = [
+      ...thisModelPrimaryKeys.map((key) =>
+        factory.createPropertyAssignment(
+          factory.createIdentifier(key),
+          factory.createPropertyAccessExpression(factory.createIdentifier(`${savedRecordName}Record`), key),
+        ),
+      ),
+      factory.createSpreadAssignment(factory.createIdentifier(savedObjectName)),
+    ];
 
-    return getGraphqlCallExpression(ActionType.UPDATE, importedModelName, importCollection, inputs);
+    return getGraphqlCallExpression(ActionType.UPDATE, importedModelName, importCollection, { inputs });
   }
 
   return factory.createCallExpression(
@@ -355,6 +372,8 @@ export const buildExpression = (
   if (dataStoreActionType === 'update') {
     const recordUpdateDataStoreCallExpression = getRecordUpdateDataStoreCallExpression({
       savedObjectName,
+      savedRecordName,
+      thisModelPrimaryKeys,
       modelName,
       importedModelName,
       fieldConfigs,
@@ -665,16 +684,23 @@ export const buildUpdateDatastoreQuery = (
 
   const queryCall =
     dataApi === 'GraphQL'
-      ? getGraphqlCallExpression(ActionType.GET, importedModelName, importCollection, [
-          factory.createPropertyAssignment(factory.createIdentifier('id'), factory.createIdentifier('idProp')),
-        ])
-      : factory.createCallExpression(
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier('DataStore'),
-            factory.createIdentifier('query'),
+      ? wrapInParenthesizedExpression(
+          getGraphqlCallExpression(ActionType.GET, importedModelName, importCollection, {
+            inputs: [
+              factory.createPropertyAssignment(factory.createIdentifier('id'), factory.createIdentifier('idProp')),
+            ],
+          }),
+          ['data', getGraphqlQueryForModel(ActionType.GET, importedModelName)],
+        )
+      : factory.createAwaitExpression(
+          factory.createCallExpression(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('DataStore'),
+              factory.createIdentifier('query'),
+            ),
+            undefined,
+            [factory.createIdentifier(importedModelName), pkQueryIdentifier],
           ),
-          undefined,
-          [factory.createIdentifier(importedModelName), pkQueryIdentifier],
         );
 
   return [
@@ -705,7 +731,7 @@ export const buildUpdateDatastoreQuery = (
                           factory.createConditionalExpression(
                             pkQueryIdentifier,
                             factory.createToken(SyntaxKind.QuestionToken),
-                            factory.createAwaitExpression(queryCall),
+                            queryCall,
                             factory.createToken(SyntaxKind.ColonToken),
                             factory.createIdentifier(getModelNameProp(lowerCaseDataTypeName)),
                           ),
