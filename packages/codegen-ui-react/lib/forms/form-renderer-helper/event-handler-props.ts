@@ -298,7 +298,7 @@ export const buildOnChangeStatement = (
     ...buildTargetVariable(studioFormComponentType || fieldType, renderedFieldName, dataType, isArray),
   ];
 
-  if (dataApi === 'GraphQL' && fieldConfig.relationship?.type === 'HAS_MANY') {
+  if (dataApi === 'GraphQL' && fieldConfig.relationship) {
     handleChangeStatements.push(
       factory.createExpressionStatement(
         factory.createCallExpression(factory.createIdentifier(getFetchRelatedRecords(component.name)), undefined, [

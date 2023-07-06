@@ -262,9 +262,10 @@ export const getUseStateHooks = (
       acc.push(buildUseStateExpression(renderedFieldName, renderCorrectUseStateValue()));
       stateNames.add(renderedFieldName);
     }
-    if (relationship?.type === 'HAS_MANY' && dataApi === 'GraphQL') {
+
+    if (dataApi === 'GraphQL' && relationship) {
       acc.push(buildUseStateExpression(`${renderedFieldName}Loading`, factory.createFalse()));
-      acc.push(buildUseStateExpression(`${renderedFieldName}Options`, factory.createArrayLiteralExpression([], false)));
+      acc.push(buildUseStateExpression(`${renderedFieldName}Records`, factory.createArrayLiteralExpression([], false)));
     }
     return acc;
   }, []);

@@ -36,7 +36,12 @@ import { ImportCollection } from '../../imports';
 import { getBiDirectionalRelationshipStatements } from './bidirectional-relationship';
 import { generateModelObjectToSave } from './parse-fields';
 import { DataApiKind } from '../../react-render-config';
-import { ActionType, getGraphqlCallExpression } from '../../utils/graphql';
+import {
+  ActionType,
+  getGraphqlCallExpression,
+  getGraphqlQueryForModel,
+  wrapInParenthesizedExpression,
+} from '../../utils/graphql';
 
 const getRecordCreateCallExpression = ({
   savedObjectName,
@@ -679,18 +684,23 @@ export const buildUpdateDatastoreQuery = (
 
   const queryCall =
     dataApi === 'GraphQL'
-      ? getGraphqlCallExpression(ActionType.GET, importedModelName, importCollection, {
-          inputs: [
-            factory.createPropertyAssignment(factory.createIdentifier('id'), factory.createIdentifier('idProp')),
-          ],
-        })
-      : factory.createCallExpression(
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier('DataStore'),
-            factory.createIdentifier('query'),
+      ? wrapInParenthesizedExpression(
+          getGraphqlCallExpression(ActionType.GET, importedModelName, importCollection, {
+            inputs: [
+              factory.createPropertyAssignment(factory.createIdentifier('id'), factory.createIdentifier('idProp')),
+            ],
+          }),
+          ['data', getGraphqlQueryForModel(ActionType.GET, importedModelName)],
+        )
+      : factory.createAwaitExpression(
+          factory.createCallExpression(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('DataStore'),
+              factory.createIdentifier('query'),
+            ),
+            undefined,
+            [factory.createIdentifier(importedModelName), pkQueryIdentifier],
           ),
-          undefined,
-          [factory.createIdentifier(importedModelName), pkQueryIdentifier],
         );
 
   return [
@@ -721,7 +731,7 @@ export const buildUpdateDatastoreQuery = (
                           factory.createConditionalExpression(
                             pkQueryIdentifier,
                             factory.createToken(SyntaxKind.QuestionToken),
-                            factory.createAwaitExpression(queryCall),
+                            queryCall,
                             factory.createToken(SyntaxKind.ColonToken),
                             factory.createIdentifier(getModelNameProp(lowerCaseDataTypeName)),
                           ),

@@ -266,12 +266,12 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         this.renderConfig.script !== ScriptKind.TSX
           ? jsx
           : /* add ts-ignore comment above jsx statement. Generated props are incompatible with amplify-ui props */
-            addSyntheticLeadingComment(
-              factory.createParenthesizedExpression(jsx),
-              SyntaxKind.MultiLineCommentTrivia,
-              ' @ts-ignore: TS2322 ',
-              true,
-            ),
+          addSyntheticLeadingComment(
+            factory.createParenthesizedExpression(jsx),
+            SyntaxKind.MultiLineCommentTrivia,
+            ' @ts-ignore: TS2322 ',
+            true,
+          ),
       ),
     );
     const codeBlockContent = variableStatements.concat([jsxStatement]);
@@ -630,13 +630,14 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     if (relatedModelNames.size) {
       if (!(this.renderConfig.apiConfiguration?.dataApi === 'GraphQL')) {
         this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
-      }
 
-      statements.push(
-        ...[...relatedModelNames].map((relatedModelName) =>
-          buildRelationshipQuery(relatedModelName, this.importCollection, dataApi),
-        ),
-      );
+        // @rotp: check if this is needed for collection
+        statements.push(
+          ...[...relatedModelNames].map((relatedModelName) =>
+            buildRelationshipQuery(relatedModelName, this.importCollection, dataApi),
+          ),
+        );
+      }
     }
 
     if (displayValueObject) {

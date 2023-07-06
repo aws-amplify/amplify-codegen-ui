@@ -27,6 +27,8 @@ import {
 } from 'typescript';
 import { ImportCollection, ImportValue } from '../imports';
 import { capitalizeFirstLetter, getSetNameIdentifier, lowerCaseFirst } from '../helpers';
+import { isBoundProperty, isConcatenatedProperty } from '../react-component-render-helper';
+import { Primitive } from '../primitive';
 
 export enum ActionType {
   CREATE = 'create',
@@ -77,9 +79,9 @@ export const getGraphqlCallExpression = (
   importCollection: ImportCollection,
   variables?:
     | {
-        inputs?: ObjectLiteralElementLike[];
-        filters?: ObjectLiteralElementLike[];
-      }
+      inputs?: ObjectLiteralElementLike[];
+      filters?: ObjectLiteralElementLike[];
+    }
     | ObjectLiteralElementLike[],
   byFieldName?: string,
 ): CallExpression => {
@@ -90,6 +92,12 @@ export const getGraphqlCallExpression = (
   ];
 
   importCollection.addMappedImport(ImportValue.API);
+
+  if (action === ActionType.LIST || action === ActionType.GET || action === ActionType.GET_BY_RELATIONSHIP) {
+    importCollection.addGraphqlQueryImport(query);
+  } else {
+    importCollection.addGraphqlMutationImport(query);
+  }
 
   if (Array.isArray(variables)) {
     graphqlOptions.push(...variables);
@@ -102,20 +110,16 @@ export const getGraphqlCallExpression = (
         ),
       );
     }
-    if (action === ActionType.LIST || action === ActionType.GET) {
-      importCollection.addGraphqlQueryImport(query);
-      // filter applies to list
-      if (variables?.filters) {
-        graphqlVariables.push(
-          factory.createPropertyAssignment(
-            factory.createIdentifier('filter'),
-            factory.createObjectLiteralExpression(variables?.filters, true),
-          ),
-        );
-      }
-    } else {
-      importCollection.addGraphqlMutationImport(query);
+    // filter applies to list
+    if ((action === ActionType.LIST || action === ActionType.GET_BY_RELATIONSHIP) && variables?.filters) {
+      graphqlVariables.push(
+        factory.createPropertyAssignment(
+          factory.createIdentifier('filter'),
+          factory.createObjectLiteralExpression(variables?.filters, true),
+        ),
+      );
     }
+
     if (graphqlVariables.length > 0) {
       graphqlOptions.push(
         factory.createPropertyAssignment(
@@ -142,345 +146,343 @@ export const getFetchRelatedRecordsCallbacks = (
   fieldConfigs: Record<string, FieldConfigMetadata>,
   importCollection: ImportCollection,
 ) => {
-  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { sanitizedFieldName, relationship }]) => {
-    if (relationship?.type === 'HAS_MANY') {
-      const fieldName = name.split('.')[0];
-      const renderedFieldName = sanitizedFieldName || fieldName;
+  return Object.entries(fieldConfigs).reduce<Statement[]>(
+    (acc, [name, { sanitizedFieldName, relationship, valueMappings, componentType }]) => {
+      if (relationship && componentType === Primitive.Autocomplete) {
+        const fieldName = name.split('.')[0];
+        const renderedFieldName = sanitizedFieldName || fieldName;
 
-      const setModelLoading = getSetNameIdentifier(`${renderedFieldName}Loading`);
-      const setModelFetchOption = getSetNameIdentifier(`${renderedFieldName}Options`);
+        const setModelLoading = getSetNameIdentifier(`${renderedFieldName}Loading`);
+        const setModelFetchOption = getSetNameIdentifier(`${renderedFieldName}Records`);
 
-      acc.push(
-        factory.createVariableStatement(
-          undefined,
-          factory.createVariableDeclarationList(
-            [
-              factory.createVariableDeclaration(
-                factory.createIdentifier(getFetchRelatedRecords(renderedFieldName)),
-                undefined,
-                undefined,
-                factory.createArrowFunction(
-                  [factory.createToken(SyntaxKind.AsyncKeyword)],
+        const valueConfig = valueMappings?.values[0];
+        if (!valueConfig) {
+          return acc;
+        }
+        const displayValueProperty = valueConfig.displayValue || valueConfig.value;
+
+        let displayValues = [];
+
+        if (isConcatenatedProperty(displayValueProperty)) {
+          displayValues = displayValueProperty.concat.reduce((displayValue: any, displayValueProp) => {
+            if (
+              'bindingProperties' in displayValueProp &&
+              'field' in displayValueProp.bindingProperties &&
+              displayValueProp.bindingProperties.field
+            ) {
+              displayValue.push(displayValueProp.bindingProperties.field);
+            }
+            return displayValue;
+          }, []);
+        } else if (isBoundProperty(displayValueProperty)) {
+          displayValues = [displayValueProperty.bindingProperties.field];
+        }
+
+        acc.push(
+          factory.createVariableStatement(
+            undefined,
+            factory.createVariableDeclarationList(
+              [
+                factory.createVariableDeclaration(
+                  factory.createIdentifier(getFetchRelatedRecords(renderedFieldName)),
                   undefined,
-                  [
-                    factory.createParameterDeclaration(
-                      undefined,
-                      undefined,
-                      undefined,
-                      factory.createIdentifier('value'),
-                      undefined,
-                      undefined,
-                      undefined,
-                    ),
-                  ],
                   undefined,
-                  factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                  factory.createBlock(
+                  factory.createArrowFunction(
+                    [factory.createToken(SyntaxKind.AsyncKeyword)],
+                    undefined,
                     [
-                      factory.createExpressionStatement(
-                        factory.createCallExpression(setModelLoading, undefined, [factory.createTrue()]),
-                      ),
-                      factory.createVariableStatement(
+                      factory.createParameterDeclaration(
                         undefined,
-                        factory.createVariableDeclarationList(
-                          [
-                            factory.createVariableDeclaration(
-                              factory.createIdentifier('newOptions'),
-                              undefined,
-                              undefined,
-                              factory.createArrayLiteralExpression([], false),
-                            ),
-                          ],
-                          NodeFlags.Const,
-                        ),
-                      ),
-                      factory.createVariableStatement(
                         undefined,
-                        factory.createVariableDeclarationList(
-                          [
-                            factory.createVariableDeclaration(
-                              factory.createIdentifier('newNext'),
-                              undefined,
-                              undefined,
-                              factory.createStringLiteral(''),
-                            ),
-                          ],
-                          NodeFlags.Let,
-                        ),
+                        undefined,
+                        factory.createIdentifier('value'),
+                        undefined,
+                        undefined,
+                        undefined,
                       ),
-                      factory.createWhileStatement(
-                        factory.createBinaryExpression(
+                    ],
+                    undefined,
+                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                    factory.createBlock(
+                      [
+                        factory.createExpressionStatement(
+                          factory.createCallExpression(setModelLoading, undefined, [factory.createTrue()]),
+                        ),
+                        factory.createVariableStatement(
+                          undefined,
+                          factory.createVariableDeclarationList(
+                            [
+                              factory.createVariableDeclaration(
+                                factory.createIdentifier('newOptions'),
+                                undefined,
+                                undefined,
+                                factory.createArrayLiteralExpression([], false),
+                              ),
+                            ],
+                            NodeFlags.Const,
+                          ),
+                        ),
+                        factory.createVariableStatement(
+                          undefined,
+                          factory.createVariableDeclarationList(
+                            [
+                              factory.createVariableDeclaration(
+                                factory.createIdentifier('newNext'),
+                                undefined,
+                                undefined,
+                                factory.createStringLiteral(''),
+                              ),
+                            ],
+                            NodeFlags.Let,
+                          ),
+                        ),
+                        factory.createWhileStatement(
                           factory.createBinaryExpression(
-                            factory.createPropertyAccessExpression(
-                              factory.createIdentifier('newOptions'),
-                              factory.createIdentifier('length'),
-                            ),
-                            factory.createToken(SyntaxKind.LessThanToken),
-                            factory.createIdentifier('autocompleteLength'),
-                          ),
-                          factory.createToken(SyntaxKind.AmpersandAmpersandToken),
-                          factory.createParenthesizedExpression(
                             factory.createBinaryExpression(
-                              factory.createIdentifier('newNext'),
-                              factory.createToken(SyntaxKind.ExclamationEqualsToken),
-                              factory.createNull(),
+                              factory.createPropertyAccessExpression(
+                                factory.createIdentifier('newOptions'),
+                                factory.createIdentifier('length'),
+                              ),
+                              factory.createToken(SyntaxKind.LessThanToken),
+                              factory.createIdentifier('autocompleteLength'),
+                            ),
+                            factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+                            factory.createParenthesizedExpression(
+                              factory.createBinaryExpression(
+                                factory.createIdentifier('newNext'),
+                                factory.createToken(SyntaxKind.ExclamationEqualsToken),
+                                factory.createNull(),
+                              ),
                             ),
                           ),
-                        ),
-                        factory.createBlock(
-                          [
-                            factory.createVariableStatement(
-                              undefined,
-                              factory.createVariableDeclarationList(
-                                [
-                                  factory.createVariableDeclaration(
-                                    factory.createIdentifier('variables'),
-                                    undefined,
-                                    undefined,
-                                    factory.createObjectLiteralExpression(
-                                      [
-                                        factory.createPropertyAssignment(
-                                          factory.createIdentifier('limit'),
-                                          factory.createBinaryExpression(
-                                            factory.createIdentifier('autocompleteLength'),
-                                            factory.createToken(SyntaxKind.AsteriskToken),
-                                            factory.createNumericLiteral('5'),
-                                          ),
-                                        ),
-                                        factory.createPropertyAssignment(
-                                          factory.createIdentifier('filter'),
-                                          factory.createObjectLiteralExpression(
-                                            [
-                                              factory.createPropertyAssignment(
-                                                factory.createIdentifier('or'),
-                                                factory.createArrayLiteralExpression(
-                                                  [
-                                                    factory.createObjectLiteralExpression(
-                                                      [
-                                                        factory.createPropertyAssignment(
-                                                          factory.createIdentifier('id'),
-                                                          factory.createObjectLiteralExpression(
-                                                            [
-                                                              factory.createPropertyAssignment(
-                                                                factory.createIdentifier('contains'),
-                                                                factory.createIdentifier('value'),
-                                                              ),
-                                                            ],
-                                                            false,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                      false,
-                                                    ),
-                                                    factory.createObjectLiteralExpression(
-                                                      [
-                                                        factory.createPropertyAssignment(
-                                                          factory.createIdentifier('title'),
-                                                          factory.createObjectLiteralExpression(
-                                                            [
-                                                              factory.createPropertyAssignment(
-                                                                factory.createIdentifier('contains'),
-                                                                factory.createIdentifier('value'),
-                                                              ),
-                                                            ],
-                                                            false,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                      false,
-                                                    ),
-                                                    factory.createObjectLiteralExpression(
-                                                      [
-                                                        factory.createPropertyAssignment(
-                                                          factory.createIdentifier('body'),
-                                                          factory.createObjectLiteralExpression(
-                                                            [
-                                                              factory.createPropertyAssignment(
-                                                                factory.createIdentifier('contains'),
-                                                                factory.createIdentifier('value'),
-                                                              ),
-                                                            ],
-                                                            false,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                      false,
-                                                    ),
-                                                  ],
-                                                  true,
-                                                ),
-                                              ),
-                                            ],
-                                            false,
-                                          ),
-                                        ),
-                                      ],
-                                      true,
-                                    ),
-                                  ),
-                                ],
-                                NodeFlags.Const,
-                              ),
-                            ),
-                            factory.createIfStatement(
-                              factory.createIdentifier('newNext'),
-                              factory.createBlock(
-                                [
-                                  factory.createExpressionStatement(
-                                    factory.createBinaryExpression(
-                                      factory.createElementAccessExpression(
-                                        factory.createIdentifier('variables'),
-                                        factory.createStringLiteral('nextToken'),
-                                      ),
-                                      factory.createToken(SyntaxKind.EqualsToken),
-                                      factory.createIdentifier('newNext'),
-                                    ),
-                                  ),
-                                ],
-                                true,
-                              ),
-                              undefined,
-                            ),
-                            factory.createVariableStatement(
-                              undefined,
-                              factory.createVariableDeclarationList(
-                                [
-                                  factory.createVariableDeclaration(
-                                    factory.createIdentifier('result'),
-                                    undefined,
-                                    undefined,
-                                    factory.createAwaitExpression(
-                                      wrapInParenthesizedExpression(
-                                        getGraphqlCallExpression(ActionType.LIST, renderedFieldName, importCollection, [
-                                          factory.createShorthandPropertyAssignment(
-                                            factory.createIdentifier('variables'),
-                                            undefined,
-                                          ),
-                                        ]),
-                                        ['data', getGraphqlQueryForModel(ActionType.LIST, renderedFieldName)],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                                NodeFlags.Const,
-                              ),
-                            ),
-                            factory.createVariableStatement(
-                              undefined,
-                              factory.createVariableDeclarationList(
-                                [
-                                  factory.createVariableDeclaration(
-                                    factory.createIdentifier('loaded'),
-                                    undefined,
-                                    undefined,
-                                    factory.createCallExpression(
-                                      factory.createPropertyAccessExpression(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('result'),
-                                          factory.createIdentifier('items'),
-                                        ),
-                                        factory.createIdentifier('filter'),
-                                      ),
+                          factory.createBlock(
+                            [
+                              factory.createVariableStatement(
+                                undefined,
+                                factory.createVariableDeclarationList(
+                                  [
+                                    factory.createVariableDeclaration(
+                                      factory.createIdentifier('variables'),
                                       undefined,
-                                      [
-                                        factory.createArrowFunction(
-                                          undefined,
-                                          undefined,
+                                      undefined,
+                                      factory.createObjectLiteralExpression(
+                                        [
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier('limit'),
+                                            factory.createBinaryExpression(
+                                              factory.createIdentifier('autocompleteLength'),
+                                              factory.createToken(SyntaxKind.AsteriskToken),
+                                              factory.createNumericLiteral('5'),
+                                            ),
+                                          ),
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier('filter'),
+                                            factory.createObjectLiteralExpression(
+                                              [
+                                                factory.createPropertyAssignment(
+                                                  factory.createIdentifier('or'),
+                                                  factory.createArrayLiteralExpression(
+                                                    displayValues.map((value: string) =>
+                                                      factory.createObjectLiteralExpression(
+                                                        [
+                                                          factory.createPropertyAssignment(
+                                                            factory.createIdentifier(value),
+                                                            factory.createObjectLiteralExpression(
+                                                              [
+                                                                factory.createPropertyAssignment(
+                                                                  factory.createIdentifier('contains'),
+                                                                  factory.createIdentifier('value'),
+                                                                ),
+                                                              ],
+                                                              false,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                        false,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                              false,
+                                            ),
+                                          ),
+                                        ],
+                                        true,
+                                      ),
+                                    ),
+                                  ],
+                                  NodeFlags.Const,
+                                ),
+                              ),
+                              factory.createIfStatement(
+                                factory.createIdentifier('newNext'),
+                                factory.createBlock(
+                                  [
+                                    factory.createExpressionStatement(
+                                      factory.createBinaryExpression(
+                                        factory.createElementAccessExpression(
+                                          factory.createIdentifier('variables'),
+                                          factory.createStringLiteral('nextToken'),
+                                        ),
+                                        factory.createToken(SyntaxKind.EqualsToken),
+                                        factory.createIdentifier('newNext'),
+                                      ),
+                                    ),
+                                  ],
+                                  true,
+                                ),
+                                undefined,
+                              ),
+                              factory.createVariableStatement(
+                                undefined,
+                                factory.createVariableDeclarationList(
+                                  [
+                                    factory.createVariableDeclaration(
+                                      factory.createIdentifier('result'),
+                                      undefined,
+                                      undefined,
+                                      wrapInParenthesizedExpression(
+                                        getGraphqlCallExpression(
+                                          ActionType.LIST,
+                                          capitalizeFirstLetter(renderedFieldName),
+                                          importCollection,
                                           [
-                                            factory.createParameterDeclaration(
-                                              undefined,
-                                              undefined,
-                                              undefined,
-                                              factory.createIdentifier('item'),
-                                              undefined,
-                                              undefined,
+                                            factory.createShorthandPropertyAssignment(
+                                              factory.createIdentifier('variables'),
                                               undefined,
                                             ),
                                           ],
-                                          undefined,
-                                          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                          factory.createPrefixUnaryExpression(
-                                            SyntaxKind.ExclamationToken,
-                                            factory.createCallExpression(
-                                              factory.createPropertyAccessExpression(
-                                                factory.createIdentifier(`${fieldName}IdSet`),
-                                                factory.createIdentifier('has'),
+                                        ),
+                                        [
+                                          'data',
+                                          getGraphqlQueryForModel(
+                                            ActionType.LIST,
+                                            capitalizeFirstLetter(renderedFieldName),
+                                          ),
+                                          'item',
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                  NodeFlags.Const,
+                                ),
+                              ),
+                              factory.createVariableStatement(
+                                undefined,
+                                factory.createVariableDeclarationList(
+                                  [
+                                    factory.createVariableDeclaration(
+                                      factory.createIdentifier('loaded'),
+                                      undefined,
+                                      undefined,
+                                      factory.createCallExpression(
+                                        factory.createPropertyAccessExpression(
+                                          factory.createIdentifier('result'),
+                                          factory.createIdentifier('filter'),
+                                        ),
+                                        undefined,
+                                        [
+                                          factory.createArrowFunction(
+                                            undefined,
+                                            undefined,
+                                            [
+                                              factory.createParameterDeclaration(
+                                                undefined,
+                                                undefined,
+                                                undefined,
+                                                factory.createIdentifier('item'),
+                                                undefined,
+                                                undefined,
+                                                undefined,
                                               ),
-                                              undefined,
-                                              [
-                                                factory.createCallChain(
-                                                  factory.createPropertyAccessExpression(
-                                                    factory.createIdentifier('getIDValue'),
-                                                    factory.createIdentifier(fieldName),
-                                                  ),
-                                                  factory.createToken(SyntaxKind.QuestionDotToken),
-                                                  undefined,
-                                                  [factory.createIdentifier('item')],
+                                            ],
+                                            undefined,
+                                            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                                            factory.createPrefixUnaryExpression(
+                                              SyntaxKind.ExclamationToken,
+                                              factory.createCallExpression(
+                                                factory.createPropertyAccessExpression(
+                                                  factory.createIdentifier(`${fieldName}IdSet`),
+                                                  factory.createIdentifier('has'),
                                                 ),
-                                              ],
+                                                undefined,
+                                                [
+                                                  factory.createCallChain(
+                                                    factory.createPropertyAccessExpression(
+                                                      factory.createIdentifier('getIDValue'),
+                                                      factory.createIdentifier(fieldName),
+                                                    ),
+                                                    factory.createToken(SyntaxKind.QuestionDotToken),
+                                                    undefined,
+                                                    [factory.createIdentifier('item')],
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
+                                  ],
+                                  NodeFlags.AwaitContext,
+                                ),
+                              ),
+                              factory.createExpressionStatement(
+                                factory.createCallExpression(
+                                  factory.createPropertyAccessExpression(
+                                    factory.createIdentifier('newOptions'),
+                                    factory.createIdentifier('push'),
                                   ),
-                                ],
-                                NodeFlags.AwaitContext,
-                              ),
-                            ),
-                            factory.createExpressionStatement(
-                              factory.createCallExpression(
-                                factory.createPropertyAccessExpression(
-                                  factory.createIdentifier('newOptions'),
-                                  factory.createIdentifier('push'),
-                                ),
-                                undefined,
-                                [factory.createSpreadElement(factory.createIdentifier('loaded'))],
-                              ),
-                            ),
-                            factory.createExpressionStatement(
-                              factory.createBinaryExpression(
-                                factory.createIdentifier('newNext'),
-                                factory.createToken(SyntaxKind.EqualsToken),
-                                factory.createPropertyAccessExpression(
-                                  factory.createIdentifier('result'),
-                                  factory.createIdentifier('nextToken'),
+                                  undefined,
+                                  [factory.createSpreadElement(factory.createIdentifier('loaded'))],
                                 ),
                               ),
-                            ),
-                          ],
-                          true,
-                        ),
-                      ),
-                      factory.createExpressionStatement(
-                        factory.createCallExpression(setModelFetchOption, undefined, [
-                          factory.createCallExpression(
-                            factory.createPropertyAccessExpression(
-                              factory.createIdentifier('newOptions'),
-                              factory.createIdentifier('slice'),
-                            ),
-                            undefined,
-                            [factory.createNumericLiteral('0'), factory.createIdentifier('autocompleteLength')],
+                              factory.createExpressionStatement(
+                                factory.createBinaryExpression(
+                                  factory.createIdentifier('newNext'),
+                                  factory.createToken(SyntaxKind.EqualsToken),
+                                  factory.createPropertyAccessExpression(
+                                    factory.createIdentifier('result'),
+                                    factory.createIdentifier('nextToken'),
+                                  ),
+                                ),
+                              ),
+                            ],
+                            true,
                           ),
-                        ]),
-                      ),
-                      factory.createExpressionStatement(
-                        factory.createCallExpression(setModelLoading, undefined, [factory.createFalse()]),
-                      ),
-                    ],
-                    true,
+                        ),
+                        factory.createExpressionStatement(
+                          factory.createCallExpression(setModelFetchOption, undefined, [
+                            factory.createCallExpression(
+                              factory.createPropertyAccessExpression(
+                                factory.createIdentifier('newOptions'),
+                                factory.createIdentifier('slice'),
+                              ),
+                              undefined,
+                              [factory.createNumericLiteral('0'), factory.createIdentifier('autocompleteLength')],
+                            ),
+                          ]),
+                        ),
+                        factory.createExpressionStatement(
+                          factory.createCallExpression(setModelLoading, undefined, [factory.createFalse()]),
+                        ),
+                      ],
+                      true,
+                    ),
                   ),
                 ),
-              ),
-            ],
-            NodeFlags.Const,
+              ],
+              NodeFlags.Const,
+            ),
           ),
-        ),
-      );
-    }
+        );
+      }
 
-    return acc;
-  }, []);
+      return acc;
+    },
+    [],
+  );
 };
 
 export function wrapInParenthesizedExpression(callExpression: CallExpression, accessors: string[]): AwaitExpression {

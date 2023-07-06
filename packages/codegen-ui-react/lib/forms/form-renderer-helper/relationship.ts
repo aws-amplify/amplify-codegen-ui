@@ -1136,27 +1136,23 @@ export const buildGetRelationshipModels = (
               factory.createConditionalExpression(
                 recordIdentifier,
                 factory.createToken(SyntaxKind.QuestionToken),
-                factory.createAwaitExpression(
-                  dataApi === 'GraphQL'
-                    ? wrapInParenthesizedExpression(
-                        getGraphqlCallExpression(
-                          ActionType.GET_BY_RELATIONSHIP,
-                          fieldConfigMetaData.relationship.relatedModelName,
-                          importCollection,
-                          { inputs },
-                          relatedModelField,
-                        ),
-                        [
-                          'data',
-                          getGraphqlQueryForModel(
-                            ActionType.GET_BY_RELATIONSHIP,
-                            fieldConfigMetaData.relationship.relatedModelName,
-                            relatedModelField,
-                          ),
-                          'items',
-                        ],
-                      )
-                    : factory.createCallExpression(
+                dataApi === 'GraphQL'
+                  ? wrapInParenthesizedExpression(
+                      getGraphqlCallExpression(
+                        ActionType.GET_BY_RELATIONSHIP,
+                        fieldName,
+                        importCollection,
+                        { inputs },
+                        relatedModelField,
+                      ),
+                      [
+                        'data',
+                        getGraphqlQueryForModel(ActionType.GET_BY_RELATIONSHIP, fieldName, relatedModelField),
+                        'items',
+                      ],
+                    )
+                  : factory.createAwaitExpression(
+                      factory.createCallExpression(
                         factory.createPropertyAccessExpression(
                           factory.createPropertyAccessExpression(recordIdentifier, factory.createIdentifier(fieldName)),
                           factory.createIdentifier('toArray'),
@@ -1164,7 +1160,7 @@ export const buildGetRelationshipModels = (
                         undefined,
                         [],
                       ),
-                ),
+                    ),
                 factory.createToken(SyntaxKind.ColonToken),
                 factory.createArrayLiteralExpression([], false),
               ),

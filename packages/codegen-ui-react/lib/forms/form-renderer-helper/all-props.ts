@@ -95,7 +95,7 @@ export const addFormAttributes = (
     }
 
     if (fieldConfig.componentType === 'Autocomplete') {
-      attributes.push(getAutocompleteOptionsProp({ fieldName: componentName, fieldConfig }));
+      attributes.push(getAutocompleteOptionsProp({ fieldName: componentName, fieldConfig, dataApi }));
       if (fieldConfig.relationship?.type === 'HAS_MANY' && dataApi === 'GraphQL') {
         attributes.push(
           factory.createJsxAttribute(
