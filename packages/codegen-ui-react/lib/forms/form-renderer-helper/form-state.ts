@@ -46,9 +46,11 @@ import {
   getSetNameIdentifier,
   buildUseStateExpression,
   getControlledComponentDefaultValue,
+  buildInitConstVariableExpression,
 } from '../../helpers';
 import { getElementAccessExpression } from './invalid-variable-helpers';
 import { shouldWrapInArrayField } from './render-checkers';
+import { DataApiKind } from '../../react-render-config';
 
 // used just to sanitize nested array field names
 // when rendering currentValue state and ref
@@ -69,7 +71,8 @@ export const getCurrentValueName = (fieldName: string) => {
 export const getCurrentDisplayValueName = (fieldName: string) =>
   `current${capitalizeFirstLetter(fieldName)}DisplayValue`;
 
-export const getRecordsName = (modelName: string) => `${lowerCaseFirst(modelName)}Records`;
+export const getRecordsName = (modelName: string, capitalized = false) =>
+  `${(capitalized ? capitalizeFirstLetter : lowerCaseFirst)(modelName)}Records`;
 
 export const getRecordName = (modelName: string) => `${lowerCaseFirst(modelName)}Record`;
 
@@ -228,11 +231,15 @@ export const getInitialValues = (
 /**
  * iterates field configs to create useState hooks for each field
  * @param fieldConfigs
+ * @param dataApi
  * @returns
  */
-export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement[] => {
+export const getUseStateHooks = (
+  fieldConfigs: Record<string, FieldConfigMetadata>,
+  dataApi?: DataApiKind,
+): Statement[] => {
   const stateNames = new Set();
-  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { sanitizedFieldName }]) => {
+  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { sanitizedFieldName, relationship }]) => {
     const fieldName = name.split('.')[0];
     const renderedFieldName = sanitizedFieldName || fieldName;
 
@@ -256,8 +263,29 @@ export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadat
       acc.push(buildUseStateExpression(renderedFieldName, renderCorrectUseStateValue()));
       stateNames.add(renderedFieldName);
     }
+
+    if (dataApi === 'GraphQL' && relationship) {
+      acc.push(buildUseStateExpression(`${renderedFieldName}Loading`, factory.createFalse()));
+      acc.push(buildUseStateExpression(`${renderedFieldName}Records`, factory.createArrayLiteralExpression([], false)));
+    }
     return acc;
   }, []);
+};
+
+export const getAutocompleteOptions = (
+  fieldConfigs: Record<string, FieldConfigMetadata>,
+  hasAutoCompleteField: boolean,
+  dataApi?: DataApiKind,
+): Statement[] => {
+  if (
+    dataApi === 'GraphQL' &&
+    hasAutoCompleteField &&
+    Object.values(fieldConfigs).some(({ relationship }) => !!relationship)
+  ) {
+    return [buildInitConstVariableExpression('autocompleteLength', factory.createNumericLiteral('10'))];
+  }
+
+  return [];
 };
 
 /**

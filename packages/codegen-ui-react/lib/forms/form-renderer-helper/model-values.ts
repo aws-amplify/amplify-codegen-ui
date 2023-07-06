@@ -18,6 +18,7 @@ import {
   StudioFormValueMappings,
   InternalError,
   ConcatenatedStudioComponentProperty,
+  HasManyRelationshipType,
 } from '@aws-amplify/codegen-ui';
 import { StudioFormInputFieldProperty } from '@aws-amplify/codegen-ui/lib/types/form/input-config';
 import {
@@ -44,6 +45,7 @@ import {
 import { buildAccessChain, getRecordsName } from './form-state';
 import { getElementAccessExpression, getValidProperty } from './invalid-variable-helpers';
 import { isEnumDataType, isModelDataType } from './render-checkers';
+import { DataApiKind } from '../../react-render-config';
 
 export const getDisplayValueObjectName = 'getDisplayValue';
 
@@ -275,14 +277,66 @@ function getSuggestionsForRelationshipScalar({
     label: getDisplayValue['primaryAuthor']?.(r),
   }))
  */
-function getModelTypeSuggestions({ modelName, fieldName }: { modelName: string; fieldName: string }): CallExpression {
+function getModelTypeSuggestions({
+  modelName,
+  fieldName,
+  fieldConfig,
+  dataApi,
+}: {
+  modelName: string;
+  fieldName: string;
+  fieldConfig: FieldConfigMetadata;
+  dataApi?: DataApiKind;
+}): CallExpression {
   const recordString = 'r';
-
   const labelExpression = getDisplayValueCallChain({ fieldName, recordString });
+  const optionsRecords = dataApi === 'GraphQL' ? getRecordsName(fieldName, true) : getRecordsName(modelName);
+
+  const mappingFunction = factory.createArrowFunction(
+    undefined,
+    undefined,
+    [
+      factory.createParameterDeclaration(
+        undefined,
+        undefined,
+        undefined,
+        factory.createIdentifier(recordString),
+        undefined,
+        undefined,
+        undefined,
+      ),
+    ],
+    undefined,
+    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+    factory.createParenthesizedExpression(
+      factory.createObjectLiteralExpression(
+        [
+          factory.createPropertyAssignment(
+            factory.createIdentifier('id'),
+            getIDValueCallChain({ fieldName, recordString }),
+          ),
+          factory.createPropertyAssignment(factory.createIdentifier('label'), labelExpression),
+        ],
+        true,
+      ),
+    ),
+  );
+
+  if (
+    dataApi === 'GraphQL' &&
+    fieldConfig.relationship?.type === 'HAS_MANY' &&
+    (fieldConfig.relationship as HasManyRelationshipType).belongsToFieldOnRelatedModel
+  ) {
+    return factory.createCallExpression(
+      factory.createPropertyAccessExpression(factory.createIdentifier(optionsRecords), factory.createIdentifier('map')),
+      undefined,
+      [mappingFunction],
+    );
+  }
 
   const filterOptionsExpression = factory.createCallExpression(
     factory.createPropertyAccessExpression(
-      factory.createIdentifier(getRecordsName(modelName)),
+      factory.createIdentifier(optionsRecords),
       factory.createIdentifier('filter'),
     ),
     undefined,
@@ -317,41 +371,10 @@ function getModelTypeSuggestions({ modelName, fieldName }: { modelName: string; 
       ),
     ],
   );
-
   return factory.createCallExpression(
     factory.createPropertyAccessExpression(filterOptionsExpression, factory.createIdentifier('map')),
     undefined,
-    [
-      factory.createArrowFunction(
-        undefined,
-        undefined,
-        [
-          factory.createParameterDeclaration(
-            undefined,
-            undefined,
-            undefined,
-            factory.createIdentifier(recordString),
-            undefined,
-            undefined,
-            undefined,
-          ),
-        ],
-        undefined,
-        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-        factory.createParenthesizedExpression(
-          factory.createObjectLiteralExpression(
-            [
-              factory.createPropertyAssignment(
-                factory.createIdentifier('id'),
-                getIDValueCallChain({ fieldName, recordString }),
-              ),
-              factory.createPropertyAssignment(factory.createIdentifier('label'), labelExpression),
-            ],
-            true,
-          ),
-        ),
-      ),
-    ],
+    [mappingFunction],
   );
 }
 
@@ -417,9 +440,11 @@ export function buildFixedAutocompleteOptions(fieldName: string, valueMappings?:
 export function getAutocompleteOptionsProp({
   fieldName,
   fieldConfig,
+  dataApi,
 }: {
   fieldName: string;
   fieldConfig: FieldConfigMetadata;
+  dataApi?: DataApiKind;
 }): JsxAttribute {
   let options: Expression | undefined;
 
@@ -431,9 +456,15 @@ export function getAutocompleteOptionsProp({
       options = getModelTypeSuggestions({
         modelName: model,
         fieldName,
+        fieldConfig,
+        dataApi,
       });
     } else if (keys) {
-      options = getSuggestionsForRelationshipScalar({ modelName: model, key: keys[0], fieldName });
+      options = getSuggestionsForRelationshipScalar({
+        modelName: dataApi === 'GraphQL' ? fieldName : model,
+        key: keys[0],
+        fieldName,
+      });
     }
   } else {
     options = buildFixedAutocompleteOptions(fieldName, valueMappings);

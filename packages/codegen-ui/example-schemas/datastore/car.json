@@ -29,7 +29,7 @@
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "dealership"
+                            "dealershipId"
                         ]
                     }
                 },

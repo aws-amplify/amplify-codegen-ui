@@ -34,8 +34,8 @@ export const getFormFieldStateName = (formName: string) => {
  * @returns true if string contains special characters except for "." , "_" and 0-9
  * and not a member of the resveredName set
  */
-export const isValidVariableName = (input: string, resveredNames?: Set<string>): boolean => {
-  const preCheck = resveredNames ? !resveredNames.has(input) : true;
+export const isValidVariableName = (input: string, reservedNames?: Set<string>): boolean => {
+  const preCheck = reservedNames ? !reservedNames.has(input) : true;
   return /^[a-zA-Z_$][a-zA-Z_$0-9]*$/g.test(input) && preCheck;
 };
 
