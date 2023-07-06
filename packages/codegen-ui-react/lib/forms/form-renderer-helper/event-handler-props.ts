@@ -55,6 +55,8 @@ import { buildModelFieldObject } from './model-fields';
 import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
 import { extractModelAndKeys, getMatchEveryModelFieldCallExpression } from './model-values';
 import { COMPOSITE_PRIMARY_KEY_PROP_NAME, STORAGE_FILE_KEY } from '../../utils/constants';
+import { DataApiKind } from '../../react-render-config';
+import { getFetchRelatedRecords } from '../../utils/graphql';
 
 export const buildMutationBindings = (form: StudioForm, primaryKeys: string[] = []) => {
   const {
@@ -284,6 +286,7 @@ function getCallbackVarName(fieldType: string): string {
 export const buildOnChangeStatement = (
   component: StudioComponent | StudioComponentChild,
   fieldConfigs: Record<string, FieldConfigMetadata>,
+  dataApi?: DataApiKind,
 ) => {
   const { name: fieldName, componentType: fieldType } = component;
   const fieldConfig = fieldConfigs[fieldName];
@@ -294,6 +297,16 @@ export const buildOnChangeStatement = (
   const handleChangeStatements: Statement[] = [
     ...buildTargetVariable(studioFormComponentType || fieldType, renderedFieldName, dataType, isArray),
   ];
+
+  if (dataApi === 'GraphQL' && fieldConfig.relationship) {
+    handleChangeStatements.push(
+      factory.createExpressionStatement(
+        factory.createCallExpression(factory.createIdentifier(getFetchRelatedRecords(component.name)), undefined, [
+          factory.createIdentifier('value'),
+        ]),
+      ),
+    );
+  }
 
   if (!shouldWrapInArrayField(fieldConfig)) {
     handleChangeStatements.push(buildOverrideOnChangeStatement(fieldName, fieldConfigs));

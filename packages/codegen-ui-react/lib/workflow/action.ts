@@ -193,7 +193,7 @@ export function buildGraphqlCallback(
                       getGraphqlMutationFromAction(action.action as Action),
                       action.parameters.model,
                       importCollection,
-                      inputKeys,
+                      { inputs: inputKeys },
                     ),
                   ),
                 ),

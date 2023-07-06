@@ -677,7 +677,7 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
-import { listTeams } from \\"../graphql/queries\\";
+import { listTeamIDS, listTeams } from \\"../graphql/queries\\";
 import { createMember } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -856,7 +856,12 @@ export default function MyMemberForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [teamID, setTeamID] = React.useState(initialValues.teamID);
+  const [teamIDLoading, setTeamIDLoading] = React.useState(false);
+  const [teamIDRecords, setTeamIDRecords] = React.useState([]);
   const [Team, setTeam] = React.useState(initialValues.Team);
+  const [TeamLoading, setTeamLoading] = React.useState(false);
+  const [TeamRecords, setTeamRecords] = React.useState([]);
+  const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -884,11 +889,6 @@ export default function MyMemberForm(props) {
       ? Team.map((r) => getIDValue.Team?.(r))
       : getIDValue.Team?.(Team)
   );
-  const teamRecords = (
-    await API.graphql({
-      query: listTeams,
-    })
-  ).data.listTeams.items;
   const getDisplayValue = {
     teamID: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
     Team: (r) => r?.name,
@@ -914,6 +914,62 @@ export default function MyMemberForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const fetchTeamIDRecords = async (value) => {
+    setTeamIDLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ name: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listTeamIDS,
+          variables,
+        })
+      ).data.listTeamIDS.item;
+      var loaded = result.filter(
+        (item) => !teamIDIdSet.has(getIDValue.teamID?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setTeamIDRecords(newOptions.slice(0, autocompleteLength));
+    setTeamIDLoading(false);
+  };
+  const fetchTeamRecords = async (value) => {
+    setTeamLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: { or: [{ name: { contains: value } }] },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listTeams,
+          variables,
+        })
+      ).data.listTeams.item;
+      var loaded = result.filter(
+        (item) => !TeamIdSet.has(getIDValue.Team?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setTeamRecords(newOptions.slice(0, autocompleteLength));
+    setTeamLoading(false);
   };
   return (
     <Grid
@@ -1090,7 +1146,7 @@ export default function MyMemberForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Team\\"
           value={currentTeamIDDisplayValue}
-          options={teamRecords
+          options={teamIDRecords
             .filter(
               (r, i, arr) =>
                 arr.findIndex((member) => member?.id === r?.id) === i
@@ -1099,6 +1155,7 @@ export default function MyMemberForm(props) {
               id: r?.id,
               label: getDisplayValue.teamID?.(r),
             }))}
+          isLoading={teamIDLoading}
           onSelect={({ id, label }) => {
             setCurrentTeamIDValue(id);
             setCurrentTeamIDDisplayValue(label);
@@ -1109,6 +1166,7 @@ export default function MyMemberForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchTeamIDRecords(value);
             if (errors.teamID?.hasError) {
               runValidationTasks(\\"teamID\\", value);
             }
@@ -1159,12 +1217,13 @@ export default function MyMemberForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Team\\"
           value={currentTeamDisplayValue}
-          options={teamRecords
-            .filter((r) => !TeamIdSet.has(getIDValue.Team?.(r)))
-            .map((r) => ({
-              id: getIDValue.Team?.(r),
-              label: getDisplayValue.Team?.(r),
-            }))}
+          options={TeamRecords.filter(
+            (r) => !TeamIdSet.has(getIDValue.Team?.(r))
+          ).map((r) => ({
+            id: getIDValue.Team?.(r),
+            label: getDisplayValue.Team?.(r),
+          }))}
+          isLoading={TeamLoading}
           onSelect={({ id, label }) => {
             setCurrentTeamValue(
               teamRecords.find((r) =>
@@ -1181,6 +1240,7 @@ export default function MyMemberForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchTeamRecords(value);
             if (errors.Team?.hasError) {
               runValidationTasks(\\"Team\\", value);
             }
@@ -1440,6 +1500,9 @@ export default function SchoolCreateForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Students, setStudents] = React.useState(initialValues.Students);
+  const [StudentsLoading, setStudentsLoading] = React.useState(false);
+  const [StudentsRecords, setStudentsRecords] = React.useState([]);
+  const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -1461,11 +1524,6 @@ export default function SchoolCreateForm(props) {
       ? Students.map((r) => getIDValue.Students?.(r))
       : getIDValue.Students?.(Students)
   );
-  const studentRecords = (
-    await API.graphql({
-      query: listStudents,
-    })
-  ).data.listStudents.items;
   const getDisplayValue = {
     Students: (r) => r?.name,
   };
@@ -1489,6 +1547,33 @@ export default function SchoolCreateForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const fetchStudentsRecords = async (value) => {
+    setStudentsLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: { or: [{ name: { contains: value } }] },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listStudents,
+          variables,
+        })
+      ).data.listStudents.item;
+      var loaded = result.filter(
+        (item) => !StudentsIdSet.has(getIDValue.Students?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setStudentsRecords(newOptions.slice(0, autocompleteLength));
+    setStudentsLoading(false);
   };
   return (
     <Grid
@@ -1643,12 +1728,13 @@ export default function SchoolCreateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Student\\"
           value={currentStudentsDisplayValue}
-          options={studentRecords
-            .filter((r) => !StudentsIdSet.has(getIDValue.Students?.(r)))
-            .map((r) => ({
-              id: getIDValue.Students?.(r),
-              label: getDisplayValue.Students?.(r),
-            }))}
+          options={StudentsRecords.filter(
+            (r) => !StudentsIdSet.has(getIDValue.Students?.(r))
+          ).map((r) => ({
+            id: getIDValue.Students?.(r),
+            label: getDisplayValue.Students?.(r),
+          }))}
+          isLoading={StudentsLoading}
           onSelect={({ id, label }) => {
             setCurrentStudentsValue(
               studentRecords.find((r) =>
@@ -1665,6 +1751,7 @@ export default function SchoolCreateForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchStudentsRecords(value);
             if (errors.Students?.hasError) {
               runValidationTasks(\\"Students\\", value);
             }
@@ -1779,7 +1866,7 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
-import { listAuthors } from \\"../graphql/queries\\";
+import { listPrimaryAuthors } from \\"../graphql/queries\\";
 import { createBook } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -1959,6 +2046,9 @@ export default function BookCreateForm(props) {
   const [primaryAuthor, setPrimaryAuthor] = React.useState(
     initialValues.primaryAuthor
   );
+  const [primaryAuthorLoading, setPrimaryAuthorLoading] = React.useState(false);
+  const [primaryAuthorRecords, setPrimaryAuthorRecords] = React.useState([]);
+  const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -1982,11 +2072,6 @@ export default function BookCreateForm(props) {
       ? primaryAuthor.map((r) => getIDValue.primaryAuthor?.(r))
       : getIDValue.primaryAuthor?.(primaryAuthor)
   );
-  const authorRecords = (
-    await API.graphql({
-      query: listAuthors,
-    })
-  ).data.listAuthors.items;
   const getDisplayValue = {
     primaryAuthor: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
@@ -2010,6 +2095,35 @@ export default function BookCreateForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const fetchPrimaryAuthorRecords = async (value) => {
+    setPrimaryAuthorLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ name: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listPrimaryAuthors,
+          variables,
+        })
+      ).data.listPrimaryAuthors.item;
+      var loaded = result.filter(
+        (item) => !primaryAuthorIdSet.has(getIDValue.primaryAuthor?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setPrimaryAuthorRecords(newOptions.slice(0, autocompleteLength));
+    setPrimaryAuthorLoading(false);
   };
   return (
     <Grid
@@ -2178,14 +2292,13 @@ export default function BookCreateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Author\\"
           value={currentPrimaryAuthorDisplayValue}
-          options={authorRecords
-            .filter(
-              (r) => !primaryAuthorIdSet.has(getIDValue.primaryAuthor?.(r))
-            )
-            .map((r) => ({
-              id: getIDValue.primaryAuthor?.(r),
-              label: getDisplayValue.primaryAuthor?.(r),
-            }))}
+          options={PrimaryAuthorRecords.filter(
+            (r) => !primaryAuthorIdSet.has(getIDValue.primaryAuthor?.(r))
+          ).map((r) => ({
+            id: getIDValue.primaryAuthor?.(r),
+            label: getDisplayValue.primaryAuthor?.(r),
+          }))}
+          isLoading={primaryAuthorLoading}
           onSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(
               authorRecords.find((r) =>
@@ -2202,6 +2315,7 @@ export default function BookCreateForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchPrimaryAuthorRecords(value);
             if (errors.primaryAuthor?.hasError) {
               runValidationTasks(\\"primaryAuthor\\", value);
             }
@@ -2465,7 +2579,10 @@ export default function TagCreateForm(props) {
   };
   const [label, setLabel] = React.useState(initialValues.label);
   const [Posts, setPosts] = React.useState(initialValues.Posts);
+  const [PostsLoading, setPostsLoading] = React.useState(false);
+  const [PostsRecords, setPostsRecords] = React.useState([]);
   const [statuses, setStatuses] = React.useState(initialValues.statuses);
+  const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setLabel(initialValues.label);
@@ -2490,11 +2607,6 @@ export default function TagCreateForm(props) {
       ? Posts.map((r) => getIDValue.Posts?.(r))
       : getIDValue.Posts?.(Posts)
   );
-  const postRecords = (
-    await API.graphql({
-      query: listPosts,
-    })
-  ).data.listPosts.items;
   const getDisplayValue = {
     Posts: (r) => r?.title,
     statuses: (r) => {
@@ -2527,6 +2639,33 @@ export default function TagCreateForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const fetchPostsRecords = async (value) => {
+    setPostsLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: { or: [{ title: { contains: value } }] },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listPosts,
+          variables,
+        })
+      ).data.listPosts.item;
+      var loaded = result.filter(
+        (item) => !PostsIdSet.has(getIDValue.Posts?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setPostsRecords(newOptions.slice(0, autocompleteLength));
+    setPostsLoading(false);
   };
   return (
     <Grid
@@ -2685,12 +2824,11 @@ export default function TagCreateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Post\\"
           value={currentPostsDisplayValue}
-          options={postRecords
-            .filter((r) => !PostsIdSet.has(getIDValue.Posts?.(r)))
-            .map((r) => ({
-              id: getIDValue.Posts?.(r),
-              label: getDisplayValue.Posts?.(r),
-            }))}
+          options={PostsRecords.map((r) => ({
+            id: getIDValue.Posts?.(r),
+            label: getDisplayValue.Posts?.(r),
+          }))}
+          isLoading={PostsLoading}
           onSelect={({ id, label }) => {
             setCurrentPostsValue(
               postRecords.find((r) =>
@@ -2707,6 +2845,7 @@ export default function TagCreateForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchPostsRecords(value);
             if (errors.Posts?.hasError) {
               runValidationTasks(\\"Posts\\", value);
             }
@@ -2883,7 +3022,7 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
-import { listAuthors, listTitles } from \\"../graphql/queries\\";
+import { listPrimaryAuthors, listPrimaryTitles } from \\"../graphql/queries\\";
 import { createBook } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -3064,9 +3203,14 @@ export default function BookCreateForm(props) {
   const [primaryAuthor, setPrimaryAuthor] = React.useState(
     initialValues.primaryAuthor
   );
+  const [primaryAuthorLoading, setPrimaryAuthorLoading] = React.useState(false);
+  const [primaryAuthorRecords, setPrimaryAuthorRecords] = React.useState([]);
   const [primaryTitle, setPrimaryTitle] = React.useState(
     initialValues.primaryTitle
   );
+  const [primaryTitleLoading, setPrimaryTitleLoading] = React.useState(false);
+  const [primaryTitleRecords, setPrimaryTitleRecords] = React.useState([]);
+  const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -3104,16 +3248,6 @@ export default function BookCreateForm(props) {
       ? primaryTitle.map((r) => getIDValue.primaryTitle?.(r))
       : getIDValue.primaryTitle?.(primaryTitle)
   );
-  const authorRecords = (
-    await API.graphql({
-      query: listAuthors,
-    })
-  ).data.listAuthors.items;
-  const titleRecords = (
-    await API.graphql({
-      query: listTitles,
-    })
-  ).data.listTitles.items;
   const getDisplayValue = {
     primaryAuthor: (r) => r?.name,
     primaryTitle: (r) => r?.name,
@@ -3139,6 +3273,60 @@ export default function BookCreateForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const fetchPrimaryAuthorRecords = async (value) => {
+    setPrimaryAuthorLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: { or: [{ name: { contains: value } }] },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listPrimaryAuthors,
+          variables,
+        })
+      ).data.listPrimaryAuthors.item;
+      var loaded = result.filter(
+        (item) => !primaryAuthorIdSet.has(getIDValue.primaryAuthor?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setPrimaryAuthorRecords(newOptions.slice(0, autocompleteLength));
+    setPrimaryAuthorLoading(false);
+  };
+  const fetchPrimaryTitleRecords = async (value) => {
+    setPrimaryTitleLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: { or: [{ name: { contains: value } }] },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listPrimaryTitles,
+          variables,
+        })
+      ).data.listPrimaryTitles.item;
+      var loaded = result.filter(
+        (item) => !primaryTitleIdSet.has(getIDValue.primaryTitle?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setPrimaryTitleRecords(newOptions.slice(0, autocompleteLength));
+    setPrimaryTitleLoading(false);
   };
   return (
     <Grid
@@ -3310,14 +3498,13 @@ export default function BookCreateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Author\\"
           value={currentPrimaryAuthorDisplayValue}
-          options={authorRecords
-            .filter(
-              (r) => !primaryAuthorIdSet.has(getIDValue.primaryAuthor?.(r))
-            )
-            .map((r) => ({
-              id: getIDValue.primaryAuthor?.(r),
-              label: getDisplayValue.primaryAuthor?.(r),
-            }))}
+          options={PrimaryAuthorRecords.filter(
+            (r) => !primaryAuthorIdSet.has(getIDValue.primaryAuthor?.(r))
+          ).map((r) => ({
+            id: getIDValue.primaryAuthor?.(r),
+            label: getDisplayValue.primaryAuthor?.(r),
+          }))}
+          isLoading={primaryAuthorLoading}
           onSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(
               authorRecords.find((r) =>
@@ -3334,6 +3521,7 @@ export default function BookCreateForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchPrimaryAuthorRecords(value);
             if (errors.primaryAuthor?.hasError) {
               runValidationTasks(\\"primaryAuthor\\", value);
             }
@@ -3391,12 +3579,13 @@ export default function BookCreateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Title\\"
           value={currentPrimaryTitleDisplayValue}
-          options={titleRecords
-            .filter((r) => !primaryTitleIdSet.has(getIDValue.primaryTitle?.(r)))
-            .map((r) => ({
-              id: getIDValue.primaryTitle?.(r),
-              label: getDisplayValue.primaryTitle?.(r),
-            }))}
+          options={PrimaryTitleRecords.filter(
+            (r) => !primaryTitleIdSet.has(getIDValue.primaryTitle?.(r))
+          ).map((r) => ({
+            id: getIDValue.primaryTitle?.(r),
+            label: getDisplayValue.primaryTitle?.(r),
+          }))}
+          isLoading={primaryTitleLoading}
           onSelect={({ id, label }) => {
             setCurrentPrimaryTitleValue(
               titleRecords.find((r) =>
@@ -3413,6 +3602,7 @@ export default function BookCreateForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchPrimaryTitleRecords(value);
             if (errors.primaryTitle?.hasError) {
               runValidationTasks(\\"primaryTitle\\", value);
             }
@@ -3474,6 +3664,713 @@ export declare type BookCreateFormProps = React.PropsWithChildren<{
     onValidate?: BookCreateFormValidationValues;
 } & React.CSSProperties>;
 export default function BookCreateForm(props: BookCreateFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should generate a relationship update form with autocomplete 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
+import { commentsByPostID, getPost, listComments } from \\"../graphql/queries\\";
+import { deleteComment, updateComment, updatePost } from \\"../graphql/mutations\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function PostUpdateForm(props) {
+  const {
+    id: idProp,
+    post: postModelProp,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    title: \\"\\",
+    body: \\"\\",
+    publishDate: \\"\\",
+    Comments: [],
+  };
+  const [title, setTitle] = React.useState(initialValues.title);
+  const [body, setBody] = React.useState(initialValues.body);
+  const [publishDate, setPublishDate] = React.useState(
+    initialValues.publishDate
+  );
+  const [Comments, setComments] = React.useState(initialValues.Comments);
+  const [CommentsLoading, setCommentsLoading] = React.useState(false);
+  const [CommentsRecords, setCommentsRecords] = React.useState([]);
+  const autocompleteLength = 10;
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = postRecord
+      ? { ...initialValues, ...postRecord, Comments: linkedComments }
+      : initialValues;
+    setTitle(cleanValues.title);
+    setBody(cleanValues.body);
+    setPublishDate(cleanValues.publishDate);
+    setComments(cleanValues.Comments ?? []);
+    setCurrentCommentsValue(undefined);
+    setCurrentCommentsDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [postRecord, setPostRecord] = React.useState(postModelProp);
+  const [linkedComments, setLinkedComments] = React.useState([]);
+  const canUnlinkComments = false;
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = idProp
+        ? (
+            await API.graphql({
+              query: getPost,
+              variables: {
+                input: {
+                  id: idProp,
+                },
+              },
+            })
+          ).data.getPost
+        : postModelProp;
+      setPostRecord(record);
+      const linkedComments = record
+        ? (
+            await API.graphql({
+              query: commentsByPostID,
+              variables: {
+                input: {
+                  postID: record.id,
+                },
+              },
+            })
+          ).data.commentsByPostID.items
+        : [];
+      setLinkedComments(linkedComments);
+    };
+    queryData();
+  }, [idProp, postModelProp]);
+  React.useEffect(resetStateValues, [postRecord, linkedComments]);
+  const [currentCommentsDisplayValue, setCurrentCommentsDisplayValue] =
+    React.useState(\\"\\");
+  const [currentCommentsValue, setCurrentCommentsValue] =
+    React.useState(undefined);
+  const CommentsRef = React.createRef();
+  const getIDValue = {
+    Comments: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const CommentsIdSet = new Set(
+    Array.isArray(Comments)
+      ? Comments.map((r) => getIDValue.Comments?.(r))
+      : getIDValue.Comments?.(Comments)
+  );
+  const getDisplayValue = {
+    Comments: (r) => \`\${r?.body ? r?.body + \\" - \\" : \\"\\"}\${r?.id}\`,
+  };
+  const validations = {
+    title: [],
+    body: [],
+    publishDate: [],
+    Comments: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  const convertToLocal = (date) => {
+    const df = new Intl.DateTimeFormat(\\"default\\", {
+      year: \\"numeric\\",
+      month: \\"2-digit\\",
+      day: \\"2-digit\\",
+      hour: \\"2-digit\\",
+      minute: \\"2-digit\\",
+      calendar: \\"iso8601\\",
+      numberingSystem: \\"latn\\",
+      hourCycle: \\"h23\\",
+    });
+    const parts = df.formatToParts(date).reduce((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {});
+    return \`\${parts.year}-\${parts.month}-\${parts.day}T\${parts.hour}:\${parts.minute}\`;
+  };
+  const fetchCommentsRecords = async (value) => {
+    setCommentsLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ body: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listComments,
+          variables,
+        })
+      ).data.listComments.item;
+      var loaded = result.filter(
+        (item) => !CommentsIdSet.has(getIDValue.Comments?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setCommentsRecords(newOptions.slice(0, autocompleteLength));
+    setCommentsLoading(false);
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          title,
+          body,
+          publishDate,
+          Comments,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
+          const promises = [];
+          const commentsToLink = [];
+          const commentsToUnLink = [];
+          const commentsSet = new Set();
+          const linkedCommentsSet = new Set();
+          Comments.forEach((r) => commentsSet.add(getIDValue.Comments?.(r)));
+          linkedComments.forEach((r) =>
+            linkedCommentsSet.add(getIDValue.Comments?.(r))
+          );
+          linkedComments.forEach((r) => {
+            if (!commentsSet.has(getIDValue.Comments?.(r))) {
+              commentsToUnLink.push(r);
+            }
+          });
+          Comments.forEach((r) => {
+            if (!linkedCommentsSet.has(getIDValue.Comments?.(r))) {
+              commentsToLink.push(r);
+            }
+          });
+          commentsToUnLink.forEach((original) => {
+            if (!canUnlinkComments) {
+              throw Error(
+                \`Comment \${original.id} cannot be unlinked from Post because postID is a required field.\`
+              );
+            }
+            promises.push(
+              API.graphql({
+                query: deleteComment,
+                variables: {
+                  input: {
+                    id: original.id,
+                  },
+                },
+              })
+            );
+          });
+          commentsToLink.forEach((original) => {
+            promises.push(
+              API.graphql({
+                query: updateComment,
+                variables: {
+                  input: {
+                    id: original.id,
+                    postID: postRecord.id,
+                  },
+                },
+              })
+            );
+          });
+          const modelFieldsToSave = {
+            title: modelFields.title,
+            body: modelFields.body,
+            publishDate: modelFields.publishDate,
+          };
+          promises.push(
+            API.graphql({
+              query: updatePost,
+              variables: {
+                input: {
+                  id: postRecord.id,
+                  ...modelFieldsToSave,
+                },
+              },
+            })
+          );
+          await Promise.all(promises);
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"PostUpdateForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Title\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={title}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              title: value,
+              body,
+              publishDate,
+              Comments,
+            };
+            const result = onChange(modelFields);
+            value = result?.title ?? value;
+          }
+          if (errors.title?.hasError) {
+            runValidationTasks(\\"title\\", value);
+          }
+          setTitle(value);
+        }}
+        onBlur={() => runValidationTasks(\\"title\\", title)}
+        errorMessage={errors.title?.errorMessage}
+        hasError={errors.title?.hasError}
+        {...getOverrideProps(overrides, \\"title\\")}
+      ></TextField>
+      <TextField
+        label=\\"Body\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={body}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              title,
+              body: value,
+              publishDate,
+              Comments,
+            };
+            const result = onChange(modelFields);
+            value = result?.body ?? value;
+          }
+          if (errors.body?.hasError) {
+            runValidationTasks(\\"body\\", value);
+          }
+          setBody(value);
+        }}
+        onBlur={() => runValidationTasks(\\"body\\", body)}
+        errorMessage={errors.body?.errorMessage}
+        hasError={errors.body?.hasError}
+        {...getOverrideProps(overrides, \\"body\\")}
+      ></TextField>
+      <TextField
+        label=\\"Publish date\\"
+        isRequired={false}
+        isReadOnly={false}
+        type=\\"datetime-local\\"
+        value={publishDate && convertToLocal(new Date(publishDate))}
+        onChange={(e) => {
+          let value =
+            e.target.value === \\"\\" ? \\"\\" : new Date(e.target.value).toISOString();
+          if (onChange) {
+            const modelFields = {
+              title,
+              body,
+              publishDate: value,
+              Comments,
+            };
+            const result = onChange(modelFields);
+            value = result?.publishDate ?? value;
+          }
+          if (errors.publishDate?.hasError) {
+            runValidationTasks(\\"publishDate\\", value);
+          }
+          setPublishDate(value);
+        }}
+        onBlur={() => runValidationTasks(\\"publishDate\\", publishDate)}
+        errorMessage={errors.publishDate?.errorMessage}
+        hasError={errors.publishDate?.hasError}
+        {...getOverrideProps(overrides, \\"publishDate\\")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              title,
+              body,
+              publishDate,
+              Comments: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.Comments ?? values;
+          }
+          setComments(values);
+          setCurrentCommentsValue(undefined);
+          setCurrentCommentsDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCommentsValue}
+        label={\\"Comments\\"}
+        items={Comments}
+        hasError={errors?.Comments?.hasError}
+        errorMessage={errors?.Comments?.errorMessage}
+        getBadgeText={getDisplayValue.Comments}
+        setFieldValue={(model) => {
+          setCurrentCommentsDisplayValue(
+            model ? getDisplayValue.Comments(model) : \\"\\"
+          );
+          setCurrentCommentsValue(model);
+        }}
+        inputFieldRef={CommentsRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Comments\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search Comment\\"
+          value={currentCommentsDisplayValue}
+          options={CommentsRecords.map((r) => ({
+            id: getIDValue.Comments?.(r),
+            label: getDisplayValue.Comments?.(r),
+          }))}
+          isLoading={CommentsLoading}
+          onSelect={({ id, label }) => {
+            setCurrentCommentsValue(
+              commentRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCommentsDisplayValue(label);
+            runValidationTasks(\\"Comments\\", label);
+          }}
+          onClear={() => {
+            setCurrentCommentsDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            fetchCommentsRecords(value);
+            if (errors.Comments?.hasError) {
+              runValidationTasks(\\"Comments\\", value);
+            }
+            setCurrentCommentsDisplayValue(value);
+            setCurrentCommentsValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"Comments\\", currentCommentsDisplayValue)
+          }
+          errorMessage={errors.Comments?.errorMessage}
+          hasError={errors.Comments?.hasError}
+          ref={CommentsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"Comments\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Reset\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || postModelProp)}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={
+              !(idProp || postModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should generate a relationship update form with autocomplete 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Comment, Post } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type PostUpdateFormInputValues = {
+    title?: string;
+    body?: string;
+    publishDate?: string;
+    Comments?: Comment[];
+};
+export declare type PostUpdateFormValidationValues = {
+    title?: ValidationFunction<string>;
+    body?: ValidationFunction<string>;
+    publishDate?: ValidationFunction<string>;
+    Comments?: ValidationFunction<Comment>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PostUpdateFormOverridesProps = {
+    PostUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    title?: PrimitiveOverrideProps<TextFieldProps>;
+    body?: PrimitiveOverrideProps<TextFieldProps>;
+    publishDate?: PrimitiveOverrideProps<TextFieldProps>;
+    Comments?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type PostUpdateFormProps = React.PropsWithChildren<{
+    overrides?: PostUpdateFormOverridesProps | undefined | null;
+} & {
+    id?: string;
+    post?: Post;
+    onSubmit?: (fields: PostUpdateFormInputValues) => PostUpdateFormInputValues;
+    onSuccess?: (fields: PostUpdateFormInputValues) => void;
+    onError?: (fields: PostUpdateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: PostUpdateFormInputValues) => PostUpdateFormInputValues;
+    onValidate?: PostUpdateFormValidationValues;
+} & React.CSSProperties>;
+export default function PostUpdateForm(props: PostUpdateFormProps): React.ReactElement;
 "
 `;
 
@@ -3727,14 +4624,16 @@ export default function MyPostForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? await API.graphql({
-            query: getPost,
-            variables: {
-              input: {
-                id: idProp,
+        ? (
+            await API.graphql({
+              query: getPost,
+              variables: {
+                input: {
+                  id: idProp,
+                },
               },
-            },
-          })
+            })
+          ).data.getPost
         : postModelProp;
       setPostRecord(record);
     };
@@ -3834,6 +4733,7 @@ export default function MyPostForm(props) {
             query: updatePost,
             variables: {
               input: {
+                id: postRecord.id,
                 ...modelFieldsToSave,
               },
             },
@@ -4280,7 +5180,7 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
-import { getComment, listPosts } from \\"../graphql/queries\\";
+import { getComment, listPostIDS, listPosts } from \\"../graphql/queries\\";
 import { updateComment } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -4460,8 +5360,13 @@ export default function CommentUpdateForm(props) {
   };
   const [content, setContent] = React.useState(initialValues.content);
   const [postID, setPostID] = React.useState(initialValues.postID);
+  const [postIDLoading, setPostIDLoading] = React.useState(false);
+  const [postIDRecords, setPostIDRecords] = React.useState([]);
   const [Post, setPost] = React.useState(initialValues.Post);
+  const [PostLoading, setPostLoading] = React.useState(false);
+  const [PostRecords, setPostRecords] = React.useState([]);
   const [post1, setPost1] = React.useState(initialValues.post);
+  const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = commentRecord
@@ -4481,14 +5386,16 @@ export default function CommentUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? await API.graphql({
-            query: getComment,
-            variables: {
-              input: {
-                id: idProp,
+        ? (
+            await API.graphql({
+              query: getComment,
+              variables: {
+                input: {
+                  id: idProp,
+                },
               },
-            },
-          })
+            })
+          ).data.getComment
         : commentModelProp;
       setCommentRecord(record);
       const postIDRecord = record ? await record.postID : undefined;
@@ -4515,11 +5422,6 @@ export default function CommentUpdateForm(props) {
       ? Post.map((r) => getIDValue.Post?.(r))
       : getIDValue.Post?.(Post)
   );
-  const postRecords = (
-    await API.graphql({
-      query: listPosts,
-    })
-  ).data.listPosts.items;
   const getDisplayValue = {
     postID: (r) => \`\${r?.title ? r?.title + \\" - \\" : \\"\\"}\${r?.id}\`,
     Post: (r) => \`\${r?.title ? r?.title + \\" - \\" : \\"\\"}\${r?.id}\`,
@@ -4546,6 +5448,64 @@ export default function CommentUpdateForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const fetchPostIDRecords = async (value) => {
+    setPostIDLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ title: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listPostIDS,
+          variables,
+        })
+      ).data.listPostIDS.item;
+      var loaded = result.filter(
+        (item) => !postIDIdSet.has(getIDValue.postID?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setPostIDRecords(newOptions.slice(0, autocompleteLength));
+    setPostIDLoading(false);
+  };
+  const fetchPostRecords = async (value) => {
+    setPostLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ title: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listPosts,
+          variables,
+        })
+      ).data.listPosts.item;
+      var loaded = result.filter(
+        (item) => !PostIdSet.has(getIDValue.Post?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setPostRecords(newOptions.slice(0, autocompleteLength));
+    setPostLoading(false);
   };
   return (
     <Grid
@@ -4606,6 +5566,7 @@ export default function CommentUpdateForm(props) {
             query: updateComment,
             variables: {
               input: {
+                id: commentRecord.id,
                 ...modelFieldsToSave,
               },
             },
@@ -4693,7 +5654,7 @@ export default function CommentUpdateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Post\\"
           value={currentPostIDDisplayValue}
-          options={postRecords
+          options={postIDRecords
             .filter(
               (r, i, arr) =>
                 arr.findIndex((member) => member?.id === r?.id) === i
@@ -4702,6 +5663,7 @@ export default function CommentUpdateForm(props) {
               id: r?.id,
               label: getDisplayValue.postID?.(r),
             }))}
+          isLoading={postIDLoading}
           onSelect={({ id, label }) => {
             setCurrentPostIDValue(id);
             setCurrentPostIDDisplayValue(label);
@@ -4713,6 +5675,7 @@ export default function CommentUpdateForm(props) {
           defaultValue={postID}
           onChange={(e) => {
             let { value } = e.target;
+            fetchPostIDRecords(value);
             if (errors.postID?.hasError) {
               runValidationTasks(\\"postID\\", value);
             }
@@ -4764,12 +5727,13 @@ export default function CommentUpdateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Post\\"
           value={currentPostDisplayValue}
-          options={postRecords
-            .filter((r) => !PostIdSet.has(getIDValue.Post?.(r)))
-            .map((r) => ({
-              id: getIDValue.Post?.(r),
-              label: getDisplayValue.Post?.(r),
-            }))}
+          options={PostRecords.filter(
+            (r) => !PostIdSet.has(getIDValue.Post?.(r))
+          ).map((r) => ({
+            id: getIDValue.Post?.(r),
+            label: getDisplayValue.Post?.(r),
+          }))}
+          isLoading={PostLoading}
           onSelect={({ id, label }) => {
             setCurrentPostValue(
               postRecords.find((r) =>
@@ -4787,6 +5751,7 @@ export default function CommentUpdateForm(props) {
           defaultValue={Post}
           onChange={(e) => {
             let { value } = e.target;
+            fetchPostRecords(value);
             if (errors.Post?.hasError) {
               runValidationTasks(\\"Post\\", value);
             }
@@ -5105,6 +6070,9 @@ export default function ClassUpdateForm(props) {
     students: [],
   };
   const [students, setStudents] = React.useState(initialValues.students);
+  const [studentsLoading, setStudentsLoading] = React.useState(false);
+  const [studentsRecords, setStudentsRecords] = React.useState([]);
+  const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = classRecord
@@ -5121,14 +6089,16 @@ export default function ClassUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? await API.graphql({
-            query: getClass,
-            variables: {
-              input: {
-                id: idProp,
+        ? (
+            await API.graphql({
+              query: getClass,
+              variables: {
+                input: {
+                  id: idProp,
+                },
               },
-            },
-          })
+            })
+          ).data.getClass
         : classModelProp;
       setClassRecord(record);
       const linkedStudents = record
@@ -5158,11 +6128,6 @@ export default function ClassUpdateForm(props) {
       ? students.map((r) => getIDValue.students?.(r))
       : getIDValue.students?.(students)
   );
-  const studentRecords = (
-    await API.graphql({
-      query: listStudents,
-    })
-  ).data.listStudents.items;
   const getDisplayValue = {
     students: (r) => r?.id,
   };
@@ -5185,6 +6150,33 @@ export default function ClassUpdateForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const fetchStudentsRecords = async (value) => {
+    setStudentsLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: { or: [{ id: { contains: value } }] },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listStudents,
+          variables,
+        })
+      ).data.listStudents.item;
+      var loaded = result.filter(
+        (item) => !studentsIdSet.has(getIDValue.students?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setStudentsRecords(newOptions.slice(0, autocompleteLength));
+    setStudentsLoading(false);
   };
   return (
     <Grid
@@ -5323,6 +6315,7 @@ export default function ClassUpdateForm(props) {
               query: updateClass,
               variables: {
                 input: {
+                  id: classRecord.id,
                   ...modelFieldsToSave,
                 },
               },
@@ -5376,12 +6369,11 @@ export default function ClassUpdateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Student\\"
           value={currentStudentsDisplayValue}
-          options={studentRecords
-            .filter((r) => !studentsIdSet.has(getIDValue.students?.(r)))
-            .map((r) => ({
-              id: getIDValue.students?.(r),
-              label: getDisplayValue.students?.(r),
-            }))}
+          options={StudentsRecords.map((r) => ({
+            id: getIDValue.students?.(r),
+            label: getDisplayValue.students?.(r),
+          }))}
+          isLoading={studentsLoading}
           onSelect={({ id, label }) => {
             setCurrentStudentsValue(
               studentRecords.find((r) =>
@@ -5398,6 +6390,7 @@ export default function ClassUpdateForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchStudentsRecords(value);
             if (errors.students?.hasError) {
               runValidationTasks(\\"students\\", value);
             }
@@ -5506,6 +6499,7 @@ import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import {
+  cPKProjectsByCPKTeacherID,
   getCPKTeacher,
   listCPKClasses,
   listCPKProjects,
@@ -5514,9 +6508,10 @@ import {
 } from \\"../graphql/queries\\";
 import {
   createCPKTeacherCPKClass,
+  deleteCPKProject,
   deleteCPKTeacherCPKClass,
+  updateCPKProject,
   updateCPKTeacher,
-  updateCPKTeacherRecord,
 } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -5698,10 +6693,17 @@ export default function UpdateCPKTeacherForm(props) {
     initialValues.specialTeacherId
   );
   const [CPKStudent, setCPKStudent] = React.useState(initialValues.CPKStudent);
+  const [CPKStudentLoading, setCPKStudentLoading] = React.useState(false);
+  const [CPKStudentRecords, setCPKStudentRecords] = React.useState([]);
   const [CPKClasses, setCPKClasses] = React.useState(initialValues.CPKClasses);
+  const [CPKClassesLoading, setCPKClassesLoading] = React.useState(false);
+  const [CPKClassesRecords, setCPKClassesRecords] = React.useState([]);
   const [CPKProjects, setCPKProjects] = React.useState(
     initialValues.CPKProjects
   );
+  const [CPKProjectsLoading, setCPKProjectsLoading] = React.useState(false);
+  const [CPKProjectsRecords, setCPKProjectsRecords] = React.useState([]);
+  const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = cPKTeacherRecord
@@ -5734,14 +6736,16 @@ export default function UpdateCPKTeacherForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = specialTeacherIdProp
-        ? await API.graphql({
-            query: getCPKTeacher,
-            variables: {
-              input: {
-                id: idProp,
+        ? (
+            await API.graphql({
+              query: getCPKTeacher,
+              variables: {
+                input: {
+                  id: idProp,
+                },
               },
-            },
-          })
+            })
+          ).data.getCPKTeacher
         : cPKTeacherModelProp;
       setCPKTeacherRecord(record);
       const CPKStudentRecord = record ? await record.CPKStudent : undefined;
@@ -5757,7 +6761,16 @@ export default function UpdateCPKTeacherForm(props) {
         : [];
       setLinkedCPKClasses(linkedCPKClasses);
       const linkedCPKProjects = record
-        ? await record.CPKProjects.toArray()
+        ? (
+            await API.graphql({
+              query: cPKProjectsByCPKTeacherID,
+              variables: {
+                input: {
+                  cPKTeacherID: record.id,
+                },
+              },
+            })
+          ).data.cPKProjectsByCPKTeacherID.items
         : [];
       setLinkedCPKProjects(linkedCPKProjects);
     };
@@ -5806,21 +6819,6 @@ export default function UpdateCPKTeacherForm(props) {
       ? CPKProjects.map((r) => getIDValue.CPKProjects?.(r))
       : getIDValue.CPKProjects?.(CPKProjects)
   );
-  const cPKStudentRecords = (
-    await API.graphql({
-      query: listCPKStudents,
-    })
-  ).data.listCPKStudents.items;
-  const cPKClassRecords = (
-    await API.graphql({
-      query: listCPKClasses,
-    })
-  ).data.listCPKClasses.items;
-  const cPKProjectRecords = (
-    await API.graphql({
-      query: listCPKProjects,
-    })
-  ).data.listCPKProjects.items;
   const getDisplayValue = {
     CPKStudent: (r) => r?.specialStudentId,
     CPKClasses: (r) => r?.specialClassId,
@@ -5848,6 +6846,87 @@ export default function UpdateCPKTeacherForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const fetchCPKStudentRecords = async (value) => {
+    setCPKStudentLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: { or: [{ specialStudentId: { contains: value } }] },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listCPKStudents,
+          variables,
+        })
+      ).data.listCPKStudents.item;
+      var loaded = result.filter(
+        (item) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setCPKStudentRecords(newOptions.slice(0, autocompleteLength));
+    setCPKStudentLoading(false);
+  };
+  const fetchCPKClassesRecords = async (value) => {
+    setCPKClassesLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: { or: [{ specialClassId: { contains: value } }] },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listCPKClasses,
+          variables,
+        })
+      ).data.listCPKClasses.item;
+      var loaded = result.filter(
+        (item) => !CPKClassesIdSet.has(getIDValue.CPKClasses?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setCPKClassesRecords(newOptions.slice(0, autocompleteLength));
+    setCPKClassesLoading(false);
+  };
+  const fetchCPKProjectsRecords = async (value) => {
+    setCPKProjectsLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: { or: [{ specialProjectId: { contains: value } }] },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listCPKProjects,
+          variables,
+        })
+      ).data.listCPKProjects.item;
+      var loaded = result.filter(
+        (item) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setCPKProjectsRecords(newOptions.slice(0, autocompleteLength));
+    setCPKProjectsLoading(false);
   };
   return (
     <Grid
@@ -6019,11 +7098,10 @@ export default function UpdateCPKTeacherForm(props) {
             }
             promises.push(
               API.graphql({
-                query: updateCPKTeacherRecord,
+                query: deleteCPKProject,
                 variables: {
                   input: {
-                    ...original,
-                    cPKTeacherID: null,
+                    specialProjectId: original.specialProjectId,
                   },
                 },
               })
@@ -6032,10 +7110,10 @@ export default function UpdateCPKTeacherForm(props) {
           cPKProjectsToLink.forEach((original) => {
             promises.push(
               API.graphql({
-                query: updateCPKTeacherRecord,
+                query: updateCPKProject,
                 variables: {
                   input: {
-                    ...original,
+                    specialProjectId: original.specialProjectId,
                     cPKTeacherID: cPKTeacherRecord.specialTeacherId,
                   },
                 },
@@ -6051,6 +7129,7 @@ export default function UpdateCPKTeacherForm(props) {
               query: updateCPKTeacher,
               variables: {
                 input: {
+                  specialTeacherId: cPKTeacherRecord.specialTeacherId,
                   ...modelFieldsToSave,
                 },
               },
@@ -6135,12 +7214,13 @@ export default function UpdateCPKTeacherForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CPKStudent\\"
           value={currentCPKStudentDisplayValue}
-          options={cPKStudentRecords
-            .filter((r) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(r)))
-            .map((r) => ({
-              id: getIDValue.CPKStudent?.(r),
-              label: getDisplayValue.CPKStudent?.(r),
-            }))}
+          options={CPKStudentRecords.filter(
+            (r) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(r))
+          ).map((r) => ({
+            id: getIDValue.CPKStudent?.(r),
+            label: getDisplayValue.CPKStudent?.(r),
+          }))}
+          isLoading={CPKStudentLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKStudentValue(
               cPKStudentRecords.find((r) =>
@@ -6158,6 +7238,7 @@ export default function UpdateCPKTeacherForm(props) {
           defaultValue={CPKStudent}
           onChange={(e) => {
             let { value } = e.target;
+            fetchCPKStudentRecords(value);
             if (errors.CPKStudent?.hasError) {
               runValidationTasks(\\"CPKStudent\\", value);
             }
@@ -6212,12 +7293,11 @@ export default function UpdateCPKTeacherForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CPKClass\\"
           value={currentCPKClassesDisplayValue}
-          options={cPKClassRecords
-            .filter((r) => !CPKClassesIdSet.has(getIDValue.CPKClasses?.(r)))
-            .map((r) => ({
-              id: getIDValue.CPKClasses?.(r),
-              label: getDisplayValue.CPKClasses?.(r),
-            }))}
+          options={CPKClassesRecords.map((r) => ({
+            id: getIDValue.CPKClasses?.(r),
+            label: getDisplayValue.CPKClasses?.(r),
+          }))}
+          isLoading={CPKClassesLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKClassesValue(
               cPKClassRecords.find((r) =>
@@ -6234,6 +7314,7 @@ export default function UpdateCPKTeacherForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchCPKClassesRecords(value);
             if (errors.CPKClasses?.hasError) {
               runValidationTasks(\\"CPKClasses\\", value);
             }
@@ -6288,12 +7369,13 @@ export default function UpdateCPKTeacherForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CPKProject\\"
           value={currentCPKProjectsDisplayValue}
-          options={cPKProjectRecords
-            .filter((r) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(r)))
-            .map((r) => ({
-              id: getIDValue.CPKProjects?.(r),
-              label: getDisplayValue.CPKProjects?.(r),
-            }))}
+          options={CPKProjectsRecords.filter(
+            (r) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(r))
+          ).map((r) => ({
+            id: getIDValue.CPKProjects?.(r),
+            label: getDisplayValue.CPKProjects?.(r),
+          }))}
+          isLoading={CPKProjectsLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKProjectsValue(
               cPKProjectRecords.find((r) =>
@@ -6310,6 +7392,7 @@ export default function UpdateCPKTeacherForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchCPKProjectsRecords(value);
             if (errors.CPKProjects?.hasError) {
               runValidationTasks(\\"CPKProjects\\", value);
             }
@@ -6426,7 +7509,10 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
-import { listCompositeDogs } from \\"../graphql/queries\\";
+import {
+  listCompositeDogCompositeToysDescriptions,
+  listCompositeDogCompositeToysNames,
+} from \\"../graphql/queries\\";
 import { createCompositeToy } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -6608,9 +7694,26 @@ export default function CreateCompositeToyForm(props) {
   const [compositeDogCompositeToysName, setCompositeDogCompositeToysName] =
     React.useState(initialValues.compositeDogCompositeToysName);
   const [
+    compositeDogCompositeToysNameLoading,
+    setCompositeDogCompositeToysNameLoading,
+  ] = React.useState(false);
+  const [
+    compositeDogCompositeToysNameRecords,
+    setCompositeDogCompositeToysNameRecords,
+  ] = React.useState([]);
+  const [
     compositeDogCompositeToysDescription,
     setCompositeDogCompositeToysDescription,
   ] = React.useState(initialValues.compositeDogCompositeToysDescription);
+  const [
+    compositeDogCompositeToysDescriptionLoading,
+    setCompositeDogCompositeToysDescriptionLoading,
+  ] = React.useState(false);
+  const [
+    compositeDogCompositeToysDescriptionRecords,
+    setCompositeDogCompositeToysDescriptionRecords,
+  ] = React.useState([]);
+  const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setKind(initialValues.kind);
@@ -6645,11 +7748,6 @@ export default function CreateCompositeToyForm(props) {
     setCurrentCompositeDogCompositeToysDescriptionValue,
   ] = React.useState(undefined);
   const compositeDogCompositeToysDescriptionRef = React.createRef();
-  const compositeDogRecords = (
-    await API.graphql({
-      query: listCompositeDogs,
-    })
-  ).data.listCompositeDogs.items;
   const getDisplayValue = {
     compositeDogCompositeToysName: (r) => r?.name,
     compositeDogCompositeToysDescription: (r) => r?.description,
@@ -6676,6 +7774,70 @@ export default function CreateCompositeToyForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const fetchCompositeDogCompositeToysNameRecords = async (value) => {
+    setCompositeDogCompositeToysNameLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: { or: [{ name: { contains: value } }] },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listCompositeDogCompositeToysNames,
+          variables,
+        })
+      ).data.listCompositeDogCompositeToysNames.item;
+      var loaded = result.filter(
+        (item) =>
+          !compositeDogCompositeToysNameIdSet.has(
+            getIDValue.compositeDogCompositeToysName?.(item)
+          )
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setCompositeDogCompositeToysNameRecords(
+      newOptions.slice(0, autocompleteLength)
+    );
+    setCompositeDogCompositeToysNameLoading(false);
+  };
+  const fetchCompositeDogCompositeToysDescriptionRecords = async (value) => {
+    setCompositeDogCompositeToysDescriptionLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: { or: [{ description: { contains: value } }] },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listCompositeDogCompositeToysDescriptions,
+          variables,
+        })
+      ).data.listCompositeDogCompositeToysDescriptions.item;
+      var loaded = result.filter(
+        (item) =>
+          !compositeDogCompositeToysDescriptionIdSet.has(
+            getIDValue.compositeDogCompositeToysDescription?.(item)
+          )
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setCompositeDogCompositeToysDescriptionRecords(
+      newOptions.slice(0, autocompleteLength)
+    );
+    setCompositeDogCompositeToysDescriptionLoading(false);
   };
   return (
     <Grid
@@ -6846,7 +8008,7 @@ export default function CreateCompositeToyForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeDog\\"
           value={currentCompositeDogCompositeToysNameDisplayValue}
-          options={compositeDogRecords
+          options={compositeDogCompositeToysNameRecords
             .filter(
               (r, i, arr) =>
                 arr.findIndex((member) => member?.name === r?.name) === i
@@ -6855,6 +8017,7 @@ export default function CreateCompositeToyForm(props) {
               id: r?.name,
               label: getDisplayValue.compositeDogCompositeToysName?.(r),
             }))}
+          isLoading={compositeDogCompositeToysNameLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeDogCompositeToysNameValue(id);
             setCurrentCompositeDogCompositeToysNameDisplayValue(label);
@@ -6865,6 +8028,7 @@ export default function CreateCompositeToyForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchCompositeDogCompositeToysNameRecords(value);
             if (errors.compositeDogCompositeToysName?.hasError) {
               runValidationTasks(\\"compositeDogCompositeToysName\\", value);
             }
@@ -6938,7 +8102,7 @@ export default function CreateCompositeToyForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeDog\\"
           value={currentCompositeDogCompositeToysDescriptionDisplayValue}
-          options={compositeDogRecords
+          options={compositeDogCompositeToysDescriptionRecords
             .filter(
               (r, i, arr) =>
                 arr.findIndex(
@@ -6949,6 +8113,7 @@ export default function CreateCompositeToyForm(props) {
               id: r?.description,
               label: getDisplayValue.compositeDogCompositeToysDescription?.(r),
             }))}
+          isLoading={compositeDogCompositeToysDescriptionLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeDogCompositeToysDescriptionValue(id);
             setCurrentCompositeDogCompositeToysDescriptionDisplayValue(label);
@@ -6959,6 +8124,7 @@ export default function CreateCompositeToyForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchCompositeDogCompositeToysDescriptionRecords(value);
             if (errors.compositeDogCompositeToysDescription?.hasError) {
               runValidationTasks(\\"compositeDogCompositeToysDescription\\", value);
             }
@@ -7077,7 +8243,12 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
-import { listOrgs, listPosts, listUsers } from \\"../graphql/queries\\";
+import {
+  listOrgs,
+  listPostCommentsIds,
+  listPosts,
+  listUsers,
+} from \\"../graphql/queries\\";
 import { createComment } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -7257,11 +8428,21 @@ export default function CreateCommentForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [post, setPost] = React.useState(initialValues.post);
+  const [postLoading, setPostLoading] = React.useState(false);
+  const [postRecords, setPostRecords] = React.useState([]);
   const [User, setUser] = React.useState(initialValues.User);
+  const [UserLoading, setUserLoading] = React.useState(false);
+  const [UserRecords, setUserRecords] = React.useState([]);
   const [Org, setOrg] = React.useState(initialValues.Org);
+  const [OrgLoading, setOrgLoading] = React.useState(false);
+  const [OrgRecords, setOrgRecords] = React.useState([]);
   const [postCommentsId, setPostCommentsId] = React.useState(
     initialValues.postCommentsId
   );
+  const [postCommentsIdLoading, setPostCommentsIdLoading] =
+    React.useState(false);
+  const [postCommentsIdRecords, setPostCommentsIdRecords] = React.useState([]);
+  const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -7318,21 +8499,6 @@ export default function CreateCommentForm(props) {
       ? Org.map((r) => getIDValue.Org?.(r))
       : getIDValue.Org?.(Org)
   );
-  const postRecords = (
-    await API.graphql({
-      query: listPosts,
-    })
-  ).data.listPosts.items;
-  const userRecords = (
-    await API.graphql({
-      query: listUsers,
-    })
-  ).data.listUsers.items;
-  const orgRecords = (
-    await API.graphql({
-      query: listOrgs,
-    })
-  ).data.listOrgs.items;
   const getDisplayValue = {
     post: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
     User: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
@@ -7362,6 +8528,122 @@ export default function CreateCommentForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const fetchPostRecords = async (value) => {
+    setPostLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ name: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listPosts,
+          variables,
+        })
+      ).data.listPosts.item;
+      var loaded = result.filter(
+        (item) => !postIdSet.has(getIDValue.post?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setPostRecords(newOptions.slice(0, autocompleteLength));
+    setPostLoading(false);
+  };
+  const fetchUserRecords = async (value) => {
+    setUserLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ name: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listUsers,
+          variables,
+        })
+      ).data.listUsers.item;
+      var loaded = result.filter(
+        (item) => !UserIdSet.has(getIDValue.User?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setUserRecords(newOptions.slice(0, autocompleteLength));
+    setUserLoading(false);
+  };
+  const fetchOrgRecords = async (value) => {
+    setOrgLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ name: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listOrgs,
+          variables,
+        })
+      ).data.listOrgs.item;
+      var loaded = result.filter(
+        (item) => !OrgIdSet.has(getIDValue.Org?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setOrgRecords(newOptions.slice(0, autocompleteLength));
+    setOrgLoading(false);
+  };
+  const fetchPostCommentsIdRecords = async (value) => {
+    setPostCommentsIdLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ name: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listPostCommentsIds,
+          variables,
+        })
+      ).data.listPostCommentsIds.item;
+      var loaded = result.filter(
+        (item) => !postCommentsIdIdSet.has(getIDValue.postCommentsId?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setPostCommentsIdRecords(newOptions.slice(0, autocompleteLength));
+    setPostCommentsIdLoading(false);
   };
   return (
     <Grid
@@ -7503,12 +8785,13 @@ export default function CreateCommentForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Post\\"
           value={currentPostDisplayValue}
-          options={postRecords
-            .filter((r) => !postIdSet.has(getIDValue.post?.(r)))
-            .map((r) => ({
-              id: getIDValue.post?.(r),
-              label: getDisplayValue.post?.(r),
-            }))}
+          options={PostRecords.filter(
+            (r) => !postIdSet.has(getIDValue.post?.(r))
+          ).map((r) => ({
+            id: getIDValue.post?.(r),
+            label: getDisplayValue.post?.(r),
+          }))}
+          isLoading={postLoading}
           onSelect={({ id, label }) => {
             setCurrentPostValue(
               postRecords.find((r) =>
@@ -7525,6 +8808,7 @@ export default function CreateCommentForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchPostRecords(value);
             if (errors.post?.hasError) {
               runValidationTasks(\\"post\\", value);
             }
@@ -7577,12 +8861,13 @@ export default function CreateCommentForm(props) {
           isReadOnly={false}
           placeholder=\\"Search User\\"
           value={currentUserDisplayValue}
-          options={userRecords
-            .filter((r) => !UserIdSet.has(getIDValue.User?.(r)))
-            .map((r) => ({
-              id: getIDValue.User?.(r),
-              label: getDisplayValue.User?.(r),
-            }))}
+          options={UserRecords.filter(
+            (r) => !UserIdSet.has(getIDValue.User?.(r))
+          ).map((r) => ({
+            id: getIDValue.User?.(r),
+            label: getDisplayValue.User?.(r),
+          }))}
+          isLoading={UserLoading}
           onSelect={({ id, label }) => {
             setCurrentUserValue(
               userRecords.find((r) =>
@@ -7599,6 +8884,7 @@ export default function CreateCommentForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchUserRecords(value);
             if (errors.User?.hasError) {
               runValidationTasks(\\"User\\", value);
             }
@@ -7651,12 +8937,13 @@ export default function CreateCommentForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Org\\"
           value={currentOrgDisplayValue}
-          options={orgRecords
-            .filter((r) => !OrgIdSet.has(getIDValue.Org?.(r)))
-            .map((r) => ({
-              id: getIDValue.Org?.(r),
-              label: getDisplayValue.Org?.(r),
-            }))}
+          options={OrgRecords.filter(
+            (r) => !OrgIdSet.has(getIDValue.Org?.(r))
+          ).map((r) => ({
+            id: getIDValue.Org?.(r),
+            label: getDisplayValue.Org?.(r),
+          }))}
+          isLoading={OrgLoading}
           onSelect={({ id, label }) => {
             setCurrentOrgValue(
               orgRecords.find((r) =>
@@ -7673,6 +8960,7 @@ export default function CreateCommentForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchOrgRecords(value);
             if (errors.Org?.hasError) {
               runValidationTasks(\\"Org\\", value);
             }
@@ -7736,7 +9024,7 @@ export default function CreateCommentForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Post\\"
           value={currentPostCommentsIdDisplayValue}
-          options={postRecords
+          options={postCommentsIdRecords
             .filter(
               (r, i, arr) =>
                 arr.findIndex((member) => member?.id === r?.id) === i
@@ -7745,6 +9033,7 @@ export default function CreateCommentForm(props) {
               id: r?.id,
               label: getDisplayValue.postCommentsId?.(r),
             }))}
+          isLoading={postCommentsIdLoading}
           onSelect={({ id, label }) => {
             setCurrentPostCommentsIdValue(id);
             setCurrentPostCommentsIdDisplayValue(label);
@@ -7755,6 +9044,7 @@ export default function CreateCommentForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchPostCommentsIdRecords(value);
             if (errors.postCommentsId?.hasError) {
               runValidationTasks(\\"postCommentsId\\", value);
             }
@@ -8065,15 +9355,25 @@ export default function CreateCompositeDogForm(props) {
   const [CompositeBowl, setCompositeBowl] = React.useState(
     initialValues.CompositeBowl
   );
+  const [CompositeBowlLoading, setCompositeBowlLoading] = React.useState(false);
+  const [CompositeBowlRecords, setCompositeBowlRecords] = React.useState([]);
   const [CompositeOwner, setCompositeOwner] = React.useState(
     initialValues.CompositeOwner
   );
+  const [CompositeOwnerLoading, setCompositeOwnerLoading] =
+    React.useState(false);
+  const [CompositeOwnerRecords, setCompositeOwnerRecords] = React.useState([]);
   const [CompositeToys, setCompositeToys] = React.useState(
     initialValues.CompositeToys
   );
+  const [CompositeToysLoading, setCompositeToysLoading] = React.useState(false);
+  const [CompositeToysRecords, setCompositeToysRecords] = React.useState([]);
   const [CompositeVets, setCompositeVets] = React.useState(
     initialValues.CompositeVets
   );
+  const [CompositeVetsLoading, setCompositeVetsLoading] = React.useState(false);
+  const [CompositeVetsRecords, setCompositeVetsRecords] = React.useState([]);
+  const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -8148,26 +9448,6 @@ export default function CreateCompositeDogForm(props) {
       ? CompositeVets.map((r) => getIDValue.CompositeVets?.(r))
       : getIDValue.CompositeVets?.(CompositeVets)
   );
-  const compositeBowlRecords = (
-    await API.graphql({
-      query: listCompositeBowls,
-    })
-  ).data.listCompositeBowls.items;
-  const compositeOwnerRecords = (
-    await API.graphql({
-      query: listCompositeOwners,
-    })
-  ).data.listCompositeOwners.items;
-  const compositeToyRecords = (
-    await API.graphql({
-      query: listCompositeToys,
-    })
-  ).data.listCompositeToys.items;
-  const compositeVetRecords = (
-    await API.graphql({
-      query: listCompositeVets,
-    })
-  ).data.listCompositeVets.items;
   const getDisplayValue = {
     CompositeBowl: (r) => \`\${r?.shape}\${\\"-\\"}\${r?.size}\`,
     CompositeOwner: (r) => \`\${r?.lastName}\${\\"-\\"}\${r?.firstName}\`,
@@ -8198,6 +9478,128 @@ export default function CreateCompositeDogForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const fetchCompositeBowlRecords = async (value) => {
+    setCompositeBowlLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ shape: { contains: value } }, { size: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listCompositeBowls,
+          variables,
+        })
+      ).data.listCompositeBowls.item;
+      var loaded = result.filter(
+        (item) => !CompositeBowlIdSet.has(getIDValue.CompositeBowl?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setCompositeBowlRecords(newOptions.slice(0, autocompleteLength));
+    setCompositeBowlLoading(false);
+  };
+  const fetchCompositeOwnerRecords = async (value) => {
+    setCompositeOwnerLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [
+            { lastName: { contains: value } },
+            { firstName: { contains: value } },
+          ],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listCompositeOwners,
+          variables,
+        })
+      ).data.listCompositeOwners.item;
+      var loaded = result.filter(
+        (item) => !CompositeOwnerIdSet.has(getIDValue.CompositeOwner?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setCompositeOwnerRecords(newOptions.slice(0, autocompleteLength));
+    setCompositeOwnerLoading(false);
+  };
+  const fetchCompositeToysRecords = async (value) => {
+    setCompositeToysLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ kind: { contains: value } }, { color: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listCompositeToys,
+          variables,
+        })
+      ).data.listCompositeToys.item;
+      var loaded = result.filter(
+        (item) => !CompositeToysIdSet.has(getIDValue.CompositeToys?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setCompositeToysRecords(newOptions.slice(0, autocompleteLength));
+    setCompositeToysLoading(false);
+  };
+  const fetchCompositeVetsRecords = async (value) => {
+    setCompositeVetsLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [
+            { specialty: { contains: value } },
+            { city: { contains: value } },
+          ],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listCompositeVets,
+          variables,
+        })
+      ).data.listCompositeVets.item;
+      var loaded = result.filter(
+        (item) => !CompositeVetsIdSet.has(getIDValue.CompositeVets?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setCompositeVetsRecords(newOptions.slice(0, autocompleteLength));
+    setCompositeVetsLoading(false);
   };
   return (
     <Grid
@@ -8446,14 +9848,13 @@ export default function CreateCompositeDogForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeBowl\\"
           value={currentCompositeBowlDisplayValue}
-          options={compositeBowlRecords
-            .filter(
-              (r) => !CompositeBowlIdSet.has(getIDValue.CompositeBowl?.(r))
-            )
-            .map((r) => ({
-              id: getIDValue.CompositeBowl?.(r),
-              label: getDisplayValue.CompositeBowl?.(r),
-            }))}
+          options={CompositeBowlRecords.filter(
+            (r) => !CompositeBowlIdSet.has(getIDValue.CompositeBowl?.(r))
+          ).map((r) => ({
+            id: getIDValue.CompositeBowl?.(r),
+            label: getDisplayValue.CompositeBowl?.(r),
+          }))}
+          isLoading={CompositeBowlLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeBowlValue(
               compositeBowlRecords.find((r) =>
@@ -8470,6 +9871,7 @@ export default function CreateCompositeDogForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchCompositeBowlRecords(value);
             if (errors.CompositeBowl?.hasError) {
               runValidationTasks(\\"CompositeBowl\\", value);
             }
@@ -8530,14 +9932,13 @@ export default function CreateCompositeDogForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeOwner\\"
           value={currentCompositeOwnerDisplayValue}
-          options={compositeOwnerRecords
-            .filter(
-              (r) => !CompositeOwnerIdSet.has(getIDValue.CompositeOwner?.(r))
-            )
-            .map((r) => ({
-              id: getIDValue.CompositeOwner?.(r),
-              label: getDisplayValue.CompositeOwner?.(r),
-            }))}
+          options={CompositeOwnerRecords.filter(
+            (r) => !CompositeOwnerIdSet.has(getIDValue.CompositeOwner?.(r))
+          ).map((r) => ({
+            id: getIDValue.CompositeOwner?.(r),
+            label: getDisplayValue.CompositeOwner?.(r),
+          }))}
+          isLoading={CompositeOwnerLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeOwnerValue(
               compositeOwnerRecords.find((r) =>
@@ -8554,6 +9955,7 @@ export default function CreateCompositeDogForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchCompositeOwnerRecords(value);
             if (errors.CompositeOwner?.hasError) {
               runValidationTasks(\\"CompositeOwner\\", value);
             }
@@ -8613,14 +10015,13 @@ export default function CreateCompositeDogForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeToy\\"
           value={currentCompositeToysDisplayValue}
-          options={compositeToyRecords
-            .filter(
-              (r) => !CompositeToysIdSet.has(getIDValue.CompositeToys?.(r))
-            )
-            .map((r) => ({
-              id: getIDValue.CompositeToys?.(r),
-              label: getDisplayValue.CompositeToys?.(r),
-            }))}
+          options={CompositeToysRecords.filter(
+            (r) => !CompositeToysIdSet.has(getIDValue.CompositeToys?.(r))
+          ).map((r) => ({
+            id: getIDValue.CompositeToys?.(r),
+            label: getDisplayValue.CompositeToys?.(r),
+          }))}
+          isLoading={CompositeToysLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeToysValue(
               compositeToyRecords.find((r) =>
@@ -8637,6 +10038,7 @@ export default function CreateCompositeDogForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchCompositeToysRecords(value);
             if (errors.CompositeToys?.hasError) {
               runValidationTasks(\\"CompositeToys\\", value);
             }
@@ -8696,14 +10098,11 @@ export default function CreateCompositeDogForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeVet\\"
           value={currentCompositeVetsDisplayValue}
-          options={compositeVetRecords
-            .filter(
-              (r) => !CompositeVetsIdSet.has(getIDValue.CompositeVets?.(r))
-            )
-            .map((r) => ({
-              id: getIDValue.CompositeVets?.(r),
-              label: getDisplayValue.CompositeVets?.(r),
-            }))}
+          options={CompositeVetsRecords.map((r) => ({
+            id: getIDValue.CompositeVets?.(r),
+            label: getDisplayValue.CompositeVets?.(r),
+          }))}
+          isLoading={CompositeVetsLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeVetsValue(
               compositeVetRecords.find((r) =>
@@ -8720,6 +10119,7 @@ export default function CreateCompositeDogForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchCompositeVetsRecords(value);
             if (errors.CompositeVets?.hasError) {
               runValidationTasks(\\"CompositeVets\\", value);
             }
@@ -9017,6 +10417,9 @@ export default function CreateDogForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Owner, setOwner] = React.useState(initialValues.Owner);
+  const [OwnerLoading, setOwnerLoading] = React.useState(false);
+  const [OwnerRecords, setOwnerRecords] = React.useState([]);
+  const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -9037,11 +10440,6 @@ export default function CreateDogForm(props) {
       ? Owner.map((r) => getIDValue.Owner?.(r))
       : getIDValue.Owner?.(Owner)
   );
-  const ownerRecords = (
-    await API.graphql({
-      query: listOwners,
-    })
-  ).data.listOwners.items;
   const getDisplayValue = {
     Owner: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
@@ -9065,6 +10463,35 @@ export default function CreateDogForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const fetchOwnerRecords = async (value) => {
+    setOwnerLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ name: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listOwners,
+          variables,
+        })
+      ).data.listOwners.item;
+      var loaded = result.filter(
+        (item) => !OwnerIdSet.has(getIDValue.Owner?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setOwnerRecords(newOptions.slice(0, autocompleteLength));
+    setOwnerLoading(false);
   };
   return (
     <Grid
@@ -9223,12 +10650,13 @@ export default function CreateDogForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Owner\\"
           value={currentOwnerDisplayValue}
-          options={ownerRecords
-            .filter((r) => !OwnerIdSet.has(getIDValue.Owner?.(r)))
-            .map((r) => ({
-              id: getIDValue.Owner?.(r),
-              label: getDisplayValue.Owner?.(r),
-            }))}
+          options={OwnerRecords.filter(
+            (r) => !OwnerIdSet.has(getIDValue.Owner?.(r))
+          ).map((r) => ({
+            id: getIDValue.Owner?.(r),
+            label: getDisplayValue.Owner?.(r),
+          }))}
+          isLoading={OwnerLoading}
           onSelect={({ id, label }) => {
             setCurrentOwnerValue(
               ownerRecords.find((r) =>
@@ -9245,6 +10673,7 @@ export default function CreateDogForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchOwnerRecords(value);
             if (errors.Owner?.hasError) {
               runValidationTasks(\\"Owner\\", value);
             }
@@ -9525,6 +10954,9 @@ export default function CreateOwnerForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Dog, setDog] = React.useState(initialValues.Dog);
+  const [DogLoading, setDogLoading] = React.useState(false);
+  const [DogRecords, setDogRecords] = React.useState([]);
+  const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -9545,11 +10977,6 @@ export default function CreateOwnerForm(props) {
       ? Dog.map((r) => getIDValue.Dog?.(r))
       : getIDValue.Dog?.(Dog)
   );
-  const dogRecords = (
-    await API.graphql({
-      query: listDogs,
-    })
-  ).data.listDogs.items;
   const getDisplayValue = {
     Dog: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
@@ -9573,6 +11000,35 @@ export default function CreateOwnerForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const fetchDogRecords = async (value) => {
+    setDogLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ name: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listDogs,
+          variables,
+        })
+      ).data.listDogs.item;
+      var loaded = result.filter(
+        (item) => !DogIdSet.has(getIDValue.Dog?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setDogRecords(newOptions.slice(0, autocompleteLength));
+    setDogLoading(false);
   };
   return (
     <Grid
@@ -9736,12 +11192,13 @@ export default function CreateOwnerForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Dog\\"
           value={currentDogDisplayValue}
-          options={dogRecords
-            .filter((r) => !DogIdSet.has(getIDValue.Dog?.(r)))
-            .map((r) => ({
-              id: getIDValue.Dog?.(r),
-              label: getDisplayValue.Dog?.(r),
-            }))}
+          options={DogRecords.filter(
+            (r) => !DogIdSet.has(getIDValue.Dog?.(r))
+          ).map((r) => ({
+            id: getIDValue.Dog?.(r),
+            label: getDisplayValue.Dog?.(r),
+          }))}
+          isLoading={DogLoading}
           onSelect={({ id, label }) => {
             setCurrentDogValue(
               dogRecords.find((r) =>
@@ -9758,6 +11215,7 @@ export default function CreateOwnerForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchDogRecords(value);
             if (errors.Dog?.hasError) {
               runValidationTasks(\\"Dog\\", value);
             }
@@ -36862,12 +38320,13 @@ export default function UpdateDealershipForm(props) {
           carsToUnLink.forEach((original) => {
             if (!canUnlinkCars) {
               throw Error(
-                \`Car \${original.id} cannot be unlinked from Dealership because undefined is a required field.\`
+                \`Car \${original.id} cannot be unlinked from Dealership because dealershipId is a required field.\`
               );
             }
             promises.push(
               DataStore.save(
                 Car.copyOf(original, (updated) => {
+                  updated.dealershipId = null;
                   updated.dealership = null;
                 })
               )
@@ -36877,6 +38336,7 @@ export default function UpdateDealershipForm(props) {
             promises.push(
               DataStore.save(
                 Car.copyOf(original, (updated) => {
+                  updated.dealershipId = dealershipRecord.id;
                   updated.dealership = dealershipRecord;
                 })
               )

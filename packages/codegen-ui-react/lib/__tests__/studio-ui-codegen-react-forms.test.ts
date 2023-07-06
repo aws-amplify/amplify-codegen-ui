@@ -752,8 +752,8 @@ describe('amplify form renderer tests', () => {
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
 
-      // check binding call is generated
-      expect(componentText).toContain(').data.listAuthors.items;');
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
 
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
@@ -772,7 +772,21 @@ describe('amplify form renderer tests', () => {
 
       expect(componentText).toContain('await API.graphql({');
       expect(componentText).toContain('query: updateComment');
-      expect(componentText).toContain(').data.listPosts.items');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate a relationship update form with autocomplete', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/relationships/update-post',
+        'datastore/relationships/has-many-autocomplete-post',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
 
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
@@ -838,9 +852,8 @@ describe('amplify form renderer tests', () => {
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
 
-      // check binding calls are generated
-      expect(componentText).toContain(').data.listAuthors.items;');
-      expect(componentText).toContain(').data.listTitles.items;');
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
 
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
@@ -854,8 +867,8 @@ describe('amplify form renderer tests', () => {
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
 
-      // check binding call is generated
-      expect(componentText).toContain(').data.listTeams.items;');
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
 
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
@@ -869,8 +882,8 @@ describe('amplify form renderer tests', () => {
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
 
-      // check binding call is generated
-      expect(componentText).toContain(').data.listPosts.items;');
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
 
       // check custom display value is set
       expect(componentText).toContain('Posts: (r) => r?.title');
@@ -887,8 +900,8 @@ describe('amplify form renderer tests', () => {
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
 
-      // check binding call is generated
-      expect(componentText).toContain(').data.listStudents.items;');
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
 
       // check custom display value is set
       expect(componentText).toContain('Students: (r) => r?.name');
