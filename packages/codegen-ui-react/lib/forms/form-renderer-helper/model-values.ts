@@ -139,15 +139,7 @@ export function getDisplayValueScalar(fieldName: string, model: string, key: str
     label: getDisplayValue['fieldName']?.(r),
   }))
  */
-function getSuggestionsForRelationshipScalar({
-  modelName,
-  key,
-  fieldName,
-}: {
-  modelName: string;
-  key: string;
-  fieldName: string;
-}): CallExpression {
+function getSuggestionsForRelationshipScalar(modelName: string, key: string, fieldName: string): CallExpression {
   const recordString = 'r';
 
   const labelExpression = getDisplayValueCallChain({ fieldName, recordString });
@@ -290,7 +282,7 @@ function getModelTypeSuggestions({
 }): CallExpression {
   const recordString = 'r';
   const labelExpression = getDisplayValueCallChain({ fieldName, recordString });
-  const optionsRecords = dataApi === 'GraphQL' ? getRecordsName(fieldName, true) : getRecordsName(modelName);
+  const optionsRecords = dataApi === 'GraphQL' ? getRecordsName(fieldName) : getRecordsName(modelName);
 
   const mappingFunction = factory.createArrowFunction(
     undefined,
@@ -460,11 +452,7 @@ export function getAutocompleteOptionsProp({
         dataApi,
       });
     } else if (keys) {
-      options = getSuggestionsForRelationshipScalar({
-        modelName: dataApi === 'GraphQL' ? fieldName : model,
-        key: keys[0],
-        fieldName,
-      });
+      options = getSuggestionsForRelationshipScalar(dataApi === 'GraphQL' ? fieldName : model, keys[0], fieldName);
     }
   } else {
     options = buildFixedAutocompleteOptions(fieldName, valueMappings);
