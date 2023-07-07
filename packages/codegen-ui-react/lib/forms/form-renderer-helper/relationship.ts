@@ -31,7 +31,13 @@ import {
   GenericDataModel,
   GenericDataField,
 } from '@aws-amplify/codegen-ui';
-import { getRecordsName, getLinkedDataName, buildAccessChain, getCanUnlinkModelName } from './form-state';
+import {
+  getRecordsName,
+  getLinkedDataName,
+  buildAccessChain,
+  getCanUnlinkModelName,
+  getRecordName,
+} from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
 import { ImportCollection, ImportSource } from '../../imports';
 import { lowerCaseFirst, getSetNameIdentifier, capitalizeFirstLetter } from '../../helpers';
@@ -258,7 +264,7 @@ export const buildManyToManyRelationshipStatements = (
     const linkedDataName = getLinkedDataName(fieldName);
     const dataToLinkMap = `${lowerCaseFirst(fieldName)}ToLinkMap`;
     const dataToUnlinkMap = `${lowerCaseFirst(fieldName)}ToUnLinkMap`;
-    const thisModelRecord = `${lowerCaseFirst(modelName)}Record`;
+    const thisModelRecord = getRecordName(modelName);
     const updatedMap = `${lowerCaseFirst(fieldName)}Map`;
     const originalMap = `${linkedDataName}Map`;
 
@@ -875,7 +881,7 @@ export const buildManyToManyRelationshipStatements = (
                                       // class: classRecord
                                       factory.createPropertyAssignment(
                                         factory.createIdentifier(joinTableThisModelName),
-                                        factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
+                                        factory.createIdentifier(thisModelRecord),
                                       ),
                                       // student: studentRecords.find((r) =>
                                       //   Object.entries(JSON.parse(id)).every(
@@ -907,7 +913,7 @@ export const buildManyToManyRelationshipStatements = (
                                               // cpkTeacher: cPKTeacherRecord,
                                               factory.createPropertyAssignment(
                                                 factory.createIdentifier(joinTableThisModelName),
-                                                factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
+                                                factory.createIdentifier(getRecordName(modelName)),
                                               ),
                                               // compositeVet: compositeVetRecords.find(
                                               //   (r) => Object.entries(JSON.parse(id)).every(([key, value]) =>
@@ -1232,6 +1238,7 @@ export const buildHasManyRelationshipStatements = (
   const dataToUnLink = `${lowerCaseFirst(fieldName)}ToUnLink`;
   const dataToLinkSet = `${lowerCaseFirst(fieldName)}Set`;
   const linkedDataSet = `${linkedDataName}Set`;
+  const thisModelRecord = getRecordName(modelName);
 
   const { keys } = extractModelAndKeys(fieldConfigMetaData.valueMappings);
   if (!keys) {
@@ -1570,7 +1577,7 @@ export const buildHasManyRelationshipStatements = (
                               ),
                             })
                           : getUpdateRelatedModelExpression(
-                              `${lowerCaseFirst(modelName)}Record`,
+                              thisModelRecord,
                               relatedModelVariableName,
                               relatedModelFields,
                               thisModelPrimaryKeys,
@@ -1639,7 +1646,7 @@ export const buildHasManyRelationshipStatements = (
                                   factory.createPropertyAssignment(
                                     factory.createIdentifier(relatedModelField),
                                     factory.createPropertyAccessExpression(
-                                      factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
+                                      factory.createIdentifier(thisModelRecord),
                                       factory.createIdentifier(thisModelPrimaryKeys[0]),
                                     ),
                                   ),
@@ -1647,7 +1654,7 @@ export const buildHasManyRelationshipStatements = (
                               ],
                             })
                           : getUpdateRelatedModelExpression(
-                              `${lowerCaseFirst(modelName)}Record`,
+                              thisModelRecord,
                               relatedModelVariableName,
                               relatedModelFields,
                               thisModelPrimaryKeys,

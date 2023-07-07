@@ -74,7 +74,8 @@ export const getCurrentDisplayValueName = (fieldName: string) =>
 export const getRecordsName = (modelName: string, capitalized = false) =>
   `${(capitalized ? capitalizeFirstLetter : lowerCaseFirst)(modelName)}Records`;
 
-export const getRecordName = (modelName: string) => `${lowerCaseFirst(modelName)}Record`;
+export const getRecordName = (modelName: string, capitalized = false) =>
+  `${(capitalized ? capitalizeFirstLetter : lowerCaseFirst)(modelName)}Record`;
 
 export const getLinkedDataName = (modelName: string) => `linked${capitalizeFirstLetter(modelName)}`;
 
