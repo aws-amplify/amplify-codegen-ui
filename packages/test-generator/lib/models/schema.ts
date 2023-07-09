@@ -1619,7 +1619,7 @@ export default {
           isArrayNullable: true,
           association: {
             connectionType: 'HAS_MANY',
-            associatedWith: ['dealership'],
+            associatedWith: ['dealershipId'],
           },
         },
         createdAt: {

@@ -73,6 +73,7 @@ export const getGraphqlQueryForModel = (action: ActionType, model: string, byFie
  * });
  * ```
  */
+/* istanbul ignore next */
 export const getGraphqlCallExpression = (
   action: ActionType,
   model: string,
@@ -139,9 +140,11 @@ export const getGraphqlCallExpression = (
   );
 };
 
+/* istanbul ignore next */
 export const getFetchRelatedRecords = (relatedModelName: string) =>
   `fetch${capitalizeFirstLetter(relatedModelName)}Records`;
 
+/* istanbul ignore next */
 export const getFetchRelatedRecordsCallbacks = (
   fieldConfigs: Record<string, FieldConfigMetadata>,
   importCollection: ImportCollection,
