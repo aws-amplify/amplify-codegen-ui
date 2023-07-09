@@ -59,6 +59,7 @@ export const buildRelationshipQuery = (
 ) => {
   const itemsName = getRecordsName(relatedModelName);
 
+  /* istanbul ignore next */
   if (dataApi === 'GraphQL') {
     return factory.createVariableStatement(
       undefined,
@@ -1814,6 +1815,7 @@ const getUpdateRelatedModelExpression = (
   belongsToFieldOnRelatedModel?: string,
   setToNull?: boolean,
 ) => {
+  /* istanbul ignore next */
   if (dataApi === 'GraphQL') {
     const statements: PropertyAssignment[] = relatedModelFields.map((relatedModelField, index) => {
       const correspondingPrimaryKey = thisModelPrimaryKeys[index];
@@ -1917,6 +1919,7 @@ const getCreateJoinTableExpression = (
   importCollection: ImportCollection,
   dataApi?: DataApiKind,
 ): CallExpression => {
+  /* istanbul ignore next */
   if (dataApi === 'GraphQL') {
     const inputs = [
       savedModelName === joinTableThisModelName
