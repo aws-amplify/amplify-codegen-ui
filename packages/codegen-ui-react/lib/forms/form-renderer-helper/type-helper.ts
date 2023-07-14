@@ -40,6 +40,8 @@ import { DATA_TYPE_TO_TYPESCRIPT_MAP, FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typ
 import { ImportCollection, ImportSource } from '../../imports';
 import { PRIMITIVE_OVERRIDE_PROPS } from '../../primitive';
 import { COMPOSITE_PRIMARY_KEY_PROP_NAME } from '../../utils/constants';
+import { ReactRenderConfig } from '../../react-render-config';
+import { isGraphqlConfig } from '../../utils/graphql';
 
 type Node<T> = {
   [n: string]: T | Node<T>;
@@ -51,13 +53,21 @@ type GetTypeNodeParam = {
   isArray: boolean;
   isValidation: boolean;
   importCollection?: ImportCollection;
+  renderConfig?: ReactRenderConfig;
 };
 /**
  * based on the provided dataType (appsync scalar)
  * converts to the correct typescript type
  * default assumption is string type
  */
-const getTypeNode = ({ componentType, dataType, isArray, isValidation, importCollection }: GetTypeNodeParam) => {
+const getTypeNode = ({
+  componentType,
+  dataType,
+  isArray,
+  isValidation,
+  importCollection,
+  renderConfig,
+}: GetTypeNodeParam) => {
   let typeNode: KeywordTypeNode | TypeReferenceNode = factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
 
   if (componentType in FIELD_TYPE_TO_TYPESCRIPT_MAP) {
@@ -71,7 +81,11 @@ const getTypeNode = ({ componentType, dataType, isArray, isValidation, importCol
   if (dataType && typeof dataType === 'object' && 'model' in dataType) {
     const modelName = dataType.model;
     const aliasedModel = importCollection?.addModelImport(modelName);
-    typeNode = factory.createTypeReferenceNode(factory.createIdentifier(aliasedModel || modelName));
+    let identifier = aliasedModel || modelName;
+    if (isGraphqlConfig(renderConfig?.apiConfiguration) && !renderConfig?.apiConfiguration.typesFilePath) {
+      identifier = 'any';
+    }
+    typeNode = factory.createTypeReferenceNode(factory.createIdentifier(identifier));
   }
 
   if (isValidation) {
@@ -157,13 +171,21 @@ export const generateFieldTypes = (
   type: 'input' | 'validation',
   fieldConfigs: Record<string, FieldConfigMetadata>,
   importCollection?: ImportCollection,
+  renderConfig?: ReactRenderConfig,
 ) => {
   const nestedPaths: [fieldName: string, getTypeNodeParam: GetTypeNodeParam][] = [];
   const typeNodes: TypeElement[] = [];
   const isValidation = type === 'validation';
   const typeName = isValidation ? getValidationTypeName(formName) : getInputValuesTypeName(formName);
   Object.entries(fieldConfigs).forEach(([fieldName, { dataType, componentType, isArray }]) => {
-    const getTypeNodeParam = { dataType, componentType, isArray: !!isArray, isValidation, importCollection };
+    const getTypeNodeParam = {
+      dataType,
+      componentType,
+      isArray: !!isArray,
+      isValidation,
+      importCollection,
+      renderConfig,
+    };
     const hasNestedFieldPath = fieldName.split('.').length > 1;
     if (hasNestedFieldPath) {
       nestedPaths.push([fieldName, getTypeNodeParam]);

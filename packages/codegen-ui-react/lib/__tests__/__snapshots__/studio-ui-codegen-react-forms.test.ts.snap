@@ -1,5 +1,546 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`amplify form renderer tests GraphQL form tests should 1:1 relationships without types file path - Create 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
+import { listDogs } from \\"../graphql/queries\\";
+import { createOwner, updateDog, updateOwner } from \\"../graphql/mutations\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function CreateOwnerForm(props) {
+  const {
+    clearOnSuccess = true,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    name: \\"\\",
+    Dog: undefined,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [Dog, setDog] = React.useState(initialValues.Dog);
+  const [DogLoading, setDogLoading] = React.useState(false);
+  const [DogRecords, setDogRecords] = React.useState([]);
+  const autocompleteLength = 10;
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setName(initialValues.name);
+    setDog(initialValues.Dog);
+    setCurrentDogValue(undefined);
+    setCurrentDogDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [currentDogDisplayValue, setCurrentDogDisplayValue] =
+    React.useState(\\"\\");
+  const [currentDogValue, setCurrentDogValue] = React.useState(undefined);
+  const DogRef = React.createRef();
+  const getIDValue = {
+    Dog: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const DogIdSet = new Set(
+    Array.isArray(Dog)
+      ? Dog.map((r) => getIDValue.Dog?.(r))
+      : getIDValue.Dog?.(Dog)
+  );
+  const getDisplayValue = {
+    Dog: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+  };
+  const validations = {
+    name: [{ type: \\"Required\\" }],
+    Dog: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  const fetchDogRecords = async (value) => {
+    setDogLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ name: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listDogs,
+          variables,
+        })
+      ).data.listDogs.item;
+      var loaded = result.filter(
+        (item) => !DogIdSet.has(getIDValue.Dog?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setDogRecords(newOptions.slice(0, autocompleteLength));
+    setDogLoading(false);
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          name,
+          Dog,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
+          const owner = await API.graphql({
+            query: createOwner,
+            variables: {
+              input: {
+                ...modelFields,
+              },
+            },
+          });
+          const promises = [];
+          const dogToLink = modelFields.Dog;
+          if (dogToLink) {
+            promises.push(
+              API.graphql({
+                query: updateDog,
+                variables: {
+                  input: {
+                    ...Dog,
+                    Owner: owner,
+                  },
+                },
+              })
+            );
+            const ownerToUnlink = await dogToLink.Owner;
+            if (ownerToUnlink) {
+              promises.push(
+                API.graphql({
+                  query: updateOwner,
+                  variables: {
+                    input: {
+                      ...ownerToUnlink,
+                      Dog: undefined,
+                      ownerDogId: undefined,
+                    },
+                  },
+                })
+              );
+            }
+          }
+          await Promise.all(promises);
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"CreateOwnerForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Name\\"
+        isRequired={true}
+        isReadOnly={false}
+        value={name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              Dog,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              Dog: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.Dog ?? value;
+          }
+          setDog(value);
+          setCurrentDogValue(undefined);
+          setCurrentDogDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentDogValue}
+        label={\\"Dog\\"}
+        items={Dog ? [Dog] : []}
+        hasError={errors?.Dog?.hasError}
+        errorMessage={errors?.Dog?.errorMessage}
+        getBadgeText={getDisplayValue.Dog}
+        setFieldValue={(model) => {
+          setCurrentDogDisplayValue(model ? getDisplayValue.Dog(model) : \\"\\");
+          setCurrentDogValue(model);
+        }}
+        inputFieldRef={DogRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Dog\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search Dog\\"
+          value={currentDogDisplayValue}
+          options={dogRecords
+            .filter((r) => !DogIdSet.has(getIDValue.Dog?.(r)))
+            .map((r) => ({
+              id: getIDValue.Dog?.(r),
+              label: getDisplayValue.Dog?.(r),
+            }))}
+          isLoading={DogLoading}
+          onSelect={({ id, label }) => {
+            setCurrentDogValue(
+              dogRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentDogDisplayValue(label);
+            runValidationTasks(\\"Dog\\", label);
+          }}
+          onClear={() => {
+            setCurrentDogDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            fetchDogRecords(value);
+            if (errors.Dog?.hasError) {
+              runValidationTasks(\\"Dog\\", value);
+            }
+            setCurrentDogDisplayValue(value);
+            setCurrentDogValue(undefined);
+          }}
+          onBlur={() => runValidationTasks(\\"Dog\\", currentDogDisplayValue)}
+          errorMessage={errors.Dog?.errorMessage}
+          hasError={errors.Dog?.hasError}
+          ref={DogRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"Dog\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should 1:1 relationships without types file path - Create 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CreateOwnerFormInputValues = {
+    name?: string;
+    Dog?: any;
+};
+export declare type CreateOwnerFormValidationValues = {
+    name?: ValidationFunction<string>;
+    Dog?: ValidationFunction<any>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CreateOwnerFormOverridesProps = {
+    CreateOwnerFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    Dog?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type CreateOwnerFormProps = React.PropsWithChildren<{
+    overrides?: CreateOwnerFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
+    onSuccess?: (fields: CreateOwnerFormInputValues) => void;
+    onError?: (fields: CreateOwnerFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
+    onValidate?: CreateOwnerFormValidationValues;
+} & React.CSSProperties>;
+export default function CreateOwnerForm(props: CreateOwnerFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should generate a create form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
@@ -5866,6 +6407,716 @@ export declare type CommentUpdateFormProps = React.PropsWithChildren<{
 } & {
     id?: string;
     comment?: Comment;
+    onSubmit?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
+    onSuccess?: (fields: CommentUpdateFormInputValues) => void;
+    onError?: (fields: CommentUpdateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
+    onValidate?: CommentUpdateFormValidationValues;
+} & React.CSSProperties>;
+export default function CommentUpdateForm(props: CommentUpdateFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should generate an update form with hasMany relationship without types file 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
+import { getComment, listPosts } from \\"../graphql/queries\\";
+import { updateComment } from \\"../graphql/mutations\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function CommentUpdateForm(props) {
+  const {
+    id: idProp,
+    comment: commentModelProp,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    content: \\"\\",
+    postID: undefined,
+    Post: undefined,
+    post: \\"\\",
+  };
+  const [content, setContent] = React.useState(initialValues.content);
+  const [postID, setPostID] = React.useState(initialValues.postID);
+  const [postIDLoading, setPostIDLoading] = React.useState(false);
+  const [postIDRecords, setPostIDRecords] = React.useState([]);
+  const [Post, setPost] = React.useState(initialValues.Post);
+  const [PostLoading, setPostLoading] = React.useState(false);
+  const [PostRecords, setPostRecords] = React.useState([]);
+  const [post1, setPost1] = React.useState(initialValues.post);
+  const autocompleteLength = 10;
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = commentRecord
+      ? { ...initialValues, ...commentRecord, postID, Post }
+      : initialValues;
+    setContent(cleanValues.content);
+    setPostID(cleanValues.postID);
+    setCurrentPostIDValue(undefined);
+    setCurrentPostIDDisplayValue(\\"\\");
+    setPost(cleanValues.Post);
+    setCurrentPostValue(undefined);
+    setCurrentPostDisplayValue(\\"\\");
+    setPost1(cleanValues.post);
+    setErrors({});
+  };
+  const [commentRecord, setCommentRecord] = React.useState(commentModelProp);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = idProp
+        ? (
+            await API.graphql({
+              query: getComment,
+              variables: {
+                input: {
+                  id: idProp,
+                },
+              },
+            })
+          ).data.getComment
+        : commentModelProp;
+      setCommentRecord(record);
+      const postIDRecord = record ? await record.postID : undefined;
+      setPostID(postIDRecord);
+      const PostRecord = record ? await record.Post : undefined;
+      setPost(PostRecord);
+    };
+    queryData();
+  }, [idProp, commentModelProp]);
+  React.useEffect(resetStateValues, [commentRecord, postID, Post]);
+  const [currentPostIDDisplayValue, setCurrentPostIDDisplayValue] =
+    React.useState(\\"\\");
+  const [currentPostIDValue, setCurrentPostIDValue] = React.useState(undefined);
+  const postIDRef = React.createRef();
+  const [currentPostDisplayValue, setCurrentPostDisplayValue] =
+    React.useState(\\"\\");
+  const [currentPostValue, setCurrentPostValue] = React.useState(undefined);
+  const PostRef = React.createRef();
+  const getIDValue = {
+    Post: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const PostIdSet = new Set(
+    Array.isArray(Post)
+      ? Post.map((r) => getIDValue.Post?.(r))
+      : getIDValue.Post?.(Post)
+  );
+  const getDisplayValue = {
+    postID: (r) => \`\${r?.title ? r?.title + \\" - \\" : \\"\\"}\${r?.id}\`,
+    Post: (r) => \`\${r?.title ? r?.title + \\" - \\" : \\"\\"}\${r?.id}\`,
+  };
+  const validations = {
+    content: [],
+    postID: [{ type: \\"Required\\" }],
+    Post: [],
+    post: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  const fetchPostIDRecords = async (value) => {
+    setPostIDLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ title: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listPosts,
+          variables,
+        })
+      ).data.listPostIDS.item;
+      var loaded = result.filter(
+        (item) => !postIDIdSet.has(getIDValue.postID?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setPostIDRecords(newOptions.slice(0, autocompleteLength));
+    setPostIDLoading(false);
+  };
+  const fetchPostRecords = async (value) => {
+    setPostLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ title: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listPosts,
+          variables,
+        })
+      ).data.listPosts.item;
+      var loaded = result.filter(
+        (item) => !PostIdSet.has(getIDValue.Post?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setPostRecords(newOptions.slice(0, autocompleteLength));
+    setPostLoading(false);
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          content,
+          postID,
+          Post,
+          post: post1,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
+          const modelFieldsToSave = {
+            content: modelFields.content,
+            postID: modelFields.postID,
+            Post: modelFields.Post,
+          };
+          await API.graphql({
+            query: updateComment,
+            variables: {
+              input: {
+                id: commentRecord.id,
+                ...modelFieldsToSave,
+              },
+            },
+          });
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"CommentUpdateForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Content\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={content}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              content: value,
+              postID,
+              Post,
+              post: post1,
+            };
+            const result = onChange(modelFields);
+            value = result?.content ?? value;
+          }
+          if (errors.content?.hasError) {
+            runValidationTasks(\\"content\\", value);
+          }
+          setContent(value);
+        }}
+        onBlur={() => runValidationTasks(\\"content\\", content)}
+        errorMessage={errors.content?.errorMessage}
+        hasError={errors.content?.hasError}
+        {...getOverrideProps(overrides, \\"content\\")}
+      ></TextField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              content,
+              postID: value,
+              Post,
+              post: post1,
+            };
+            const result = onChange(modelFields);
+            value = result?.postID ?? value;
+          }
+          setPostID(value);
+          setCurrentPostIDValue(undefined);
+        }}
+        currentFieldValue={currentPostIDValue}
+        label={\\"Post id\\"}
+        items={postID ? [postID] : []}
+        hasError={errors?.postID?.hasError}
+        errorMessage={errors?.postID?.errorMessage}
+        getBadgeText={(value) =>
+          value
+            ? getDisplayValue.postID(postRecords.find((r) => r.id === value))
+            : \\"\\"
+        }
+        setFieldValue={(value) => {
+          setCurrentPostIDDisplayValue(
+            value
+              ? getDisplayValue.postID(postRecords.find((r) => r.id === value))
+              : \\"\\"
+          );
+          setCurrentPostIDValue(value);
+        }}
+        inputFieldRef={postIDRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Post id\\"
+          isRequired={true}
+          isReadOnly={false}
+          placeholder=\\"Search Post\\"
+          value={currentPostIDDisplayValue}
+          options={postIDRecords
+            .filter(
+              (r, i, arr) =>
+                arr.findIndex((member) => member?.id === r?.id) === i
+            )
+            .map((r) => ({
+              id: r?.id,
+              label: getDisplayValue.postID?.(r),
+            }))}
+          isLoading={postIDLoading}
+          onSelect={({ id, label }) => {
+            setCurrentPostIDValue(id);
+            setCurrentPostIDDisplayValue(label);
+            runValidationTasks(\\"postID\\", label);
+          }}
+          onClear={() => {
+            setCurrentPostIDDisplayValue(\\"\\");
+          }}
+          defaultValue={postID}
+          onChange={(e) => {
+            let { value } = e.target;
+            fetchPostIDRecords(value);
+            if (errors.postID?.hasError) {
+              runValidationTasks(\\"postID\\", value);
+            }
+            setCurrentPostIDDisplayValue(value);
+            setCurrentPostIDValue(undefined);
+          }}
+          onBlur={() => runValidationTasks(\\"postID\\", currentPostIDValue)}
+          errorMessage={errors.postID?.errorMessage}
+          hasError={errors.postID?.hasError}
+          ref={postIDRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"postID\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              content,
+              postID,
+              Post: value,
+              post: post1,
+            };
+            const result = onChange(modelFields);
+            value = result?.Post ?? value;
+          }
+          setPost(value);
+          setCurrentPostValue(undefined);
+          setCurrentPostDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentPostValue}
+        label={\\"Post\\"}
+        items={Post ? [Post] : []}
+        hasError={errors?.Post?.hasError}
+        errorMessage={errors?.Post?.errorMessage}
+        getBadgeText={getDisplayValue.Post}
+        setFieldValue={(model) => {
+          setCurrentPostDisplayValue(model ? getDisplayValue.Post(model) : \\"\\");
+          setCurrentPostValue(model);
+        }}
+        inputFieldRef={PostRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Post\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search Post\\"
+          value={currentPostDisplayValue}
+          options={postRecords
+            .filter((r) => !PostIdSet.has(getIDValue.Post?.(r)))
+            .map((r) => ({
+              id: getIDValue.Post?.(r),
+              label: getDisplayValue.Post?.(r),
+            }))}
+          isLoading={PostLoading}
+          onSelect={({ id, label }) => {
+            setCurrentPostValue(
+              postRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentPostDisplayValue(label);
+            runValidationTasks(\\"Post\\", label);
+          }}
+          onClear={() => {
+            setCurrentPostDisplayValue(\\"\\");
+          }}
+          defaultValue={Post}
+          onChange={(e) => {
+            let { value } = e.target;
+            fetchPostRecords(value);
+            if (errors.Post?.hasError) {
+              runValidationTasks(\\"Post\\", value);
+            }
+            setCurrentPostDisplayValue(value);
+            setCurrentPostValue(undefined);
+          }}
+          onBlur={() => runValidationTasks(\\"Post\\", currentPostDisplayValue)}
+          errorMessage={errors.Post?.errorMessage}
+          hasError={errors.Post?.hasError}
+          ref={PostRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"Post\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <TextField
+        label=\\"Label\\"
+        value={post1}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              content,
+              postID,
+              Post,
+              post: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.post ?? value;
+          }
+          if (errors.post?.hasError) {
+            runValidationTasks(\\"post\\", value);
+          }
+          setPost1(value);
+        }}
+        onBlur={() => runValidationTasks(\\"post\\", post1)}
+        errorMessage={errors.post?.errorMessage}
+        hasError={errors.post?.hasError}
+        {...getOverrideProps(overrides, \\"post\\")}
+      ></TextField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Reset\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || commentModelProp)}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={
+              !(idProp || commentModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should generate an update form with hasMany relationship without types file 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CommentUpdateFormInputValues = {
+    content?: string;
+    postID?: string;
+    Post?: any;
+    post?: string;
+};
+export declare type CommentUpdateFormValidationValues = {
+    content?: ValidationFunction<string>;
+    postID?: ValidationFunction<string>;
+    Post?: ValidationFunction<any>;
+    post?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CommentUpdateFormOverridesProps = {
+    CommentUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    content?: PrimitiveOverrideProps<TextFieldProps>;
+    postID?: PrimitiveOverrideProps<AutocompleteProps>;
+    Post?: PrimitiveOverrideProps<AutocompleteProps>;
+    post?: PrimitiveOverrideProps<TextFieldProps>;
+} & EscapeHatchProps;
+export declare type CommentUpdateFormProps = React.PropsWithChildren<{
+    overrides?: CommentUpdateFormOverridesProps | undefined | null;
+} & {
+    id?: string;
+    comment?: any;
     onSubmit?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
     onSuccess?: (fields: CommentUpdateFormInputValues) => void;
     onError?: (fields: CommentUpdateFormInputValues, errorMessage: string) => void;

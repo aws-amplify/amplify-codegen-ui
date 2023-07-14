@@ -15,6 +15,7 @@
  */
 /* eslint-disable no-template-curly-in-string */
 import { ImportSource } from '../imports';
+import { ReactRenderConfig } from '../react-render-config';
 import {
   defaultCLIRenderConfig,
   generateComponentOnlyWithAmplifyFormRenderer,
@@ -708,6 +709,16 @@ describe('amplify form renderer tests', () => {
   });
 
   describe('GraphQL form tests', () => {
+    const noTypesFileConfig: ReactRenderConfig = {
+      apiConfiguration: {
+        dataApi: 'GraphQL',
+        typesFilePath: '',
+        queriesFilePath: '../graphql/queries',
+        mutationsFilePath: '../graphql/mutations',
+        subscriptionsFilePath: '../graphql/subscriptions',
+        fragmentsFilePath: '../graphql/fragments',
+      },
+    };
     it('should generate a create form', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/post-datastore-create',
@@ -764,6 +775,24 @@ describe('amplify form renderer tests', () => {
         'forms/relationships/update-comment',
         'datastore/relationships/has-many-comment',
         { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      expect(componentText).toContain('await API.graphql({');
+      expect(componentText).toContain('query: updateComment');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate an update form with hasMany relationship without types file', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/relationships/update-comment',
+        'datastore/relationships/has-many-comment',
+        { ...defaultCLIRenderConfig, ...noTypesFileConfig },
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
 
@@ -972,6 +1001,20 @@ describe('amplify form renderer tests', () => {
         'forms/owner-dog-create',
         'datastore/dog-owner-required',
         { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      expect(componentText).not.toContain('cannot be unlinked because');
+      expect(componentText).not.toContain('cannot be linked to ');
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should 1:1 relationships without types file path - Create', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/owner-dog-create',
+        'datastore/dog-owner-required',
+        { ...defaultCLIRenderConfig, ...noTypesFileConfig },
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
 

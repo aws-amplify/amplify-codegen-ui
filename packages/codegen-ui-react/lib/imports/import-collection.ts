@@ -200,46 +200,48 @@ export class ImportCollection {
             ],
       )
       .concat(
-        Array.from(this.#collection).map(([moduleName, imports]) => {
-          const namedImports = [...imports].filter((namedImport) => namedImport !== 'default').sort();
-          const aliasMap = this.importAlias.get(moduleName);
-          if (aliasMap) {
-            const importClause = factory.createImportClause(
-              false,
-              undefined,
-              factory.createNamedImports(
-                [...imports].map((item) => {
-                  const alias = aliasMap.get(item);
-                  return factory.createImportSpecifier(
-                    alias && alias !== item ? factory.createIdentifier(item) : undefined,
-                    factory.createIdentifier(alias ?? item),
-                  );
-                }),
-              ),
-            );
+        Array.from(this.#collection)
+          .filter(([moduleName]) => moduleName)
+          .map(([moduleName, imports]) => {
+            const namedImports = [...imports].filter((namedImport) => namedImport !== 'default').sort();
+            const aliasMap = this.importAlias.get(moduleName);
+            if (aliasMap) {
+              const importClause = factory.createImportClause(
+                false,
+                undefined,
+                factory.createNamedImports(
+                  [...imports].map((item) => {
+                    const alias = aliasMap.get(item);
+                    return factory.createImportSpecifier(
+                      alias && alias !== item ? factory.createIdentifier(item) : undefined,
+                      factory.createIdentifier(alias ?? item),
+                    );
+                  }),
+                ),
+              );
+              return factory.createImportDeclaration(
+                undefined,
+                undefined,
+                importClause,
+                factory.createStringLiteral(moduleName),
+              );
+            }
             return factory.createImportDeclaration(
               undefined,
               undefined,
-              importClause,
+              factory.createImportClause(
+                false,
+                // use module name as default import name
+                [...imports].indexOf('default') >= 0 ? factory.createIdentifier(path.basename(moduleName)) : undefined,
+                factory.createNamedImports(
+                  namedImports.map((item) => {
+                    return factory.createImportSpecifier(undefined, factory.createIdentifier(item));
+                  }),
+                ),
+              ),
               factory.createStringLiteral(moduleName),
             );
-          }
-          return factory.createImportDeclaration(
-            undefined,
-            undefined,
-            factory.createImportClause(
-              false,
-              // use module name as default import name
-              [...imports].indexOf('default') >= 0 ? factory.createIdentifier(path.basename(moduleName)) : undefined,
-              factory.createNamedImports(
-                namedImports.map((item) => {
-                  return factory.createImportSpecifier(undefined, factory.createIdentifier(item));
-                }),
-              ),
-            ),
-            factory.createStringLiteral(moduleName),
-          );
-        }),
+          }),
       );
 
     return importDeclarations;
