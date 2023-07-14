@@ -2,6 +2,10 @@
     "extends": "@istanbuljs/nyc-config-typescript",
     "all": true,
     "check-coverage": true,
+    "lines": 70,
+    "statements": 70,
+    "branches": 50,
+    "functions": 65,
     "coverageReporters": [
         "json"
     ],
