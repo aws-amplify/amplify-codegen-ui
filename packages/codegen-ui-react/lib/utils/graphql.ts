@@ -348,7 +348,7 @@ export const getFetchRelatedRecordsCallbacks = (
                                       wrapInParenthesizedExpression(
                                         getGraphqlCallExpression(
                                           ActionType.LIST,
-                                          capitalizeFirstLetter(renderedFieldName),
+                                          relationship.relatedModelName,
                                           importCollection,
                                           [
                                             factory.createShorthandPropertyAssignment(

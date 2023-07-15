@@ -677,7 +677,7 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
-import { listTeamIDS, listTeams } from \\"../graphql/queries\\";
+import { listTeams } from \\"../graphql/queries\\";
 import { createMember } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -931,7 +931,7 @@ export default function MyMemberForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listTeamIDS,
+          query: listTeams,
           variables,
         })
       ).data.listTeamIDS.item;
@@ -1866,7 +1866,7 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
-import { listPrimaryAuthors } from \\"../graphql/queries\\";
+import { listAuthors } from \\"../graphql/queries\\";
 import { createBook } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -2112,7 +2112,7 @@ export default function BookCreateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listPrimaryAuthors,
+          query: listAuthors,
           variables,
         })
       ).data.listPrimaryAuthors.item;
@@ -3024,7 +3024,7 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
-import { listPrimaryAuthors, listPrimaryTitles } from \\"../graphql/queries\\";
+import { listAuthors, listTitles } from \\"../graphql/queries\\";
 import { createBook } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -3290,7 +3290,7 @@ export default function BookCreateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listPrimaryAuthors,
+          query: listAuthors,
           variables,
         })
       ).data.listPrimaryAuthors.item;
@@ -3317,7 +3317,7 @@ export default function BookCreateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listPrimaryTitles,
+          query: listTitles,
           variables,
         })
       ).data.listPrimaryTitles.item;
@@ -5184,7 +5184,7 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
-import { getComment, listPostIDS, listPosts } from \\"../graphql/queries\\";
+import { getComment, listPosts } from \\"../graphql/queries\\";
 import { updateComment } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -5469,7 +5469,7 @@ export default function CommentUpdateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listPostIDS,
+          query: listPosts,
           variables,
         })
       ).data.listPostIDS.item;
@@ -7513,10 +7513,7 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
-import {
-  listCompositeDogCompositeToysDescriptions,
-  listCompositeDogCompositeToysNames,
-} from \\"../graphql/queries\\";
+import { listCompositeDogs } from \\"../graphql/queries\\";
 import { createCompositeToy } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -7793,7 +7790,7 @@ export default function CreateCompositeToyForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listCompositeDogCompositeToysNames,
+          query: listCompositeDogs,
           variables,
         })
       ).data.listCompositeDogCompositeToysNames.item;
@@ -7825,7 +7822,7 @@ export default function CreateCompositeToyForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listCompositeDogCompositeToysDescriptions,
+          query: listCompositeDogs,
           variables,
         })
       ).data.listCompositeDogCompositeToysDescriptions.item;
@@ -8247,12 +8244,7 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
-import {
-  listOrgs,
-  listPostCommentsIds,
-  listPosts,
-  listUsers,
-} from \\"../graphql/queries\\";
+import { listOrgs, listPosts, listUsers } from \\"../graphql/queries\\";
 import { createComment } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -8636,7 +8628,7 @@ export default function CreateCommentForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listPostCommentsIds,
+          query: listPosts,
           variables,
         })
       ).data.listPostCommentsIds.item;
