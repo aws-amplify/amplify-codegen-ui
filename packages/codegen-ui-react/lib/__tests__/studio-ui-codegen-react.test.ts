@@ -39,18 +39,6 @@ describe('amplify render tests', () => {
       expect(generatedCode.componentText).toMatchSnapshot();
     });
 
-    it('should generate a simple badge component', () => {});
-
-    it('should generate a simple card component', () => {});
-
-    it('should generate a simple divider component', () => {});
-
-    it('should generate a simple flex component', () => {});
-
-    it('should generate a simple image component', () => {});
-
-    it('should generate a simple string component', () => {});
-
     it('should generate a simple component without variant specific generation', () => {
       const generatedCode = generateWithAmplifyRenderer('buttonGolden');
       expect(generatedCode.componentText.includes('restProp')).toBe(false);

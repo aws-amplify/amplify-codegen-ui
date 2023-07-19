@@ -101,7 +101,7 @@ import {
 } from './form-renderer-helper/type-helper';
 import { buildSelectedRecordsIdSet } from './form-renderer-helper/model-values';
 import { COMPOSITE_PRIMARY_KEY_PROP_NAME } from '../utils/constants';
-import { getFetchRelatedRecordsCallbacks } from '../utils/graphql';
+import { getFetchRelatedRecordsCallbacks, isGraphqlConfig } from '../utils/graphql';
 
 type RenderComponentOnlyResponse = {
   compText: string;
@@ -343,12 +343,16 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       modelName = this.importCollection.addModelImport(dataTypeName);
     }
 
+    if (isGraphqlConfig(this.renderConfig.apiConfiguration) && !this.renderConfig.apiConfiguration.typesFilePath) {
+      modelName = 'any';
+    }
+
     return [
       validationResponseType,
       validationFunctionType,
       // pass in importCollection once to collect models to import
-      generateFieldTypes(formName, 'input', fieldConfigs, this.importCollection),
-      generateFieldTypes(formName, 'validation', fieldConfigs, this.importCollection),
+      generateFieldTypes(formName, 'input', fieldConfigs, this.importCollection, this.renderConfig),
+      generateFieldTypes(formName, 'validation', fieldConfigs, this.importCollection, this.renderConfig),
       primitiveOverrideProp,
       overrideTypeAliasDeclaration,
       factory.createTypeAliasDeclaration(
