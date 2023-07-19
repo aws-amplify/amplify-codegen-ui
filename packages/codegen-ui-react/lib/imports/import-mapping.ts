@@ -22,6 +22,7 @@ export enum ImportSource {
   LOCAL_MODELS = '../models',
   LOCAL_SCHEMA = '../models/schema',
   UTILS = './utils',
+  AMPLIFY = 'aws-amplify',
 }
 
 export enum ImportValue {
@@ -50,6 +51,10 @@ export enum ImportValue {
   FETCH_BY_PATH = 'fetchByPath',
   PROCESS_FILE = 'processFile',
   DEFAULT_THEME = 'defaultTheme',
+  USE_STATE = 'useState',
+  API = 'API',
+  PAGINATION = 'Pagination',
+  PLACEHOLDER = 'Placeholder',
 }
 
 export const ImportMapping: Record<ImportValue, ImportSource> = {
@@ -77,4 +82,8 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.VALIDATE_FIELD]: ImportSource.UTILS,
   [ImportValue.FETCH_BY_PATH]: ImportSource.UTILS,
   [ImportValue.PROCESS_FILE]: ImportSource.UTILS,
+  [ImportValue.USE_STATE]: ImportSource.REACT,
+  [ImportValue.API]: ImportSource.AMPLIFY,
+  [ImportValue.PAGINATION]: ImportSource.UI_REACT,
+  [ImportValue.PLACEHOLDER]: ImportSource.UI_REACT,
 };

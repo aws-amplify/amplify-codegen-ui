@@ -129,9 +129,13 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Collection:
-        return new CollectionRenderer(component, this.componentMetadata, this.importCollection, parent).renderElement(
-          renderChildren,
-        );
+        return new CollectionRenderer(
+          component,
+          this.componentMetadata,
+          this.importCollection,
+          this.renderConfig,
+          parent,
+        ).renderElement(renderChildren);
 
       case Primitive.Divider:
         return new ReactComponentRenderer<DividerProps>(

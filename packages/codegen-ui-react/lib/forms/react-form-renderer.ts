@@ -53,7 +53,7 @@ import {
   getModelNameProp,
   lowerCaseFirst,
 } from '../helpers';
-import { ImportCollection, ImportSource, ImportValue } from '../imports';
+import { ImportCollection, ImportValue } from '../imports';
 import { PrimitiveTypeParameter, Primitive, primitiveOverrideProp } from '../primitive';
 import { getComponentPropName } from '../react-component-render-helper';
 import { ReactOutputManager } from '../react-output-manager';
@@ -68,7 +68,6 @@ import { generateArrayFieldComponent } from '../utils/forms/array-field-componen
 import { hasTokenReference } from '../utils/forms/layout-helpers';
 import { convertTimeStampToDateAST, convertToLocalAST } from '../utils/forms/value-mappers';
 import { addUseEffectWrapper } from '../utils/generate-react-hooks';
-import { RequiredKeys } from '../utils/type-utils';
 import {
   buildMutationBindings,
   buildOverrideTypesBindings,
@@ -91,6 +90,7 @@ import {
   getUseStateHooks,
   resetStateFunction,
   getCanUnlinkModelName,
+  getAutocompleteOptions,
 } from './form-renderer-helper/form-state';
 import { shouldWrapInArrayField } from './form-renderer-helper/render-checkers';
 import {
@@ -101,6 +101,7 @@ import {
 } from './form-renderer-helper/type-helper';
 import { buildSelectedRecordsIdSet } from './form-renderer-helper/model-values';
 import { COMPOSITE_PRIMARY_KEY_PROP_NAME } from '../utils/constants';
+import { getFetchRelatedRecordsCallbacks } from '../utils/graphql';
 
 type RenderComponentOnlyResponse = {
   compText: string;
@@ -122,7 +123,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 > {
   protected importCollection: ImportCollection;
 
-  protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
+  protected renderConfig: ReactRenderConfig & typeof defaultRenderConfig;
 
   protected formDefinition: FormDefinition;
 
@@ -159,7 +160,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     this.componentMetadata = computeComponentMetadata(this.formComponent);
     this.componentMetadata.formMetadata = mapFormMetadata(this.component, this.formDefinition);
-    this.importCollection = new ImportCollection(this.componentMetadata);
+    this.importCollection = new ImportCollection({ rendererConfig: renderConfig });
+    this.importCollection.ingestComponentMetadata(this.componentMetadata);
     if (dataSchema) {
       const dataSchemaMetadata = dataSchema;
       this.componentMetadata.dataSchemaMetadata = dataSchemaMetadata;
@@ -338,7 +340,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     // add model import for datastore type
     if (dataSourceType === 'DataStore') {
       this.requiredDataModels.push(dataTypeName);
-      modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
+      modelName = this.importCollection.addModelImport(dataTypeName);
     }
 
     return [
@@ -375,7 +377,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
    *  - form fields
    *  - valid state for form
    *  - error object { hasError: boolean, errorMessage: string }
-   * - datastore operation (conditional if form is backed by datastore)
+   *  - datastore operation (conditional if form is backed by datastore)
    *  - this is the datastore mutation function which will be used by the helpers
    */
   private buildVariableStatements() {
@@ -388,17 +390,22 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     const lowerCaseDataTypeName = lowerCaseFirst(dataTypeName);
     const lowerCaseDataTypeNameRecord = `${lowerCaseDataTypeName}Record`;
     const isDataStoreUpdateForm = dataSourceType === 'DataStore' && formActionType === 'update';
+    const dataApi = 'apiConfiguration' in this.renderConfig ? this.renderConfig.apiConfiguration?.dataApi : undefined;
+
     let modelName = dataTypeName;
     if (!formMetadata) {
       throw new Error(`Form Metadata is missing from form: ${this.component.name}`);
     }
-    this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
-    this.importCollection.addMappedImport(ImportValue.FETCH_BY_PATH);
+    this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD, ImportValue.FETCH_BY_PATH);
+
+    const hasAutoComplete = Object.values(formMetadata.fieldConfigs).some(
+      ({ componentType }) => componentType === Primitive.Autocomplete,
+    );
 
     // add model import for datastore type
     if (dataSourceType === 'DataStore') {
       this.requiredDataModels.push(dataTypeName);
-      modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
+      modelName = this.importCollection.addModelImport(dataTypeName);
     }
 
     const elements: BindingElement[] = [
@@ -419,7 +426,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       ),
     ];
 
-    // add binding elments to statements
+    // add binding elements to statements
     statements.push(
       factory.createVariableStatement(
         undefined,
@@ -460,7 +467,9 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     statements.push(getInitialValues(formMetadata.fieldConfigs, this.component));
 
-    statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
+    statements.push(...getUseStateHooks(formMetadata.fieldConfigs, dataApi));
+
+    statements.push(...getAutocompleteOptions(formMetadata.fieldConfigs, hasAutoComplete, dataApi));
 
     statements.push(buildUseStateExpression('errors', factory.createObjectLiteralExpression()));
 
@@ -504,7 +513,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
             linkedDataNames.push(fieldName);
           }
           // Flatten statments into 1d array
-          relatedModelStatements.push(...buildGetRelationshipModels(fieldName, value));
+          relatedModelStatements.push(...buildGetRelationshipModels(fieldName, value, this.importCollection, dataApi));
         }
       });
 
@@ -515,7 +524,14 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
           this.primaryKeys.length > 1 ? getPropName(COMPOSITE_PRIMARY_KEY_PROP_NAME) : getPropName(this.primaryKeys[0]);
         statements.push(
           addUseEffectWrapper(
-            buildUpdateDatastoreQuery(modelName, lowerCaseDataTypeName, relatedModelStatements, destructuredPrimaryKey),
+            buildUpdateDatastoreQuery(
+              modelName,
+              lowerCaseDataTypeName,
+              relatedModelStatements,
+              destructuredPrimaryKey,
+              this.importCollection,
+              dataApi,
+            ),
             [destructuredPrimaryKey, getModelNameProp(lowerCaseDataTypeName)],
           ),
         );
@@ -526,8 +542,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       statements.push(buildResetValuesOnRecordUpdate(defaultValueVariableName, linkedDataNames));
     }
 
-    this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
-    this.importCollection.addMappedImport(ImportValue.FETCH_BY_PATH);
+    this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD, ImportValue.FETCH_BY_PATH);
 
     if (dataSourceType === 'Custom' && formActionType === 'update') {
       statements.push(addUseEffectWrapper([buildSetStateFunction(formMetadata.fieldConfigs)], []));
@@ -597,23 +612,32 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     modelsToImport.forEach((model) => {
       this.requiredDataModels.push(model);
-      this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
+      this.importCollection.addModelImport(model);
     });
 
-    // datastore relationship query
-    /**
+    // relationship query
+    /** GraphQL:
+     *    const authorRecords = await API.graphql(
+     *      { query: listAuthors }
+     *    ).data.listAuthors.items;
+     */
+    /** Datastore:
           const authorRecords = useDataStoreBinding({
             type: 'collection',
             model: Author,
           }).items;
-        */
+    */
     if (relatedModelNames.size) {
-      this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
-      statements.push(
-        ...[...relatedModelNames].map((relatedModelName) =>
-          buildRelationshipQuery(relatedModelName, this.importCollection),
-        ),
-      );
+      if (!(this.renderConfig.apiConfiguration?.dataApi === 'GraphQL')) {
+        this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
+
+        // @rotp: check if this is needed for collection
+        statements.push(
+          ...[...relatedModelNames].map((relatedModelName) =>
+            buildRelationshipQuery(relatedModelName, this.importCollection, dataApi),
+          ),
+        );
+      }
     }
 
     if (displayValueObject) {
@@ -640,6 +664,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     // if we only have date time then we only need the local conversion
     else if (dataTypesMap.AWSDateTime) {
       statements.push(convertToLocalAST);
+    }
+
+    if (hasAutoComplete && dataApi === 'GraphQL') {
+      statements.push(...getFetchRelatedRecordsCallbacks(formMetadata.fieldConfigs, this.importCollection));
     }
 
     return statements;

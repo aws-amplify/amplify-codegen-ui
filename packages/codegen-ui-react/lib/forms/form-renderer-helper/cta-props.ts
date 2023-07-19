@@ -27,22 +27,39 @@ import {
 import { getModelNameProp, getSetNameIdentifier, lowerCaseFirst } from '../../helpers';
 import { getDisplayValueObjectName } from './model-values';
 import {
-  buildHasManyRelationshipDataStoreStatements,
-  buildManyToManyRelationshipDataStoreStatements,
+  buildHasManyRelationshipStatements,
+  buildManyToManyRelationshipStatements,
   getRelationshipBasedRecordUpdateStatements,
 } from './relationship';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
 import { ImportCollection } from '../../imports';
 import { getBiDirectionalRelationshipStatements } from './bidirectional-relationship';
 import { generateModelObjectToSave } from './parse-fields';
+import { DataApiKind } from '../../react-render-config';
+import {
+  ActionType,
+  getGraphqlCallExpression,
+  getGraphqlQueryForModel,
+  wrapInParenthesizedExpression,
+} from '../../utils/graphql';
 
-const getRecordCreateDataStoreCallExpression = ({
+const getRecordCreateCallExpression = ({
   savedObjectName,
   importedModelName,
+  importCollection,
+  dataApi,
 }: {
   savedObjectName: string;
   importedModelName: string;
+  importCollection: ImportCollection;
+  dataApi?: DataApiKind;
 }) => {
+  if (dataApi === 'GraphQL') {
+    const inputs = [factory.createSpreadAssignment(factory.createIdentifier(savedObjectName))];
+
+    return getGraphqlCallExpression(ActionType.CREATE, importedModelName, importCollection, { inputs });
+  }
+
   return factory.createCallExpression(
     factory.createPropertyAccessExpression(factory.createIdentifier('DataStore'), factory.createIdentifier('save')),
     undefined,
@@ -56,14 +73,22 @@ const getRecordCreateDataStoreCallExpression = ({
 
 const getRecordUpdateDataStoreCallExpression = ({
   savedObjectName,
+  savedRecordName,
+  thisModelPrimaryKeys,
   modelName,
   importedModelName,
   fieldConfigs,
+  importCollection,
+  dataApi,
 }: {
   savedObjectName: string;
+  savedRecordName: string;
+  thisModelPrimaryKeys: string[];
   modelName: string;
   importedModelName: string;
   fieldConfigs: Record<string, FieldConfigMetadata>;
+  importCollection: ImportCollection;
+  dataApi?: DataApiKind;
 }) => {
   const updatedObjectName = 'updated';
   // TODO: remove after DataStore addresses issue: https://github.com/aws-amplify/amplify-js/issues/10750
@@ -73,6 +98,20 @@ const getRecordUpdateDataStoreCallExpression = ({
     savedObjectName,
     fieldConfigs,
   });
+
+  if (dataApi === 'GraphQL') {
+    const inputs = [
+      ...thisModelPrimaryKeys.map((key) =>
+        factory.createPropertyAssignment(
+          factory.createIdentifier(key),
+          factory.createPropertyAccessExpression(factory.createIdentifier(`${savedRecordName}Record`), key),
+        ),
+      ),
+      factory.createSpreadAssignment(factory.createIdentifier(savedObjectName)),
+    ];
+
+    return getGraphqlCallExpression(ActionType.UPDATE, importedModelName, importCollection, { inputs });
+  }
 
   return factory.createCallExpression(
     factory.createPropertyAccessExpression(factory.createIdentifier('DataStore'), factory.createIdentifier('save')),
@@ -211,13 +250,14 @@ export const replaceEmptyStringStatement = factory.createExpressionStatement(
   ),
 );
 
-export const buildDataStoreExpression = (
+export const buildExpression = (
   dataStoreActionType: 'update' | 'create',
   modelName: string,
   importedModelName: string,
   fieldConfigs: Record<string, FieldConfigMetadata>,
   dataSchema: GenericDataSchema,
   importCollection: ImportCollection,
+  dataApi?: DataApiKind,
 ): Statement[] => {
   const modelFieldsObjectName = 'modelFields';
   const modelFieldsObjectToSaveName = 'modelFieldsToSave';
@@ -238,30 +278,34 @@ export const buildDataStoreExpression = (
         fieldConfig,
         modelName,
         savedRecordName,
+        dataApi,
       }),
     );
     if (fieldConfigMetaData.relationship?.type === 'HAS_MANY') {
       if (isManyToManyRelationship(fieldConfigMetaData)) {
         const joinTable = dataSchema.models[fieldConfigMetaData.relationship.relatedJoinTableName];
         relationshipsPromisesAccessStatements.push(
-          ...buildManyToManyRelationshipDataStoreStatements(
+          ...buildManyToManyRelationshipStatements(
             dataStoreActionType,
             importedModelName,
             fieldConfig,
             thisModelPrimaryKeys,
             joinTable,
             savedRecordName,
+            importCollection,
+            dataApi,
           ),
         );
       } else {
         relationshipsPromisesAccessStatements.push(
-          ...buildHasManyRelationshipDataStoreStatements(
+          ...buildHasManyRelationshipStatements(
             dataStoreActionType,
             importedModelName,
             fieldConfig,
             thisModelPrimaryKeys,
             savedRecordName,
             importCollection,
+            dataApi,
           ),
         );
       }
@@ -315,9 +359,52 @@ export const buildDataStoreExpression = (
     );
   }
 
-  const recordCreateDataStoreCallExpression = getRecordCreateDataStoreCallExpression({
+  const resolvePromisesStatement = factory.createExpressionStatement(
+    factory.createAwaitExpression(
+      factory.createCallExpression(
+        factory.createPropertyAccessExpression(factory.createIdentifier('Promise'), factory.createIdentifier('all')),
+        undefined,
+        [factory.createIdentifier('promises')],
+      ),
+    ),
+  );
+
+  if (dataStoreActionType === 'update') {
+    const recordUpdateDataStoreCallExpression = getRecordUpdateDataStoreCallExpression({
+      savedObjectName,
+      savedRecordName,
+      thisModelPrimaryKeys,
+      modelName,
+      importedModelName,
+      fieldConfigs,
+      importCollection,
+      dataApi,
+    });
+
+    const genericUpdateStatement = relationshipsPromisesAccessStatements.length
+      ? [
+          factory.createExpressionStatement(
+            factory.createCallExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier('promises'),
+                factory.createIdentifier('push'),
+              ),
+              undefined,
+              [recordUpdateDataStoreCallExpression],
+            ),
+          ),
+          resolvePromisesStatement,
+        ]
+      : [factory.createExpressionStatement(factory.createAwaitExpression(recordUpdateDataStoreCallExpression))];
+
+    return [...relationshipsPromisesAccessStatements, ...modelObjectToSaveStatements, ...genericUpdateStatement];
+  }
+
+  const recordCreateCallExpression = getRecordCreateCallExpression({
     savedObjectName,
     importedModelName,
+    importCollection,
+    dataApi,
   });
   const genericCreateStatement = relationshipsPromisesAccessStatements.length
     ? [
@@ -329,51 +416,14 @@ export const buildDataStoreExpression = (
                 factory.createIdentifier(savedRecordName),
                 undefined,
                 undefined,
-                factory.createAwaitExpression(recordCreateDataStoreCallExpression),
+                factory.createAwaitExpression(recordCreateCallExpression),
               ),
             ],
             NodeFlags.Const,
           ),
         ),
       ]
-    : [factory.createExpressionStatement(factory.createAwaitExpression(recordCreateDataStoreCallExpression))];
-
-  const resolvePromisesStatement = factory.createExpressionStatement(
-    factory.createAwaitExpression(
-      factory.createCallExpression(
-        factory.createPropertyAccessExpression(factory.createIdentifier('Promise'), factory.createIdentifier('all')),
-        undefined,
-        [factory.createIdentifier('promises')],
-      ),
-    ),
-  );
-
-  const recordUpdateDataStoreCallExpression = getRecordUpdateDataStoreCallExpression({
-    savedObjectName,
-    modelName,
-    importedModelName,
-    fieldConfigs,
-  });
-
-  const genericUpdateStatement = relationshipsPromisesAccessStatements.length
-    ? [
-        factory.createExpressionStatement(
-          factory.createCallExpression(
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier('promises'),
-              factory.createIdentifier('push'),
-            ),
-            undefined,
-            [recordUpdateDataStoreCallExpression],
-          ),
-        ),
-        resolvePromisesStatement,
-      ]
-    : [factory.createExpressionStatement(factory.createAwaitExpression(recordUpdateDataStoreCallExpression))];
-
-  if (dataStoreActionType === 'update') {
-    return [...relationshipsPromisesAccessStatements, ...modelObjectToSaveStatements, ...genericUpdateStatement];
-  }
+    : [factory.createExpressionStatement(factory.createAwaitExpression(recordCreateCallExpression))];
   const createStatements = [
     ...modelObjectToSaveStatements,
     ...genericCreateStatement,
@@ -627,8 +677,32 @@ export const buildUpdateDatastoreQuery = (
   lowerCaseDataTypeName: string,
   relatedModelStatements: Statement[],
   primaryKey: string,
+  importCollection: ImportCollection,
+  dataApi?: DataApiKind,
 ) => {
   const pkQueryIdentifier = factory.createIdentifier(primaryKey);
+
+  const queryCall =
+    dataApi === 'GraphQL'
+      ? wrapInParenthesizedExpression(
+          getGraphqlCallExpression(ActionType.GET, importedModelName, importCollection, {
+            inputs: [
+              factory.createPropertyAssignment(factory.createIdentifier('id'), factory.createIdentifier('idProp')),
+            ],
+          }),
+          ['data', getGraphqlQueryForModel(ActionType.GET, importedModelName)],
+        )
+      : factory.createAwaitExpression(
+          factory.createCallExpression(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('DataStore'),
+              factory.createIdentifier('query'),
+            ),
+            undefined,
+            [factory.createIdentifier(importedModelName), pkQueryIdentifier],
+          ),
+        );
+
   return [
     factory.createVariableStatement(
       undefined,
@@ -657,16 +731,7 @@ export const buildUpdateDatastoreQuery = (
                           factory.createConditionalExpression(
                             pkQueryIdentifier,
                             factory.createToken(SyntaxKind.QuestionToken),
-                            factory.createAwaitExpression(
-                              factory.createCallExpression(
-                                factory.createPropertyAccessExpression(
-                                  factory.createIdentifier('DataStore'),
-                                  factory.createIdentifier('query'),
-                                ),
-                                undefined,
-                                [factory.createIdentifier(importedModelName), pkQueryIdentifier],
-                              ),
-                            ),
+                            queryCall,
                             factory.createToken(SyntaxKind.ColonToken),
                             factory.createIdentifier(getModelNameProp(lowerCaseDataTypeName)),
                           ),

@@ -63,7 +63,11 @@ import ts, {
   PropertyAssignment,
   ObjectLiteralElementLike,
   Identifier,
+  Expression,
+  ParameterDeclaration,
+  ShorthandPropertyAssignment,
 } from 'typescript';
+import pluralize from 'pluralize';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
 import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
@@ -94,7 +98,6 @@ import {
   PRIMITIVE_OVERRIDE_PROPS,
   isPrimitive,
 } from './primitive';
-import { RequiredKeys } from './utils/type-utils';
 import {
   getComponentActions,
   buildUseActionStatement,
@@ -111,7 +114,11 @@ import {
   fieldNeedsRelationshipLoadedForCollection,
   isAliased,
   removeAlias,
+  buildInitConstVariableExpression,
+  buildArrowFunctionStatement,
 } from './helpers';
+import { addUseEffectWrapper } from './utils/generate-react-hooks';
+import { ActionType, getGraphqlCallExpression, getGraphqlQueryForModel } from './utils/graphql';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -124,7 +131,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 > {
   protected importCollection: ImportCollection;
 
-  protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
+  protected renderConfig: ReactRenderConfig & typeof defaultRenderConfig;
 
   protected componentMetadata: ComponentMetadata;
 
@@ -143,7 +150,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     this.componentMetadata.dataSchemaMetadata = dataSchema;
     this.mapSyntheticPropsForVariants();
     this.mapSyntheticProps();
-    this.importCollection = new ImportCollection(this.componentMetadata);
+    this.importCollection = new ImportCollection({ rendererConfig: renderConfig });
+    this.importCollection.ingestComponentMetadata(this.componentMetadata);
     addBindingPropertiesImports(this.component, this.importCollection);
     // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
   }
@@ -233,6 +241,46 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     });
 
     componentText += EOL;
+
+    if (this.component.componentType === 'Collection' && this.renderConfig.apiConfiguration?.dataApi === 'GraphQL') {
+      componentText += EOL;
+
+      const graphqlVariableDeclarations = [
+        factory.createVariableStatement(
+          undefined,
+          factory.createVariableDeclarationList(
+            [
+              factory.createVariableDeclaration(
+                factory.createIdentifier('nextToken'),
+                undefined,
+                undefined,
+                factory.createObjectLiteralExpression([], false),
+              ),
+            ],
+            ts.NodeFlags.Const,
+          ),
+        ),
+        factory.createVariableStatement(
+          undefined,
+          factory.createVariableDeclarationList(
+            [
+              factory.createVariableDeclaration(
+                factory.createIdentifier('apiCache'),
+                undefined,
+                undefined,
+                factory.createObjectLiteralExpression([], false),
+              ),
+            ],
+            ts.NodeFlags.Const,
+          ),
+        ),
+      ];
+
+      graphqlVariableDeclarations.forEach((variableDeclaration) => {
+        const result = printer.printNode(EmitHint.Unspecified, variableDeclaration, file);
+        componentText += result + EOL;
+      });
+    }
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
     componentText += result;
@@ -504,10 +552,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           );
           propSignatures.push(propSignature);
         } else if (isDataPropertyBinding(binding)) {
-          const modelName = this.importCollection.getMappedAlias(
-            ImportSource.LOCAL_MODELS,
-            binding.bindingProperties.model,
-          );
+          const modelName = this.importCollection.getMappedModelAlias(binding.bindingProperties.model);
           const propSignature = factory.createPropertySignature(
             undefined,
             propName,
@@ -640,14 +685,15 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     }
 
     if (component.componentType === 'Collection') {
-      const bindingElement = this.hasCollectionPropertyNamedItems(component)
-        ? factory.createBindingElement(
-            undefined,
-            factory.createIdentifier('items'),
-            factory.createIdentifier('itemsProp'),
-            undefined,
-          )
-        : factory.createBindingElement(undefined, undefined, factory.createIdentifier('items'), undefined);
+      const bindingElement =
+        this.hasCollectionPropertyNamedItems(component) || this.renderConfig.apiConfiguration?.dataApi === 'GraphQL'
+          ? factory.createBindingElement(
+              undefined,
+              factory.createIdentifier('items'),
+              factory.createIdentifier('itemsProp'),
+              undefined,
+            )
+          : factory.createBindingElement(undefined, undefined, factory.createIdentifier('items'), undefined);
       elements.push(bindingElement);
       elements.push(
         factory.createBindingElement(undefined, undefined, factory.createIdentifier('overrideItems'), undefined),
@@ -708,17 +754,29 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       statements.push(authStatement);
     }
 
-    const collectionBindingStatements = this.buildCollectionBindingStatements(component);
-    collectionBindingStatements.forEach((entry) => {
-      statements.push(entry);
-    });
+    if (component.componentType === 'Collection' && this.renderConfig.apiConfiguration?.dataApi === 'GraphQL') {
+      const paginationStatements = this.buildGraphqlPaginationStatements(component);
+      paginationStatements.forEach((entry) => {
+        statements.push(entry);
+      });
+    } else {
+      const collectionBindingStatements = this.buildCollectionBindingStatements(component);
+      collectionBindingStatements.forEach((entry) => {
+        statements.push(entry);
+      });
+    }
 
-    const useStoreBindingStatements = this.buildUseDataStoreBindingStatements(component);
+    const useStoreBindingStatements = this.buildUseBindingStatements(component);
     useStoreBindingStatements.forEach((entry) => {
       statements.push(entry);
     });
 
-    const stateStatements = buildStateStatements(component, this.componentMetadata, this.importCollection);
+    const stateStatements = buildStateStatements(
+      component,
+      this.componentMetadata,
+      this.importCollection,
+      this.renderConfig.apiConfiguration?.dataApi,
+    );
     stateStatements.forEach((entry) => {
       statements.push(entry);
     });
@@ -887,8 +945,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
    * );
    */
   private buildOverridesFromVariantsAndProp(hasBreakpoint: boolean) {
-    this.importCollection.addMappedImport(ImportValue.GET_OVERRIDES_FROM_VARIANTS);
-    this.importCollection.addMappedImport(ImportValue.VARIANT);
+    this.importCollection.addMappedImport(ImportValue.GET_OVERRIDES_FROM_VARIANTS, ImportValue.VARIANT);
 
     return factory.createVariableStatement(
       undefined,
@@ -932,15 +989,14 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (isStudioComponentWithCollectionProperties(component)) {
       Object.entries(component.collectionProperties).forEach((collectionProp) => {
         const [propName, { model, sort, predicate }] = collectionProp;
-        const modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
+        const modelName = this.importCollection.addModelImport(model);
 
         if (predicate) {
           statements.push(this.buildPredicateDeclaration(propName, predicate, model));
           statements.push(this.buildCreateDataStorePredicateCall(modelName, propName));
         }
         if (sort) {
-          this.importCollection.addMappedImport(ImportValue.SORT_DIRECTION);
-          this.importCollection.addMappedImport(ImportValue.SORT_PREDICATE);
+          this.importCollection.addMappedImport(ImportValue.SORT_DIRECTION, ImportValue.SORT_PREDICATE);
           statements.push(this.buildPaginationStatement(propName, modelName, sort));
         }
 
@@ -1237,7 +1293,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  private buildUseDataStoreBindingStatements(component: StudioComponent): Statement[] {
+  private buildUseBindingStatements(component: StudioComponent): Statement[] {
     const statements: Statement[] = [];
 
     // generate for single record binding
@@ -1248,7 +1304,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           const { bindingProperties } = binding;
           if ('predicate' in bindingProperties && bindingProperties.predicate !== undefined) {
             this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
-            const modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, bindingProperties.model);
+            const modelName = this.importCollection.addModelImport(bindingProperties.model);
 
             /* const buttonColorFilter = {
              *   field: "userID",
@@ -1259,7 +1315,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             statements.push(
               this.buildPredicateDeclaration(propName, bindingProperties.predicate, bindingProperties.model),
             );
-            statements.push(this.buildCreateDataStorePredicateCall(modelName, propName));
+
+            if (this.renderConfig.apiConfiguration?.dataApi !== 'GraphQL') {
+              statements.push(this.buildCreateDataStorePredicateCall(modelName, propName));
+            }
+
             /**
              * const buttonColorDataStore = useDataStoreBinding({
              *   type: "collection"
@@ -1277,7 +1337,15 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                       undefined,
                       factory.createElementAccessExpression(
                         factory.createPropertyAccessExpression(
-                          this.buildUseDataStoreBindingCall('collection', modelName, this.getFilterName(propName)),
+                          this.renderConfig.apiConfiguration?.dataApi === 'GraphQL'
+                            ? getGraphqlCallExpression(ActionType.LIST, modelName, this.importCollection, {
+                                inputs: [
+                                  factory.createSpreadAssignment(
+                                    factory.createIdentifier(this.getFilterObjName(propName)),
+                                  ),
+                                ],
+                              })
+                            : this.buildUseDataStoreBindingCall('collection', modelName, this.getFilterName(propName)),
                           factory.createIdentifier('items'),
                         ),
                         factory.createNumericLiteral('0'),
@@ -1449,35 +1517,65 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       return this.predicateToObjectLiteralExpression(resolveBetweenPredicateToMultiplePredicates(predicate), model);
     }
 
-    const objectAssignments = Object.entries(filteredPredicate).map(([key, value]) => {
-      if (key === 'and' || key === 'or') {
+    let objectAssignments: PropertyAssignment[];
+
+    if (
+      this.renderConfig.apiConfiguration?.dataApi === 'GraphQL' &&
+      filteredPredicate.field &&
+      filteredPredicate.operand &&
+      filteredPredicate.operator
+    ) {
+      objectAssignments = [
+        factory.createPropertyAssignment(
+          factory.createIdentifier(filteredPredicate.field),
+          factory.createObjectLiteralExpression(
+            [
+              factory.createPropertyAssignment(
+                factory.createIdentifier(filteredPredicate.operator),
+                getConditionalOperandExpression(
+                  parseNumberOperand(
+                    filteredPredicate.operand,
+                    this.componentMetadata.dataSchemaMetadata?.models[model]?.fields[predicate.field || ''],
+                  ),
+                  operandType,
+                ),
+              ),
+            ],
+            false,
+          ),
+        ),
+      ];
+    } else {
+      objectAssignments = Object.entries(filteredPredicate).map(([key, value]) => {
+        if (key === 'and' || key === 'or' || key === 'not') {
+          return factory.createPropertyAssignment(
+            factory.createIdentifier(key),
+            factory.createArrayLiteralExpression(
+              (predicate[key] as StudioComponentPredicate[]).map(
+                (pred: StudioComponentPredicate) => this.predicateToObjectLiteralExpression(pred, model),
+                false,
+              ),
+            ),
+          );
+        }
+        if (key === 'operand' && typeof value === 'string') {
+          return factory.createPropertyAssignment(
+            factory.createIdentifier(key),
+            getConditionalOperandExpression(
+              parseNumberOperand(
+                value,
+                this.componentMetadata.dataSchemaMetadata?.models[model]?.fields[predicate.field || ''],
+              ),
+              operandType,
+            ),
+          );
+        }
         return factory.createPropertyAssignment(
           factory.createIdentifier(key),
-          factory.createArrayLiteralExpression(
-            (predicate[key] as StudioComponentPredicate[]).map(
-              (pred: StudioComponentPredicate) => this.predicateToObjectLiteralExpression(pred, model),
-              false,
-            ),
-          ),
+          typeof value === 'string' ? factory.createStringLiteral(value) : factory.createIdentifier('undefined'),
         );
-      }
-      if (key === 'operand' && typeof value === 'string') {
-        return factory.createPropertyAssignment(
-          factory.createIdentifier(key),
-          getConditionalOperandExpression(
-            parseNumberOperand(
-              value,
-              this.componentMetadata.dataSchemaMetadata?.models[model]?.fields[predicate.field || ''],
-            ),
-            operandType,
-          ),
-        );
-      }
-      return factory.createPropertyAssignment(
-        factory.createIdentifier(key),
-        typeof value === 'string' ? factory.createStringLiteral(value) : factory.createIdentifier('undefined'),
-      );
-    });
+      });
+    }
 
     return factory.createObjectLiteralExpression(objectAssignments);
   }
@@ -1486,7 +1584,13 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const actions = getComponentActions(this.component);
     if (actions) {
       return actions.map(({ action, identifier }) =>
-        buildUseActionStatement(this.componentMetadata, action, identifier, this.importCollection),
+        buildUseActionStatement(
+          this.componentMetadata,
+          action,
+          identifier,
+          this.importCollection,
+          this.renderConfig.apiConfiguration?.dataApi,
+        ),
       );
     }
     return [];
@@ -1506,6 +1610,695 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             undefined,
             undefined,
             this.predicateToObjectLiteralExpression(predicate, model),
+          ),
+        ],
+        ts.NodeFlags.Const,
+      ),
+    );
+  }
+
+  private buildGraphqlPaginationStatements(component: StudioComponent): Statement[] {
+    const statements: Statement[] = [];
+
+    const stateVariables: { name: string; default: Expression }[] = [
+      { name: 'pageIndex', default: factory.createNumericLiteral('1') },
+      { name: 'hasMorePages', default: factory.createTrue() },
+      { name: 'items', default: factory.createArrayLiteralExpression([]) },
+      { name: 'isApiPagination', default: factory.createFalse() },
+      { name: 'instanceKey', default: factory.createStringLiteral('newGuid') },
+      { name: 'loading', default: factory.createTrue() },
+      { name: 'maxViewed', default: factory.createNumericLiteral(1) },
+    ];
+
+    /*
+        const [pageIndex, setPageIndex] = React.useState(1);
+        const [hasMorePages, setHasMorePages] = React.useState(true);
+        const [items, setItems] = React.useState([]);
+        const [isApiPagination, setIsApiPagination] = React.useState(false);
+        const [instanceKey] = React.useState('newGuid');
+        const [loading, setLoading] = React.useState(true);
+        const [maxViewed, setMaxViewed] = React.useState(1);
+     */
+    stateVariables.forEach((state) => {
+      statements.push(buildUseStateExpression(state.name, state.default));
+    });
+
+    // const pageSize = 4;
+    statements.push(buildInitConstVariableExpression('pageSize', factory.createNumericLiteral('4')));
+
+    /*
+      React.useEffect(() => {
+        nextToken[instanceKey] = '';
+        apiCache[instanceKey] = [];
+      },[instanceKey]);
+
+      React.useEffect(() => {
+        setIsApiPagination(!!!itemsProp);
+      }, [itemsProp]);
+    */
+    const instanceKeyStatements = [
+      factory.createExpressionStatement(
+        factory.createBinaryExpression(
+          factory.createElementAccessExpression(
+            factory.createIdentifier('nextToken'),
+            factory.createIdentifier('instanceKey'),
+          ),
+          factory.createToken(ts.SyntaxKind.EqualsToken),
+          factory.createStringLiteral(''),
+        ),
+      ),
+      factory.createExpressionStatement(
+        factory.createBinaryExpression(
+          factory.createElementAccessExpression(
+            factory.createIdentifier('apiCache'),
+            factory.createIdentifier('instanceKey'),
+          ),
+          factory.createToken(ts.SyntaxKind.EqualsToken),
+          factory.createArrayLiteralExpression([], false),
+        ),
+      ),
+    ];
+    statements.push(addUseEffectWrapper(instanceKeyStatements, ['instanceKey']));
+    statements.push(
+      addUseEffectWrapper(
+        [
+          factory.createExpressionStatement(
+            factory.createCallExpression(factory.createIdentifier('setIsApiPagination'), undefined, [
+              factory.createPrefixUnaryExpression(
+                ts.SyntaxKind.ExclamationToken,
+                factory.createPrefixUnaryExpression(
+                  ts.SyntaxKind.ExclamationToken,
+                  factory.createPrefixUnaryExpression(
+                    ts.SyntaxKind.ExclamationToken,
+                    factory.createIdentifier('itemsProp'),
+                  ),
+                ),
+              ),
+            ]),
+          ),
+        ],
+        ['itemsProp'],
+      ),
+    );
+
+    /*
+      const handlePreviousPage = () => {
+        setPageIndex(pageIndex-1);
+      };
+
+      const handleNextPage = () => {
+          setPageIndex(pageIndex+1);
+      };
+
+      const jumpToPage = (pageNum?: number) => {
+          setPageIndex(pageNum!);
+      };
+    */
+    const arrowFunctionVariables: {
+      variableName: string;
+      functionName: string;
+      expression: Expression;
+      parameterDeclarations?: ParameterDeclaration[];
+    }[] = [
+      {
+        variableName: 'handlePreviousPage',
+        functionName: 'setPageIndex',
+        expression: factory.createBinaryExpression(
+          factory.createIdentifier('pageIndex'),
+          factory.createToken(ts.SyntaxKind.MinusToken),
+          factory.createNumericLiteral('1'),
+        ),
+      },
+      {
+        variableName: 'handleNextPage',
+        functionName: 'setPageIndex',
+        expression: factory.createBinaryExpression(
+          factory.createIdentifier('pageIndex'),
+          factory.createToken(ts.SyntaxKind.PlusToken),
+          factory.createNumericLiteral('1'),
+        ),
+      },
+      {
+        variableName: 'jumpToPage',
+        functionName: 'setPageIndex',
+        expression: factory.createNonNullExpression(factory.createIdentifier('pageNum')),
+        parameterDeclarations: [
+          factory.createParameterDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            factory.createIdentifier('pageNum'),
+            factory.createToken(ts.SyntaxKind.QuestionToken),
+            factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+            undefined,
+          ),
+        ],
+      },
+    ];
+    arrowFunctionVariables.forEach((entry) => {
+      statements.push(
+        buildArrowFunctionStatement(
+          entry.variableName,
+          entry.functionName,
+          entry.expression,
+          entry.parameterDeclarations,
+        ),
+      );
+    });
+
+    statements.push(this.buildLoadPageStatement(component));
+
+    /*
+      React.useEffect(() => {
+        loadPage(pageIndex);
+      }, [pageIndex]);
+
+      React.useEffect(() => {
+        setMaxViewed(Math.max(maxViewed, pageIndex));
+      }, [pageIndex, maxViewed, setMaxViewed]);
+    */
+    statements.push(
+      addUseEffectWrapper(
+        [
+          factory.createExpressionStatement(
+            factory.createCallExpression(factory.createIdentifier('loadPage'), undefined, [
+              factory.createIdentifier('pageIndex'),
+            ]),
+          ),
+        ],
+        ['pageIndex'],
+      ),
+    );
+    statements.push(
+      addUseEffectWrapper(
+        [
+          factory.createExpressionStatement(
+            factory.createCallExpression(factory.createIdentifier('setMaxViewed'), undefined, [
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('Math'),
+                  factory.createIdentifier('max'),
+                ),
+                undefined,
+                [factory.createIdentifier('maxViewed'), factory.createIdentifier('pageIndex')],
+              ),
+            ]),
+          ),
+        ],
+        ['pageIndex', 'maxViewed', 'setMaxViewed'],
+      ),
+    );
+
+    return statements;
+  }
+
+  private buildLoadPageStatement(component: StudioComponent): Statement {
+    const statements: Statement[] = [];
+
+    /*
+      const cacheUntil = (page*pageSize)+1; 
+      const newCache = apiCache[instanceKey].slice();
+      let newNext = nextToken[instanceKey];
+    */
+    statements.push(
+      buildInitConstVariableExpression(
+        'cacheUntil',
+        factory.createBinaryExpression(
+          factory.createParenthesizedExpression(
+            factory.createBinaryExpression(
+              factory.createIdentifier('page'),
+              factory.createToken(ts.SyntaxKind.AsteriskToken),
+              factory.createIdentifier('pageSize'),
+            ),
+          ),
+          factory.createToken(ts.SyntaxKind.PlusToken),
+          factory.createNumericLiteral('1'),
+        ),
+      ),
+    );
+    statements.push(
+      buildInitConstVariableExpression(
+        'newCache',
+        factory.createCallExpression(
+          factory.createPropertyAccessExpression(
+            factory.createElementAccessExpression(
+              factory.createIdentifier('apiCache'),
+              factory.createIdentifier('instanceKey'),
+            ),
+            factory.createIdentifier('slice'),
+          ),
+          undefined,
+          [],
+        ),
+      ),
+    );
+    statements.push(
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier('newNext'),
+              undefined,
+              undefined,
+              factory.createElementAccessExpression(
+                factory.createIdentifier('nextToken'),
+                factory.createIdentifier('instanceKey'),
+              ),
+            ),
+          ],
+          ts.NodeFlags.Let,
+        ),
+      ),
+    );
+
+    if (isStudioComponentWithCollectionProperties(component)) {
+      let filter: ObjectLiteralExpression | undefined;
+      let modelQuery = '';
+      const { dataSchemaMetadata: dataSchema } = this.componentMetadata;
+      const loadedFields: ShorthandPropertyAssignment[] = [];
+      const loadedFieldNames: string[] = [];
+      const loadedFieldStatements: Statement[] = [];
+
+      Object.entries(component.collectionProperties).forEach((collectionProp) => {
+        const [, { model: modelName, predicate }] = collectionProp;
+        modelQuery = getGraphqlQueryForModel(ActionType.LIST, modelName);
+        this.importCollection.addGraphqlQueryImport(modelQuery);
+        if (predicate) {
+          filter = this.predicateToObjectLiteralExpression(predicate, modelName);
+        }
+
+        const model = dataSchema?.models[modelName];
+
+        if (model !== undefined) {
+          Object.entries(model.fields).forEach(([fieldName, fieldSchema]) => {
+            if (fieldNeedsRelationshipLoadedForCollection(fieldSchema, dataSchema as GenericDataSchema)) {
+              const { relationship } = fieldSchema;
+              loadedFieldNames.push(fieldName);
+              const relatedFieldQueryName = this.getQueryRelationshipName(
+                modelName,
+                relationship?.relatedModelName ?? '',
+              );
+
+              /*
+                const Comments = (await API.graphql({query: commentsByPostID, variables: { post: item.id }}))
+                  .data.commentsByPostID.items;
+              */
+              loadedFieldStatements.push(
+                factory.createVariableStatement(
+                  undefined,
+                  factory.createVariableDeclarationList(
+                    [
+                      factory.createVariableDeclaration(
+                        factory.createIdentifier(pluralize(fieldName)),
+                        undefined,
+                        undefined,
+                        factory.createPropertyAccessExpression(
+                          factory.createPropertyAccessExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createParenthesizedExpression(
+                                factory.createAwaitExpression(
+                                  factory.createCallExpression(
+                                    factory.createPropertyAccessExpression(
+                                      factory.createIdentifier('API'),
+                                      factory.createIdentifier('graphql'),
+                                    ),
+                                    undefined,
+                                    [
+                                      factory.createObjectLiteralExpression(
+                                        [
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier('query'),
+                                            factory.createIdentifier(relatedFieldQueryName),
+                                          ),
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier('variables'),
+                                            factory.createObjectLiteralExpression(
+                                              [
+                                                factory.createPropertyAssignment(
+                                                  factory.createIdentifier(`${modelName.toLowerCase()}ID`),
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createIdentifier('item'),
+                                                    factory.createIdentifier('id'),
+                                                  ),
+                                                ),
+                                              ],
+                                              false,
+                                            ),
+                                          ),
+                                        ],
+                                        false,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              factory.createIdentifier('data'),
+                            ),
+                            factory.createIdentifier(relatedFieldQueryName),
+                          ),
+                          factory.createIdentifier('items'),
+                        ),
+                      ),
+                    ],
+                    ts.NodeFlags.Const,
+                  ),
+                ),
+              );
+
+              loadedFields.push(
+                factory.createShorthandPropertyAssignment(factory.createIdentifier(fieldName), undefined),
+              );
+            }
+          });
+        }
+      });
+
+      statements.push(
+        factory.createWhileStatement(
+          factory.createBinaryExpression(
+            factory.createBinaryExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier('newCache'),
+                factory.createIdentifier('length'),
+              ),
+              factory.createToken(ts.SyntaxKind.LessThanToken),
+              factory.createIdentifier('cacheUntil'),
+            ),
+            factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
+            factory.createParenthesizedExpression(
+              factory.createBinaryExpression(
+                factory.createIdentifier('newNext'),
+                factory.createToken(ts.SyntaxKind.ExclamationEqualsToken),
+                factory.createNull(),
+              ),
+            ),
+          ),
+          factory.createBlock(
+            [
+              factory.createExpressionStatement(
+                factory.createCallExpression(factory.createIdentifier('setLoading'), undefined, [factory.createTrue()]),
+              ),
+              factory.createVariableStatement(
+                undefined,
+                factory.createVariableDeclarationList(
+                  [
+                    factory.createVariableDeclaration(
+                      factory.createIdentifier('variables'),
+                      undefined,
+                      factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+                      factory.createObjectLiteralExpression(
+                        filter !== undefined
+                          ? [
+                              factory.createPropertyAssignment(
+                                factory.createIdentifier('limit'),
+                                factory.createIdentifier('pageSize'),
+                              ),
+                              factory.createPropertyAssignment(factory.createIdentifier('filter'), filter),
+                            ]
+                          : [
+                              factory.createPropertyAssignment(
+                                factory.createIdentifier('limit'),
+                                factory.createIdentifier('pageSize'),
+                              ),
+                            ],
+                        true,
+                      ),
+                    ),
+                  ],
+                  ts.NodeFlags.Const,
+                ),
+              ),
+              factory.createIfStatement(
+                factory.createIdentifier('newNext'),
+                factory.createBlock(
+                  [
+                    factory.createExpressionStatement(
+                      factory.createBinaryExpression(
+                        factory.createElementAccessExpression(
+                          factory.createIdentifier('variables'),
+                          factory.createStringLiteral('nextToken'),
+                        ),
+                        factory.createToken(ts.SyntaxKind.EqualsToken),
+                        factory.createIdentifier('newNext'),
+                      ),
+                    ),
+                  ],
+                  true,
+                ),
+                undefined,
+              ),
+              factory.createVariableStatement(
+                undefined,
+                factory.createVariableDeclarationList(
+                  [
+                    factory.createVariableDeclaration(
+                      factory.createIdentifier('result'),
+                      undefined,
+                      undefined,
+                      factory.createPropertyAccessExpression(
+                        factory.createPropertyAccessExpression(
+                          factory.createParenthesizedExpression(
+                            factory.createAwaitExpression(
+                              factory.createCallExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('API'),
+                                  factory.createIdentifier('graphql'),
+                                ),
+                                undefined,
+                                [
+                                  factory.createObjectLiteralExpression(
+                                    [
+                                      factory.createPropertyAssignment(
+                                        factory.createIdentifier('query'),
+                                        factory.createIdentifier(modelQuery),
+                                      ),
+                                      factory.createShorthandPropertyAssignment(
+                                        factory.createIdentifier('variables'),
+                                        undefined,
+                                      ),
+                                    ],
+                                    true,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          factory.createIdentifier('data'),
+                        ),
+                        factory.createIdentifier(modelQuery),
+                      ),
+                    ),
+                  ],
+                  ts.NodeFlags.Const,
+                ),
+              ),
+              factory.createVariableStatement(
+                undefined,
+                factory.createVariableDeclarationList(
+                  [
+                    factory.createVariableDeclaration(
+                      factory.createIdentifier('loaded'),
+                      undefined,
+                      undefined,
+                      factory.createAwaitExpression(
+                        factory.createCallExpression(
+                          factory.createPropertyAccessExpression(
+                            factory.createIdentifier('Promise'),
+                            factory.createIdentifier('all'),
+                          ),
+                          undefined,
+                          [
+                            factory.createCallExpression(
+                              factory.createPropertyAccessExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('result'),
+                                  factory.createIdentifier('items'),
+                                ),
+                                factory.createIdentifier('map'),
+                              ),
+                              undefined,
+                              [
+                                factory.createArrowFunction(
+                                  [factory.createToken(ts.SyntaxKind.AsyncKeyword)],
+                                  undefined,
+                                  [
+                                    factory.createParameterDeclaration(
+                                      undefined,
+                                      undefined,
+                                      undefined,
+                                      factory.createIdentifier('item'),
+                                      undefined,
+                                      undefined,
+                                      undefined,
+                                    ),
+                                  ],
+                                  undefined,
+                                  factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+                                  factory.createBlock(
+                                    [
+                                      ...loadedFieldStatements,
+                                      factory.createReturnStatement(
+                                        factory.createObjectLiteralExpression(
+                                          [
+                                            factory.createSpreadAssignment(factory.createIdentifier('item')),
+                                            ...loadedFields,
+                                          ],
+                                          true,
+                                        ),
+                                      ),
+                                    ],
+                                    true,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                  ts.NodeFlags.AwaitContext,
+                ),
+              ),
+              factory.createExpressionStatement(
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('newCache'),
+                    factory.createIdentifier('push'),
+                  ),
+                  undefined,
+                  [factory.createSpreadElement(factory.createIdentifier('loaded'))],
+                ),
+              ),
+              factory.createExpressionStatement(
+                factory.createBinaryExpression(
+                  factory.createIdentifier('newNext'),
+                  factory.createToken(ts.SyntaxKind.EqualsToken),
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('result'),
+                    factory.createIdentifier('nextToken'),
+                  ),
+                ),
+              ),
+            ],
+            true,
+          ),
+        ),
+      );
+    }
+
+    /*
+      const cacheSlice = newCache.slice((page-1)*pageSize, page*pageSize);
+      setItems(cacheSlice);
+      setHasMorePages(!!newNext);
+      setLoading(false);
+      apiCache[instanceKey] = newCache;
+      nextToken[instanceKey] = newNext;
+    */
+    statements.push(
+      buildInitConstVariableExpression(
+        'cacheSlice',
+        factory.createCallExpression(
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier('newCache'),
+            factory.createIdentifier('slice'),
+          ),
+          undefined,
+          [
+            factory.createBinaryExpression(
+              factory.createParenthesizedExpression(
+                factory.createBinaryExpression(
+                  factory.createIdentifier('page'),
+                  factory.createToken(ts.SyntaxKind.MinusToken),
+                  factory.createNumericLiteral('1'),
+                ),
+              ),
+              factory.createToken(ts.SyntaxKind.AsteriskToken),
+              factory.createIdentifier('pageSize'),
+            ),
+            factory.createBinaryExpression(
+              factory.createIdentifier('page'),
+              factory.createToken(ts.SyntaxKind.AsteriskToken),
+              factory.createIdentifier('pageSize'),
+            ),
+          ],
+        ),
+      ),
+    );
+    statements.push(
+      factory.createExpressionStatement(
+        factory.createCallExpression(factory.createIdentifier('setItems'), undefined, [
+          factory.createIdentifier('cacheSlice'),
+        ]),
+      ),
+    );
+    statements.push(
+      factory.createExpressionStatement(
+        factory.createCallExpression(factory.createIdentifier('setHasMorePages'), undefined, [
+          factory.createPrefixUnaryExpression(
+            ts.SyntaxKind.ExclamationToken,
+            factory.createPrefixUnaryExpression(ts.SyntaxKind.ExclamationToken, factory.createIdentifier('newNext')),
+          ),
+        ]),
+      ),
+    );
+    statements.push(
+      factory.createExpressionStatement(
+        factory.createCallExpression(factory.createIdentifier('setLoading'), undefined, [factory.createFalse()]),
+      ),
+    );
+    statements.push(
+      factory.createExpressionStatement(
+        factory.createBinaryExpression(
+          factory.createElementAccessExpression(
+            factory.createIdentifier('apiCache'),
+            factory.createIdentifier('instanceKey'),
+          ),
+          factory.createToken(ts.SyntaxKind.EqualsToken),
+          factory.createIdentifier('newCache'),
+        ),
+      ),
+    );
+    statements.push(
+      factory.createExpressionStatement(
+        factory.createBinaryExpression(
+          factory.createElementAccessExpression(
+            factory.createIdentifier('nextToken'),
+            factory.createIdentifier('instanceKey'),
+          ),
+          factory.createToken(ts.SyntaxKind.EqualsToken),
+          factory.createIdentifier('newNext'),
+        ),
+      ),
+    );
+
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('loadPage'),
+            undefined,
+            undefined,
+            factory.createArrowFunction(
+              [factory.createToken(ts.SyntaxKind.AsyncKeyword)],
+              undefined,
+              [
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier('page'),
+                  undefined,
+                  factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+                  undefined,
+                ),
+              ],
+              undefined,
+              factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+              factory.createBlock(statements, true),
+            ),
           ),
         ],
         ts.NodeFlags.Const,
@@ -1542,6 +2335,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       return 'ButtonProps';
     }
     return `${component.componentType}Props`;
+  }
+
+  private getQueryRelationshipName(modelName: string, relatedModelName: string): string {
+    const relatedModel = pluralize(relatedModelName.toLowerCase());
+    return `${relatedModel}By${modelName}ID`;
   }
 
   private dropMissingListElements<T>(elements: (T | null | undefined)[]): T[] {

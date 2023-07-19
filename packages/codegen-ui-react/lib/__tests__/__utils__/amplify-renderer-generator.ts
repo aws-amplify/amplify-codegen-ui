@@ -156,3 +156,14 @@ export const renderExpanderJsxElement = (
 
   return transpile(expanderNode, {}).componentText;
 };
+
+export const rendererConfigWithGraphQL: ReactRenderConfig = {
+  apiConfiguration: {
+    dataApi: 'GraphQL',
+    typesFilePath: '../API',
+    queriesFilePath: '../graphql/queries',
+    mutationsFilePath: '../graphql/mutations',
+    subscriptionsFilePath: '../graphql/subscriptions',
+    fragmentsFilePath: '../graphql/fragments',
+  },
+};

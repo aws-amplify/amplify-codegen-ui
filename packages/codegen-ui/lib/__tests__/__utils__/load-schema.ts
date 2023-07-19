@@ -13,13 +13,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './component-metadata';
-export * from './component-tree';
-export * from './state-reference-metadata';
-export * from './string-formatter';
-export * from './form-component-metadata';
-export * from './form-to-component';
-export * from './breakpoint-utils';
-export * from './form-utils';
-export * from './reserved-words';
-export * from './data-binding-utils';
+import fs from 'fs';
+import { join } from 'path';
+
+export function loadSchemaFromJSONFile<SchemaType>(localSchemaPath: string): SchemaType {
+  return JSON.parse(
+    fs.readFileSync(join(__dirname, '..', '..', '..', 'example-schemas', `${localSchemaPath}.json`), 'utf-8'),
+  ) as SchemaType;
+}

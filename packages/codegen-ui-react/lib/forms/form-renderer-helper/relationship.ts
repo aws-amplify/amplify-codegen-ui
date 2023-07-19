@@ -13,7 +13,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { CallExpression, factory, IfStatement, NodeFlags, Statement, SyntaxKind } from 'typescript';
+import {
+  CallExpression,
+  factory,
+  IfStatement,
+  NodeFlags,
+  ObjectLiteralElementLike,
+  ObjectLiteralExpression,
+  PropertyAssignment,
+  Statement,
+  SyntaxKind,
+} from 'typescript';
 import {
   FieldConfigMetadata,
   HasManyRelationshipType,
@@ -21,21 +31,60 @@ import {
   GenericDataModel,
   GenericDataField,
 } from '@aws-amplify/codegen-ui';
-import { getRecordsName, getLinkedDataName, buildAccessChain, getCanUnlinkModelName } from './form-state';
+import {
+  getRecordsName,
+  getLinkedDataName,
+  buildAccessChain,
+  getCanUnlinkModelName,
+  getRecordName,
+} from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
 import { ImportCollection, ImportSource } from '../../imports';
-import { lowerCaseFirst, getSetNameIdentifier } from '../../helpers';
+import { lowerCaseFirst, getSetNameIdentifier, capitalizeFirstLetter } from '../../helpers';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
 import { extractModelAndKeys, getIDValueCallChain, getMatchEveryModelFieldCallExpression } from './model-values';
 import { isModelDataType } from './render-checkers';
+import { DataApiKind } from '../../react-render-config';
+import {
+  ActionType,
+  getGraphqlCallExpression,
+  getGraphqlQueryForModel,
+  wrapInParenthesizedExpression,
+} from '../../utils/graphql';
 
-export const buildRelationshipQuery = (relatedModelName: string, importCollection: ImportCollection) => {
+export const buildRelationshipQuery = (
+  relatedModelName: string,
+  importCollection: ImportCollection,
+  dataApi?: DataApiKind,
+) => {
   const itemsName = getRecordsName(relatedModelName);
+
+  /* istanbul ignore next */
+  if (dataApi === 'GraphQL') {
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier(itemsName),
+            undefined,
+            undefined,
+            wrapInParenthesizedExpression(
+              getGraphqlCallExpression(ActionType.LIST, relatedModelName, importCollection),
+              ['data', getGraphqlQueryForModel(ActionType.LIST, relatedModelName), 'items'],
+            ),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    );
+  }
+
   const objectProperties = [
     factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral('collection')),
     factory.createPropertyAssignment(
       factory.createIdentifier('model'),
-      factory.createIdentifier(importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, relatedModelName)),
+      factory.createIdentifier(importCollection.addModelImport(relatedModelName)),
     ),
   ];
   return buildBaseCollectionVariableStatement(
@@ -59,6 +108,8 @@ const getJoinTableQueryArrowFunction = ({
   joinTableRelatedModelFields: string[];
   thisModelRecord: string;
 }) => {
+  const recordKeysString = 'recordKeys';
+
   const getQueryCallExpression = (queriedKey: string, recordName: string, recordKey: string) =>
     factory.createCallExpression(
       factory.createPropertyAccessExpression(
@@ -73,8 +124,6 @@ const getJoinTableQueryArrowFunction = ({
         ),
       ],
     );
-
-  const recordKeysString = 'recordKeys';
 
   const queryCallExpressions: CallExpression[] = [];
 
@@ -111,30 +160,7 @@ const getJoinTableQueryArrowFunction = ({
     undefined,
     factory.createToken(SyntaxKind.EqualsGreaterThanToken),
     factory.createBlock(
-      [
-        factory.createVariableStatement(
-          undefined,
-          factory.createVariableDeclarationList(
-            [
-              factory.createVariableDeclaration(
-                factory.createIdentifier(recordKeysString),
-                undefined,
-                undefined,
-                factory.createCallExpression(
-                  factory.createPropertyAccessExpression(
-                    factory.createIdentifier('JSON'),
-                    factory.createIdentifier('parse'),
-                  ),
-                  undefined,
-                  [factory.createIdentifier('id')],
-                ),
-              ),
-            ],
-            NodeFlags.Const,
-          ),
-        ),
-        factory.createReturnStatement(factory.createArrayLiteralExpression(queryCallExpressions, true)),
-      ],
+      [factory.createReturnStatement(factory.createArrayLiteralExpression(queryCallExpressions, true))],
       true,
     ),
   );
@@ -203,13 +229,15 @@ function createHasManyUpdateRelatedModelBlock({
   return factory.createBlock(statements, true);
 }
 
-export const buildManyToManyRelationshipDataStoreStatements = (
+export const buildManyToManyRelationshipStatements = (
   dataStoreActionType: 'update' | 'create',
   modelName: string,
   hasManyFieldConfig: [string, FieldConfigMetadata],
   thisModelPrimaryKeys: string[],
   joinTable: GenericDataModel,
   savedModelName: string,
+  importCollection: ImportCollection,
+  dataApi?: DataApiKind,
 ) => {
   let [fieldName] = hasManyFieldConfig;
   const [, fieldConfigMetaData] = hasManyFieldConfig;
@@ -218,6 +246,8 @@ export const buildManyToManyRelationshipDataStoreStatements = (
     fieldConfigMetaData.relationship as HasManyRelationshipType;
   const joinTableThisModelName = relatedModelFields[0];
   const joinTableRelatedModelName = relatedJoinFieldName;
+  const isGraphql = dataApi === 'GraphQL';
+
   if (!relatedJoinTableName) {
     throw new InternalError(`Cannot find join table for ${fieldName}`);
   }
@@ -235,8 +265,10 @@ export const buildManyToManyRelationshipDataStoreStatements = (
     const linkedDataName = getLinkedDataName(fieldName);
     const dataToLinkMap = `${lowerCaseFirst(fieldName)}ToLinkMap`;
     const dataToUnlinkMap = `${lowerCaseFirst(fieldName)}ToUnLinkMap`;
+    const thisModelRecord = getRecordName(modelName);
     const updatedMap = `${lowerCaseFirst(fieldName)}Map`;
     const originalMap = `${linkedDataName}Map`;
+
     const { keys: relatedModelPrimaryKeys } = extractModelAndKeys(fieldConfigMetaData.valueMappings);
     if (!relatedModelPrimaryKeys) {
       throw new InternalError(`Could not identify primary key(s) for ${relatedModelName}`);
@@ -767,118 +799,15 @@ export const buildManyToManyRelationshipDataStoreStatements = (
               ],
               undefined,
               factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-              factory.createBlock(
-                [
-                  factory.createVariableStatement(
-                    undefined,
-                    factory.createVariableDeclarationList(
-                      [
-                        factory.createVariableDeclaration(
-                          factory.createIdentifier(getRecordsName(relatedJoinTableName)),
-                          undefined,
-                          undefined,
-                          factory.createAwaitExpression(
-                            factory.createCallExpression(
-                              factory.createPropertyAccessExpression(
-                                factory.createIdentifier('DataStore'),
-                                factory.createIdentifier('query'),
-                              ),
-                              undefined,
-                              [
-                                factory.createIdentifier(relatedJoinTableName),
-                                factory.createArrowFunction(
-                                  undefined,
-                                  undefined,
-                                  [
-                                    factory.createParameterDeclaration(
-                                      undefined,
-                                      undefined,
-                                      undefined,
-                                      factory.createIdentifier('r'),
-                                      undefined,
-                                      undefined,
-                                      undefined,
-                                    ),
-                                  ],
-                                  undefined,
-                                  factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                  factory.createCallExpression(
-                                    factory.createPropertyAccessExpression(
-                                      factory.createIdentifier('r'),
-                                      factory.createIdentifier('and'),
-                                    ),
-                                    undefined,
-                                    [
-                                      getJoinTableQueryArrowFunction({
-                                        thisModelPrimaryKeys,
-                                        relatedModelPrimaryKeys,
-                                        joinTableThisModelFields,
-                                        joinTableRelatedModelFields,
-                                        thisModelRecord: `${lowerCaseFirst(modelName)}Record`,
-                                      }),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                      // eslint-disable-next-line no-bitwise
-                      NodeFlags.Const | NodeFlags.AwaitContext | NodeFlags.ContextFlags | NodeFlags.TypeExcludesFlags,
-                    ),
-                  ),
-                  factory.createForStatement(
-                    factory.createVariableDeclarationList(
-                      [
-                        factory.createVariableDeclaration(
-                          factory.createIdentifier('i'),
-                          undefined,
-                          undefined,
-                          factory.createNumericLiteral('0'),
-                        ),
-                      ],
-                      // eslint-disable-next-line no-bitwise
-                      NodeFlags.Let | NodeFlags.AwaitContext | NodeFlags.ContextFlags | NodeFlags.TypeExcludesFlags,
-                    ),
-                    factory.createBinaryExpression(
-                      factory.createIdentifier('i'),
-                      factory.createToken(SyntaxKind.LessThanToken),
-                      factory.createIdentifier('count'),
-                    ),
-                    factory.createPostfixUnaryExpression(factory.createIdentifier('i'), SyntaxKind.PlusPlusToken),
-                    factory.createBlock(
-                      [
-                        factory.createExpressionStatement(
-                          factory.createCallExpression(
-                            factory.createPropertyAccessExpression(
-                              factory.createIdentifier('promises'),
-                              factory.createIdentifier('push'),
-                            ),
-                            undefined,
-                            [
-                              factory.createCallExpression(
-                                factory.createPropertyAccessExpression(
-                                  factory.createIdentifier('DataStore'),
-                                  factory.createIdentifier('delete'),
-                                ),
-                                undefined,
-                                [
-                                  factory.createElementAccessExpression(
-                                    factory.createIdentifier(getRecordsName(relatedJoinTableName as string)),
-                                    factory.createIdentifier('i'),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                      true,
-                    ),
-                  ),
-                ],
-                true,
+              buildUnlinkForEachBlock(
+                relatedJoinTableName,
+                thisModelPrimaryKeys,
+                relatedModelPrimaryKeys,
+                joinTableThisModelFields,
+                joinTableRelatedModelFields,
+                thisModelRecord,
+                isGraphql,
+                importCollection,
               ),
             ),
           ],
@@ -947,41 +876,63 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                             ),
                             undefined,
                             [
-                              factory.createCallExpression(
-                                factory.createPropertyAccessExpression(
-                                  factory.createIdentifier('DataStore'),
-                                  factory.createIdentifier('save'),
-                                ),
-                                undefined,
-                                [
-                                  factory.createNewExpression(
-                                    factory.createIdentifier(relatedJoinTableName as string),
+                              isGraphql
+                                ? getGraphqlCallExpression(ActionType.CREATE, relatedJoinTableName, importCollection, {
+                                    inputs: [
+                                      // class: classRecord
+                                      factory.createPropertyAssignment(
+                                        factory.createIdentifier(joinTableThisModelName),
+                                        factory.createIdentifier(thisModelRecord),
+                                      ),
+                                      // student: studentRecords.find((r) =>
+                                      //   Object.entries(JSON.parse(id)).every(
+                                      //     ([key, value]) => r[key] === value
+                                      //   )
+                                      // ),
+                                      factory.createPropertyAssignment(
+                                        factory.createIdentifier(joinTableRelatedModelName),
+                                        getMatchEveryModelFieldCallExpression({
+                                          recordsArrayName: getRecordsName(relatedModelName),
+                                          JSONName: 'id',
+                                        }),
+                                      ),
+                                    ],
+                                  })
+                                : factory.createCallExpression(
+                                    factory.createPropertyAccessExpression(
+                                      factory.createIdentifier('DataStore'),
+                                      factory.createIdentifier('save'),
+                                    ),
                                     undefined,
                                     [
-                                      factory.createObjectLiteralExpression(
+                                      factory.createNewExpression(
+                                        factory.createIdentifier(relatedJoinTableName as string),
+                                        undefined,
                                         [
-                                          // cpkTeacher: cPKTeacherRecord,
-                                          factory.createPropertyAssignment(
-                                            factory.createIdentifier(joinTableThisModelName),
-                                            factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
-                                          ),
-                                          // compositeVet: compositeVetRecords.find(
-                                          //   (r) => Object.entries(JSON.parse(id)).every(([key, value]) =>
-                                          //   r[key] === value))
-                                          factory.createPropertyAssignment(
-                                            factory.createIdentifier(joinTableRelatedModelName),
-                                            getMatchEveryModelFieldCallExpression({
-                                              recordsArrayName: getRecordsName(relatedModelName),
-                                              JSONName: 'id',
-                                            }),
+                                          factory.createObjectLiteralExpression(
+                                            [
+                                              // cpkTeacher: cPKTeacherRecord,
+                                              factory.createPropertyAssignment(
+                                                factory.createIdentifier(joinTableThisModelName),
+                                                factory.createIdentifier(getRecordName(modelName)),
+                                              ),
+                                              // compositeVet: compositeVetRecords.find(
+                                              //   (r) => Object.entries(JSON.parse(id)).every(([key, value]) =>
+                                              //   r[key] === value))
+                                              factory.createPropertyAssignment(
+                                                factory.createIdentifier(joinTableRelatedModelName),
+                                                getMatchEveryModelFieldCallExpression({
+                                                  recordsArrayName: getRecordsName(relatedModelName),
+                                                  JSONName: 'id',
+                                                }),
+                                              ),
+                                            ],
+                                            true,
                                           ),
                                         ],
-                                        true,
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
                             ],
                           ),
                         ),
@@ -1049,42 +1000,13 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                             ),
                             undefined,
                             [
-                              factory.createCallExpression(
-                                factory.createPropertyAccessExpression(
-                                  factory.createIdentifier('DataStore'),
-                                  factory.createIdentifier('save'),
-                                ),
-                                undefined,
-                                [
-                                  factory.createNewExpression(
-                                    factory.createIdentifier(relatedJoinTableName),
-                                    undefined,
-                                    [
-                                      // {
-                                      //   cpkTeacher: cPKTeacher,
-                                      //   cpkClass,
-                                      // }
-                                      factory.createObjectLiteralExpression(
-                                        [
-                                          savedModelName === joinTableThisModelName
-                                            ? factory.createShorthandPropertyAssignment(
-                                                factory.createIdentifier(joinTableThisModelName),
-                                                undefined,
-                                              )
-                                            : factory.createPropertyAssignment(
-                                                factory.createIdentifier(joinTableThisModelName),
-                                                factory.createIdentifier(savedModelName),
-                                              ),
-                                          factory.createShorthandPropertyAssignment(
-                                            factory.createIdentifier(joinTableRelatedModelName),
-                                            undefined,
-                                          ),
-                                        ],
-                                        true,
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                              getCreateJoinTableExpression(
+                                relatedJoinTableName,
+                                savedModelName,
+                                joinTableThisModelName,
+                                joinTableRelatedModelName,
+                                importCollection,
+                                dataApi,
                               ),
                             ],
                           ),
@@ -1105,7 +1027,14 @@ export const buildManyToManyRelationshipDataStoreStatements = (
   ];
 };
 
-export const buildGetRelationshipModels = (fieldName: string, fieldConfigMetaData: FieldConfigMetadata) => {
+export const buildGetRelationshipModels = (
+  fieldName: string,
+  fieldConfigMetaData: FieldConfigMetadata,
+  importCollection: ImportCollection,
+  dataApi?: DataApiKind,
+) => {
+  const recordIdentifier = factory.createIdentifier('record');
+
   if (fieldConfigMetaData.relationship?.type === 'HAS_MANY') {
     const linkedDataName = getLinkedDataName(fieldName);
     const { relatedJoinFieldName } = fieldConfigMetaData.relationship as HasManyRelationshipType;
@@ -1120,7 +1049,7 @@ export const buildGetRelationshipModels = (fieldName: string, fieldConfigMetaDat
               undefined,
               undefined,
               factory.createConditionalExpression(
-                factory.createIdentifier('record'),
+                recordIdentifier,
                 factory.createToken(SyntaxKind.QuestionToken),
                 factory.createAwaitExpression(
                   factory.createCallExpression(
@@ -1194,6 +1123,15 @@ export const buildGetRelationshipModels = (fieldName: string, fieldConfigMetaDat
         ),
       );
     } else {
+      // hasMany relationship has one related field.
+      const relatedModelField = fieldConfigMetaData.relationship.relatedModelFields[0];
+      const inputs: ObjectLiteralElementLike[] = [
+        factory.createPropertyAssignment(
+          factory.createIdentifier(relatedModelField),
+          factory.createPropertyAccessExpression(recordIdentifier, factory.createIdentifier('id')),
+        ),
+      ];
+
       lazyLoadLinkedDataStatement = factory.createVariableStatement(
         undefined,
         factory.createVariableDeclarationList(
@@ -1203,21 +1141,33 @@ export const buildGetRelationshipModels = (fieldName: string, fieldConfigMetaDat
               undefined,
               undefined,
               factory.createConditionalExpression(
-                factory.createIdentifier('record'),
+                recordIdentifier,
                 factory.createToken(SyntaxKind.QuestionToken),
-                factory.createAwaitExpression(
-                  factory.createCallExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('record'),
-                        factory.createIdentifier(fieldName),
+                dataApi === 'GraphQL'
+                  ? wrapInParenthesizedExpression(
+                      getGraphqlCallExpression(
+                        ActionType.GET_BY_RELATIONSHIP,
+                        fieldName,
+                        importCollection,
+                        { inputs },
+                        relatedModelField,
                       ),
-                      factory.createIdentifier('toArray'),
+                      [
+                        'data',
+                        getGraphqlQueryForModel(ActionType.GET_BY_RELATIONSHIP, fieldName, relatedModelField),
+                        'items',
+                      ],
+                    )
+                  : factory.createAwaitExpression(
+                      factory.createCallExpression(
+                        factory.createPropertyAccessExpression(
+                          factory.createPropertyAccessExpression(recordIdentifier, factory.createIdentifier(fieldName)),
+                          factory.createIdentifier('toArray'),
+                        ),
+                        undefined,
+                        [],
+                      ),
                     ),
-                    undefined,
-                    [],
-                  ),
-                ),
                 factory.createToken(SyntaxKind.ColonToken),
                 factory.createArrayLiteralExpression([], false),
               ),
@@ -1269,13 +1219,14 @@ export const buildGetRelationshipModels = (fieldName: string, fieldConfigMetaDat
   ];
 };
 
-export const buildHasManyRelationshipDataStoreStatements = (
+export const buildHasManyRelationshipStatements = (
   dataStoreActionType: 'update' | 'create',
   modelName: string,
   hasManyFieldConfig: [string, FieldConfigMetadata],
   thisModelPrimaryKeys: string[],
   savedModelName: string,
   importCollection: ImportCollection,
+  dataApi?: DataApiKind,
 ) => {
   let [fieldName] = hasManyFieldConfig;
   const [, fieldConfigMetaData] = hasManyFieldConfig;
@@ -1288,6 +1239,8 @@ export const buildHasManyRelationshipDataStoreStatements = (
   const dataToUnLink = `${lowerCaseFirst(fieldName)}ToUnLink`;
   const dataToLinkSet = `${lowerCaseFirst(fieldName)}Set`;
   const linkedDataSet = `${linkedDataName}Set`;
+  const thisModelRecord = getRecordName(modelName);
+
   const { keys } = extractModelAndKeys(fieldConfigMetaData.valueMappings);
   if (!keys) {
     throw new InternalError(`Could not identify primary key(s) for ${relatedModelName}`);
@@ -1612,49 +1565,28 @@ export const buildHasManyRelationshipDataStoreStatements = (
                       ),
                       undefined,
                       [
-                        factory.createCallExpression(
-                          factory.createPropertyAccessExpression(
-                            factory.createIdentifier('DataStore'),
-                            factory.createIdentifier('save'),
-                          ),
-                          undefined,
-                          [
-                            factory.createCallExpression(
-                              factory.createPropertyAccessExpression(
-                                factory.createIdentifier(relatedModelVariableName),
-                                factory.createIdentifier('copyOf'),
-                              ),
-                              undefined,
-                              [
-                                factory.createIdentifier('original'),
-                                factory.createArrowFunction(
-                                  undefined,
-                                  undefined,
-                                  [
-                                    factory.createParameterDeclaration(
-                                      undefined,
-                                      undefined,
-                                      undefined,
-                                      factory.createIdentifier('updated'),
-                                      undefined,
-                                      undefined,
-                                      undefined,
-                                    ),
-                                  ],
-                                  undefined,
-                                  factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                  createHasManyUpdateRelatedModelBlock({
-                                    relatedModelFields,
-                                    thisModelPrimaryKeys,
-                                    thisModelRecord: `${lowerCaseFirst(modelName)}Record`,
-                                    belongsToFieldOnRelatedModel,
-                                    setToNull: true,
-                                  }),
+                        dataApi === 'GraphQL'
+                          ? getGraphqlCallExpression(ActionType.DELETE, relatedModelName, importCollection, {
+                              inputs: keys.map((key) =>
+                                factory.createPropertyAssignment(
+                                  factory.createIdentifier(key),
+                                  factory.createPropertyAccessExpression(
+                                    factory.createIdentifier('original'),
+                                    factory.createIdentifier(key),
+                                  ),
                                 ),
-                              ],
+                              ),
+                            })
+                          : getUpdateRelatedModelExpression(
+                              thisModelRecord,
+                              relatedModelVariableName,
+                              relatedModelFields,
+                              thisModelPrimaryKeys,
+                              importCollection,
+                              dataApi,
+                              belongsToFieldOnRelatedModel,
+                              true,
                             ),
-                          ],
-                        ),
                       ],
                     ),
                   ),
@@ -1699,48 +1631,38 @@ export const buildHasManyRelationshipDataStoreStatements = (
                       ),
                       undefined,
                       [
-                        factory.createCallExpression(
-                          factory.createPropertyAccessExpression(
-                            factory.createIdentifier('DataStore'),
-                            factory.createIdentifier('save'),
-                          ),
-                          undefined,
-                          [
-                            factory.createCallExpression(
-                              factory.createPropertyAccessExpression(
-                                factory.createIdentifier(relatedModelVariableName),
-                                factory.createIdentifier('copyOf'),
-                              ),
-                              undefined,
-                              [
-                                factory.createIdentifier('original'),
-                                factory.createArrowFunction(
-                                  undefined,
-                                  undefined,
-                                  [
-                                    factory.createParameterDeclaration(
-                                      undefined,
-                                      undefined,
-                                      undefined,
-                                      factory.createIdentifier('updated'),
-                                      undefined,
-                                      undefined,
-                                      undefined,
+                        dataApi === 'GraphQL'
+                          ? getGraphqlCallExpression(ActionType.UPDATE, relatedModelName, importCollection, {
+                              inputs: [
+                                ...keys.map((key) =>
+                                  factory.createPropertyAssignment(
+                                    factory.createIdentifier(key),
+                                    factory.createPropertyAccessExpression(
+                                      factory.createIdentifier('original'),
+                                      factory.createIdentifier(key),
                                     ),
-                                  ],
-                                  undefined,
-                                  factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                  createHasManyUpdateRelatedModelBlock({
-                                    relatedModelFields,
-                                    thisModelPrimaryKeys,
-                                    thisModelRecord: `${lowerCaseFirst(modelName)}Record`,
-                                    belongsToFieldOnRelatedModel,
-                                  }),
+                                  ),
+                                ),
+                                ...relatedModelFields.map((relatedModelField) =>
+                                  factory.createPropertyAssignment(
+                                    factory.createIdentifier(relatedModelField),
+                                    factory.createPropertyAccessExpression(
+                                      factory.createIdentifier(thisModelRecord),
+                                      factory.createIdentifier(thisModelPrimaryKeys[0]),
+                                    ),
+                                  ),
                                 ),
                               ],
+                            })
+                          : getUpdateRelatedModelExpression(
+                              thisModelRecord,
+                              relatedModelVariableName,
+                              relatedModelFields,
+                              thisModelPrimaryKeys,
+                              importCollection,
+                              dataApi,
+                              belongsToFieldOnRelatedModel,
                             ),
-                          ],
-                        ),
                       ],
                     ),
                   ),
@@ -1753,6 +1675,16 @@ export const buildHasManyRelationshipDataStoreStatements = (
       ),
     ];
   }
+
+  const updateRelatedModelExpression = getUpdateRelatedModelExpression(
+    savedModelName,
+    relatedModelName,
+    relatedModelFields,
+    thisModelPrimaryKeys,
+    importCollection,
+    dataApi,
+    belongsToFieldOnRelatedModel,
+  );
   return [
     factory.createExpressionStatement(
       factory.createCallExpression(
@@ -1802,50 +1734,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
                               factory.createIdentifier('push'),
                             ),
                             undefined,
-                            [
-                              factory.createCallExpression(
-                                factory.createPropertyAccessExpression(
-                                  factory.createIdentifier('DataStore'),
-                                  factory.createIdentifier('save'),
-                                ),
-                                undefined,
-                                [
-                                  factory.createCallExpression(
-                                    factory.createPropertyAccessExpression(
-                                      factory.createIdentifier(relatedModelName),
-                                      factory.createIdentifier('copyOf'),
-                                    ),
-                                    undefined,
-                                    [
-                                      factory.createIdentifier('original'),
-                                      factory.createArrowFunction(
-                                        undefined,
-                                        undefined,
-                                        [
-                                          factory.createParameterDeclaration(
-                                            undefined,
-                                            undefined,
-                                            undefined,
-                                            factory.createIdentifier('updated'),
-                                            undefined,
-                                            undefined,
-                                            undefined,
-                                          ),
-                                        ],
-                                        undefined,
-                                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                        createHasManyUpdateRelatedModelBlock({
-                                          relatedModelFields,
-                                          thisModelPrimaryKeys,
-                                          thisModelRecord: savedModelName,
-                                          belongsToFieldOnRelatedModel,
-                                        }),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                            [updateRelatedModelExpression],
                           ),
                         ),
                         factory.createReturnStatement(factory.createIdentifier('promises')),
@@ -1915,3 +1804,414 @@ export const getRelationshipBasedRecordUpdateStatements = ({
   });
   return statements;
 };
+
+const getUpdateRelatedModelExpression = (
+  savedModelName: string,
+  relatedModelName: string,
+  relatedModelFields: string[],
+  thisModelPrimaryKeys: string[],
+  importCollection: ImportCollection,
+  dataApi?: DataApiKind,
+  belongsToFieldOnRelatedModel?: string,
+  setToNull?: boolean,
+) => {
+  /* istanbul ignore next */
+  if (dataApi === 'GraphQL') {
+    const statements: PropertyAssignment[] = relatedModelFields.map((relatedModelField, index) => {
+      const correspondingPrimaryKey = thisModelPrimaryKeys[index];
+
+      if (!correspondingPrimaryKey) {
+        throw new InternalError(`Corresponding primary key not found for ${relatedModelField}`);
+      }
+
+      return factory.createPropertyAssignment(
+        factory.createIdentifier(relatedModelField),
+        setToNull
+          ? factory.createNull()
+          : factory.createPropertyAccessExpression(
+              factory.createIdentifier(savedModelName),
+              factory.createIdentifier(correspondingPrimaryKey),
+            ),
+      );
+    });
+
+    if (belongsToFieldOnRelatedModel) {
+      statements.push(
+        factory.createPropertyAssignment(
+          factory.createIdentifier(belongsToFieldOnRelatedModel),
+          setToNull ? factory.createNull() : factory.createIdentifier(savedModelName),
+        ),
+      );
+    }
+
+    /**
+     * API.graphql({
+     *    query: updateStudent,
+     *    variables: {
+     *      input: {
+     *        ...original,
+     *        schoolID: school.id
+     *      }
+     *    }
+     * })
+     */
+    const inputs = [factory.createSpreadAssignment(factory.createIdentifier('original')), ...statements];
+
+    return getGraphqlCallExpression(ActionType.UPDATE, capitalizeFirstLetter(savedModelName), importCollection, {
+      inputs,
+    });
+  }
+
+  /**
+   * Datastore.save(
+   *    Student.copyOf(original, (updated) => {
+   *        updated.schoolID = school.id
+   *    })
+   * )
+   */
+  return factory.createCallExpression(
+    factory.createPropertyAccessExpression(factory.createIdentifier('DataStore'), factory.createIdentifier('save')),
+    undefined,
+    [
+      factory.createCallExpression(
+        factory.createPropertyAccessExpression(
+          factory.createIdentifier(relatedModelName),
+          factory.createIdentifier('copyOf'),
+        ),
+        undefined,
+        [
+          factory.createIdentifier('original'),
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier('updated'),
+                undefined,
+                undefined,
+                undefined,
+              ),
+            ],
+            undefined,
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+            createHasManyUpdateRelatedModelBlock({
+              relatedModelFields,
+              thisModelPrimaryKeys,
+              thisModelRecord: savedModelName,
+              belongsToFieldOnRelatedModel,
+              setToNull,
+            }),
+          ),
+        ],
+      ),
+    ],
+  );
+};
+
+const getCreateJoinTableExpression = (
+  relatedJoinTableName: string,
+  savedModelName: string,
+  joinTableThisModelName: string,
+  joinTableRelatedModelName: string,
+  importCollection: ImportCollection,
+  dataApi?: DataApiKind,
+): CallExpression => {
+  /* istanbul ignore next */
+  if (dataApi === 'GraphQL') {
+    const inputs = [
+      savedModelName === joinTableThisModelName
+        ? factory.createShorthandPropertyAssignment(factory.createIdentifier(joinTableThisModelName), undefined)
+        : factory.createPropertyAssignment(
+            factory.createIdentifier(joinTableThisModelName),
+            factory.createIdentifier(savedModelName),
+          ),
+      factory.createShorthandPropertyAssignment(factory.createIdentifier(joinTableRelatedModelName), undefined),
+    ];
+
+    return getGraphqlCallExpression(ActionType.CREATE, relatedJoinTableName, importCollection, { inputs });
+  }
+
+  return factory.createCallExpression(
+    factory.createPropertyAccessExpression(factory.createIdentifier('DataStore'), factory.createIdentifier('save')),
+    undefined,
+    [
+      factory.createNewExpression(factory.createIdentifier(relatedJoinTableName), undefined, [
+        // {
+        //   cpkTeacher: cPKTeacher,
+        //   cpkClass,
+        // }
+        factory.createObjectLiteralExpression(
+          [
+            savedModelName === joinTableThisModelName
+              ? factory.createShorthandPropertyAssignment(factory.createIdentifier(joinTableThisModelName), undefined)
+              : factory.createPropertyAssignment(
+                  factory.createIdentifier(joinTableThisModelName),
+                  factory.createIdentifier(savedModelName),
+                ),
+            factory.createShorthandPropertyAssignment(factory.createIdentifier(joinTableRelatedModelName), undefined),
+          ],
+          true,
+        ),
+      ]),
+    ],
+  );
+};
+
+/*
+  GraphQL:
+    const recordKeys = JSON.parse(id);
+      const studentClassRecords = await API.graphql({
+        query: listStudentClasses,
+        variables: {
+          filter: {
+            and: [
+              { studentId: { eq: recordKeys.id } },
+              { classId: { eq: classRecord.id } },
+            ],
+          },
+        },
+      });
+      for (let i = 0; i < count; i++) {
+        promises.push(
+          API.graphql({
+            query: deleteStudentClass,
+            variables: {
+              input: {
+                input: studentClassRecords[i],
+              },
+            },
+          })
+        );
+      }
+  
+  DataStore:
+    const recordKeys = JSON.parse(id);
+    const studentClassRecords = await DataStore.query(
+      StudentClass,
+      (r) =>
+        r.and((r) => {
+          const recordKeys = JSON.parse(id);
+          return [
+            r.studentID.eq(recordKeys.id),
+            r.classID.eq(classRecord.id),
+          ];
+        })
+    );
+
+    for (let i = 0; i < count; i++) {
+      promises.push(DataStore.delete(studentClassRecords[i]));
+    }
+*/
+function buildUnlinkForEachBlock(
+  relatedJoinTableName: string,
+  thisModelPrimaryKeys: string[],
+  relatedModelPrimaryKeys: string[],
+  joinTableThisModelFields: string[],
+  joinTableRelatedModelFields: string[],
+  thisModelRecord: string,
+  isGraphql: boolean,
+  importCollection: ImportCollection,
+) {
+  const recordKeysString = 'recordKeys';
+  const joinTableFilterExpressions: ObjectLiteralExpression[] = [];
+
+  const graphqlFilterInput = (field: string, recordModel: string, recordKey: string) => {
+    return factory.createObjectLiteralExpression(
+      [
+        factory.createPropertyAssignment(
+          factory.createIdentifier(field),
+          factory.createObjectLiteralExpression(
+            [
+              factory.createPropertyAssignment(
+                factory.createIdentifier('eq'),
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier(recordModel),
+                  factory.createIdentifier(recordKey),
+                ),
+              ),
+            ],
+            false,
+          ),
+        ),
+      ],
+      false,
+    );
+  };
+
+  joinTableRelatedModelFields.forEach((field, index) => {
+    const recordKey = relatedModelPrimaryKeys[index];
+    if (!recordKey) {
+      throw new InternalError(`Cannot find corresponding key for ${field}`);
+    }
+    joinTableFilterExpressions.push(graphqlFilterInput(field, recordKeysString, recordKey));
+  });
+
+  joinTableThisModelFields.forEach((field, index) => {
+    const recordKey = thisModelPrimaryKeys[index];
+    if (!recordKey) {
+      throw new InternalError(`Cannot find corresponding key for ${field}`);
+    }
+    joinTableFilterExpressions.push(graphqlFilterInput(field, thisModelRecord, recordKey));
+  });
+
+  const filters = [
+    factory.createPropertyAssignment(
+      factory.createIdentifier('and'),
+      factory.createArrayLiteralExpression(joinTableFilterExpressions, true),
+    ),
+  ];
+
+  return factory.createBlock(
+    [
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier(recordKeysString),
+              undefined,
+              undefined,
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('JSON'),
+                  factory.createIdentifier('parse'),
+                ),
+                undefined,
+                [factory.createIdentifier('id')],
+              ),
+            ),
+          ],
+          NodeFlags.Const,
+        ),
+      ),
+
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier(getRecordsName(relatedJoinTableName)),
+              undefined,
+              undefined,
+              wrapInParenthesizedExpression(
+                isGraphql
+                  ? getGraphqlCallExpression(ActionType.LIST, relatedJoinTableName, importCollection, { filters })
+                  : factory.createCallExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier('DataStore'),
+                        factory.createIdentifier('query'),
+                      ),
+                      undefined,
+                      [
+                        factory.createIdentifier(relatedJoinTableName),
+                        factory.createArrowFunction(
+                          undefined,
+                          undefined,
+                          [
+                            factory.createParameterDeclaration(
+                              undefined,
+                              undefined,
+                              undefined,
+                              factory.createIdentifier('r'),
+                              undefined,
+                              undefined,
+                              undefined,
+                            ),
+                          ],
+                          undefined,
+                          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                          factory.createCallExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createIdentifier('r'),
+                              factory.createIdentifier('and'),
+                            ),
+                            undefined,
+                            [
+                              getJoinTableQueryArrowFunction({
+                                thisModelPrimaryKeys,
+                                relatedModelPrimaryKeys,
+                                joinTableThisModelFields,
+                                joinTableRelatedModelFields,
+                                thisModelRecord,
+                              }),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                isGraphql ? ['data', getGraphqlQueryForModel(ActionType.LIST, relatedJoinTableName), 'items'] : [],
+              ),
+            ),
+          ],
+          // eslint-disable-next-line no-bitwise
+          NodeFlags.Const | NodeFlags.AwaitContext | NodeFlags.ContextFlags | NodeFlags.TypeExcludesFlags,
+        ),
+      ),
+      factory.createForStatement(
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier('i'),
+              undefined,
+              undefined,
+              factory.createNumericLiteral('0'),
+            ),
+          ],
+          // eslint-disable-next-line no-bitwise
+          NodeFlags.Let | NodeFlags.AwaitContext | NodeFlags.ContextFlags | NodeFlags.TypeExcludesFlags,
+        ),
+        factory.createBinaryExpression(
+          factory.createIdentifier('i'),
+          factory.createToken(SyntaxKind.LessThanToken),
+          factory.createIdentifier('count'),
+        ),
+        factory.createPostfixUnaryExpression(factory.createIdentifier('i'), SyntaxKind.PlusPlusToken),
+        factory.createBlock(
+          [
+            factory.createExpressionStatement(
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('promises'),
+                  factory.createIdentifier('push'),
+                ),
+                undefined,
+                [
+                  isGraphql
+                    ? getGraphqlCallExpression(ActionType.DELETE, relatedJoinTableName, importCollection, {
+                        inputs: [
+                          factory.createPropertyAssignment(
+                            factory.createIdentifier('input'),
+                            factory.createElementAccessExpression(
+                              factory.createIdentifier(getRecordsName(relatedJoinTableName)),
+                              factory.createIdentifier('i'),
+                            ),
+                          ),
+                        ],
+                      })
+                    : factory.createCallExpression(
+                        factory.createPropertyAccessExpression(
+                          factory.createIdentifier('DataStore'),
+                          factory.createIdentifier('delete'),
+                        ),
+                        undefined,
+                        [
+                          factory.createElementAccessExpression(
+                            factory.createIdentifier(getRecordsName(relatedJoinTableName)),
+                            factory.createIdentifier('i'),
+                          ),
+                        ],
+                      ),
+                ],
+              ),
+            ),
+          ],
+          true,
+        ),
+      ),
+    ],
+    true,
+  );
+}

@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import ts, { Statement, factory, ObjectLiteralExpression, Expression } from 'typescript';
+import ts, { Statement, factory, ObjectLiteralExpression, Expression, PropertyAssignment } from 'typescript';
 import {
   InvalidInputError,
   StudioComponent,
@@ -23,10 +23,15 @@ import {
   StudioComponentProperty,
   MutationAction,
   ComponentMetadata,
+  DataStoreCreateItemAction,
+  DataStoreUpdateItemAction,
+  DataStoreDeleteItemAction,
 } from '@aws-amplify/codegen-ui';
 import { isActionEvent, propertyToExpression, getSetStateName, sanitizeName } from '../react-component-render-helper';
 import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { getChildPropMappingForComponentName } from './utils';
+import { DataApiKind } from '../react-render-config';
+import { ActionType, getGraphqlCallExpression } from '../utils/graphql';
 
 enum Action {
   'Amplify.Navigation' = 'Amplify.Navigation',
@@ -36,6 +41,8 @@ enum Action {
   'Amplify.AuthSignOut' = 'Amplify.AuthSignOut',
   'Amplify.Mutation' = 'Amplify.Mutation',
 }
+
+type DataAction = DataStoreCreateItemAction | DataStoreUpdateItemAction | DataStoreDeleteItemAction;
 
 export default Action;
 
@@ -58,12 +65,29 @@ function isMutationAction(action: ActionStudioComponentEvent): action is Mutatio
   return (action.action as Action) === Action['Amplify.Mutation'];
 }
 
+function isDataAction(action: ActionStudioComponentEvent): action is DataAction {
+  return DataStoreActions.has(action.action as Action);
+}
+
 export function getActionHookImportValue(action: string): ImportValue {
   const actionName = ActionNameMapping[Action[action as Action]];
   if (actionName === undefined) {
     throw new InvalidInputError(`${action} is not a valid action.`);
   }
   return actionName;
+}
+
+function getGraphqlMutationFromAction(action: Action): ActionType {
+  switch (action) {
+    case Action['Amplify.DataStoreCreateItemAction']:
+      return ActionType.CREATE;
+    case Action['Amplify.DataStoreUpdateItemAction']:
+      return ActionType.UPDATE;
+    case Action['Amplify.DataStoreDeleteItemAction']:
+      return ActionType.DELETE;
+    default:
+      throw new InvalidInputError(`Action ${action} has no corresponding GraphQL operation`);
+  }
 }
 
 export function getComponentActions(component: StudioComponent | StudioComponentChild): {
@@ -95,9 +119,14 @@ export function buildUseActionStatement(
   action: ActionStudioComponentEvent,
   identifier: string,
   importCollection: ImportCollection,
+  apiKind: DataApiKind = 'DataStore',
 ): Statement {
   if (isMutationAction(action)) {
     return buildMutationActionStatement(componentMetadata, action, identifier);
+  }
+
+  if (isDataAction(action) && apiKind === 'GraphQL') {
+    return buildGraphqlCallback(componentMetadata, action, identifier, importCollection);
   }
 
   const actionHookImportValue = getActionHookImportValue(action.action);
@@ -114,6 +143,63 @@ export function buildUseActionStatement(
             factory.createIdentifier(actionHookImportValue),
             undefined,
             buildActionArguments(componentMetadata, action, importCollection),
+          ),
+        ),
+      ],
+      ts.NodeFlags.Const,
+    ),
+  );
+}
+
+export function buildGraphqlCallback(
+  componentMetadata: ComponentMetadata,
+  action: DataAction,
+  identifier: string,
+  importCollection: ImportCollection,
+) {
+  const inputKeys = [];
+
+  if ('id' in action.parameters && action.parameters.id) {
+    inputKeys.push(
+      factory.createPropertyAssignment(
+        'id',
+        getActionParameterValue(componentMetadata, 'id', action.parameters.id, importCollection),
+      ),
+    );
+  }
+  if ('fields' in action.parameters && action.parameters.fields) {
+    inputKeys.unshift(...assignFieldProperties(componentMetadata, action.parameters.fields, importCollection));
+  }
+
+  return factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier(identifier),
+          undefined,
+          undefined,
+          factory.createArrowFunction(
+            [factory.createToken(ts.SyntaxKind.AsyncKeyword)],
+            undefined,
+            [],
+            undefined,
+            factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+            factory.createBlock(
+              [
+                factory.createExpressionStatement(
+                  factory.createAwaitExpression(
+                    getGraphqlCallExpression(
+                      getGraphqlMutationFromAction(action.action as Action),
+                      action.parameters.model,
+                      importCollection,
+                      { inputs: inputKeys },
+                    ),
+                  ),
+                ),
+              ],
+              true,
+            ),
           ),
         ),
       ],
@@ -178,26 +264,47 @@ export function buildActionArguments(
   importCollection: ImportCollection,
 ): ObjectLiteralExpression[] | undefined {
   if (action.parameters) {
-    const properties = Object.entries(action.parameters).map(([key, value]) =>
-      factory.createPropertyAssignment(
-        factory.createIdentifier(key),
-        getActionParameterValue(componentMetadata, key, value, importCollection),
-      ),
-    );
-
-    if (DataStoreActions.has(action.action as Action)) {
-      addSchemaToArguments(properties, importCollection);
-    }
-    return [factory.createObjectLiteralExpression(properties, false)];
+    return [buildActionArgument(componentMetadata, action, importCollection)];
   }
 
   return undefined;
+}
+
+function buildActionArgument(
+  componentMetadata: ComponentMetadata,
+  action: ActionStudioComponentEvent,
+  importCollection: ImportCollection,
+): ObjectLiteralExpression {
+  const properties = Object.entries(action.parameters).map(([key, value]) =>
+    factory.createPropertyAssignment(
+      factory.createIdentifier(key),
+      getActionParameterValue(componentMetadata, key, value, importCollection),
+    ),
+  );
+
+  if (DataStoreActions.has(action.action as Action)) {
+    addSchemaToArguments(properties, importCollection);
+  }
+  return factory.createObjectLiteralExpression(properties, false);
 }
 
 export function addSchemaToArguments(properties: ts.PropertyAssignment[], importCollection: ImportCollection) {
   const SCHEMA = 'schema';
   properties.push(factory.createPropertyAssignment(factory.createIdentifier(SCHEMA), factory.createIdentifier(SCHEMA)));
   importCollection.addImport(ImportSource.LOCAL_SCHEMA, SCHEMA);
+}
+
+function assignFieldProperties(
+  componentMetadata: ComponentMetadata,
+  fieldsValue: StudioComponentProperty | { [key: string]: StudioComponentProperty } | string,
+  importCollection: ImportCollection,
+): PropertyAssignment[] {
+  return Object.entries(fieldsValue).map(([nestedKey, nestedValue]) =>
+    factory.createPropertyAssignment(
+      factory.createIdentifier(nestedKey),
+      getActionParameterValue(componentMetadata, nestedKey, nestedValue, importCollection),
+    ),
+  );
 }
 
 export function getActionParameterValue(
@@ -207,17 +314,12 @@ export function getActionParameterValue(
   importCollection: ImportCollection,
 ): Expression {
   if (key === 'model') {
-    const modelName = importCollection.addImport(ImportSource.LOCAL_MODELS, value as string);
+    const modelName = importCollection.addModelImport(value as string);
     return factory.createIdentifier(modelName);
   }
   if (key === 'fields') {
     return factory.createObjectLiteralExpression(
-      Object.entries(value).map(([nestedKey, nestedValue]) =>
-        factory.createPropertyAssignment(
-          factory.createIdentifier(nestedKey),
-          getActionParameterValue(componentMetadata, nestedKey, nestedValue, importCollection),
-        ),
-      ),
+      assignFieldProperties(componentMetadata, value, importCollection),
       false,
     );
   }

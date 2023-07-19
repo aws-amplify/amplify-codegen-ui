@@ -17,9 +17,11 @@ import { GenericDataSchema, GenericDataField } from '@aws-amplify/codegen-ui';
 import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
 import { factory, NodeFlags, SyntaxKind, ThrowStatement } from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
-import { ImportCollection, ImportSource } from '../../imports';
+import { ImportCollection } from '../../imports';
 import { isModelDataType } from './render-checkers';
 import { getRecordName } from './form-state';
+import { DataApiKind } from '../../react-render-config';
+import { ActionType, getGraphqlCallExpression } from '../../utils/graphql';
 
 function getFieldBiDirectionalWith({
   modelName,
@@ -86,12 +88,34 @@ function unlinkModelRecordExpression({
   recordNameToUnlink,
   fieldName,
   associatedFields,
+  importCollection,
+  dataApi,
 }: {
   modelName: string;
   recordNameToUnlink: string;
   fieldName: string;
   associatedFields: string[];
+  importCollection: ImportCollection;
+  dataApi?: DataApiKind;
 }) {
+  if (dataApi === 'GraphQL') {
+    const inputs = [
+      factory.createSpreadAssignment(factory.createIdentifier(recordNameToUnlink)),
+      factory.createPropertyAssignment(factory.createIdentifier(fieldName), factory.createIdentifier('undefined')),
+      ...associatedFields.map((field) =>
+        factory.createPropertyAssignment(factory.createIdentifier(field), factory.createIdentifier('undefined')),
+      ),
+    ];
+
+    return factory.createExpressionStatement(
+      factory.createCallExpression(
+        factory.createPropertyAccessExpression(factory.createIdentifier('promises'), factory.createIdentifier('push')),
+        undefined,
+        [getGraphqlCallExpression(ActionType.UPDATE, modelName, importCollection, { inputs })],
+      ),
+    );
+  }
+
   return factory.createExpressionStatement(
     factory.createCallExpression(
       factory.createPropertyAccessExpression(factory.createIdentifier('promises'), factory.createIdentifier('push')),
@@ -226,6 +250,100 @@ function wrapThrowInIfStatement({
   );
 }
 
+function linkModelRecordExpression({
+  importedRelatedModelName,
+  relatedRecordToLink,
+  fieldBiDirectionalWithName,
+  currentRecord,
+  importCollection,
+  dataApi,
+}: {
+  importedRelatedModelName: string;
+  relatedRecordToLink: string;
+  fieldBiDirectionalWithName: string;
+  currentRecord: string;
+  importCollection: ImportCollection;
+  dataApi?: DataApiKind;
+}) {
+  if (dataApi === 'GraphQL') {
+    const inputs = [
+      factory.createSpreadAssignment(factory.createIdentifier(importedRelatedModelName)),
+      factory.createPropertyAssignment(
+        factory.createIdentifier(fieldBiDirectionalWithName),
+        factory.createIdentifier(currentRecord),
+      ),
+    ];
+
+    return factory.createExpressionStatement(
+      factory.createCallExpression(
+        factory.createPropertyAccessExpression(factory.createIdentifier('promises'), factory.createIdentifier('push')),
+        undefined,
+        [getGraphqlCallExpression(ActionType.UPDATE, importedRelatedModelName, importCollection, { inputs })],
+      ),
+    );
+  }
+
+  return factory.createExpressionStatement(
+    factory.createCallExpression(
+      factory.createPropertyAccessExpression(factory.createIdentifier('promises'), factory.createIdentifier('push')),
+      undefined,
+      [
+        factory.createCallExpression(
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier('DataStore'),
+            factory.createIdentifier('save'),
+          ),
+          undefined,
+          [
+            factory.createCallExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier(importedRelatedModelName),
+                factory.createIdentifier('copyOf'),
+              ),
+              undefined,
+              [
+                factory.createIdentifier(relatedRecordToLink),
+                factory.createArrowFunction(
+                  undefined,
+                  undefined,
+                  [
+                    factory.createParameterDeclaration(
+                      undefined,
+                      undefined,
+                      undefined,
+                      factory.createIdentifier('updated'),
+                      undefined,
+                      undefined,
+                      undefined,
+                    ),
+                  ],
+                  undefined,
+                  factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                  factory.createBlock(
+                    [
+                      factory.createExpressionStatement(
+                        factory.createBinaryExpression(
+                          factory.createPropertyAccessExpression(
+                            factory.createIdentifier('updated'),
+                            factory.createIdentifier(fieldBiDirectionalWithName),
+                          ),
+                          factory.createToken(SyntaxKind.EqualsToken),
+                          factory.createIdentifier(currentRecord),
+                        ),
+                      ),
+                    ],
+                    true,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+
 export function getBiDirectionalRelationshipStatements({
   formActionType,
   dataSchema,
@@ -233,6 +351,7 @@ export function getBiDirectionalRelationshipStatements({
   fieldConfig,
   modelName,
   savedRecordName,
+  dataApi,
 }: {
   formActionType: 'create' | 'update';
   dataSchema: GenericDataSchema;
@@ -240,6 +359,7 @@ export function getBiDirectionalRelationshipStatements({
   fieldConfig: [string, FieldConfigMetadata];
   modelName: string;
   savedRecordName: string;
+  dataApi?: DataApiKind;
 }) {
   const getFieldBiDirectionalWithReturnValue = getFieldBiDirectionalWith({
     modelName,
@@ -261,8 +381,8 @@ export function getBiDirectionalRelationshipStatements({
     fieldBiDirectionalWithPrimaryKeys,
   } = getFieldBiDirectionalWithReturnValue;
   const [fieldName, { relationship }] = fieldConfig;
-  const importedRelatedModelName = importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, relatedModelName);
-  const importedThisModelName = importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, modelName);
+  const importedRelatedModelName = importCollection.getMappedModelAlias(relatedModelName);
+  const importedThisModelName = importCollection.getMappedModelAlias(modelName);
   // TODO: setting associated fields to `undefined` is a workaround.
   // remove after DataStore addresses issue: https://github.com/aws-amplify/amplify-js/issues/10750
   const associatedFields =
@@ -328,6 +448,8 @@ export function getBiDirectionalRelationshipStatements({
                     recordNameToUnlink: relatedRecordToUnlink,
                     fieldName: fieldBiDirectionalWithName,
                     associatedFields: associatedFieldsBiDirectionalWith,
+                    importCollection,
+                    dataApi,
                   }),
             ],
             true,
@@ -338,7 +460,30 @@ export function getBiDirectionalRelationshipStatements({
     );
   }
 
-  /** 
+  /** GraphQL:
+          const compositeOwnerToLink = modelFields.CompositeOwner;
+          if (compositeOwnerToLink) {
+            promises.push(API.graphql({
+              query: updateCompositeOwner0,
+              variables: { input: { ...ownerToLink, Dog: dog }},
+            }))
+  
+            const compositeDogToUnlink = await compositeOwnerToLink.CompositeDog;
+            if (compositeDogToUnlink) {
+              promises.push(API.graphql({
+                query: updateCompositeDog,
+                variables: { input: {
+                  ...compositeDogToUnlink,
+                  compositeDogCompositeOwnerLastName: undefined,
+                  compositeDogCompositeOwnerFirstName: undefined,
+                  CompositeOwner: undefined,
+                }}
+              }))
+            }
+          }
+   */
+
+  /** Datatstore:
           const compositeOwnerToLink = modelFields.CompositeOwner;
           if (compositeOwnerToLink) {
             promises.push(DataStore.save(CompositeOwner0.copyOf(compositeOwnerToLink, (updated) => {
@@ -381,68 +526,14 @@ export function getBiDirectionalRelationshipStatements({
         factory.createIdentifier(relatedRecordToLink),
         factory.createBlock(
           [
-            factory.createExpressionStatement(
-              factory.createCallExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier('promises'),
-                  factory.createIdentifier('push'),
-                ),
-                undefined,
-                [
-                  factory.createCallExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('DataStore'),
-                      factory.createIdentifier('save'),
-                    ),
-                    undefined,
-                    [
-                      factory.createCallExpression(
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier(importedRelatedModelName),
-                          factory.createIdentifier('copyOf'),
-                        ),
-                        undefined,
-                        [
-                          factory.createIdentifier(relatedRecordToLink),
-                          factory.createArrowFunction(
-                            undefined,
-                            undefined,
-                            [
-                              factory.createParameterDeclaration(
-                                undefined,
-                                undefined,
-                                undefined,
-                                factory.createIdentifier('updated'),
-                                undefined,
-                                undefined,
-                                undefined,
-                              ),
-                            ],
-                            undefined,
-                            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                            factory.createBlock(
-                              [
-                                factory.createExpressionStatement(
-                                  factory.createBinaryExpression(
-                                    factory.createPropertyAccessExpression(
-                                      factory.createIdentifier('updated'),
-                                      factory.createIdentifier(fieldBiDirectionalWithName),
-                                    ),
-                                    factory.createToken(SyntaxKind.EqualsToken),
-                                    factory.createIdentifier(currentRecord),
-                                  ),
-                                ),
-                              ],
-                              true,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            linkModelRecordExpression({
+              importedRelatedModelName,
+              relatedRecordToLink,
+              fieldBiDirectionalWithName,
+              currentRecord,
+              importCollection,
+              dataApi,
+            }),
             factory.createVariableStatement(
               undefined,
               factory.createVariableDeclarationList(
@@ -483,6 +574,8 @@ export function getBiDirectionalRelationshipStatements({
                         recordNameToUnlink: thisModelRecordToUnlink,
                         fieldName,
                         associatedFields,
+                        importCollection,
+                        dataApi,
                       }),
                 ],
                 true,

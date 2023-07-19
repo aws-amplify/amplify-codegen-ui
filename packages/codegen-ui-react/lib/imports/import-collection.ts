@@ -15,19 +15,23 @@
  */
 import { ImportDeclaration, factory } from 'typescript';
 import path from 'path';
-import { ComponentMetadata, reservedWords } from '@aws-amplify/codegen-ui';
+import { ComponentMetadata, InvalidInputError, reservedWords } from '@aws-amplify/codegen-ui';
 import { ImportMapping, ImportValue, ImportSource } from './import-mapping';
 import { isPrimitive } from '../primitive';
 import { createUniqueName } from '../helpers';
+import { ReactRenderConfig } from '../react-render-config';
+
+type ImportCollectionConfig = {
+  rendererConfig?: ReactRenderConfig;
+};
 
 export class ImportCollection {
-  constructor(componentMetadata?: ComponentMetadata) {
-    this.importedNames = new Set(Object.values(componentMetadata?.componentNameToTypeMap || {}).concat(reservedWords));
-    // Add form fields so we dont reuse the identifier
-    if (componentMetadata?.formMetadata) {
-      Object.keys(componentMetadata.formMetadata.fieldConfigs).forEach((key) => this.importedNames.add(key));
-    }
+  constructor(importConfig?: ImportCollectionConfig) {
+    this.importedNames = new Set(reservedWords);
+    this.rendererConfig = importConfig?.rendererConfig;
   }
+
+  rendererConfig: ReactRenderConfig | undefined;
 
   importedNames: Set<string>;
 
@@ -35,9 +39,57 @@ export class ImportCollection {
 
   importAlias: Map<string, Map<string, string>> = new Map();
 
-  addMappedImport(importValue: ImportValue) {
-    const importPackage = ImportMapping[importValue];
-    this.addImport(importPackage, importValue);
+  ingestComponentMetadata(componentMetadata: ComponentMetadata) {
+    Object.values(componentMetadata?.componentNameToTypeMap || {}).forEach((value) => this.importedNames.add(value));
+
+    // Add form fields so we dont reuse the identifier
+    if (componentMetadata?.formMetadata) {
+      Object.keys(componentMetadata.formMetadata.fieldConfigs).forEach((value) => this.importedNames.add(value));
+    }
+  }
+
+  private getOperationsPath(operation: 'mutation' | 'query' | 'subscription' | 'fragment') {
+    if (this.rendererConfig?.apiConfiguration?.dataApi === 'GraphQL') {
+      switch (operation) {
+        case 'mutation':
+          return this.rendererConfig.apiConfiguration.mutationsFilePath;
+        case 'query':
+          return this.rendererConfig.apiConfiguration.queriesFilePath;
+        case 'subscription':
+          return this.rendererConfig.apiConfiguration.subscriptionsFilePath;
+        case 'fragment':
+          return this.rendererConfig.apiConfiguration.fragmentsFilePath;
+        default:
+          throw new InvalidInputError(`Unexpected GraphQL operation encountered: ${operation}`);
+      }
+    }
+    throw new InvalidInputError('Render is not configured to utilize GraphQL operations');
+  }
+
+  addMappedImport(...importValue: ImportValue[]) {
+    importValue.forEach((value) => {
+      const importPackage = ImportMapping[value];
+      this.addImport(importPackage, value);
+    });
+  }
+
+  addGraphqlMutationImport(importName: string) {
+    return this.addImport(this.getOperationsPath('mutation'), importName);
+  }
+
+  addGraphqlQueryImport(importName: string) {
+    return this.addImport(this.getOperationsPath('query'), importName);
+  }
+
+  addGraphqlSubscriptionImport(importName: string) {
+    return this.addImport(this.getOperationsPath('subscription'), importName);
+  }
+
+  addModelImport(importName: string) {
+    if (this.rendererConfig?.apiConfiguration?.dataApi === 'GraphQL') {
+      return this.addImport(`${this.rendererConfig.apiConfiguration.typesFilePath}`, importName);
+    }
+    return this.addImport(ImportSource.LOCAL_MODELS, importName);
   }
 
   addImport(packageName: string, importName: string) {
@@ -82,6 +134,13 @@ export class ImportCollection {
 
   getMappedAlias(packageName: string, importName: string) {
     return this.importAlias.get(packageName)?.get(importName) || importName;
+  }
+
+  getMappedModelAlias(importName: string) {
+    if (this.rendererConfig?.apiConfiguration?.dataApi === 'GraphQL') {
+      return this.getMappedAlias(this.rendererConfig.apiConfiguration?.typesFilePath || '', importName);
+    }
+    return this.getMappedAlias(ImportSource.LOCAL_MODELS, importName);
   }
 
   mergeCollections(otherCollection: ImportCollection) {

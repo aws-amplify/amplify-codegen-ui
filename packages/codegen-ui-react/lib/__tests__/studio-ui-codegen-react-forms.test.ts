@@ -15,7 +15,12 @@
  */
 /* eslint-disable no-template-curly-in-string */
 import { ImportSource } from '../imports';
-import { generateComponentOnlyWithAmplifyFormRenderer, generateWithAmplifyFormRenderer } from './__utils__';
+import {
+  defaultCLIRenderConfig,
+  generateComponentOnlyWithAmplifyFormRenderer,
+  generateWithAmplifyFormRenderer,
+  rendererConfigWithGraphQL,
+} from './__utils__';
 
 describe('amplify form renderer tests', () => {
   describe('datastore form tests', () => {
@@ -697,6 +702,281 @@ describe('amplify form renderer tests', () => {
         'datastore/product',
         undefined,
       );
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+  });
+
+  describe('GraphQL form tests', () => {
+    it('should generate a create form', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/post-datastore-create',
+        'datastore/post',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate a update form without relationships', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/post-datastore-update',
+        'datastore/post',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: false },
+      );
+
+      // check import for graphql operations
+      expect(componentText).toContain('import { API } from "aws-amplify";');
+      expect(componentText).toContain('import { getPost } from "../graphql/queries";');
+      expect(componentText).toContain('import { updatePost } from "../graphql/mutations";');
+
+      // should not have DataStore.save call
+      expect(componentText).not.toContain('await DataStore.save(');
+
+      // should call updatePost mutation onSubmit
+      expect(componentText).toContain(`await API.graphql`);
+      expect(componentText).toContain(`query: updatePost,`);
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate a create form with hasOne relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/book-datastore-relationship',
+        'datastore/relationship',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate an update form with hasMany relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/relationships/update-comment',
+        'datastore/relationships/has-many-comment',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      expect(componentText).toContain('await API.graphql({');
+      expect(componentText).toContain('query: updateComment');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate a relationship update form with autocomplete', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/relationships/update-post',
+        'datastore/relationships/has-many-autocomplete-post',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate an update form with many to many relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/relationships/update-class',
+        'datastore/relationships/many-to-many-class',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      expect(componentText).toContain('await API.graphql({');
+      expect(componentText).toContain('createStudentClass');
+      expect(componentText).toContain('deleteStudentClass');
+      expect(componentText).toContain('updateClass');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate an upgrade form with multiple relationship & cpk', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/cpk-teacher-datastore-update',
+        'datastore/cpk-relationships',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      // hasOne
+      expect(componentText).toContain('specialTeacherId: specialTeacherIdProp');
+      expect(componentText).toContain('query: getCPKTeacher,');
+      expect(componentText).toContain('Student: (r) => r?.specialStudentId');
+      expect(componentText).toContain('JSON.stringify({ specialStudentId: r?.specialStudentId })');
+
+      // manyToMany
+      expect(componentText).toContain('const count = cPKClassesMap.get(getIDValue.CPKClasses?.(r))');
+      expect(componentText).toContain('cPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount)');
+      expect(componentText).toContain('const count = linkedCPKClassesMap.get(getIDValue.CPKClasses?.(r))');
+      expect(componentText).toContain('linkedCPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount)');
+      expect(componentText).toContain('cpkTeacher: cPKTeacherRecord');
+
+      // hasMany
+      expect(componentText).toContain('cPKProjectsSet.add(getIDValue.CPKProjects?.(r)');
+      expect(componentText).toContain('linkedCPKProjectsSet.add(getIDValue.CPKProjects?.(r))');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate a create form with multiple hasOne relationships', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/book-datastore-relationship-multiple',
+        'datastore/relationship-multiple',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate a create form with belongsTo relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/member-datastore-create',
+        'datastore/project-team-model',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate a create form with manyToMany relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/tag-datastore-create',
+        'datastore/tag-post',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      // check custom display value is set
+      expect(componentText).toContain('Posts: (r) => r?.title');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate a create form with hasMany relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/school-datastore-create',
+        'datastore/school-student',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      // check custom display value is set
+      expect(componentText).toContain('Students: (r) => r?.name');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should render a create form for model with composite keys', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/composite-dog-datastore-create',
+        'datastore/composite-relationships',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should render a create form for child of 1:m relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/composite-toy-datastore-create',
+        'datastore/composite-relationships',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should render a create form for child of 1:m-belongsTo relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/comment-datastore-create',
+        'datastore/comment-hasMany-belongsTo-relationships',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      expect(componentText).toContain('postCommentsId');
+      expect(componentText).not.toContain('postID');
+      expect(componentText).not.toContain('userCommentsId');
+      expect(componentText).not.toContain('orgCommentsId');
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should render thrown error for required parent field 1:1 relationships - Create', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/dog-owner-create',
+        'datastore/dog-owner-required',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      expect(componentText).toContain('if (JSON.stringify(dogToUnlink) !== JSON.stringify(dog)) {');
+      expect(componentText).toContain('throw Error(');
+      expect(componentText).toContain(
+        'Owner ${ownerToLink.id} cannot be linked to Dog because it is already linked to another Dog.',
+      );
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should render thrown error for required related field 1:1 relationships - Create', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/owner-dog-create',
+        'datastore/dog-owner-required',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      expect(componentText).not.toContain('cannot be unlinked because');
+      expect(componentText).not.toContain('cannot be linked to ');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });

@@ -106,6 +106,7 @@ export type StudioComponentDataBindingProperty = {
 export type StudioComponentPredicate = {
   and?: StudioComponentPredicate[];
   or?: StudioComponentPredicate[];
+  not?: StudioComponentPredicate[];
   field?: string;
   operand?: string;
   operator?: string;
