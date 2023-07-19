@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.3](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.14.2...v2.14.3) (2023-07-19)
+
+### Bug Fixes
+
+- alias colliding imported model name in hasMany relationship ([#1019](https://github.com/aws-amplify/amplify-codegen-ui/issues/1019)) ([5d5060d](https://github.com/aws-amplify/amplify-codegen-ui/commit/5d5060d232f0a65f3b6485b23b06d3d02da1bb60))
+
 ## [2.14.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.14.1...v2.14.2) (2023-06-06)
 
 **Note:** Version bump only for package @aws-amplify/codegen-ui
