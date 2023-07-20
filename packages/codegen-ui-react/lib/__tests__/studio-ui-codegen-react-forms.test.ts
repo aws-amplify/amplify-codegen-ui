@@ -14,6 +14,7 @@
   limitations under the License.
  */
 /* eslint-disable no-template-curly-in-string */
+import { NoApiError } from '@aws-amplify/codegen-ui';
 import { ImportSource } from '../imports';
 import { ReactRenderConfig } from '../react-render-config';
 import {
@@ -21,6 +22,7 @@ import {
   generateComponentOnlyWithAmplifyFormRenderer,
   generateWithAmplifyFormRenderer,
   rendererConfigWithGraphQL,
+  rendererConfigWithNoApi,
 } from './__utils__';
 
 describe('amplify form renderer tests', () => {
@@ -1020,6 +1022,32 @@ describe('amplify form renderer tests', () => {
 
       expect(componentText).not.toContain('cannot be unlinked because');
       expect(componentText).not.toContain('cannot be linked to ');
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+  });
+
+  describe('NoApi form tests', () => {
+    it('should throw if form has data dependency with no configured API', () => {
+      expect(() => {
+        generateWithAmplifyFormRenderer(
+          'forms/comment-datastore-create',
+          'datastore/comment-hasMany-belongsTo-relationships',
+          { ...defaultCLIRenderConfig, ...rendererConfigWithNoApi },
+          { isNonModelSupported: true, isRelationshipSupported: true },
+        );
+      }).toThrow(NoApiError);
+    });
+
+    it('should render custom data form successfully with no configured API', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/custom-with-array-field',
+        undefined,
+        { ...defaultCLIRenderConfig, ...rendererConfigWithNoApi },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+      expect(componentText).not.toContain('DataStore.save');
+      expect(componentText).toContain('resetStateValues();');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });

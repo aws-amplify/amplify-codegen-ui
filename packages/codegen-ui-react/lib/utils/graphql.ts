@@ -29,7 +29,7 @@ import { ImportCollection, ImportValue } from '../imports';
 import { capitalizeFirstLetter, getSetNameIdentifier, lowerCaseFirst } from '../helpers';
 import { isBoundProperty, isConcatenatedProperty } from '../react-component-render-helper';
 import { Primitive } from '../primitive';
-import { DataStoreRenderConfig, GraphqlRenderConfig } from '../react-render-config';
+import { DataStoreRenderConfig, GraphqlRenderConfig, NoApiRenderConfig } from '../react-render-config';
 
 export enum ActionType {
   CREATE = 'create',
@@ -42,7 +42,7 @@ export enum ActionType {
 
 /* istanbul ignore next */
 export const isGraphqlConfig = (
-  apiConfiguration?: GraphqlRenderConfig | DataStoreRenderConfig,
+  apiConfiguration?: GraphqlRenderConfig | DataStoreRenderConfig | NoApiRenderConfig,
 ): apiConfiguration is GraphqlRenderConfig => {
   return apiConfiguration?.dataApi === 'GraphQL';
 };

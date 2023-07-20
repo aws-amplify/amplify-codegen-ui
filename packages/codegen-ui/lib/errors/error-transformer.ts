@@ -13,10 +13,10 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { InternalError, InvalidInputError } from './error-types';
+import { InternalError, InvalidInputError, NoApiError } from './error-types';
 
 export const transformCodegenError = (error: any | unknown): InternalError | InvalidInputError => {
-  if (error instanceof InternalError || error instanceof InvalidInputError) {
+  if (error instanceof InternalError || error instanceof InvalidInputError || error instanceof NoApiError) {
     return error;
   }
 

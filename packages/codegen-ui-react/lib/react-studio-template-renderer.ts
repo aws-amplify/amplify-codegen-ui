@@ -38,6 +38,8 @@ import {
   isValidVariableName,
   InternalError,
   resolveBetweenPredicateToMultiplePredicates,
+  NoApiError,
+  componentRequiresDataApi,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import ts, {
@@ -153,7 +155,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     this.importCollection = new ImportCollection({ rendererConfig: renderConfig });
     this.importCollection.ingestComponentMetadata(this.componentMetadata);
     addBindingPropertiesImports(this.component, this.importCollection);
+
     // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
+    if (componentRequiresDataApi(component) && renderConfig.apiConfiguration?.dataApi === 'NoApi') {
+      throw new NoApiError('Component cannot be rendered without a data API');
+    }
   }
 
   @handleCodegenErrors
