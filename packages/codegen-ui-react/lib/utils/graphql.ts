@@ -371,7 +371,7 @@ export const getFetchRelatedRecordsCallbacks = (
                                             ActionType.LIST,
                                             capitalizeFirstLetter(renderedFieldName),
                                           ),
-                                          'item',
+                                          'items',
                                         ],
                                       ),
                                     ),
