@@ -18,7 +18,7 @@ import { ScriptKind, ScriptTarget, ModuleKind } from 'typescript';
 
 export { ScriptKind, ScriptTarget, ModuleKind } from 'typescript';
 
-export type DataApiKind = 'DataStore' | 'GraphQL';
+export type DataApiKind = 'DataStore' | 'GraphQL' | 'NoApi';
 
 export type ReactRenderConfig = FrameworkRenderConfig & {
   script?: ScriptKind;
@@ -26,7 +26,7 @@ export type ReactRenderConfig = FrameworkRenderConfig & {
   module?: ModuleKind;
   renderTypeDeclarations?: boolean;
   inlineSourceMap?: boolean;
-  apiConfiguration?: GraphqlRenderConfig | DataStoreRenderConfig;
+  apiConfiguration?: GraphqlRenderConfig | DataStoreRenderConfig | NoApiRenderConfig;
 };
 
 export type GraphqlRenderConfig = {
@@ -40,6 +40,10 @@ export type GraphqlRenderConfig = {
 
 export type DataStoreRenderConfig = {
   dataApi: 'DataStore';
+};
+
+export type NoApiRenderConfig = {
+  dataApi: 'NoApi';
 };
 
 export function scriptKindToFileExtension(scriptKind: ScriptKind): string {

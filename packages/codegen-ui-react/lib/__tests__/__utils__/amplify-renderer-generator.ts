@@ -167,3 +167,9 @@ export const rendererConfigWithGraphQL: ReactRenderConfig = {
     fragmentsFilePath: '../graphql/fragments',
   },
 };
+
+export const rendererConfigWithNoApi: ReactRenderConfig = {
+  apiConfiguration: {
+    dataApi: 'NoApi',
+  },
+};

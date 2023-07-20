@@ -13,6 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { NoApiError } from '@aws-amplify/codegen-ui';
 import { ModuleKind, ScriptTarget, ScriptKind } from '..';
 import {
   authorHasManySchema,
@@ -20,6 +21,7 @@ import {
   generateWithAmplifyRenderer,
   rendererConfigWithGraphQL,
   userSchema,
+  rendererConfigWithNoApi,
 } from './__utils__';
 
 describe('amplify render tests', () => {
@@ -94,6 +96,19 @@ describe('amplify render tests', () => {
 
     it('should render with data binding in child elements', () => {
       const generatedCode = generateWithAmplifyRenderer('childComponentWithDataBinding');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
+  });
+
+  describe('renderer configurations with NoApi', () => {
+    it('should throw if component has data binding', () => {
+      expect(() => {
+        generateWithAmplifyRenderer('workflow/dataStoreCreateItem', rendererConfigWithNoApi);
+      }).toThrow(NoApiError);
+    });
+
+    it('should render component without data binding successfully', () => {
+      const generatedCode = generateWithAmplifyRenderer('buttonGolden', rendererConfigWithNoApi);
       expect(generatedCode.componentText).toMatchSnapshot();
     });
   });

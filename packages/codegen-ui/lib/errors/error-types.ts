@@ -36,3 +36,13 @@ export class InvalidInputError extends Error {
     Object.setPrototypeOf(this, InvalidInputError.prototype);
   }
 }
+
+/**
+ * Entity requires a working data API to produce a working component but no valid API configuration was provided.
+ */
+export class NoApiError extends Error {
+  constructor(message: string) {
+    super(message);
+    Object.setPrototypeOf(this, NoApiError.prototype);
+  }
+}

@@ -10248,6 +10248,43 @@ export default function TextFieldPrimitive<Multiline extends boolean>(
 "
 `;
 
+exports[`amplify render tests renderer configurations with NoApi should render component without data binding successfully 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CustomButtonOverridesProps = {
+  CustomButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
+export type CustomButtonProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    overrides?: CustomButtonOverridesProps | undefined | null;
+  }
+>;
+export default function CustomButton(
+  props: CustomButtonProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      color=\\"#ff0000\\"
+      width={20}
+      isDisabled={true}
+      {...getOverrideProps(overrides, \\"CustomButton\\")}
+      {...rest}
+    ></Button>
+  );
+}
+"
+`;
+
 exports[`amplify render tests sample code snippet tests should generate a sample code snippet for components 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";

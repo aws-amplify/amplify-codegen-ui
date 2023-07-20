@@ -29,6 +29,8 @@ import {
   StudioTemplateRenderer,
   validateFormSchema,
   FormFeatureFlags,
+  NoApiError,
+  formRequiresDataApi,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import {
@@ -169,6 +171,11 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       if (dataSourceType === 'DataStore') {
         this.primaryKeys = dataSchemaMetadata.models[dataTypeName].primaryKeys;
       }
+    }
+
+    // validate inputs for renderer
+    if (formRequiresDataApi(component) && renderConfig.apiConfiguration?.dataApi === 'NoApi') {
+      throw new NoApiError('Form cannot be rendered without a data API');
     }
   }
 
