@@ -1155,11 +1155,7 @@ export default function CollectionOfCustomButtons(
   const buttonColorFilterObj = { userID: { eq: \\"user@email.com\\" } };
   const buttonColorDataStore = API.graphql({
     query: listUserPreferences,
-    variables: {
-      input: {
-        ...buttonColorFilterObj,
-      },
-    },
+    variables: { ...buttonColorFilterObj },
   }).items[0];
   const buttonColor =
     buttonColorProp !== undefined ? buttonColorProp : buttonColorDataStore;
@@ -1168,11 +1164,7 @@ export default function CollectionOfCustomButtons(
   };
   const buttonEnabledDataStore = API.graphql({
     query: listUserPreferences,
-    variables: {
-      input: {
-        ...buttonEnabledFilterObj,
-      },
-    },
+    variables: { ...buttonEnabledFilterObj },
   }).items[0];
   const buttonEnabled =
     buttonEnabledProp !== undefined

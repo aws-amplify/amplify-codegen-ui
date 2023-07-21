@@ -4440,11 +4440,7 @@ export default function PostUpdateForm(props) {
         ? (
             await API.graphql({
               query: getPost,
-              variables: {
-                input: {
-                  id: idProp,
-                },
-              },
+              variables: { id: idProp },
             })
           ).data.getPost
         : postModelProp;
@@ -4453,11 +4449,7 @@ export default function PostUpdateForm(props) {
         ? (
             await API.graphql({
               query: commentsByPostID,
-              variables: {
-                input: {
-                  postID: record.id,
-                },
-              },
+              variables: { postID: record.id },
             })
           ).data.commentsByPostID.items
         : [];
@@ -5172,11 +5164,7 @@ export default function MyPostForm(props) {
         ? (
             await API.graphql({
               query: getPost,
-              variables: {
-                input: {
-                  id: idProp,
-                },
-              },
+              variables: { id: idProp },
             })
           ).data.getPost
         : postModelProp;
@@ -5934,11 +5922,7 @@ export default function CommentUpdateForm(props) {
         ? (
             await API.graphql({
               query: getComment,
-              variables: {
-                input: {
-                  id: idProp,
-                },
-              },
+              variables: { id: idProp },
             })
           ).data.getComment
         : commentModelProp;
@@ -6645,11 +6629,7 @@ export default function CommentUpdateForm(props) {
         ? (
             await API.graphql({
               query: getComment,
-              variables: {
-                input: {
-                  id: idProp,
-                },
-              },
+              variables: { id: idProp },
             })
           ).data.getComment
         : commentModelProp;
@@ -7347,11 +7327,7 @@ export default function ClassUpdateForm(props) {
         ? (
             await API.graphql({
               query: getClass,
-              variables: {
-                input: {
-                  id: idProp,
-                },
-              },
+              variables: { id: idProp },
             })
           ).data.getClass
         : classModelProp;
@@ -7994,11 +7970,7 @@ export default function UpdateCPKTeacherForm(props) {
         ? (
             await API.graphql({
               query: getCPKTeacher,
-              variables: {
-                input: {
-                  id: idProp,
-                },
-              },
+              variables: { id: idProp },
             })
           ).data.getCPKTeacher
         : cPKTeacherModelProp;
@@ -8019,11 +7991,7 @@ export default function UpdateCPKTeacherForm(props) {
         ? (
             await API.graphql({
               query: cPKProjectsByCPKTeacherID,
-              variables: {
-                input: {
-                  cPKTeacherID: record.id,
-                },
-              },
+              variables: { cPKTeacherID: record.id },
             })
           ).data.cPKProjectsByCPKTeacherID.items
         : [];
