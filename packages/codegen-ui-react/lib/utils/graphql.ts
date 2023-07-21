@@ -66,6 +66,11 @@ export const getGraphqlQueryForModel = (action: ActionType, model: string, byFie
   }
 };
 
+/* istanbul ignore next */
+export const isGraphqlQueryAction = (action: ActionType) => {
+  return [ActionType.GET_BY_RELATIONSHIP, ActionType.GET, ActionType.LIST].includes(action);
+};
+
 /**
  * Returns a GraphQL call expression and adds to importCollection.
  *
@@ -102,7 +107,7 @@ export const getGraphqlCallExpression = (
 
   importCollection.addMappedImport(ImportValue.API);
 
-  if (action === ActionType.LIST || action === ActionType.GET || action === ActionType.GET_BY_RELATIONSHIP) {
+  if (isGraphqlQueryAction(action)) {
     importCollection.addGraphqlQueryImport(query);
   } else {
     importCollection.addGraphqlMutationImport(query);
@@ -112,12 +117,18 @@ export const getGraphqlCallExpression = (
     graphqlOptions.push(...variables);
   } else {
     if (variables?.inputs) {
-      graphqlVariables.push(
-        factory.createPropertyAssignment(
-          factory.createIdentifier('input'),
-          factory.createObjectLiteralExpression(variables.inputs, true),
-        ),
-      );
+      if (isGraphqlQueryAction(action)) {
+        variables.inputs.forEach((variable) => {
+          graphqlVariables.push(variable);
+        });
+      } else {
+        graphqlVariables.push(
+          factory.createPropertyAssignment(
+            factory.createIdentifier('input'),
+            factory.createObjectLiteralExpression(variables.inputs, true),
+          ),
+        );
+      }
     }
     // filter applies to list
     if ((action === ActionType.LIST || action === ActionType.GET_BY_RELATIONSHIP) && variables?.filters) {
