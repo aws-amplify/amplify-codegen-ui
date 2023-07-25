@@ -4232,7 +4232,7 @@ import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { commentsByPostID, getPost, listComments } from \\"../graphql/queries\\";
-import { deleteComment, updateComment, updatePost } from \\"../graphql/mutations\\";
+import { updateComment, updatePost } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
   onChange,
@@ -4620,10 +4620,11 @@ export default function PostUpdateForm(props) {
             }
             promises.push(
               API.graphql({
-                query: deleteComment,
+                query: updateComment,
                 variables: {
                   input: {
                     id: original.id,
+                    postID: null,
                   },
                 },
               })
@@ -7739,7 +7740,6 @@ import {
 } from \\"../graphql/queries\\";
 import {
   createCPKTeacherCPKClass,
-  deleteCPKProject,
   deleteCPKTeacherCPKClass,
   updateCPKProject,
   updateCPKTeacher,
@@ -8321,10 +8321,11 @@ export default function UpdateCPKTeacherForm(props) {
             }
             promises.push(
               API.graphql({
-                query: deleteCPKProject,
+                query: updateCPKProject,
                 variables: {
                   input: {
                     specialProjectId: original.specialProjectId,
+                    cPKTeacherID: null,
                   },
                 },
               })
