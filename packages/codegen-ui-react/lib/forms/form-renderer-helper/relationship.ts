@@ -39,7 +39,7 @@ import {
   getRecordName,
 } from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
-import { ImportCollection, ImportSource } from '../../imports';
+import { ImportCollection } from '../../imports';
 import { lowerCaseFirst, getSetNameIdentifier, capitalizeFirstLetter } from '../../helpers';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
 import { extractModelAndKeys, getIDValueCallChain, getMatchEveryModelFieldCallExpression } from './model-values';
@@ -1233,7 +1233,7 @@ export const buildHasManyRelationshipStatements = (
   fieldName = fieldConfigMetaData.sanitizedFieldName || fieldName;
   const { relatedModelName, relatedModelFields, belongsToFieldOnRelatedModel } =
     fieldConfigMetaData.relationship as HasManyRelationshipType;
-  const relatedModelVariableName = importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, relatedModelName);
+  const relatedModelVariableName = importCollection.getMappedModelAlias(relatedModelName);
   const linkedDataName = getLinkedDataName(fieldName);
   const dataToLink = `${lowerCaseFirst(fieldName)}ToLink`;
   const dataToUnLink = `${lowerCaseFirst(fieldName)}ToUnLink`;
@@ -1566,16 +1566,25 @@ export const buildHasManyRelationshipStatements = (
                       undefined,
                       [
                         dataApi === 'GraphQL'
-                          ? getGraphqlCallExpression(ActionType.DELETE, relatedModelName, importCollection, {
-                              inputs: keys.map((key) =>
-                                factory.createPropertyAssignment(
-                                  factory.createIdentifier(key),
-                                  factory.createPropertyAccessExpression(
-                                    factory.createIdentifier('original'),
+                          ? getGraphqlCallExpression(ActionType.UPDATE, relatedModelName, importCollection, {
+                              inputs: keys
+                                .map((key) =>
+                                  factory.createPropertyAssignment(
                                     factory.createIdentifier(key),
+                                    factory.createPropertyAccessExpression(
+                                      factory.createIdentifier('original'),
+                                      factory.createIdentifier(key),
+                                    ),
+                                  ),
+                                )
+                                .concat(
+                                  relatedModelFields.map((key) =>
+                                    factory.createPropertyAssignment(
+                                      factory.createIdentifier(key),
+                                      factory.createNull(),
+                                    ),
                                   ),
                                 ),
-                              ),
                             })
                           : getUpdateRelatedModelExpression(
                               thisModelRecord,
