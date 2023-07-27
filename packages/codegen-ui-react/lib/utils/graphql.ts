@@ -380,7 +380,7 @@ export const getFetchRelatedRecordsCallbacks = (
                                           'data',
                                           getGraphqlQueryForModel(
                                             ActionType.LIST,
-                                            capitalizeFirstLetter(renderedFieldName),
+                                            capitalizeFirstLetter(relationship.relatedModelName),
                                           ),
                                           'items',
                                         ],

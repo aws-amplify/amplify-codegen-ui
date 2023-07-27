@@ -1475,7 +1475,7 @@ export default function MyMemberForm(props) {
           query: listTeams,
           variables,
         })
-      ).data.listTeamIDS.items;
+      ).data.listTeams.items;
       var loaded = result.filter(
         (item) => !teamIDIdSet.has(getIDValue.teamID?.(item))
       );
@@ -2656,7 +2656,7 @@ export default function BookCreateForm(props) {
           query: listAuthors,
           variables,
         })
-      ).data.listPrimaryAuthors.items;
+      ).data.listAuthors.items;
       var loaded = result.filter(
         (item) => !primaryAuthorIdSet.has(getIDValue.primaryAuthor?.(item))
       );
@@ -3834,7 +3834,7 @@ export default function BookCreateForm(props) {
           query: listAuthors,
           variables,
         })
-      ).data.listPrimaryAuthors.items;
+      ).data.listAuthors.items;
       var loaded = result.filter(
         (item) => !primaryAuthorIdSet.has(getIDValue.primaryAuthor?.(item))
       );
@@ -3861,7 +3861,7 @@ export default function BookCreateForm(props) {
           query: listTitles,
           variables,
         })
-      ).data.listPrimaryTitles.items;
+      ).data.listTitles.items;
       var loaded = result.filter(
         (item) => !primaryTitleIdSet.has(getIDValue.primaryTitle?.(item))
       );
@@ -5998,7 +5998,7 @@ export default function CommentUpdateForm(props) {
           query: listPosts,
           variables,
         })
-      ).data.listPostIDS.items;
+      ).data.listPosts.items;
       var loaded = result.filter(
         (item) => !postIDIdSet.has(getIDValue.postID?.(item))
       );
@@ -6705,7 +6705,7 @@ export default function CommentUpdateForm(props) {
           query: listPosts,
           variables,
         })
-      ).data.listPostIDS.items;
+      ).data.listPosts.items;
       var loaded = result.filter(
         (item) => !postIDIdSet.has(getIDValue.postID?.(item))
       );
@@ -9013,7 +9013,7 @@ export default function CreateCompositeToyForm(props) {
           query: listCompositeDogs,
           variables,
         })
-      ).data.listCompositeDogCompositeToysNames.items;
+      ).data.listCompositeDogs.items;
       var loaded = result.filter(
         (item) =>
           !compositeDogCompositeToysNameIdSet.has(
@@ -9045,7 +9045,7 @@ export default function CreateCompositeToyForm(props) {
           query: listCompositeDogs,
           variables,
         })
-      ).data.listCompositeDogCompositeToysDescriptions.items;
+      ).data.listCompositeDogs.items;
       var loaded = result.filter(
         (item) =>
           !compositeDogCompositeToysDescriptionIdSet.has(
@@ -9851,7 +9851,7 @@ export default function CreateCommentForm(props) {
           query: listPosts,
           variables,
         })
-      ).data.listPostCommentsIds.items;
+      ).data.listPosts.items;
       var loaded = result.filter(
         (item) => !postCommentsIdIdSet.has(getIDValue.postCommentsId?.(item))
       );
