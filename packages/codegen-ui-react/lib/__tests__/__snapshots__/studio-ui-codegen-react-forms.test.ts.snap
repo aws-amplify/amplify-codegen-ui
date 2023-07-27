@@ -5141,12 +5141,13 @@ export default function MyPostForm(props) {
     setProfile_url(cleanValues.profile_url);
     setPost_url(cleanValues.post_url);
     setMetadata(
-      typeof cleanValues.metadata === \\"string\\"
+      typeof cleanValues.metadata === \\"string\\" || cleanValues.metadata === null
         ? cleanValues.metadata
         : JSON.stringify(cleanValues.metadata)
     );
     setNonModelField(
-      typeof cleanValues.nonModelField === \\"string\\"
+      typeof cleanValues.nonModelField === \\"string\\" ||
+        cleanValues.nonModelField === null
         ? cleanValues.nonModelField
         : JSON.stringify(cleanValues.nonModelField)
     );
@@ -30490,12 +30491,13 @@ export default function MyPostForm(props) {
     setProfile_url(cleanValues.profile_url);
     setPost_url(cleanValues.post_url);
     setMetadata(
-      typeof cleanValues.metadata === \\"string\\"
+      typeof cleanValues.metadata === \\"string\\" || cleanValues.metadata === null
         ? cleanValues.metadata
         : JSON.stringify(cleanValues.metadata)
     );
     setNonModelField(
-      typeof cleanValues.nonModelField === \\"string\\"
+      typeof cleanValues.nonModelField === \\"string\\" ||
+        cleanValues.nonModelField === null
         ? cleanValues.nonModelField
         : JSON.stringify(cleanValues.nonModelField)
     );
@@ -35858,7 +35860,8 @@ export default function InputGalleryUpdateForm(props) {
     setJsonArray(cleanValues.jsonArray ?? []);
     setCurrentJsonArrayValue(\\"\\");
     setJsonField(
-      typeof cleanValues.jsonField === \\"string\\"
+      typeof cleanValues.jsonField === \\"string\\" ||
+        cleanValues.jsonField === null
         ? cleanValues.jsonField
         : JSON.stringify(cleanValues.jsonField)
     );

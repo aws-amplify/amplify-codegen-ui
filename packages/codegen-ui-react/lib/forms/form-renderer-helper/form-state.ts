@@ -438,19 +438,29 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
 
 /**
  * Datastore allows JSON strings and normal JSON so check for a string
- * before stringifying or else the string will return with escaped quotes
+ * before stringifying or else the string will return with escaped quotes.
+ * Also do not stringify null.
  *
  * Example output:
- * typeof cleanValues.metadata === 'string' ? cleanValues.metadata : JSON.stringify(cleanValues.metadata)
+ * typeof cleanValues.metadata === 'string' || cleanValues.metadata === null ?
+ * cleanValues.metadata : JSON.stringify(cleanValues.metadata)
  */
 const stringifyAWSJSONFieldValue = (
   value: PropertyAccessExpression | ElementAccessExpression,
 ): ConditionalExpression => {
   return factory.createConditionalExpression(
     factory.createBinaryExpression(
-      factory.createTypeOfExpression(value),
-      factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
-      factory.createStringLiteral('string'),
+      factory.createBinaryExpression(
+        factory.createTypeOfExpression(value),
+        factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+        factory.createStringLiteral('string'),
+      ),
+      factory.createToken(SyntaxKind.BarBarToken),
+      factory.createBinaryExpression(
+        value,
+        factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+        factory.createNull(),
+      ),
     ),
     factory.createToken(SyntaxKind.QuestionToken),
     value,
