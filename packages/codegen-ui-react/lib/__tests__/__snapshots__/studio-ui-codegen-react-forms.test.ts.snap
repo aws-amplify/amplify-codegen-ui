@@ -6135,18 +6135,21 @@ export default function MovieUpdateForm(props) {
             }
           });
           tagsToLinkMap.forEach((count, id) => {
+            const tagToLink = tagRecords.find((r) =>
+              Object.entries(JSON.parse(id)).every(
+                ([key, value]) => r[key] === value
+              )
+            );
             for (let i = count; i > 0; i--) {
               promises.push(
                 API.graphql({
                   query: createMovieTags,
                   variables: {
                     input: {
-                      movie: movieRecord,
-                      tag: tagRecords.find((r) =>
-                        Object.entries(JSON.parse(id)).every(
-                          ([key, value]) => r[key] === value
-                        )
-                      ),
+                      movieMovieKey: movieRecord.movieKey,
+                      movietitle: movieRecord.title,
+                      moviegenre: movieRecord.genre,
+                      tagId: tagToLink.id,
                     },
                   },
                 })
@@ -8286,18 +8289,19 @@ export default function ClassUpdateForm(props) {
             }
           });
           studentsToLinkMap.forEach((count, id) => {
+            const studentToLink = studentRecords.find((r) =>
+              Object.entries(JSON.parse(id)).every(
+                ([key, value]) => r[key] === value
+              )
+            );
             for (let i = count; i > 0; i--) {
               promises.push(
                 API.graphql({
                   query: createStudentClass,
                   variables: {
                     input: {
-                      class: classRecord,
-                      student: studentRecords.find((r) =>
-                        Object.entries(JSON.parse(id)).every(
-                          ([key, value]) => r[key] === value
-                        )
-                      ),
+                      classId: classRecord.id,
+                      studentId: studentToLink.id,
                     },
                   },
                 })
@@ -9038,18 +9042,20 @@ export default function UpdateCPKTeacherForm(props) {
             }
           });
           cPKClassesToLinkMap.forEach((count, id) => {
+            const cPKClassToLink = cPKClassRecords.find((r) =>
+              Object.entries(JSON.parse(id)).every(
+                ([key, value]) => r[key] === value
+              )
+            );
             for (let i = count; i > 0; i--) {
               promises.push(
                 API.graphql({
                   query: createCPKTeacherCPKClass,
                   variables: {
                     input: {
-                      cpkTeacher: cPKTeacherRecord,
-                      cpkClass: cPKClassRecords.find((r) =>
-                        Object.entries(JSON.parse(id)).every(
-                          ([key, value]) => r[key] === value
-                        )
-                      ),
+                      cPKTeacherSpecialTeacherId:
+                        cPKTeacherRecord.specialTeacherId,
+                      cPKClassSpecialClassId: cPKClassToLink.specialClassId,
                     },
                   },
                 })
@@ -19792,16 +19798,17 @@ export default function UpdateCompositeDogForm(props) {
             }
           });
           compositeVetsToLinkMap.forEach((count, id) => {
+            const compositeVetToLink = compositeVetRecords.find((r) =>
+              Object.entries(JSON.parse(id)).every(
+                ([key, value]) => r[key] === value
+              )
+            );
             for (let i = count; i > 0; i--) {
               promises.push(
                 DataStore.save(
                   new CompositeDogCompositeVet({
                     compositeDog: compositeDogRecord,
-                    compositeVet: compositeVetRecords.find((r) =>
-                      Object.entries(JSON.parse(id)).every(
-                        ([key, value]) => r[key] === value
-                      )
-                    ),
+                    compositeVet: compositeVetToLink,
                   })
                 )
               );
@@ -20781,16 +20788,17 @@ export default function UpdateCPKTeacherForm(props) {
             }
           });
           cPKClassesToLinkMap.forEach((count, id) => {
+            const cPKClassToLink = cPKClassRecords.find((r) =>
+              Object.entries(JSON.parse(id)).every(
+                ([key, value]) => r[key] === value
+              )
+            );
             for (let i = count; i > 0; i--) {
               promises.push(
                 DataStore.save(
                   new CPKTeacherCPKClass({
                     cpkTeacher: cPKTeacherRecord,
-                    cpkClass: cPKClassRecords.find((r) =>
-                      Object.entries(JSON.parse(id)).every(
-                        ([key, value]) => r[key] === value
-                      )
-                    ),
+                    cpkClass: cPKClassToLink,
                   })
                 )
               );
@@ -24206,16 +24214,17 @@ export default function UpdateCompositeDogForm(props) {
             }
           });
           compositeVetsToLinkMap.forEach((count, id) => {
+            const compositeVetToLink = compositeVetRecords.find((r) =>
+              Object.entries(JSON.parse(id)).every(
+                ([key, value]) => r[key] === value
+              )
+            );
             for (let i = count; i > 0; i--) {
               promises.push(
                 DataStore.save(
                   new CompositeDogCompositeVet({
                     compositeDog: compositeDogRecord,
-                    compositeVet: compositeVetRecords.find((r) =>
-                      Object.entries(JSON.parse(id)).every(
-                        ([key, value]) => r[key] === value
-                      )
-                    ),
+                    compositeVet: compositeVetToLink,
                   })
                 )
               );
@@ -33970,16 +33979,17 @@ export default function TagUpdateForm(props) {
             }
           });
           postsToLinkMap.forEach((count, id) => {
+            const postToLink = postRecords.find((r) =>
+              Object.entries(JSON.parse(id)).every(
+                ([key, value]) => r[key] === value
+              )
+            );
             for (let i = count; i > 0; i--) {
               promises.push(
                 DataStore.save(
                   new TagPost({
                     tag: tagRecord,
-                    post: postRecords.find((r) =>
-                      Object.entries(JSON.parse(id)).every(
-                        ([key, value]) => r[key] === value
-                      )
-                    ),
+                    post: postToLink,
                   })
                 )
               );

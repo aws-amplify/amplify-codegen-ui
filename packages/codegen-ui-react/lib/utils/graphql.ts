@@ -15,7 +15,7 @@
  */
 
 import { plural } from 'pluralize';
-import { FieldConfigMetadata, InvalidInputError } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, InternalError, InvalidInputError } from '@aws-amplify/codegen-ui';
 import {
   AwaitExpression,
   CallExpression,
@@ -157,6 +157,54 @@ export const getGraphqlCallExpression = (
     undefined,
     [factory.createObjectLiteralExpression(graphqlOptions, true)],
   );
+};
+
+/* istanbul ignore next */
+export const getGraphQLJoinTableCreateExpression = (
+  relatedJoinTableName: string,
+  thisModelRecord: string,
+  thisModelPrimaryKeys: string[],
+  joinTableThisModelFields: string[],
+  relatedModelRecord: string,
+  relatedModelPrimaryKeys: string[],
+  joinTableRelatedModelFields: string[],
+  importCollection: ImportCollection,
+) => {
+  const mapFieldArraysToPropertyAssignments = (
+    joinTableFields: string[],
+    modelFields: string[],
+    modelRecord: string,
+  ) => {
+    return joinTableFields.map((key, i) => {
+      const recordKey = modelFields[i];
+      if (!recordKey) {
+        throw new InternalError(`Cannot find corresponding key for ${key}`);
+      }
+
+      return factory.createPropertyAssignment(
+        factory.createIdentifier(key),
+        factory.createPropertyAccessExpression(
+          factory.createIdentifier(modelRecord),
+          factory.createIdentifier(recordKey),
+        ),
+      );
+    });
+  };
+
+  const thisModelAssignments = mapFieldArraysToPropertyAssignments(
+    joinTableThisModelFields,
+    thisModelPrimaryKeys,
+    thisModelRecord,
+  );
+  const relatedModelAssignments = mapFieldArraysToPropertyAssignments(
+    joinTableRelatedModelFields,
+    relatedModelPrimaryKeys,
+    relatedModelRecord,
+  );
+
+  return getGraphqlCallExpression(ActionType.CREATE, relatedJoinTableName, importCollection, {
+    inputs: [...thisModelAssignments, ...relatedModelAssignments],
+  });
 };
 
 /* istanbul ignore next */
