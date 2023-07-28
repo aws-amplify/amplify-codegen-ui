@@ -531,8 +531,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       // primaryKey should exist if DataStore update form. This condition is just for ts
       if (this.primaryKeys) {
         // if there are multiple primaryKeys, it's a composite key and we're using 'id' for a composite key prop
-        const destructuredPrimaryKey =
-          this.primaryKeys.length > 1 ? getPropName(COMPOSITE_PRIMARY_KEY_PROP_NAME) : getPropName(this.primaryKeys[0]);
+        const isCompositeKey = this.primaryKeys.length > 1;
+        const destructuredPrimaryKey = isCompositeKey
+          ? getPropName(COMPOSITE_PRIMARY_KEY_PROP_NAME)
+          : getPropName(this.primaryKeys[0]);
         statements.push(
           addUseEffectWrapper(
             buildUpdateDatastoreQuery(
@@ -541,6 +543,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
               relatedModelStatements,
               destructuredPrimaryKey,
               this.importCollection,
+              isCompositeKey,
               dataApi,
             ),
             [destructuredPrimaryKey, getModelNameProp(lowerCaseDataTypeName)],

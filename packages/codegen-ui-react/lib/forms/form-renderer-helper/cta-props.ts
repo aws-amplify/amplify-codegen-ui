@@ -678,8 +678,10 @@ export const buildUpdateDatastoreQuery = (
   relatedModelStatements: Statement[],
   primaryKey: string,
   importCollection: ImportCollection,
+  isCompositeKey: boolean,
   dataApi?: DataApiKind,
 ) => {
+  // if there are multiple primaryKeys, it's a composite key and we're using 'id' for a composite key prop
   const pkQueryIdentifier = factory.createIdentifier(primaryKey);
 
   const queryCall =
@@ -687,7 +689,9 @@ export const buildUpdateDatastoreQuery = (
       ? wrapInParenthesizedExpression(
           getGraphqlCallExpression(ActionType.GET, importedModelName, importCollection, {
             inputs: [
-              factory.createPropertyAssignment(factory.createIdentifier('id'), factory.createIdentifier('idProp')),
+              isCompositeKey
+                ? factory.createSpreadAssignment(pkQueryIdentifier)
+                : factory.createPropertyAssignment(factory.createIdentifier('id'), pkQueryIdentifier),
             ],
           }),
           ['data', getGraphqlQueryForModel(ActionType.GET, importedModelName)],

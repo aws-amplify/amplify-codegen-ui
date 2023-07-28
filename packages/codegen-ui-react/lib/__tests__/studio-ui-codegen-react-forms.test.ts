@@ -843,6 +843,22 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should generate an update form with composite primary key', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/relationships/update-movie',
+        'models/composite-key-movie',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+      expect(componentText).toContain('variables: { ...idProp },');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should generate an upgrade form with multiple relationship & cpk', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/cpk-teacher-datastore-update',

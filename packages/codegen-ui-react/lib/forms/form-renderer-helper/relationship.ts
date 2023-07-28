@@ -766,6 +766,7 @@ export const buildManyToManyRelationshipStatements = (
           ],
         ),
       ),
+      // unlink many:many records
       factory.createExpressionStatement(
         factory.createCallExpression(
           factory.createPropertyAccessExpression(
@@ -813,6 +814,7 @@ export const buildManyToManyRelationshipStatements = (
           ],
         ),
       ),
+      // link many:many records
       factory.createExpressionStatement(
         factory.createCallExpression(
           factory.createPropertyAccessExpression(
@@ -2192,10 +2194,13 @@ function buildUnlinkForEachBlock(
                     ? getGraphqlCallExpression(ActionType.DELETE, relatedJoinTableName, importCollection, {
                         inputs: [
                           factory.createPropertyAssignment(
-                            factory.createIdentifier('input'),
-                            factory.createElementAccessExpression(
-                              factory.createIdentifier(getRecordsName(relatedJoinTableName)),
-                              factory.createIdentifier('i'),
+                            factory.createIdentifier('id'),
+                            factory.createPropertyAccessExpression(
+                              factory.createElementAccessExpression(
+                                factory.createIdentifier(getRecordsName(relatedJoinTableName)),
+                                factory.createIdentifier('i'),
+                              ),
+                              factory.createIdentifier('id'),
                             ),
                           ),
                         ],

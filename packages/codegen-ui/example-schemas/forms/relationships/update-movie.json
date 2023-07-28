@@ -1,0 +1,12 @@
+{
+  "name": "MovieUpdateForm",
+  "formActionType": "update",
+  "fields": {},
+  "dataType": {
+      "dataSourceType": "DataStore",
+      "dataTypeName": "Movie"
+  },
+  "style": {},
+  "sectionalElements": {},
+  "cta": {}
+}
