@@ -1,0 +1,266 @@
+{
+  "models": {
+    "Movie": {
+      "name": "Movie",
+      "fields": {
+        "movieKey": {
+          "name": "movieKey",
+          "isArray": false,
+          "type": "ID",
+          "isRequired": true,
+          "attributes": []
+        },
+        "title": {
+          "name": "title",
+          "isArray": false,
+          "type": "String",
+          "isRequired": true,
+          "attributes": []
+        },
+        "genre": {
+          "name": "genre",
+          "isArray": false,
+          "type": "String",
+          "isRequired": true,
+          "attributes": []
+        },
+        "rating": {
+          "name": "rating",
+          "isArray": false,
+          "type": "String",
+          "isRequired": false,
+          "attributes": []
+        },
+        "tags": {
+          "name": "tags",
+          "isArray": true,
+          "type": {
+            "model": "MovieTags"
+          },
+          "isRequired": false,
+          "attributes": [],
+          "isArrayNullable": true,
+          "association": {
+            "connectionType": "HAS_MANY",
+            "associatedWith": [
+              "movie"
+            ]
+          }
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        }
+      },
+      "syncable": true,
+      "pluralName": "Movies",
+      "attributes": [
+        {
+          "type": "model",
+          "properties": {}
+        },
+        {
+          "type": "key",
+          "properties": {
+            "fields": [
+              "movieKey",
+              "title",
+              "genre"
+            ]
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "name": "Tag",
+      "fields": {
+        "id": {
+          "name": "id",
+          "isArray": false,
+          "type": "ID",
+          "isRequired": true,
+          "attributes": []
+        },
+        "label": {
+          "name": "label",
+          "isArray": false,
+          "type": "String",
+          "isRequired": true,
+          "attributes": []
+        },
+        "movies": {
+          "name": "movies",
+          "isArray": true,
+          "type": {
+            "model": "MovieTags"
+          },
+          "isRequired": false,
+          "attributes": [],
+          "isArrayNullable": true,
+          "association": {
+            "connectionType": "HAS_MANY",
+            "associatedWith": [
+              "tag"
+            ]
+          }
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        }
+      },
+      "syncable": true,
+      "pluralName": "Tags",
+      "attributes": [
+        {
+          "type": "model",
+          "properties": {}
+        }
+      ]
+    },
+    "MovieTags": {
+      "name": "MovieTags",
+      "fields": {
+        "id": {
+          "name": "id",
+          "isArray": false,
+          "type": "ID",
+          "isRequired": true,
+          "attributes": []
+        },
+        "tagId": {
+          "name": "tagId",
+          "isArray": false,
+          "type": "ID",
+          "isRequired": false,
+          "attributes": []
+        },
+        "movieMovieKey": {
+          "name": "movieMovieKey",
+          "isArray": false,
+          "type": "ID",
+          "isRequired": false,
+          "attributes": []
+        },
+        "movietitle": {
+          "name": "movietitle",
+          "isArray": false,
+          "type": "String",
+          "isRequired": false,
+          "attributes": []
+        },
+        "moviegenre": {
+          "name": "moviegenre",
+          "isArray": false,
+          "type": "String",
+          "isRequired": false,
+          "attributes": []
+        },
+        "tag": {
+          "name": "tag",
+          "isArray": false,
+          "type": {
+            "model": "Tag"
+          },
+          "isRequired": true,
+          "attributes": [],
+          "association": {
+            "connectionType": "BELONGS_TO",
+            "targetNames": [
+              "tagId"
+            ]
+          }
+        },
+        "movie": {
+          "name": "movie",
+          "isArray": false,
+          "type": {
+            "model": "Movie"
+          },
+          "isRequired": true,
+          "attributes": [],
+          "association": {
+            "connectionType": "BELONGS_TO",
+            "targetNames": [
+              "movieMovieKey",
+              "movietitle",
+              "moviegenre"
+            ]
+          }
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        }
+      },
+      "syncable": true,
+      "pluralName": "MovieTags",
+      "attributes": [
+        {
+          "type": "model",
+          "properties": {}
+        },
+        {
+          "type": "key",
+          "properties": {
+            "name": "byTag",
+            "fields": [
+              "tagId"
+            ]
+          }
+        },
+        {
+          "type": "key",
+          "properties": {
+            "name": "byMovie",
+            "fields": [
+              "movieMovieKey",
+              "movietitle",
+              "moviegenre"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "enums": {},
+  "nonModels": {},
+  "codegenVersion": "3.4.3",
+  "version": "722b578d5541331db4e75c2857de5eaa"
+}
