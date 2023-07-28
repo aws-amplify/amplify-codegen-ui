@@ -851,9 +851,17 @@ describe('amplify form renderer tests', () => {
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
 
-      // check for import statement for graphql operation
+      // no datastore reference
       expect(componentText).not.toContain('DataStore');
+
+      // component's id prop should be spread to be used as query variables
       expect(componentText).toContain('variables: { ...idProp },');
+
+      // creating join table records should include references to all keys in composite key
+      expect(componentText).toContain('movieMovieKey: movieRecord.movieKey,');
+      expect(componentText).toContain('movietitle: movieRecord.title,');
+      expect(componentText).toContain('moviegenre: movieRecord.genre,');
+      expect(componentText).toContain('tagId: tagToLink.id,');
 
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
@@ -881,7 +889,7 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('cPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount)');
       expect(componentText).toContain('const count = linkedCPKClassesMap.get(getIDValue.CPKClasses?.(r))');
       expect(componentText).toContain('linkedCPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount)');
-      expect(componentText).toContain('cpkTeacher: cPKTeacherRecord');
+      expect(componentText).toContain('cPKClassSpecialClassId: cPKClassToLink.specialClassId');
 
       // hasMany
       expect(componentText).toContain('cPKProjectsSet.add(getIDValue.CPKProjects?.(r)');

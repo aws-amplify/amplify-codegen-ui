@@ -48,6 +48,7 @@ import { DataApiKind } from '../../react-render-config';
 import {
   ActionType,
   getGraphqlCallExpression,
+  getGraphQLJoinTableCreateExpression,
   getGraphqlQueryForModel,
   wrapInParenthesizedExpression,
 } from '../../utils/graphql';
@@ -263,6 +264,7 @@ export const buildManyToManyRelationshipStatements = (
   if (dataStoreActionType === 'update') {
     const idValueCallChain = getIDValueCallChain({ fieldName, recordString: 'r' });
     const linkedDataName = getLinkedDataName(fieldName);
+    const dataToLink = `${lowerCaseFirst(relatedModelName)}ToLink`;
     const dataToLinkMap = `${lowerCaseFirst(fieldName)}ToLinkMap`;
     const dataToUnlinkMap = `${lowerCaseFirst(fieldName)}ToUnLinkMap`;
     const thisModelRecord = getRecordName(modelName);
@@ -850,6 +852,23 @@ export const buildManyToManyRelationshipStatements = (
               factory.createToken(SyntaxKind.EqualsGreaterThanToken),
               factory.createBlock(
                 [
+                  factory.createVariableStatement(
+                    undefined,
+                    factory.createVariableDeclarationList(
+                      [
+                        factory.createVariableDeclaration(
+                          factory.createIdentifier(dataToLink),
+                          undefined,
+                          undefined,
+                          getMatchEveryModelFieldCallExpression({
+                            recordsArrayName: getRecordsName(relatedModelName),
+                            JSONName: 'id',
+                          }),
+                        ),
+                      ],
+                      NodeFlags.Const,
+                    ),
+                  ),
                   factory.createForStatement(
                     factory.createVariableDeclarationList(
                       [
@@ -879,27 +898,16 @@ export const buildManyToManyRelationshipStatements = (
                             undefined,
                             [
                               isGraphql
-                                ? getGraphqlCallExpression(ActionType.CREATE, relatedJoinTableName, importCollection, {
-                                    inputs: [
-                                      // class: classRecord
-                                      factory.createPropertyAssignment(
-                                        factory.createIdentifier(joinTableThisModelName),
-                                        factory.createIdentifier(thisModelRecord),
-                                      ),
-                                      // student: studentRecords.find((r) =>
-                                      //   Object.entries(JSON.parse(id)).every(
-                                      //     ([key, value]) => r[key] === value
-                                      //   )
-                                      // ),
-                                      factory.createPropertyAssignment(
-                                        factory.createIdentifier(joinTableRelatedModelName),
-                                        getMatchEveryModelFieldCallExpression({
-                                          recordsArrayName: getRecordsName(relatedModelName),
-                                          JSONName: 'id',
-                                        }),
-                                      ),
-                                    ],
-                                  })
+                                ? getGraphQLJoinTableCreateExpression(
+                                    relatedJoinTableName,
+                                    thisModelRecord,
+                                    thisModelPrimaryKeys,
+                                    joinTableThisModelFields,
+                                    dataToLink,
+                                    relatedModelPrimaryKeys,
+                                    joinTableRelatedModelFields,
+                                    importCollection,
+                                  )
                                 : factory.createCallExpression(
                                     factory.createPropertyAccessExpression(
                                       factory.createIdentifier('DataStore'),
@@ -923,10 +931,7 @@ export const buildManyToManyRelationshipStatements = (
                                               //   r[key] === value))
                                               factory.createPropertyAssignment(
                                                 factory.createIdentifier(joinTableRelatedModelName),
-                                                getMatchEveryModelFieldCallExpression({
-                                                  recordsArrayName: getRecordsName(relatedModelName),
-                                                  JSONName: 'id',
-                                                }),
+                                                factory.createIdentifier(dataToLink),
                                               ),
                                             ],
                                             true,
@@ -1505,6 +1510,7 @@ export const buildHasManyRelationshipStatements = (
           ],
         ),
       ),
+      // unlink items
       factory.createExpressionStatement(
         factory.createCallExpression(
           factory.createPropertyAccessExpression(
@@ -1608,6 +1614,7 @@ export const buildHasManyRelationshipStatements = (
           ],
         ),
       ),
+      // link items
       factory.createExpressionStatement(
         factory.createCallExpression(
           factory.createPropertyAccessExpression(
