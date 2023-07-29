@@ -863,6 +863,9 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('moviegenre: movieRecord.genre,');
       expect(componentText).toContain('tagId: tagToLink.id,');
 
+      // query for join table records indexed by current model's ids
+      expect(componentText).toContain('query: movieTagsByMovieMovieKeyAndMovietitleAndMoviegenre');
+
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });

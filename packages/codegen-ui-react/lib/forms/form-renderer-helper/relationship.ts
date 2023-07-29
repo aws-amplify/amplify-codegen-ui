@@ -30,6 +30,7 @@ import {
   InternalError,
   GenericDataModel,
   GenericDataField,
+  GenericDataSchema,
 } from '@aws-amplify/codegen-ui';
 import {
   getRecordsName,
@@ -50,6 +51,7 @@ import {
   getGraphqlCallExpression,
   getGraphQLJoinTableCreateExpression,
   getGraphqlQueryForModel,
+  mapFieldArraysToPropertyAssignments,
   wrapInParenthesizedExpression,
 } from '../../utils/graphql';
 
@@ -1037,6 +1039,8 @@ export const buildManyToManyRelationshipStatements = (
 export const buildGetRelationshipModels = (
   fieldName: string,
   fieldConfigMetaData: FieldConfigMetadata,
+  dataSchemaMetadata: GenericDataSchema | undefined,
+  primaryKeys: string[],
   importCollection: ImportCollection,
   dataApi?: DataApiKind,
 ) => {
@@ -1044,91 +1048,195 @@ export const buildGetRelationshipModels = (
 
   if (fieldConfigMetaData.relationship?.type === 'HAS_MANY') {
     const linkedDataName = getLinkedDataName(fieldName);
-    const { relatedJoinFieldName } = fieldConfigMetaData.relationship as HasManyRelationshipType;
     let lazyLoadLinkedDataStatement;
     if (isManyToManyRelationship(fieldConfigMetaData)) {
-      lazyLoadLinkedDataStatement = factory.createVariableStatement(
-        undefined,
-        factory.createVariableDeclarationList(
-          [
-            factory.createVariableDeclaration(
-              factory.createIdentifier(linkedDataName),
-              undefined,
-              undefined,
-              factory.createConditionalExpression(
-                recordIdentifier,
-                factory.createToken(SyntaxKind.QuestionToken),
-                factory.createAwaitExpression(
+      const { relatedJoinFieldName, relatedJoinTableName } = fieldConfigMetaData.relationship;
+      /* istanbul ignore next */
+      if (dataApi === 'GraphQL') {
+        const joinTableMetadata = dataSchemaMetadata?.models[relatedJoinTableName];
+        const joinTableThisModelName = fieldConfigMetaData.relationship.relatedModelFields[0];
+        const joinTableThisModelFields =
+          extractAssociatedFields(joinTableMetadata!.fields[joinTableThisModelName]) || [];
+        const joinTableIndexedQuery = `${lowerCaseFirst(relatedJoinTableName)}By${joinTableThisModelFields
+          .map(capitalizeFirstLetter)
+          .join('And')}`;
+        importCollection.addGraphqlQueryImport(joinTableIndexedQuery);
+        lazyLoadLinkedDataStatement = factory.createVariableStatement(
+          undefined,
+          factory.createVariableDeclarationList(
+            [
+              factory.createVariableDeclaration(
+                factory.createIdentifier(linkedDataName),
+                undefined,
+                undefined,
+                factory.createConditionalExpression(
+                  factory.createIdentifier('record'),
+                  factory.createToken(SyntaxKind.QuestionToken),
                   factory.createCallExpression(
                     factory.createPropertyAccessExpression(
-                      factory.createIdentifier('Promise'),
-                      factory.createIdentifier('all'),
+                      factory.createPropertyAccessExpression(
+                        factory.createPropertyAccessExpression(
+                          factory.createPropertyAccessExpression(
+                            factory.createParenthesizedExpression(
+                              factory.createAwaitExpression(
+                                factory.createCallExpression(
+                                  factory.createPropertyAccessExpression(
+                                    factory.createIdentifier('API'),
+                                    factory.createIdentifier('graphql'),
+                                  ),
+                                  undefined,
+                                  [
+                                    factory.createObjectLiteralExpression(
+                                      [
+                                        factory.createPropertyAssignment(
+                                          factory.createIdentifier('query'),
+                                          factory.createIdentifier(joinTableIndexedQuery),
+                                        ),
+                                        factory.createPropertyAssignment(
+                                          factory.createIdentifier('variables'),
+                                          factory.createObjectLiteralExpression(
+                                            [
+                                              ...mapFieldArraysToPropertyAssignments(
+                                                joinTableThisModelFields,
+                                                primaryKeys,
+                                                'record',
+                                              ),
+                                            ],
+                                            true,
+                                          ),
+                                        ),
+                                      ],
+                                      true,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            factory.createIdentifier('data'),
+                          ),
+                          factory.createIdentifier(joinTableIndexedQuery),
+                        ),
+                        factory.createIdentifier('items'),
+                      ),
+                      factory.createIdentifier('map'),
                     ),
                     undefined,
                     [
-                      factory.createCallExpression(
-                        factory.createPropertyAccessExpression(
-                          factory.createParenthesizedExpression(
-                            factory.createAwaitExpression(
-                              factory.createCallExpression(
-                                factory.createPropertyAccessExpression(
-                                  factory.createPropertyAccessExpression(
-                                    factory.createIdentifier('record'),
-                                    factory.createIdentifier(fieldName),
-                                  ),
-                                  factory.createIdentifier('toArray'),
-                                ),
-                                undefined,
-                                [],
-                              ),
-                            ),
-                          ),
-                          factory.createIdentifier('map'),
-                        ),
+                      factory.createArrowFunction(
+                        undefined,
                         undefined,
                         [
-                          factory.createArrowFunction(
+                          factory.createParameterDeclaration(
                             undefined,
                             undefined,
-                            [
-                              factory.createParameterDeclaration(
-                                undefined,
-                                undefined,
-                                undefined,
-                                factory.createIdentifier('r'),
-                                undefined,
-                                undefined,
-                                undefined,
-                              ),
-                            ],
                             undefined,
-                            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                            factory.createBlock(
-                              [
-                                factory.createReturnStatement(
-                                  factory.createPropertyAccessExpression(
-                                    factory.createIdentifier('r'),
-                                    factory.createIdentifier(relatedJoinFieldName as string),
-                                  ),
-                                ),
-                              ],
-                              true,
-                            ),
+                            factory.createIdentifier('t'),
+                            undefined,
+                            undefined,
+                            undefined,
                           ),
                         ],
+                        undefined,
+                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                        factory.createPropertyAccessExpression(
+                          factory.createIdentifier('t'),
+                          factory.createIdentifier(relatedJoinFieldName || fieldName),
+                        ),
                       ),
                     ],
                   ),
+                  factory.createToken(SyntaxKind.ColonToken),
+                  factory.createArrayLiteralExpression([], false),
                 ),
-                factory.createToken(SyntaxKind.ColonToken),
-                factory.createArrayLiteralExpression([], false),
               ),
-            ),
-          ],
-          // eslint-disable-next-line no-bitwise
-          NodeFlags.Const | NodeFlags.AwaitContext | NodeFlags.ContextFlags | NodeFlags.TypeExcludesFlags,
-        ),
-      );
+            ],
+            NodeFlags.Const,
+          ),
+        );
+      } else {
+        lazyLoadLinkedDataStatement = factory.createVariableStatement(
+          undefined,
+          factory.createVariableDeclarationList(
+            [
+              factory.createVariableDeclaration(
+                factory.createIdentifier(linkedDataName),
+                undefined,
+                undefined,
+                factory.createConditionalExpression(
+                  recordIdentifier,
+                  factory.createToken(SyntaxKind.QuestionToken),
+                  factory.createAwaitExpression(
+                    factory.createCallExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier('Promise'),
+                        factory.createIdentifier('all'),
+                      ),
+                      undefined,
+                      [
+                        factory.createCallExpression(
+                          factory.createPropertyAccessExpression(
+                            factory.createParenthesizedExpression(
+                              factory.createAwaitExpression(
+                                factory.createCallExpression(
+                                  factory.createPropertyAccessExpression(
+                                    factory.createPropertyAccessExpression(
+                                      factory.createIdentifier('record'),
+                                      factory.createIdentifier(fieldName),
+                                    ),
+                                    factory.createIdentifier('toArray'),
+                                  ),
+                                  undefined,
+                                  [],
+                                ),
+                              ),
+                            ),
+                            factory.createIdentifier('map'),
+                          ),
+                          undefined,
+                          [
+                            factory.createArrowFunction(
+                              undefined,
+                              undefined,
+                              [
+                                factory.createParameterDeclaration(
+                                  undefined,
+                                  undefined,
+                                  undefined,
+                                  factory.createIdentifier('r'),
+                                  undefined,
+                                  undefined,
+                                  undefined,
+                                ),
+                              ],
+                              undefined,
+                              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                              factory.createBlock(
+                                [
+                                  factory.createReturnStatement(
+                                    factory.createPropertyAccessExpression(
+                                      factory.createIdentifier('r'),
+                                      factory.createIdentifier(relatedJoinFieldName as string),
+                                    ),
+                                  ),
+                                ],
+                                true,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  factory.createToken(SyntaxKind.ColonToken),
+                  factory.createArrayLiteralExpression([], false),
+                ),
+              ),
+            ],
+            // eslint-disable-next-line no-bitwise
+            NodeFlags.Const | NodeFlags.AwaitContext | NodeFlags.ContextFlags | NodeFlags.TypeExcludesFlags,
+          ),
+        );
+      }
     } else {
       // hasMany relationship has one related field.
       const relatedModelField = fieldConfigMetaData.relationship.relatedModelFields[0];

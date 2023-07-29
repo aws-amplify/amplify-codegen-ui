@@ -524,7 +524,16 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
             linkedDataNames.push(fieldName);
           }
           // Flatten statments into 1d array
-          relatedModelStatements.push(...buildGetRelationshipModels(fieldName, value, this.importCollection, dataApi));
+          relatedModelStatements.push(
+            ...buildGetRelationshipModels(
+              fieldName,
+              value,
+              this.componentMetadata.dataSchemaMetadata,
+              this.primaryKeys!,
+              this.importCollection,
+              dataApi,
+            ),
+          );
         }
       });
 
