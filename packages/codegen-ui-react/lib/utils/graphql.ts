@@ -160,6 +160,28 @@ export const getGraphqlCallExpression = (
 };
 
 /* istanbul ignore next */
+export const mapFieldArraysToPropertyAssignments = (
+  joinTableFields: string[],
+  modelFields: string[],
+  modelRecord: string,
+) => {
+  return joinTableFields.map((key, i) => {
+    const recordKey = modelFields[i];
+    if (!recordKey) {
+      throw new InternalError(`Cannot find corresponding key for ${key}`);
+    }
+
+    return factory.createPropertyAssignment(
+      factory.createIdentifier(key),
+      factory.createPropertyAccessExpression(
+        factory.createIdentifier(modelRecord),
+        factory.createIdentifier(recordKey),
+      ),
+    );
+  });
+};
+
+/* istanbul ignore next */
 export const getGraphQLJoinTableCreateExpression = (
   relatedJoinTableName: string,
   thisModelRecord: string,
@@ -170,27 +192,6 @@ export const getGraphQLJoinTableCreateExpression = (
   joinTableRelatedModelFields: string[],
   importCollection: ImportCollection,
 ) => {
-  const mapFieldArraysToPropertyAssignments = (
-    joinTableFields: string[],
-    modelFields: string[],
-    modelRecord: string,
-  ) => {
-    return joinTableFields.map((key, i) => {
-      const recordKey = modelFields[i];
-      if (!recordKey) {
-        throw new InternalError(`Cannot find corresponding key for ${key}`);
-      }
-
-      return factory.createPropertyAssignment(
-        factory.createIdentifier(key),
-        factory.createPropertyAccessExpression(
-          factory.createIdentifier(modelRecord),
-          factory.createIdentifier(recordKey),
-        ),
-      );
-    });
-  };
-
   const thisModelAssignments = mapFieldArraysToPropertyAssignments(
     joinTableThisModelFields,
     thisModelPrimaryKeys,

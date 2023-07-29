@@ -5714,8 +5714,13 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
+import {
+  getMovie,
+  listMovieTags,
+  listTags,
+  movieTagsByMovieMovieKeyAndMovietitleAndMoviegenre,
+} from \\"../graphql/queries\\";
 import { API } from \\"aws-amplify\\";
-import { getMovie, listMovieTags, listTags } from \\"../graphql/queries\\";
 import {
   createMovieTags,
   deleteMovieTags,
@@ -5935,12 +5940,17 @@ export default function MovieUpdateForm(props) {
         : movieModelProp;
       setMovieRecord(record);
       const linkedTags = record
-        ? await Promise.all(
-            (
-              await record.tags.toArray()
-            ).map((r) => {
-              return r.tag;
+        ? (
+            await API.graphql({
+              query: movieTagsByMovieMovieKeyAndMovietitleAndMoviegenre,
+              variables: {
+                movieMovieKey: record.movieKey,
+                movietitle: record.title,
+                moviegenre: record.genre,
+              },
             })
+          ).data.movieTagsByMovieMovieKeyAndMovietitleAndMoviegenre.items.map(
+            (t) => t.tag
           )
         : [];
       setLinkedTags(linkedTags);
@@ -7891,8 +7901,13 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
+import {
+  getClass,
+  listStudentClasses,
+  listStudents,
+  studentClassByClassId,
+} from \\"../graphql/queries\\";
 import { API } from \\"aws-amplify\\";
-import { getClass, listStudentClasses, listStudents } from \\"../graphql/queries\\";
 import {
   createStudentClass,
   deleteStudentClass,
@@ -8100,13 +8115,14 @@ export default function ClassUpdateForm(props) {
         : classModelProp;
       setClassRecord(record);
       const linkedStudents = record
-        ? await Promise.all(
-            (
-              await record.students.toArray()
-            ).map((r) => {
-              return r.student;
+        ? (
+            await API.graphql({
+              query: studentClassByClassId,
+              variables: {
+                classId: record.id,
+              },
             })
-          )
+          ).data.studentClassByClassId.items.map((t) => t.student)
         : [];
       setLinkedStudents(linkedStudents);
     };
@@ -8496,15 +8512,16 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
-import { API } from \\"aws-amplify\\";
 import {
   cPKProjectsByCPKTeacherID,
+  cPKTeacherCPKClassByCPKTeacherSpecialTeacherId,
   getCPKTeacher,
   listCPKClasses,
   listCPKProjects,
   listCPKStudents,
   listCPKTeacherCPKClasses,
 } from \\"../graphql/queries\\";
+import { API } from \\"aws-amplify\\";
 import {
   createCPKTeacherCPKClass,
   deleteCPKTeacherCPKClass,
@@ -8745,12 +8762,15 @@ export default function UpdateCPKTeacherForm(props) {
       const CPKStudentRecord = record ? await record.CPKStudent : undefined;
       setCPKStudent(CPKStudentRecord);
       const linkedCPKClasses = record
-        ? await Promise.all(
-            (
-              await record.CPKClasses.toArray()
-            ).map((r) => {
-              return r.cpkClass;
+        ? (
+            await API.graphql({
+              query: cPKTeacherCPKClassByCPKTeacherSpecialTeacherId,
+              variables: {
+                cPKTeacherSpecialTeacherId: record.specialTeacherId,
+              },
             })
+          ).data.cPKTeacherCPKClassByCPKTeacherSpecialTeacherId.items.map(
+            (t) => t.cpkClass
           )
         : [];
       setLinkedCPKClasses(linkedCPKClasses);
