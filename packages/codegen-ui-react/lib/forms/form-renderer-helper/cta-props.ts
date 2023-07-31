@@ -744,13 +744,13 @@ export const buildUpdateDatastoreQuery = (
                       NodeFlags.Const,
                     ),
                   ),
+                  // Add logic to pull related relationship models off record
+                  ...relatedModelStatements,
                   factory.createExpressionStatement(
                     factory.createCallExpression(getSetNameIdentifier(`${lowerCaseDataTypeName}Record`), undefined, [
                       factory.createIdentifier('record'),
                     ]),
                   ),
-                  // Add logic to pull related relationship models off record
-                  ...relatedModelStatements,
                 ],
                 true,
               ),

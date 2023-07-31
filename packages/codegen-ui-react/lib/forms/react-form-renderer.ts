@@ -654,7 +654,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       if (!(this.renderConfig.apiConfiguration?.dataApi === 'GraphQL')) {
         this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
 
-        // @rotp: check if this is needed for collection
         statements.push(
           ...[...relatedModelNames].map((relatedModelName) =>
             buildRelationshipQuery(relatedModelName, this.importCollection, dataApi),
@@ -690,7 +689,13 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     }
 
     if (hasAutoComplete && dataApi === 'GraphQL') {
-      statements.push(...getFetchRelatedRecordsCallbacks(formMetadata.fieldConfigs, this.importCollection));
+      statements.push(
+        ...getFetchRelatedRecordsCallbacks(
+          formMetadata.fieldConfigs,
+          this.importCollection,
+          this.renderConfig.apiConfiguration?.dataApi,
+        ),
+      );
     }
 
     return statements;

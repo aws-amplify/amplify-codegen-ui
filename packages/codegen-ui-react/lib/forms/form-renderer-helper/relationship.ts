@@ -1287,6 +1287,78 @@ export const buildGetRelationshipModels = (
     );
     return [lazyLoadLinkedDataStatement, setLinkedDataStateStatement];
   }
+
+  if (dataApi === 'GraphQL' && fieldConfigMetaData.relationship && !isModelDataType(fieldConfigMetaData)) {
+    const relatedModelName = lowerCaseFirst(fieldConfigMetaData.relationship.relatedModelName);
+    const queryCall = wrapInParenthesizedExpression(
+      getGraphqlCallExpression(ActionType.GET, fieldConfigMetaData.relationship.relatedModelName, importCollection, {
+        inputs: [
+          factory.createPropertyAssignment(
+            factory.createIdentifier('id'),
+            factory.createIdentifier(`${fieldName}Record`),
+          ),
+        ],
+      }),
+      ['data', getGraphqlQueryForModel(ActionType.GET, fieldConfigMetaData.relationship.relatedModelName)],
+    );
+
+    return [
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier(`${fieldName}Record`),
+              undefined,
+              undefined,
+              factory.createConditionalExpression(
+                factory.createIdentifier('record'),
+                factory.createToken(SyntaxKind.QuestionToken),
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('record'),
+                  factory.createIdentifier(fieldName),
+                ),
+                factory.createToken(SyntaxKind.ColonToken),
+                factory.createIdentifier('undefined'),
+              ),
+            ),
+          ],
+          NodeFlags.Const,
+        ),
+      ),
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier(`${relatedModelName}Record`),
+              undefined,
+              undefined,
+              factory.createConditionalExpression(
+                factory.createIdentifier(`${fieldName}Record`),
+                factory.createToken(SyntaxKind.QuestionToken),
+                queryCall,
+                factory.createToken(SyntaxKind.ColonToken),
+                factory.createIdentifier('undefined'),
+              ),
+            ),
+          ],
+          NodeFlags.Const,
+        ),
+      ),
+      factory.createExpressionStatement(
+        factory.createCallExpression(getSetNameIdentifier(fieldName), undefined, [
+          factory.createIdentifier(`${fieldName}Record`),
+        ]),
+      ),
+      factory.createExpressionStatement(
+        factory.createCallExpression(getSetNameIdentifier(`${fieldName}Records`), undefined, [
+          factory.createArrayLiteralExpression([factory.createIdentifier(`${relatedModelName}Record`)]),
+        ]),
+      ),
+    ];
+  }
+
   return [
     factory.createVariableStatement(
       undefined,
