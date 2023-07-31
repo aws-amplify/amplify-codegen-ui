@@ -18,7 +18,6 @@ import {
   factory,
   IfStatement,
   NodeFlags,
-  ObjectLiteralElementLike,
   ObjectLiteralExpression,
   PropertyAssignment,
   Statement,
@@ -1239,13 +1238,7 @@ export const buildGetRelationshipModels = (
       }
     } else {
       // hasMany relationship has one related field.
-      const relatedModelField = fieldConfigMetaData.relationship.relatedModelFields[0];
-      const inputs: ObjectLiteralElementLike[] = [
-        factory.createPropertyAssignment(
-          factory.createIdentifier(relatedModelField),
-          factory.createPropertyAccessExpression(recordIdentifier, factory.createIdentifier('id')),
-        ),
-      ];
+      const { relatedModelName } = fieldConfigMetaData.relationship;
 
       lazyLoadLinkedDataStatement = factory.createVariableStatement(
         undefined,
@@ -1259,19 +1252,13 @@ export const buildGetRelationshipModels = (
                 recordIdentifier,
                 factory.createToken(SyntaxKind.QuestionToken),
                 dataApi === 'GraphQL'
-                  ? wrapInParenthesizedExpression(
-                      getGraphqlCallExpression(
-                        ActionType.GET_BY_RELATIONSHIP,
-                        fieldName,
-                        importCollection,
-                        { inputs },
-                        relatedModelField,
+                  ? factory.createPropertyAccessChain(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier('record'),
+                        factory.createIdentifier(relatedModelName),
                       ),
-                      [
-                        'data',
-                        getGraphqlQueryForModel(ActionType.GET_BY_RELATIONSHIP, fieldName, relatedModelField),
-                        'items',
-                      ],
+                      factory.createToken(SyntaxKind.QuestionDotToken),
+                      factory.createIdentifier('items'),
                     )
                   : factory.createAwaitExpression(
                       factory.createCallExpression(

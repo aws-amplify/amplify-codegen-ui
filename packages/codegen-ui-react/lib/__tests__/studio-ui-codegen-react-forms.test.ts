@@ -1008,6 +1008,28 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should render a create form for parent of 1:m-belongsTo relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/post-graphql-create',
+        'datastore/comment-hasMany-belongsTo-relationships',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should render a update form for parent of 1:m-belongsTo relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/post-graphql-update',
+        'datastore/comment-hasMany-belongsTo-relationships',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should render thrown error for required parent field 1:1 relationships - Create', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/dog-owner-create',

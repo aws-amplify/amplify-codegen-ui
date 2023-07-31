@@ -262,7 +262,7 @@ export default function CreateOwnerForm(props) {
           query: listDogs,
           variables,
         })
-      ).data.listDogs.items;
+      )?.data?.listDogs?.items;
       var loaded = result.filter(
         (item) => !DogIdSet.has(getIDValue.Dog?.(item))
       );
@@ -1475,7 +1475,7 @@ export default function MyMemberForm(props) {
           query: listTeams,
           variables,
         })
-      ).data.listTeams.items;
+      )?.data?.listTeams?.items;
       var loaded = result.filter(
         (item) => !teamIDIdSet.has(getIDValue.teamID?.(item))
       );
@@ -1502,7 +1502,7 @@ export default function MyMemberForm(props) {
           query: listTeams,
           variables,
         })
-      ).data.listTeams.items;
+      )?.data?.listTeams?.items;
       var loaded = result.filter(
         (item) => !TeamIdSet.has(getIDValue.Team?.(item))
       );
@@ -2106,7 +2106,7 @@ export default function SchoolCreateForm(props) {
           query: listStudents,
           variables,
         })
-      ).data.listStudents.items;
+      )?.data?.listStudents?.items;
       var loaded = result.filter(
         (item) => !StudentsIdSet.has(getIDValue.Students?.(item))
       );
@@ -2656,7 +2656,7 @@ export default function BookCreateForm(props) {
           query: listAuthors,
           variables,
         })
-      ).data.listAuthors.items;
+      )?.data?.listAuthors?.items;
       var loaded = result.filter(
         (item) => !primaryAuthorIdSet.has(getIDValue.primaryAuthor?.(item))
       );
@@ -3200,7 +3200,7 @@ export default function TagCreateForm(props) {
           query: listPosts,
           variables,
         })
-      ).data.listPosts.items;
+      )?.data?.listPosts?.items;
       var loaded = result.filter(
         (item) => !PostsIdSet.has(getIDValue.Posts?.(item))
       );
@@ -3834,7 +3834,7 @@ export default function BookCreateForm(props) {
           query: listAuthors,
           variables,
         })
-      ).data.listAuthors.items;
+      )?.data?.listAuthors?.items;
       var loaded = result.filter(
         (item) => !primaryAuthorIdSet.has(getIDValue.primaryAuthor?.(item))
       );
@@ -3861,7 +3861,7 @@ export default function BookCreateForm(props) {
           query: listTitles,
           variables,
         })
-      ).data.listTitles.items;
+      )?.data?.listTitles?.items;
       var loaded = result.filter(
         (item) => !primaryTitleIdSet.has(getIDValue.primaryTitle?.(item))
       );
@@ -4231,7 +4231,7 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
-import { commentsByPostID, getPost, listComments } from \\"../graphql/queries\\";
+import { getPost, listComments } from \\"../graphql/queries\\";
 import { updateComment, updatePost } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -4442,17 +4442,10 @@ export default function PostUpdateForm(props) {
               query: getPost,
               variables: { id: idProp },
             })
-          ).data.getPost
+          )?.data?.getPost
         : postModelProp;
       setPostRecord(record);
-      const linkedComments = record
-        ? (
-            await API.graphql({
-              query: commentsByPostID,
-              variables: { postID: record.id },
-            })
-          ).data.commentsByPostID.items
-        : [];
+      const linkedComments = record ? record.Comment?.items : [];
       setLinkedComments(linkedComments);
     };
     queryData();
@@ -4533,7 +4526,7 @@ export default function PostUpdateForm(props) {
           query: listComments,
           variables,
         })
-      ).data.listComments.items;
+      )?.data?.listComments?.items;
       var loaded = result.filter(
         (item) => !CommentsIdSet.has(getIDValue.Comments?.(item))
       );
@@ -5168,7 +5161,7 @@ export default function MyPostForm(props) {
               query: getPost,
               variables: { id: idProp },
             })
-          ).data.getPost
+          )?.data?.getPost
         : postModelProp;
       setPostRecord(record);
     };
@@ -5936,7 +5929,7 @@ export default function MovieUpdateForm(props) {
               query: getMovie,
               variables: { ...idProp },
             })
-          ).data.getMovie
+          )?.data?.getMovie
         : movieModelProp;
       setMovieRecord(record);
       const linkedTags = record
@@ -6016,7 +6009,7 @@ export default function MovieUpdateForm(props) {
           query: listTags,
           variables,
         })
-      ).data.listTags.items;
+      )?.data?.listTags?.items;
       var loaded = result.filter(
         (item) => !tagsIdSet.has(getIDValue.tags?.(item))
       );
@@ -6130,7 +6123,7 @@ export default function MovieUpdateForm(props) {
                   },
                 },
               })
-            ).data.listMovieTags.items;
+            )?.data?.listMovieTags?.items;
             for (let i = 0; i < count; i++) {
               promises.push(
                 API.graphql({
@@ -6701,7 +6694,7 @@ export default function CommentUpdateForm(props) {
               query: getComment,
               variables: { id: idProp },
             })
-          ).data.getComment
+          )?.data?.getComment
         : commentModelProp;
       setCommentRecord(record);
       const postIDRecord = record ? await record.postID : undefined;
@@ -6774,7 +6767,7 @@ export default function CommentUpdateForm(props) {
           query: listPosts,
           variables,
         })
-      ).data.listPosts.items;
+      )?.data?.listPosts?.items;
       var loaded = result.filter(
         (item) => !postIDIdSet.has(getIDValue.postID?.(item))
       );
@@ -6803,7 +6796,7 @@ export default function CommentUpdateForm(props) {
           query: listPosts,
           variables,
         })
-      ).data.listPosts.items;
+      )?.data?.listPosts?.items;
       var loaded = result.filter(
         (item) => !PostIdSet.has(getIDValue.Post?.(item))
       );
@@ -7408,7 +7401,7 @@ export default function CommentUpdateForm(props) {
               query: getComment,
               variables: { id: idProp },
             })
-          ).data.getComment
+          )?.data?.getComment
         : commentModelProp;
       setCommentRecord(record);
       const postIDRecord = record ? await record.postID : undefined;
@@ -7481,7 +7474,7 @@ export default function CommentUpdateForm(props) {
           query: listPosts,
           variables,
         })
-      ).data.listPosts.items;
+      )?.data?.listPosts?.items;
       var loaded = result.filter(
         (item) => !postIDIdSet.has(getIDValue.postID?.(item))
       );
@@ -7510,7 +7503,7 @@ export default function CommentUpdateForm(props) {
           query: listPosts,
           variables,
         })
-      ).data.listPosts.items;
+      )?.data?.listPosts?.items;
       var loaded = result.filter(
         (item) => !PostIdSet.has(getIDValue.Post?.(item))
       );
@@ -8111,7 +8104,7 @@ export default function ClassUpdateForm(props) {
               query: getClass,
               variables: { id: idProp },
             })
-          ).data.getClass
+          )?.data?.getClass
         : classModelProp;
       setClassRecord(record);
       const linkedStudents = record
@@ -8182,7 +8175,7 @@ export default function ClassUpdateForm(props) {
           query: listStudents,
           variables,
         })
-      ).data.listStudents.items;
+      )?.data?.listStudents?.items;
       var loaded = result.filter(
         (item) => !studentsIdSet.has(getIDValue.students?.(item))
       );
@@ -8290,7 +8283,7 @@ export default function ClassUpdateForm(props) {
                   },
                 },
               })
-            ).data.listStudentClasses.items;
+            )?.data?.listStudentClasses?.items;
             for (let i = 0; i < count; i++) {
               promises.push(
                 API.graphql({
@@ -8513,7 +8506,6 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import {
-  cPKProjectsByCPKTeacherID,
   cPKTeacherCPKClassByCPKTeacherSpecialTeacherId,
   getCPKTeacher,
   listCPKClasses,
@@ -8756,7 +8748,7 @@ export default function UpdateCPKTeacherForm(props) {
               query: getCPKTeacher,
               variables: { id: specialTeacherIdProp },
             })
-          ).data.getCPKTeacher
+          )?.data?.getCPKTeacher
         : cPKTeacherModelProp;
       setCPKTeacherRecord(record);
       const CPKStudentRecord = record ? await record.CPKStudent : undefined;
@@ -8774,14 +8766,7 @@ export default function UpdateCPKTeacherForm(props) {
           )
         : [];
       setLinkedCPKClasses(linkedCPKClasses);
-      const linkedCPKProjects = record
-        ? (
-            await API.graphql({
-              query: cPKProjectsByCPKTeacherID,
-              variables: { cPKTeacherID: record.id },
-            })
-          ).data.cPKProjectsByCPKTeacherID.items
-        : [];
+      const linkedCPKProjects = record ? record.CPKProject?.items : [];
       setLinkedCPKProjects(linkedCPKProjects);
     };
     queryData();
@@ -8874,7 +8859,7 @@ export default function UpdateCPKTeacherForm(props) {
           query: listCPKStudents,
           variables,
         })
-      ).data.listCPKStudents.items;
+      )?.data?.listCPKStudents?.items;
       var loaded = result.filter(
         (item) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(item))
       );
@@ -8901,7 +8886,7 @@ export default function UpdateCPKTeacherForm(props) {
           query: listCPKClasses,
           variables,
         })
-      ).data.listCPKClasses.items;
+      )?.data?.listCPKClasses?.items;
       var loaded = result.filter(
         (item) => !CPKClassesIdSet.has(getIDValue.CPKClasses?.(item))
       );
@@ -8928,7 +8913,7 @@ export default function UpdateCPKTeacherForm(props) {
           query: listCPKProjects,
           variables,
         })
-      ).data.listCPKProjects.items;
+      )?.data?.listCPKProjects?.items;
       var loaded = result.filter(
         (item) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(item))
       );
@@ -9047,7 +9032,7 @@ export default function UpdateCPKTeacherForm(props) {
                   },
                 },
               })
-            ).data.listCPKTeacherCPKClasses.items;
+            )?.data?.listCPKTeacherCPKClasses?.items;
             for (let i = 0; i < count; i++) {
               promises.push(
                 API.graphql({
@@ -9802,7 +9787,7 @@ export default function CreateCompositeToyForm(props) {
           query: listCompositeDogs,
           variables,
         })
-      ).data.listCompositeDogs.items;
+      )?.data?.listCompositeDogs?.items;
       var loaded = result.filter(
         (item) =>
           !compositeDogCompositeToysNameIdSet.has(
@@ -9834,7 +9819,7 @@ export default function CreateCompositeToyForm(props) {
           query: listCompositeDogs,
           variables,
         })
-      ).data.listCompositeDogs.items;
+      )?.data?.listCompositeDogs?.items;
       var loaded = result.filter(
         (item) =>
           !compositeDogCompositeToysDescriptionIdSet.has(
@@ -10553,7 +10538,7 @@ export default function CreateCommentForm(props) {
           query: listPosts,
           variables,
         })
-      ).data.listPosts.items;
+      )?.data?.listPosts?.items;
       var loaded = result.filter(
         (item) => !postIdSet.has(getIDValue.post?.(item))
       );
@@ -10582,7 +10567,7 @@ export default function CreateCommentForm(props) {
           query: listUsers,
           variables,
         })
-      ).data.listUsers.items;
+      )?.data?.listUsers?.items;
       var loaded = result.filter(
         (item) => !UserIdSet.has(getIDValue.User?.(item))
       );
@@ -10611,7 +10596,7 @@ export default function CreateCommentForm(props) {
           query: listOrgs,
           variables,
         })
-      ).data.listOrgs.items;
+      )?.data?.listOrgs?.items;
       var loaded = result.filter(
         (item) => !OrgIdSet.has(getIDValue.Org?.(item))
       );
@@ -10640,7 +10625,7 @@ export default function CreateCommentForm(props) {
           query: listPosts,
           variables,
         })
-      ).data.listPosts.items;
+      )?.data?.listPosts?.items;
       var loaded = result.filter(
         (item) => !postCommentsIdIdSet.has(getIDValue.postCommentsId?.(item))
       );
@@ -11503,7 +11488,7 @@ export default function CreateCompositeDogForm(props) {
           query: listCompositeBowls,
           variables,
         })
-      ).data.listCompositeBowls.items;
+      )?.data?.listCompositeBowls?.items;
       var loaded = result.filter(
         (item) => !CompositeBowlIdSet.has(getIDValue.CompositeBowl?.(item))
       );
@@ -11535,7 +11520,7 @@ export default function CreateCompositeDogForm(props) {
           query: listCompositeOwners,
           variables,
         })
-      ).data.listCompositeOwners.items;
+      )?.data?.listCompositeOwners?.items;
       var loaded = result.filter(
         (item) => !CompositeOwnerIdSet.has(getIDValue.CompositeOwner?.(item))
       );
@@ -11564,7 +11549,7 @@ export default function CreateCompositeDogForm(props) {
           query: listCompositeToys,
           variables,
         })
-      ).data.listCompositeToys.items;
+      )?.data?.listCompositeToys?.items;
       var loaded = result.filter(
         (item) => !CompositeToysIdSet.has(getIDValue.CompositeToys?.(item))
       );
@@ -11596,7 +11581,7 @@ export default function CreateCompositeDogForm(props) {
           query: listCompositeVets,
           variables,
         })
-      ).data.listCompositeVets.items;
+      )?.data?.listCompositeVets?.items;
       var loaded = result.filter(
         (item) => !CompositeVetsIdSet.has(getIDValue.CompositeVets?.(item))
       );
@@ -12232,6 +12217,1137 @@ export default function CreateCompositeDogForm(props: CreateCompositeDogFormProp
 "
 `;
 
+exports[`amplify form renderer tests GraphQL form tests should render a create form for parent of 1:m-belongsTo relationship 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
+import { listComments } from \\"../graphql/queries\\";
+import { createPost, updatePost } from \\"../graphql/mutations\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function CreatePostForm(props) {
+  const {
+    clearOnSuccess = true,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    name: \\"\\",
+    comments: [],
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [comments, setComments] = React.useState(initialValues.comments);
+  const [commentsLoading, setCommentsLoading] = React.useState(false);
+  const [commentsRecords, setCommentsRecords] = React.useState([]);
+  const autocompleteLength = 10;
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setName(initialValues.name);
+    setComments(initialValues.comments);
+    setCurrentCommentsValue(undefined);
+    setCurrentCommentsDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [currentCommentsDisplayValue, setCurrentCommentsDisplayValue] =
+    React.useState(\\"\\");
+  const [currentCommentsValue, setCurrentCommentsValue] =
+    React.useState(undefined);
+  const commentsRef = React.createRef();
+  const getIDValue = {
+    comments: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const commentsIdSet = new Set(
+    Array.isArray(comments)
+      ? comments.map((r) => getIDValue.comments?.(r))
+      : getIDValue.comments?.(comments)
+  );
+  const getDisplayValue = {
+    comments: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+  };
+  const validations = {
+    name: [],
+    comments: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  const fetchCommentsRecords = async (value) => {
+    setCommentsLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ name: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listComments,
+          variables,
+        })
+      )?.data?.listComments?.items;
+      var loaded = result.filter(
+        (item) => !commentsIdSet.has(getIDValue.comments?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setCommentsRecords(newOptions.slice(0, autocompleteLength));
+    setCommentsLoading(false);
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          name,
+          comments,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+          };
+          const post = await API.graphql({
+            query: createPost,
+            variables: {
+              input: {
+                ...modelFieldsToSave,
+              },
+            },
+          });
+          const promises = [];
+          promises.push(
+            ...comments.reduce((promises, original) => {
+              promises.push(
+                API.graphql({
+                  query: updatePost,
+                  variables: {
+                    input: {
+                      ...original,
+                      postCommentsId: post.id,
+                      post: post,
+                    },
+                  },
+                })
+              );
+              return promises;
+            }, [])
+          );
+          await Promise.all(promises);
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"CreatePostForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Name\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              comments,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              name,
+              comments: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.comments ?? values;
+          }
+          setComments(values);
+          setCurrentCommentsValue(undefined);
+          setCurrentCommentsDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCommentsValue}
+        label={\\"Comments\\"}
+        items={comments}
+        hasError={errors?.comments?.hasError}
+        errorMessage={errors?.comments?.errorMessage}
+        getBadgeText={getDisplayValue.comments}
+        setFieldValue={(model) => {
+          setCurrentCommentsDisplayValue(
+            model ? getDisplayValue.comments(model) : \\"\\"
+          );
+          setCurrentCommentsValue(model);
+        }}
+        inputFieldRef={commentsRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Comments\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search Comment\\"
+          value={currentCommentsDisplayValue}
+          options={commentsRecords.map((r) => ({
+            id: getIDValue.comments?.(r),
+            label: getDisplayValue.comments?.(r),
+          }))}
+          isLoading={commentsLoading}
+          onSelect={({ id, label }) => {
+            setCurrentCommentsValue(
+              commentRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCommentsDisplayValue(label);
+            runValidationTasks(\\"comments\\", label);
+          }}
+          onClear={() => {
+            setCurrentCommentsDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            fetchCommentsRecords(value);
+            if (errors.comments?.hasError) {
+              runValidationTasks(\\"comments\\", value);
+            }
+            setCurrentCommentsDisplayValue(value);
+            setCurrentCommentsValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"comments\\", currentCommentsDisplayValue)
+          }
+          errorMessage={errors.comments?.errorMessage}
+          hasError={errors.comments?.hasError}
+          ref={commentsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"comments\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should render a create form for parent of 1:m-belongsTo relationship 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Comment } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CreatePostFormInputValues = {
+    name?: string;
+    comments?: Comment[];
+};
+export declare type CreatePostFormValidationValues = {
+    name?: ValidationFunction<string>;
+    comments?: ValidationFunction<Comment>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CreatePostFormOverridesProps = {
+    CreatePostFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    comments?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type CreatePostFormProps = React.PropsWithChildren<{
+    overrides?: CreatePostFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: CreatePostFormInputValues) => CreatePostFormInputValues;
+    onSuccess?: (fields: CreatePostFormInputValues) => void;
+    onError?: (fields: CreatePostFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: CreatePostFormInputValues) => CreatePostFormInputValues;
+    onValidate?: CreatePostFormValidationValues;
+} & React.CSSProperties>;
+export default function CreatePostForm(props: CreatePostFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should render a update form for parent of 1:m-belongsTo relationship 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
+import { getPost, listComments } from \\"../graphql/queries\\";
+import { updateComment, updatePost } from \\"../graphql/mutations\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function UpdatePostForm(props) {
+  const {
+    id: idProp,
+    post: postModelProp,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    name: \\"\\",
+    comments: [],
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [comments, setComments] = React.useState(initialValues.comments);
+  const [commentsLoading, setCommentsLoading] = React.useState(false);
+  const [commentsRecords, setCommentsRecords] = React.useState([]);
+  const autocompleteLength = 10;
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = postRecord
+      ? { ...initialValues, ...postRecord, comments: linkedComments }
+      : initialValues;
+    setName(cleanValues.name);
+    setComments(cleanValues.comments ?? []);
+    setCurrentCommentsValue(undefined);
+    setCurrentCommentsDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [postRecord, setPostRecord] = React.useState(postModelProp);
+  const [linkedComments, setLinkedComments] = React.useState([]);
+  const canUnlinkComments = true;
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = idProp
+        ? (
+            await API.graphql({
+              query: getPost,
+              variables: { id: idProp },
+            })
+          )?.data?.getPost
+        : postModelProp;
+      setPostRecord(record);
+      const linkedComments = record ? record.Comment?.items : [];
+      setLinkedComments(linkedComments);
+    };
+    queryData();
+  }, [idProp, postModelProp]);
+  React.useEffect(resetStateValues, [postRecord, linkedComments]);
+  const [currentCommentsDisplayValue, setCurrentCommentsDisplayValue] =
+    React.useState(\\"\\");
+  const [currentCommentsValue, setCurrentCommentsValue] =
+    React.useState(undefined);
+  const commentsRef = React.createRef();
+  const getIDValue = {
+    comments: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const commentsIdSet = new Set(
+    Array.isArray(comments)
+      ? comments.map((r) => getIDValue.comments?.(r))
+      : getIDValue.comments?.(comments)
+  );
+  const getDisplayValue = {
+    comments: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+  };
+  const validations = {
+    name: [],
+    comments: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  const fetchCommentsRecords = async (value) => {
+    setCommentsLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ name: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listComments,
+          variables,
+        })
+      )?.data?.listComments?.items;
+      var loaded = result.filter(
+        (item) => !commentsIdSet.has(getIDValue.comments?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setCommentsRecords(newOptions.slice(0, autocompleteLength));
+    setCommentsLoading(false);
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          name,
+          comments,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
+          const promises = [];
+          const commentsToLink = [];
+          const commentsToUnLink = [];
+          const commentsSet = new Set();
+          const linkedCommentsSet = new Set();
+          comments.forEach((r) => commentsSet.add(getIDValue.comments?.(r)));
+          linkedComments.forEach((r) =>
+            linkedCommentsSet.add(getIDValue.comments?.(r))
+          );
+          linkedComments.forEach((r) => {
+            if (!commentsSet.has(getIDValue.comments?.(r))) {
+              commentsToUnLink.push(r);
+            }
+          });
+          comments.forEach((r) => {
+            if (!linkedCommentsSet.has(getIDValue.comments?.(r))) {
+              commentsToLink.push(r);
+            }
+          });
+          commentsToUnLink.forEach((original) => {
+            if (!canUnlinkComments) {
+              throw Error(
+                \`Comment \${original.id} cannot be unlinked from Post because postCommentsId is a required field.\`
+              );
+            }
+            promises.push(
+              API.graphql({
+                query: updateComment,
+                variables: {
+                  input: {
+                    id: original.id,
+                    postCommentsId: null,
+                  },
+                },
+              })
+            );
+          });
+          commentsToLink.forEach((original) => {
+            promises.push(
+              API.graphql({
+                query: updateComment,
+                variables: {
+                  input: {
+                    id: original.id,
+                    postCommentsId: postRecord.id,
+                  },
+                },
+              })
+            );
+          });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+          };
+          promises.push(
+            API.graphql({
+              query: updatePost,
+              variables: {
+                input: {
+                  id: postRecord.id,
+                  ...modelFieldsToSave,
+                },
+              },
+            })
+          );
+          await Promise.all(promises);
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"UpdatePostForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Name\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              comments,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              name,
+              comments: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.comments ?? values;
+          }
+          setComments(values);
+          setCurrentCommentsValue(undefined);
+          setCurrentCommentsDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCommentsValue}
+        label={\\"Comments\\"}
+        items={comments}
+        hasError={errors?.comments?.hasError}
+        errorMessage={errors?.comments?.errorMessage}
+        getBadgeText={getDisplayValue.comments}
+        setFieldValue={(model) => {
+          setCurrentCommentsDisplayValue(
+            model ? getDisplayValue.comments(model) : \\"\\"
+          );
+          setCurrentCommentsValue(model);
+        }}
+        inputFieldRef={commentsRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Comments\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search Comment\\"
+          value={currentCommentsDisplayValue}
+          options={commentsRecords.map((r) => ({
+            id: getIDValue.comments?.(r),
+            label: getDisplayValue.comments?.(r),
+          }))}
+          isLoading={commentsLoading}
+          onSelect={({ id, label }) => {
+            setCurrentCommentsValue(
+              commentRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCommentsDisplayValue(label);
+            runValidationTasks(\\"comments\\", label);
+          }}
+          onClear={() => {
+            setCurrentCommentsDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            fetchCommentsRecords(value);
+            if (errors.comments?.hasError) {
+              runValidationTasks(\\"comments\\", value);
+            }
+            setCurrentCommentsDisplayValue(value);
+            setCurrentCommentsValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"comments\\", currentCommentsDisplayValue)
+          }
+          errorMessage={errors.comments?.errorMessage}
+          hasError={errors.comments?.hasError}
+          ref={commentsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"comments\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Reset\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || postModelProp)}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={
+              !(idProp || postModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should render a update form for parent of 1:m-belongsTo relationship 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Comment, Post } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UpdatePostFormInputValues = {
+    name?: string;
+    comments?: Comment[];
+};
+export declare type UpdatePostFormValidationValues = {
+    name?: ValidationFunction<string>;
+    comments?: ValidationFunction<Comment>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type UpdatePostFormOverridesProps = {
+    UpdatePostFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    comments?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type UpdatePostFormProps = React.PropsWithChildren<{
+    overrides?: UpdatePostFormOverridesProps | undefined | null;
+} & {
+    id?: string;
+    post?: Post;
+    onSubmit?: (fields: UpdatePostFormInputValues) => UpdatePostFormInputValues;
+    onSuccess?: (fields: UpdatePostFormInputValues) => void;
+    onError?: (fields: UpdatePostFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: UpdatePostFormInputValues) => UpdatePostFormInputValues;
+    onValidate?: UpdatePostFormValidationValues;
+} & React.CSSProperties>;
+export default function UpdatePostForm(props: UpdatePostFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should render thrown error for required parent field 1:1 relationships - Create 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
@@ -12494,7 +13610,7 @@ export default function CreateDogForm(props) {
           query: listOwners,
           variables,
         })
-      ).data.listOwners.items;
+      )?.data?.listOwners?.items;
       var loaded = result.filter(
         (item) => !OwnerIdSet.has(getIDValue.Owner?.(item))
       );
@@ -13031,7 +14147,7 @@ export default function CreateOwnerForm(props) {
           query: listDogs,
           variables,
         })
-      ).data.listDogs.items;
+      )?.data?.listDogs?.items;
       var loaded = result.filter(
         (item) => !DogIdSet.has(getIDValue.Dog?.(item))
       );
