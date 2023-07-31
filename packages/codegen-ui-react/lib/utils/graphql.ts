@@ -559,7 +559,11 @@ export const getFetchRelatedRecordsCallbacks = (
 export function wrapInParenthesizedExpression(callExpression: CallExpression, accessors: string[]): AwaitExpression {
   return accessors.reduce(
     (acc: any, _, index: any, initialValue: string[]) =>
-      factory.createPropertyAccessExpression(acc, factory.createIdentifier(initialValue[index])),
+      factory.createPropertyAccessChain(
+        acc,
+        factory.createToken(SyntaxKind.QuestionDotToken),
+        factory.createIdentifier(initialValue[index]),
+      ),
     factory.createAwaitExpression(callExpression),
   );
 }

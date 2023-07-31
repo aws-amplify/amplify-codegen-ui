@@ -1,0 +1,12 @@
+{
+  "name": "CreatePostForm",
+  "dataType": {
+      "dataSourceType": "DataStore",
+      "dataTypeName": "Post"
+  },
+  "formActionType": "create",
+  "fields": {},
+  "sectionalElements": {},
+  "style": {},
+  "cta": {}
+}
