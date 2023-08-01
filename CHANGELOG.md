@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.15.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.14.3...v2.15.0) (2023-08-01)
+
+### Bug Fixes
+
+- bugfixes for GraphQL composite key querying and join table deletion ([6eca2c0](https://github.com/aws-amplify/amplify-codegen-ui/commit/6eca2c0d22f3bbe716f1c03eea7953f70910826e))
+- change autocomplete data access property to related model name ([#1050](https://github.com/aws-amplify/amplify-codegen-ui/issues/1050)) ([694d214](https://github.com/aws-amplify/amplify-codegen-ui/commit/694d2141a1e6fe781fbaf8b3fb89fcde8f3e9814))
+- change GraphQL unlink to use update action instead of delete ([0a4d469](https://github.com/aws-amplify/amplify-codegen-ui/commit/0a4d4697c0154e71d1d21a534a54a5eb715b11c1))
+- fields with json type display 'null' ([#1051](https://github.com/aws-amplify/amplify-codegen-ui/issues/1051)) ([0045ee8](https://github.com/aws-amplify/amplify-codegen-ui/commit/0045ee8f65de27307056f9e15d2448d489498b98))
+- plural items property in autocomplete data query ([#1047](https://github.com/aws-amplify/amplify-codegen-ui/issues/1047)) ([df2633b](https://github.com/aws-amplify/amplify-codegen-ui/commit/df2633be970f6658e60e1a5691dc3b86ba5e5cf6))
+- remove indexes query from one to many parent update ([#1054](https://github.com/aws-amplify/amplify-codegen-ui/issues/1054)) ([e9d0beb](https://github.com/aws-amplify/amplify-codegen-ui/commit/e9d0beb20460ffd7d8643d117093677b4c8d5b22))
+- remove input obj in graphql query ([690f928](https://github.com/aws-amplify/amplify-codegen-ui/commit/690f928cb226a3f0ed43601f4d1790b808324f71))
+- remove type import if no graphql types file ([#1040](https://github.com/aws-amplify/amplify-codegen-ui/issues/1040)) ([ac7836a](https://github.com/aws-amplify/amplify-codegen-ui/commit/ac7836aebcc65d67c3cba612d87d22ea346bd5dd))
+- use primary key values to create join table records for GraphQL ([1b52a80](https://github.com/aws-amplify/amplify-codegen-ui/commit/1b52a8018d4b602b9ce273fe6f07f50854941414))
+
+### Features
+
+- add NoApi configuration and validation for data dependency ([56518d3](https://github.com/aws-amplify/amplify-codegen-ui/commit/56518d32f6ec633e12def45050f9489c4ba3c1a5))
+- handle parent relationship without belongsTo for GraphQL ([#1055](https://github.com/aws-amplify/amplify-codegen-ui/issues/1055)) ([af04792](https://github.com/aws-amplify/amplify-codegen-ui/commit/af047926d56cbbb4fcb1fbbaac481d31d0b90522))
+- implement graphql querying for join tables ([faaf011](https://github.com/aws-amplify/amplify-codegen-ui/commit/faaf011ebe39dec85a63eb058fd2fb21dcde8499))
+
 ## [2.14.3](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.14.2...v2.14.3) (2023-07-19)
 
 ### Bug Fixes
