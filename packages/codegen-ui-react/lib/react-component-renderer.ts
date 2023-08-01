@@ -110,7 +110,15 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
         this.importCollection.addImport(ImportSource.UI_REACT, 'Text');
         this.importCollection.addImport(ImportSource.UI_REACT, 'useTheme');
 
-        return renderArrayFieldComponent(this.component.name, label, fieldConfigs, element, labelDecorator, isRequired);
+        return renderArrayFieldComponent(
+          this.component.name,
+          label,
+          fieldConfigs,
+          element,
+          labelDecorator,
+          isRequired,
+          this.importCollection.rendererConfig?.apiConfiguration?.dataApi,
+        );
       }
     }
 

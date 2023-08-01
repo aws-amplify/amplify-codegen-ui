@@ -1476,9 +1476,7 @@ export default function MyMemberForm(props) {
           variables,
         })
       )?.data?.listTeams?.items;
-      var loaded = result.filter(
-        (item) => !teamIDIdSet.has(getIDValue.teamID?.(item))
-      );
+      var loaded = result.filter((item) => teamID !== item.id);
       newOptions.push(...loaded);
       newNext = result.nextToken;
     }
@@ -1667,13 +1665,15 @@ export default function MyMemberForm(props) {
         errorMessage={errors?.teamID?.errorMessage}
         getBadgeText={(value) =>
           value
-            ? getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+            ? getDisplayValue.teamID(teamIDRecords.find((r) => r.id === value))
             : \\"\\"
         }
         setFieldValue={(value) => {
           setCurrentTeamIDDisplayValue(
             value
-              ? getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+              ? getDisplayValue.teamID(
+                  teamIDRecords.find((r) => r.id === value)
+                )
               : \\"\\"
           );
           setCurrentTeamIDValue(value);
@@ -4444,9 +4444,9 @@ export default function PostUpdateForm(props) {
             })
           )?.data?.getPost
         : postModelProp;
-      setPostRecord(record);
       const linkedComments = record ? record.Comment?.items : [];
       setLinkedComments(linkedComments);
+      setPostRecord(record);
     };
     queryData();
   }, [idProp, postModelProp]);
@@ -5931,7 +5931,6 @@ export default function MovieUpdateForm(props) {
             })
           )?.data?.getMovie
         : movieModelProp;
-      setMovieRecord(record);
       const linkedTags = record
         ? (
             await API.graphql({
@@ -5947,6 +5946,7 @@ export default function MovieUpdateForm(props) {
           )
         : [];
       setLinkedTags(linkedTags);
+      setMovieRecord(record);
     };
     queryData();
   }, [idProp, movieModelProp]);
@@ -6483,7 +6483,7 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
-import { getComment, listPosts } from \\"../graphql/queries\\";
+import { getComment, getPost, listPosts } from \\"../graphql/queries\\";
 import { updateComment } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -6696,11 +6696,20 @@ export default function CommentUpdateForm(props) {
             })
           )?.data?.getComment
         : commentModelProp;
-      setCommentRecord(record);
-      const postIDRecord = record ? await record.postID : undefined;
+      const postIDRecord = record ? record.postID : undefined;
+      const postRecord = postIDRecord
+        ? (
+            await API.graphql({
+              query: getPost,
+              variables: { id: postIDRecord },
+            })
+          )?.data?.getPost
+        : undefined;
       setPostID(postIDRecord);
+      setPostIDRecords([postRecord]);
       const PostRecord = record ? await record.Post : undefined;
       setPost(PostRecord);
+      setCommentRecord(record);
     };
     queryData();
   }, [idProp, commentModelProp]);
@@ -6768,9 +6777,7 @@ export default function CommentUpdateForm(props) {
           variables,
         })
       )?.data?.listPosts?.items;
-      var loaded = result.filter(
-        (item) => !postIDIdSet.has(getIDValue.postID?.(item))
-      );
+      var loaded = result.filter((item) => postID !== item.id);
       newOptions.push(...loaded);
       newNext = result.nextToken;
     }
@@ -6933,13 +6940,15 @@ export default function CommentUpdateForm(props) {
         errorMessage={errors?.postID?.errorMessage}
         getBadgeText={(value) =>
           value
-            ? getDisplayValue.postID(postRecords.find((r) => r.id === value))
+            ? getDisplayValue.postID(postIDRecords.find((r) => r.id === value))
             : \\"\\"
         }
         setFieldValue={(value) => {
           setCurrentPostIDDisplayValue(
             value
-              ? getDisplayValue.postID(postRecords.find((r) => r.id === value))
+              ? getDisplayValue.postID(
+                  postIDRecords.find((r) => r.id === value)
+                )
               : \\"\\"
           );
           setCurrentPostIDValue(value);
@@ -7190,7 +7199,7 @@ import {
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
-import { getComment, listPosts } from \\"../graphql/queries\\";
+import { getComment, getPost, listPosts } from \\"../graphql/queries\\";
 import { updateComment } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -7403,11 +7412,20 @@ export default function CommentUpdateForm(props) {
             })
           )?.data?.getComment
         : commentModelProp;
-      setCommentRecord(record);
-      const postIDRecord = record ? await record.postID : undefined;
+      const postIDRecord = record ? record.postID : undefined;
+      const postRecord = postIDRecord
+        ? (
+            await API.graphql({
+              query: getPost,
+              variables: { id: postIDRecord },
+            })
+          )?.data?.getPost
+        : undefined;
       setPostID(postIDRecord);
+      setPostIDRecords([postRecord]);
       const PostRecord = record ? await record.Post : undefined;
       setPost(PostRecord);
+      setCommentRecord(record);
     };
     queryData();
   }, [idProp, commentModelProp]);
@@ -7475,9 +7493,7 @@ export default function CommentUpdateForm(props) {
           variables,
         })
       )?.data?.listPosts?.items;
-      var loaded = result.filter(
-        (item) => !postIDIdSet.has(getIDValue.postID?.(item))
-      );
+      var loaded = result.filter((item) => postID !== item.id);
       newOptions.push(...loaded);
       newNext = result.nextToken;
     }
@@ -7640,13 +7656,15 @@ export default function CommentUpdateForm(props) {
         errorMessage={errors?.postID?.errorMessage}
         getBadgeText={(value) =>
           value
-            ? getDisplayValue.postID(postRecords.find((r) => r.id === value))
+            ? getDisplayValue.postID(postIDRecords.find((r) => r.id === value))
             : \\"\\"
         }
         setFieldValue={(value) => {
           setCurrentPostIDDisplayValue(
             value
-              ? getDisplayValue.postID(postRecords.find((r) => r.id === value))
+              ? getDisplayValue.postID(
+                  postIDRecords.find((r) => r.id === value)
+                )
               : \\"\\"
           );
           setCurrentPostIDValue(value);
@@ -8106,7 +8124,6 @@ export default function ClassUpdateForm(props) {
             })
           )?.data?.getClass
         : classModelProp;
-      setClassRecord(record);
       const linkedStudents = record
         ? (
             await API.graphql({
@@ -8118,6 +8135,7 @@ export default function ClassUpdateForm(props) {
           ).data.studentClassByClassId.items.map((t) => t.student)
         : [];
       setLinkedStudents(linkedStudents);
+      setClassRecord(record);
     };
     queryData();
   }, [idProp, classModelProp]);
@@ -8750,7 +8768,6 @@ export default function UpdateCPKTeacherForm(props) {
             })
           )?.data?.getCPKTeacher
         : cPKTeacherModelProp;
-      setCPKTeacherRecord(record);
       const CPKStudentRecord = record ? await record.CPKStudent : undefined;
       setCPKStudent(CPKStudentRecord);
       const linkedCPKClasses = record
@@ -8768,6 +8785,7 @@ export default function UpdateCPKTeacherForm(props) {
       setLinkedCPKClasses(linkedCPKClasses);
       const linkedCPKProjects = record ? record.CPKProject?.items : [];
       setLinkedCPKProjects(linkedCPKProjects);
+      setCPKTeacherRecord(record);
     };
     queryData();
   }, [specialTeacherIdProp, cPKTeacherModelProp]);
@@ -9789,10 +9807,7 @@ export default function CreateCompositeToyForm(props) {
         })
       )?.data?.listCompositeDogs?.items;
       var loaded = result.filter(
-        (item) =>
-          !compositeDogCompositeToysNameIdSet.has(
-            getIDValue.compositeDogCompositeToysName?.(item)
-          )
+        (item) => compositeDogCompositeToysName !== item.id
       );
       newOptions.push(...loaded);
       newNext = result.nextToken;
@@ -9821,10 +9836,7 @@ export default function CreateCompositeToyForm(props) {
         })
       )?.data?.listCompositeDogs?.items;
       var loaded = result.filter(
-        (item) =>
-          !compositeDogCompositeToysDescriptionIdSet.has(
-            getIDValue.compositeDogCompositeToysDescription?.(item)
-          )
+        (item) => compositeDogCompositeToysDescription !== item.id
       );
       newOptions.push(...loaded);
       newNext = result.nextToken;
@@ -9980,7 +9992,9 @@ export default function CreateCompositeToyForm(props) {
         getBadgeText={(value) =>
           value
             ? getDisplayValue.compositeDogCompositeToysName(
-                compositeDogRecords.find((r) => r.name === value)
+                compositeDogCompositeToysNameRecords.find(
+                  (r) => r.name === value
+                )
               )
             : \\"\\"
         }
@@ -9988,7 +10002,9 @@ export default function CreateCompositeToyForm(props) {
           setCurrentCompositeDogCompositeToysNameDisplayValue(
             value
               ? getDisplayValue.compositeDogCompositeToysName(
-                  compositeDogRecords.find((r) => r.name === value)
+                  compositeDogCompositeToysNameRecords.find(
+                    (r) => r.name === value
+                  )
                 )
               : \\"\\"
           );
@@ -10074,7 +10090,9 @@ export default function CreateCompositeToyForm(props) {
         getBadgeText={(value) =>
           value
             ? getDisplayValue.compositeDogCompositeToysDescription(
-                compositeDogRecords.find((r) => r.description === value)
+                compositeDogCompositeToysDescriptionRecords.find(
+                  (r) => r.description === value
+                )
               )
             : \\"\\"
         }
@@ -10082,7 +10100,9 @@ export default function CreateCompositeToyForm(props) {
           setCurrentCompositeDogCompositeToysDescriptionDisplayValue(
             value
               ? getDisplayValue.compositeDogCompositeToysDescription(
-                  compositeDogRecords.find((r) => r.description === value)
+                  compositeDogCompositeToysDescriptionRecords.find(
+                    (r) => r.description === value
+                  )
                 )
               : \\"\\"
           );
@@ -10626,9 +10646,7 @@ export default function CreateCommentForm(props) {
           variables,
         })
       )?.data?.listPosts?.items;
-      var loaded = result.filter(
-        (item) => !postCommentsIdIdSet.has(getIDValue.postCommentsId?.(item))
-      );
+      var loaded = result.filter((item) => postCommentsId !== item.id);
       newOptions.push(...loaded);
       newNext = result.nextToken;
     }
@@ -10991,7 +11009,7 @@ export default function CreateCommentForm(props) {
         getBadgeText={(value) =>
           value
             ? getDisplayValue.postCommentsId(
-                postRecords.find((r) => r.id === value)
+                postCommentsIdRecords.find((r) => r.id === value)
               )
             : \\"\\"
         }
@@ -10999,7 +11017,7 @@ export default function CreateCommentForm(props) {
           setCurrentPostCommentsIdDisplayValue(
             value
               ? getDisplayValue.postCommentsId(
-                  postRecords.find((r) => r.id === value)
+                  postCommentsIdRecords.find((r) => r.id === value)
                 )
               : \\"\\"
           );
@@ -12976,9 +12994,9 @@ export default function UpdatePostForm(props) {
             })
           )?.data?.getPost
         : postModelProp;
-      setPostRecord(record);
       const linkedComments = record ? record.Comment?.items : [];
       setLinkedComments(linkedComments);
+      setPostRecord(record);
     };
     queryData();
   }, [idProp, postModelProp]);
@@ -14424,6 +14442,540 @@ export declare type CreateOwnerFormProps = React.PropsWithChildren<{
     onValidate?: CreateOwnerFormValidationValues;
 } & React.CSSProperties>;
 export default function CreateOwnerForm(props: CreateOwnerFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should treat relationship as bidirectional without belongsTo 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
+import { getComment, getPost, listPosts } from \\"../graphql/queries\\";
+import { updateComment } from \\"../graphql/mutations\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function CommentUpdateForm(props) {
+  const {
+    id: idProp,
+    comment: commentModelProp,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    content: \\"\\",
+    postID: undefined,
+  };
+  const [content, setContent] = React.useState(initialValues.content);
+  const [postID, setPostID] = React.useState(initialValues.postID);
+  const [postIDLoading, setPostIDLoading] = React.useState(false);
+  const [postIDRecords, setPostIDRecords] = React.useState([]);
+  const autocompleteLength = 10;
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = commentRecord
+      ? { ...initialValues, ...commentRecord, postID }
+      : initialValues;
+    setContent(cleanValues.content);
+    setPostID(cleanValues.postID);
+    setCurrentPostIDValue(undefined);
+    setCurrentPostIDDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [commentRecord, setCommentRecord] = React.useState(commentModelProp);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = idProp
+        ? (
+            await API.graphql({
+              query: getComment,
+              variables: { id: idProp },
+            })
+          )?.data?.getComment
+        : commentModelProp;
+      const postIDRecord = record ? record.postID : undefined;
+      const postRecord = postIDRecord
+        ? (
+            await API.graphql({
+              query: getPost,
+              variables: { id: postIDRecord },
+            })
+          )?.data?.getPost
+        : undefined;
+      setPostID(postIDRecord);
+      setPostIDRecords([postRecord]);
+      setCommentRecord(record);
+    };
+    queryData();
+  }, [idProp, commentModelProp]);
+  React.useEffect(resetStateValues, [commentRecord, postID]);
+  const [currentPostIDDisplayValue, setCurrentPostIDDisplayValue] =
+    React.useState(\\"\\");
+  const [currentPostIDValue, setCurrentPostIDValue] = React.useState(undefined);
+  const postIDRef = React.createRef();
+  const getDisplayValue = {
+    postID: (r) => \`\${r?.title ? r?.title + \\" - \\" : \\"\\"}\${r?.id}\`,
+  };
+  const validations = {
+    content: [],
+    postID: [{ type: \\"Required\\" }],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  const fetchPostIDRecords = async (value) => {
+    setPostIDLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ title: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listPosts,
+          variables,
+        })
+      )?.data?.listPosts?.items;
+      var loaded = result.filter((item) => postID !== item.id);
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setPostIDRecords(newOptions.slice(0, autocompleteLength));
+    setPostIDLoading(false);
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          content,
+          postID,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
+          await API.graphql({
+            query: updateComment,
+            variables: {
+              input: {
+                id: commentRecord.id,
+                ...modelFields,
+              },
+            },
+          });
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"CommentUpdateForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Content\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={content}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              content: value,
+              postID,
+            };
+            const result = onChange(modelFields);
+            value = result?.content ?? value;
+          }
+          if (errors.content?.hasError) {
+            runValidationTasks(\\"content\\", value);
+          }
+          setContent(value);
+        }}
+        onBlur={() => runValidationTasks(\\"content\\", content)}
+        errorMessage={errors.content?.errorMessage}
+        hasError={errors.content?.hasError}
+        {...getOverrideProps(overrides, \\"content\\")}
+      ></TextField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              content,
+              postID: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.postID ?? value;
+          }
+          setPostID(value);
+          setCurrentPostIDValue(undefined);
+        }}
+        currentFieldValue={currentPostIDValue}
+        label={\\"Post id\\"}
+        items={postID ? [postID] : []}
+        hasError={errors?.postID?.hasError}
+        errorMessage={errors?.postID?.errorMessage}
+        getBadgeText={(value) =>
+          value
+            ? getDisplayValue.postID(postIDRecords.find((r) => r.id === value))
+            : \\"\\"
+        }
+        setFieldValue={(value) => {
+          setCurrentPostIDDisplayValue(
+            value
+              ? getDisplayValue.postID(
+                  postIDRecords.find((r) => r.id === value)
+                )
+              : \\"\\"
+          );
+          setCurrentPostIDValue(value);
+        }}
+        inputFieldRef={postIDRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Post id\\"
+          isRequired={true}
+          isReadOnly={false}
+          placeholder=\\"Search Post\\"
+          value={currentPostIDDisplayValue}
+          options={postIDRecords
+            .filter(
+              (r, i, arr) =>
+                arr.findIndex((member) => member?.id === r?.id) === i
+            )
+            .map((r) => ({
+              id: r?.id,
+              label: getDisplayValue.postID?.(r),
+            }))}
+          isLoading={postIDLoading}
+          onSelect={({ id, label }) => {
+            setCurrentPostIDValue(id);
+            setCurrentPostIDDisplayValue(label);
+            runValidationTasks(\\"postID\\", label);
+          }}
+          onClear={() => {
+            setCurrentPostIDDisplayValue(\\"\\");
+          }}
+          defaultValue={postID}
+          onChange={(e) => {
+            let { value } = e.target;
+            fetchPostIDRecords(value);
+            if (errors.postID?.hasError) {
+              runValidationTasks(\\"postID\\", value);
+            }
+            setCurrentPostIDDisplayValue(value);
+            setCurrentPostIDValue(undefined);
+          }}
+          onBlur={() => runValidationTasks(\\"postID\\", currentPostIDValue)}
+          errorMessage={errors.postID?.errorMessage}
+          hasError={errors.postID?.hasError}
+          ref={postIDRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"postID\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Reset\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || commentModelProp)}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={
+              !(idProp || commentModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should treat relationship as bidirectional without belongsTo 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Comment } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CommentUpdateFormInputValues = {
+    content?: string;
+    postID?: string;
+};
+export declare type CommentUpdateFormValidationValues = {
+    content?: ValidationFunction<string>;
+    postID?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CommentUpdateFormOverridesProps = {
+    CommentUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    content?: PrimitiveOverrideProps<TextFieldProps>;
+    postID?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type CommentUpdateFormProps = React.PropsWithChildren<{
+    overrides?: CommentUpdateFormOverridesProps | undefined | null;
+} & {
+    id?: string;
+    comment?: Comment;
+    onSubmit?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
+    onSuccess?: (fields: CommentUpdateFormInputValues) => void;
+    onError?: (fields: CommentUpdateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
+    onValidate?: CommentUpdateFormValidationValues;
+} & React.CSSProperties>;
+export default function CommentUpdateForm(props: CommentUpdateFormProps): React.ReactElement;
 "
 `;
 

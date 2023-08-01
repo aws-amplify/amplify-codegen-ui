@@ -98,6 +98,12 @@ jobs:
         env:
           REACT_APP_USER_EMAIL: ${{ secrets.E2E_TEST_USER_EMAIL }}
           REACT_APP_USER_PASSWORD: ${{ secrets.E2E_TEST_USER_PASSWORD }}
+      - name: Upload Cypress videos
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-videos
+          path: /home/runner/work/amplify-codegen-ui/amplify-codegen-ui/e2e-test-app/cypress/videos
 
   functional-tests:
     runs-on: ubuntu-latest
@@ -123,6 +129,12 @@ jobs:
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 210
           config-file: cypress.config.ts
+      - name: Upload Cypress videos
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-videos
+          path: /home/runner/work/amplify-codegen-ui/amplify-codegen-ui/packages/integration-test/cypress/videos
       - name: Check Integ Test Coverage
         working-directory: packages/integration-test
         run: node cypress/scripts/generateCoverageSummary.mjs

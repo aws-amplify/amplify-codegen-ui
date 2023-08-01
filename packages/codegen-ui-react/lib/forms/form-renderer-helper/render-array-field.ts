@@ -30,6 +30,7 @@ import { extractModelAndKeys, getDisplayValueObjectName, getDisplayValueScalar }
 import { getElementAccessExpression } from './invalid-variable-helpers';
 import { getSetNameIdentifier, capitalizeFirstLetter } from '../../helpers';
 import { getDecoratedLabel } from './label-decorator';
+import { DataApiKind } from '../../react-render-config';
 
 function getOnChangeAttribute({
   setStateName,
@@ -130,6 +131,7 @@ export const renderArrayFieldComponent = (
   inputField: JsxChild,
   labelDecorator?: LabelDecorator,
   isRequired?: boolean,
+  dataApi: DataApiKind = 'DataStore',
 ) => {
   const fieldConfig = fieldConfigs[fieldName];
   const { sanitizedFieldName, dataType, componentType } = fieldConfig;
@@ -239,7 +241,9 @@ export const renderArrayFieldComponent = (
       ],
       undefined,
       factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-      getDisplayValueScalar(fieldName, scalarModel, scalarKey),
+      dataApi === 'GraphQL' && !isModelDataType(fieldConfig)
+        ? getDisplayValueScalar(fieldName, fieldName, scalarKey)
+        : getDisplayValueScalar(fieldName, scalarModel, scalarKey),
     );
   }
 
@@ -348,7 +352,9 @@ export const renderArrayFieldComponent = (
                 [
                   factory.createExpressionStatement(
                     factory.createCallExpression(setFieldValueIdentifier, undefined, [
-                      getDisplayValueScalar(fieldName, scalarModel, scalarKey),
+                      dataApi === 'GraphQL'
+                        ? getDisplayValueScalar(fieldName, fieldName, scalarKey)
+                        : getDisplayValueScalar(fieldName, scalarModel, scalarKey),
                     ]),
                   ),
                   factory.createExpressionStatement(

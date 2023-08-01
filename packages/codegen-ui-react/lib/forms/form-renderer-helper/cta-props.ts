@@ -707,6 +707,21 @@ export const buildUpdateDatastoreQuery = (
           ),
         );
 
+  const statements: Statement[] = [];
+  const setRecordStatement: ExpressionStatement = factory.createExpressionStatement(
+    factory.createCallExpression(getSetNameIdentifier(`${lowerCaseDataTypeName}Record`), undefined, [
+      factory.createIdentifier('record'),
+    ]),
+  );
+
+  if (dataApi === 'GraphQL') {
+    statements.push(...relatedModelStatements);
+    statements.push(setRecordStatement);
+  } else {
+    statements.push(setRecordStatement);
+    statements.push(...relatedModelStatements);
+  }
+
   return [
     factory.createVariableStatement(
       undefined,
@@ -744,13 +759,7 @@ export const buildUpdateDatastoreQuery = (
                       NodeFlags.Const,
                     ),
                   ),
-                  factory.createExpressionStatement(
-                    factory.createCallExpression(getSetNameIdentifier(`${lowerCaseDataTypeName}Record`), undefined, [
-                      factory.createIdentifier('record'),
-                    ]),
-                  ),
-                  // Add logic to pull related relationship models off record
-                  ...relatedModelStatements,
+                  ...statements,
                 ],
                 true,
               ),

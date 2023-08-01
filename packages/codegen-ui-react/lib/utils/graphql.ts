@@ -29,7 +29,8 @@ import { ImportCollection, ImportValue } from '../imports';
 import { capitalizeFirstLetter, getSetNameIdentifier, lowerCaseFirst } from '../helpers';
 import { isBoundProperty, isConcatenatedProperty } from '../react-component-render-helper';
 import { Primitive } from '../primitive';
-import { DataStoreRenderConfig, GraphqlRenderConfig, NoApiRenderConfig } from '../react-render-config';
+import { DataApiKind, DataStoreRenderConfig, GraphqlRenderConfig, NoApiRenderConfig } from '../react-render-config';
+import { isModelDataType } from '../forms/form-renderer-helper/render-checkers';
 
 export enum ActionType {
   CREATE = 'create',
@@ -216,6 +217,7 @@ export const getFetchRelatedRecords = (relatedModelName: string) =>
 export const getFetchRelatedRecordsCallbacks = (
   fieldConfigs: Record<string, FieldConfigMetadata>,
   importCollection: ImportCollection,
+  dataApi: DataApiKind = 'DataStore',
 ) => {
   return Object.entries(fieldConfigs).reduce<Statement[]>(
     (acc, [name, { sanitizedFieldName, relationship, valueMappings, componentType }]) => {
@@ -470,27 +472,36 @@ export const getFetchRelatedRecordsCallbacks = (
                                             ],
                                             undefined,
                                             factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                            factory.createPrefixUnaryExpression(
-                                              SyntaxKind.ExclamationToken,
-                                              factory.createCallExpression(
-                                                factory.createPropertyAccessExpression(
-                                                  factory.createIdentifier(`${fieldName}IdSet`),
-                                                  factory.createIdentifier('has'),
-                                                ),
-                                                undefined,
-                                                [
-                                                  factory.createCallChain(
-                                                    factory.createPropertyAccessExpression(
-                                                      factory.createIdentifier('getIDValue'),
-                                                      factory.createIdentifier(fieldName),
-                                                    ),
-                                                    factory.createToken(SyntaxKind.QuestionDotToken),
-                                                    undefined,
-                                                    [factory.createIdentifier('item')],
+                                            dataApi === 'GraphQL' && !isModelDataType(fieldConfigs[fieldName])
+                                              ? factory.createBinaryExpression(
+                                                  factory.createIdentifier(fieldName),
+                                                  factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createIdentifier('item'),
+                                                    factory.createIdentifier('id'),
                                                   ),
-                                                ],
-                                              ),
-                                            ),
+                                                )
+                                              : factory.createPrefixUnaryExpression(
+                                                  SyntaxKind.ExclamationToken,
+                                                  factory.createCallExpression(
+                                                    factory.createPropertyAccessExpression(
+                                                      factory.createIdentifier(`${fieldName}IdSet`),
+                                                      factory.createIdentifier('has'),
+                                                    ),
+                                                    undefined,
+                                                    [
+                                                      factory.createCallChain(
+                                                        factory.createPropertyAccessExpression(
+                                                          factory.createIdentifier('getIDValue'),
+                                                          factory.createIdentifier(fieldName),
+                                                        ),
+                                                        factory.createToken(SyntaxKind.QuestionDotToken),
+                                                        undefined,
+                                                        [factory.createIdentifier('item')],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
                                           ),
                                         ],
                                       ),
