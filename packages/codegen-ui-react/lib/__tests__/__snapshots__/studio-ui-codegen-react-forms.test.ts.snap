@@ -20552,9 +20552,9 @@ export default function UpdateOrgForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp ? await DataStore.query(Org, idProp) : orgModelProp;
+      setOrgRecord(record);
       const linkedComments = record ? await record.comments.toArray() : [];
       setLinkedComments(linkedComments);
-      setOrgRecord(record);
     };
     queryData();
   }, [idProp, orgModelProp]);
@@ -21153,6 +21153,7 @@ export default function UpdateCompositeDogForm(props) {
       const record = idProp
         ? await DataStore.query(CompositeDog, idProp)
         : compositeDogModelProp;
+      setCompositeDogRecord(record);
       const CompositeBowlRecord = record
         ? await record.CompositeBowl
         : undefined;
@@ -21175,7 +21176,6 @@ export default function UpdateCompositeDogForm(props) {
           )
         : [];
       setLinkedCompositeVets(linkedCompositeVets);
-      setCompositeDogRecord(record);
     };
     queryData();
   }, [idProp, compositeDogModelProp]);
@@ -22267,6 +22267,7 @@ export default function UpdateCPKTeacherForm(props) {
       const record = specialTeacherIdProp
         ? await DataStore.query(CPKTeacher, specialTeacherIdProp)
         : cPKTeacherModelProp;
+      setCPKTeacherRecord(record);
       const CPKStudentRecord = record ? await record.CPKStudent : undefined;
       setCPKStudent(CPKStudentRecord);
       const linkedCPKClasses = record
@@ -22283,7 +22284,6 @@ export default function UpdateCPKTeacherForm(props) {
         ? await record.CPKProjects.toArray()
         : [];
       setLinkedCPKProjects(linkedCPKProjects);
-      setCPKTeacherRecord(record);
     };
     queryData();
   }, [specialTeacherIdProp, cPKTeacherModelProp]);
@@ -25573,6 +25573,7 @@ export default function UpdateCompositeDogForm(props) {
       const record = idProp
         ? await DataStore.query(CompositeDog, idProp)
         : compositeDogModelProp;
+      setCompositeDogRecord(record);
       const CompositeOwnerRecord = record
         ? await record.CompositeOwner
         : undefined;
@@ -25595,7 +25596,6 @@ export default function UpdateCompositeDogForm(props) {
         ? await record.compositeDogCompositeBowlShape
         : undefined;
       setCompositeDogCompositeBowlShape(compositeDogCompositeBowlShapeRecord);
-      setCompositeDogRecord(record);
     };
     queryData();
   }, [idProp, compositeDogModelProp]);
@@ -27342,9 +27342,9 @@ export default function UpdateDogForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp ? await DataStore.query(Dog, idProp) : dogModelProp;
+      setDogRecord(record);
       const OwnerRecord = record ? await record.Owner : undefined;
       setOwner(OwnerRecord);
-      setDogRecord(record);
     };
     queryData();
   }, [idProp, dogModelProp]);
@@ -28379,9 +28379,9 @@ export default function UpdateOwnerForm(props) {
       const record = idProp
         ? await DataStore.query(Owner, idProp)
         : ownerModelProp;
+      setOwnerRecord(record);
       const DogRecord = record ? await record.Dog : undefined;
       setDog(DogRecord);
-      setOwnerRecord(record);
     };
     queryData();
   }, [idProp, ownerModelProp]);
@@ -33715,9 +33715,9 @@ export default function SchoolUpdateForm(props) {
       const record = idProp
         ? await DataStore.query(School, idProp)
         : schoolModelProp;
+      setSchoolRecord(record);
       const linkedStudents = record ? await record.Students.toArray() : [];
       setLinkedStudents(linkedStudents);
-      setSchoolRecord(record);
     };
     queryData();
   }, [idProp, schoolModelProp]);
@@ -34281,9 +34281,9 @@ export default function SchoolUpdateForm(props) {
       const record = idProp
         ? await DataStore.query(School, idProp)
         : schoolModelProp;
+      setSchoolRecord(record);
       const linkedStudent = record ? await record.Student.toArray() : [];
       setLinkedStudent(linkedStudent);
-      setSchoolRecord(record);
     };
     queryData();
   }, [idProp, schoolModelProp]);
@@ -34894,11 +34894,11 @@ export default function MyMemberForm(props) {
       const record = idProp
         ? await DataStore.query(Member, idProp)
         : memberModelProp;
+      setMemberRecord(record);
       const teamIDRecord = record ? await record.teamID : undefined;
       setTeamID(teamIDRecord);
       const TeamRecord = record ? await record.Team : undefined;
       setTeam(TeamRecord);
-      setMemberRecord(record);
     };
     queryData();
   }, [idProp, memberModelProp]);
@@ -35503,6 +35503,7 @@ export default function TagUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp ? await DataStore.query(Tag, idProp) : tagModelProp;
+      setTagRecord(record);
       const linkedPosts = record
         ? await Promise.all(
             (
@@ -35513,7 +35514,6 @@ export default function TagUpdateForm(props) {
           )
         : [];
       setLinkedPosts(linkedPosts);
-      setTagRecord(record);
     };
     queryData();
   }, [idProp, tagModelProp]);
@@ -41896,9 +41896,9 @@ export default function UpdateCarForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp ? await DataStore.query(Car, idProp) : carModelProp;
+      setCarRecord(record);
       const dealershipRecord = record ? await record.dealership : undefined;
       setDealership(dealershipRecord);
-      setCarRecord(record);
     };
     queryData();
   }, [idProp, carModelProp]);
@@ -42407,9 +42407,9 @@ export default function UpdateDealershipForm(props) {
       const record = idProp
         ? await DataStore.query(Dealership, idProp)
         : dealershipModelProp;
+      setDealershipRecord(record);
       const linkedCars = record ? await record.cars.toArray() : [];
       setLinkedCars(linkedCars);
-      setDealershipRecord(record);
     };
     queryData();
   }, [idProp, dealershipModelProp]);
