@@ -4444,7 +4444,7 @@ export default function PostUpdateForm(props) {
             })
           )?.data?.getPost
         : postModelProp;
-      const linkedComments = record ? record.Comment?.items : [];
+      const linkedComments = record?.Comment?.items ?? [];
       setLinkedComments(linkedComments);
       setPostRecord(record);
     };
@@ -8783,7 +8783,7 @@ export default function UpdateCPKTeacherForm(props) {
           )
         : [];
       setLinkedCPKClasses(linkedCPKClasses);
-      const linkedCPKProjects = record ? record.CPKProject?.items : [];
+      const linkedCPKProjects = record?.CPKProject?.items ?? [];
       setLinkedCPKProjects(linkedCPKProjects);
       setCPKTeacherRecord(record);
     };
@@ -12994,7 +12994,7 @@ export default function UpdatePostForm(props) {
             })
           )?.data?.getPost
         : postModelProp;
-      const linkedComments = record ? record.Comment?.items : [];
+      const linkedComments = record?.Comment?.items ?? [];
       setLinkedComments(linkedComments);
       setPostRecord(record);
     };
