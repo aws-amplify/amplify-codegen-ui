@@ -272,6 +272,9 @@ export default function CreateOwnerForm(props) {
     setDogRecords(newOptions.slice(0, autocompleteLength));
     setDogLoading(false);
   };
+  React.useEffect(() => {
+    fetchDogRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -1510,6 +1513,10 @@ export default function MyMemberForm(props) {
     setTeamRecords(newOptions.slice(0, autocompleteLength));
     setTeamLoading(false);
   };
+  React.useEffect(() => {
+    fetchTeamIDRecords(\\"\\");
+    fetchTeamRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -2116,6 +2123,9 @@ export default function SchoolCreateForm(props) {
     setStudentsRecords(newOptions.slice(0, autocompleteLength));
     setStudentsLoading(false);
   };
+  React.useEffect(() => {
+    fetchStudentsRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -2666,6 +2676,9 @@ export default function BookCreateForm(props) {
     setPrimaryAuthorRecords(newOptions.slice(0, autocompleteLength));
     setPrimaryAuthorLoading(false);
   };
+  React.useEffect(() => {
+    fetchPrimaryAuthorRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -3210,6 +3223,9 @@ export default function TagCreateForm(props) {
     setPostsRecords(newOptions.slice(0, autocompleteLength));
     setPostsLoading(false);
   };
+  React.useEffect(() => {
+    fetchPostsRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -3871,6 +3887,10 @@ export default function BookCreateForm(props) {
     setPrimaryTitleRecords(newOptions.slice(0, autocompleteLength));
     setPrimaryTitleLoading(false);
   };
+  React.useEffect(() => {
+    fetchPrimaryAuthorRecords(\\"\\");
+    fetchPrimaryTitleRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -4536,6 +4556,9 @@ export default function PostUpdateForm(props) {
     setCommentsRecords(newOptions.slice(0, autocompleteLength));
     setCommentsLoading(false);
   };
+  React.useEffect(() => {
+    fetchCommentsRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -6019,6 +6042,9 @@ export default function MovieUpdateForm(props) {
     setTagsRecords(newOptions.slice(0, autocompleteLength));
     setTagsLoading(false);
   };
+  React.useEffect(() => {
+    fetchTagsRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -6813,6 +6839,10 @@ export default function CommentUpdateForm(props) {
     setPostRecords(newOptions.slice(0, autocompleteLength));
     setPostLoading(false);
   };
+  React.useEffect(() => {
+    fetchPostIDRecords(\\"\\");
+    fetchPostRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -7529,6 +7559,10 @@ export default function CommentUpdateForm(props) {
     setPostRecords(newOptions.slice(0, autocompleteLength));
     setPostLoading(false);
   };
+  React.useEffect(() => {
+    fetchPostIDRecords(\\"\\");
+    fetchPostRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -8203,6 +8237,9 @@ export default function ClassUpdateForm(props) {
     setStudentsRecords(newOptions.slice(0, autocompleteLength));
     setStudentsLoading(false);
   };
+  React.useEffect(() => {
+    fetchStudentsRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -8941,6 +8978,11 @@ export default function UpdateCPKTeacherForm(props) {
     setCPKProjectsRecords(newOptions.slice(0, autocompleteLength));
     setCPKProjectsLoading(false);
   };
+  React.useEffect(() => {
+    fetchCPKStudentRecords(\\"\\");
+    fetchCPKClassesRecords(\\"\\");
+    fetchCPKProjectsRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -9846,6 +9888,10 @@ export default function CreateCompositeToyForm(props) {
     );
     setCompositeDogCompositeToysDescriptionLoading(false);
   };
+  React.useEffect(() => {
+    fetchCompositeDogCompositeToysNameRecords(\\"\\");
+    fetchCompositeDogCompositeToysDescriptionRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -10653,6 +10699,12 @@ export default function CreateCommentForm(props) {
     setPostCommentsIdRecords(newOptions.slice(0, autocompleteLength));
     setPostCommentsIdLoading(false);
   };
+  React.useEffect(() => {
+    fetchPostRecords(\\"\\");
+    fetchUserRecords(\\"\\");
+    fetchOrgRecords(\\"\\");
+    fetchPostCommentsIdRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -11609,6 +11661,12 @@ export default function CreateCompositeDogForm(props) {
     setCompositeVetsRecords(newOptions.slice(0, autocompleteLength));
     setCompositeVetsLoading(false);
   };
+  React.useEffect(() => {
+    fetchCompositeBowlRecords(\\"\\");
+    fetchCompositeOwnerRecords(\\"\\");
+    fetchCompositeToysRecords(\\"\\");
+    fetchCompositeVetsRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -12508,6 +12566,9 @@ export default function CreatePostForm(props) {
     setCommentsRecords(newOptions.slice(0, autocompleteLength));
     setCommentsLoading(false);
   };
+  React.useEffect(() => {
+    fetchCommentsRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -13067,6 +13128,9 @@ export default function UpdatePostForm(props) {
     setCommentsRecords(newOptions.slice(0, autocompleteLength));
     setCommentsLoading(false);
   };
+  React.useEffect(() => {
+    fetchCommentsRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -13638,6 +13702,9 @@ export default function CreateDogForm(props) {
     setOwnerRecords(newOptions.slice(0, autocompleteLength));
     setOwnerLoading(false);
   };
+  React.useEffect(() => {
+    fetchOwnerRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -14175,6 +14242,9 @@ export default function CreateOwnerForm(props) {
     setDogRecords(newOptions.slice(0, autocompleteLength));
     setDogLoading(false);
   };
+  React.useEffect(() => {
+    fetchDogRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
@@ -14738,6 +14808,9 @@ export default function CommentUpdateForm(props) {
     setPostIDRecords(newOptions.slice(0, autocompleteLength));
     setPostIDLoading(false);
   };
+  React.useEffect(() => {
+    fetchPostIDRecords(\\"\\");
+  }, []);
   return (
     <Grid
       as=\\"form\\"
