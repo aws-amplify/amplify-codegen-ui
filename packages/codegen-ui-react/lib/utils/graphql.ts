@@ -209,6 +209,35 @@ export const getGraphQLJoinTableCreateExpression = (
   });
 };
 
+const fetchRelatedRecordEffect = (fetchRecordFunctions: string[]) => {
+  return factory.createExpressionStatement(
+    factory.createCallExpression(
+      factory.createPropertyAccessExpression(factory.createIdentifier('React'), factory.createIdentifier('useEffect')),
+      undefined,
+      [
+        factory.createArrowFunction(
+          undefined,
+          undefined,
+          [],
+          undefined,
+          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+          factory.createBlock(
+            fetchRecordFunctions.map((fetchFunction) => {
+              return factory.createExpressionStatement(
+                factory.createCallExpression(factory.createIdentifier(fetchFunction), undefined, [
+                  factory.createStringLiteral(''),
+                ]),
+              );
+            }),
+            true,
+          ),
+        ),
+        factory.createArrayLiteralExpression([], false),
+      ],
+    ),
+  );
+};
+
 /* istanbul ignore next */
 export const getFetchRelatedRecords = (relatedModelName: string) =>
   `fetch${capitalizeFirstLetter(relatedModelName)}Records`;
@@ -219,12 +248,14 @@ export const getFetchRelatedRecordsCallbacks = (
   importCollection: ImportCollection,
   dataApi: DataApiKind = 'DataStore',
 ) => {
-  return Object.entries(fieldConfigs).reduce<Statement[]>(
+  const initalFetchRecords: string[] = [];
+  const fetchRecordsStatements = Object.entries(fieldConfigs).reduce<Statement[]>(
     (acc, [name, { sanitizedFieldName, relationship, valueMappings, componentType }]) => {
       if (relationship && componentType === Primitive.Autocomplete) {
         const fieldName = name.split('.')[0];
         const renderedFieldName = sanitizedFieldName || fieldName;
-
+        const fetchRecordsVariable = getFetchRelatedRecords(renderedFieldName);
+        initalFetchRecords.push(fetchRecordsVariable);
         const setModelLoading = getSetNameIdentifier(`${renderedFieldName}Loading`);
         const setModelFetchOption = getSetNameIdentifier(`${renderedFieldName}Records`);
 
@@ -257,7 +288,7 @@ export const getFetchRelatedRecordsCallbacks = (
             factory.createVariableDeclarationList(
               [
                 factory.createVariableDeclaration(
-                  factory.createIdentifier(getFetchRelatedRecords(renderedFieldName)),
+                  factory.createIdentifier(fetchRecordsVariable),
                   undefined,
                   undefined,
                   factory.createArrowFunction(
@@ -565,6 +596,7 @@ export const getFetchRelatedRecordsCallbacks = (
     },
     [],
   );
+  return [...fetchRecordsStatements, fetchRelatedRecordEffect(initalFetchRecords)];
 };
 
 export function wrapInParenthesizedExpression(callExpression: CallExpression, accessors: string[]): AwaitExpression {
