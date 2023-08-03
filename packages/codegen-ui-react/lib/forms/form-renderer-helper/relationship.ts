@@ -231,6 +231,22 @@ function createHasManyUpdateRelatedModelBlock({
   return factory.createBlock(statements, true);
 }
 
+function graphqlLinkedRecordsFallback(modelName: string) {
+  return factory.createBinaryExpression(
+    factory.createPropertyAccessChain(
+      factory.createPropertyAccessChain(
+        factory.createIdentifier('record'),
+        factory.createToken(SyntaxKind.QuestionDotToken),
+        factory.createIdentifier(modelName),
+      ),
+      factory.createToken(SyntaxKind.QuestionDotToken),
+      factory.createIdentifier('items'),
+    ),
+    factory.createToken(SyntaxKind.QuestionQuestionToken),
+    factory.createArrayLiteralExpression([], false),
+  );
+}
+
 export const buildManyToManyRelationshipStatements = (
   dataStoreActionType: 'update' | 'create',
   modelName: string,
@@ -1248,19 +1264,12 @@ export const buildGetRelationshipModels = (
               factory.createIdentifier(linkedDataName),
               undefined,
               undefined,
-              factory.createConditionalExpression(
-                recordIdentifier,
-                factory.createToken(SyntaxKind.QuestionToken),
-                dataApi === 'GraphQL'
-                  ? factory.createPropertyAccessChain(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('record'),
-                        factory.createIdentifier(relatedModelName),
-                      ),
-                      factory.createToken(SyntaxKind.QuestionDotToken),
-                      factory.createIdentifier('items'),
-                    )
-                  : factory.createAwaitExpression(
+              dataApi === 'GraphQL'
+                ? graphqlLinkedRecordsFallback(relatedModelName)
+                : factory.createConditionalExpression(
+                    recordIdentifier,
+                    factory.createToken(SyntaxKind.QuestionToken),
+                    factory.createAwaitExpression(
                       factory.createCallExpression(
                         factory.createPropertyAccessExpression(
                           factory.createPropertyAccessExpression(recordIdentifier, factory.createIdentifier(fieldName)),
@@ -1270,9 +1279,9 @@ export const buildGetRelationshipModels = (
                         [],
                       ),
                     ),
-                factory.createToken(SyntaxKind.ColonToken),
-                factory.createArrayLiteralExpression([], false),
-              ),
+                    factory.createToken(SyntaxKind.ColonToken),
+                    factory.createArrayLiteralExpression([], false),
+                  ),
             ),
           ],
           NodeFlags.Const,
