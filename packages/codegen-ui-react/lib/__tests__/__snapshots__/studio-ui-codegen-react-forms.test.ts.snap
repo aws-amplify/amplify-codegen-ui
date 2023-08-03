@@ -196,8 +196,8 @@ export default function CreateOwnerForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Dog, setDog] = React.useState(initialValues.Dog);
-  const [DogLoading, setDogLoading] = React.useState(false);
-  const [DogRecords, setDogRecords] = React.useState([]);
+  const [dogLoading, setDogLoading] = React.useState(false);
+  const [dogRecords, setDogRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -440,7 +440,7 @@ export default function CreateOwnerForm(props) {
               id: getIDValue.Dog?.(r),
               label: getDisplayValue.Dog?.(r),
             }))}
-          isLoading={DogLoading}
+          isLoading={dogLoading}
           onSelect={({ id, label }) => {
             setCurrentDogValue(
               dogRecords.find((r) =>
@@ -1400,8 +1400,8 @@ export default function MyMemberForm(props) {
   const [teamIDLoading, setTeamIDLoading] = React.useState(false);
   const [teamIDRecords, setTeamIDRecords] = React.useState([]);
   const [Team, setTeam] = React.useState(initialValues.Team);
-  const [TeamLoading, setTeamLoading] = React.useState(false);
-  const [TeamRecords, setTeamRecords] = React.useState([]);
+  const [teamLoading, setTeamLoading] = React.useState(false);
+  const [teamRecords, setTeamRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -1764,7 +1764,7 @@ export default function MyMemberForm(props) {
               id: getIDValue.Team?.(r),
               label: getDisplayValue.Team?.(r),
             }))}
-          isLoading={TeamLoading}
+          isLoading={teamLoading}
           onSelect={({ id, label }) => {
             setCurrentTeamValue(
               teamRecords.find((r) =>
@@ -2041,8 +2041,8 @@ export default function SchoolCreateForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Students, setStudents] = React.useState(initialValues.Students);
-  const [StudentsLoading, setStudentsLoading] = React.useState(false);
-  const [StudentsRecords, setStudentsRecords] = React.useState([]);
+  const [studentsLoading, setStudentsLoading] = React.useState(false);
+  const [studentsRecords, setStudentsRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -2275,7 +2275,7 @@ export default function SchoolCreateForm(props) {
               id: getIDValue.Students?.(r),
               label: getDisplayValue.Students?.(r),
             }))}
-          isLoading={StudentsLoading}
+          isLoading={studentsLoading}
           onSelect={({ id, label }) => {
             setCurrentStudentsValue(
               studentRecords.find((r) =>
@@ -3122,8 +3122,8 @@ export default function TagCreateForm(props) {
   };
   const [label, setLabel] = React.useState(initialValues.label);
   const [Posts, setPosts] = React.useState(initialValues.Posts);
-  const [PostsLoading, setPostsLoading] = React.useState(false);
-  const [PostsRecords, setPostsRecords] = React.useState([]);
+  const [postsLoading, setPostsLoading] = React.useState(false);
+  const [postsRecords, setPostsRecords] = React.useState([]);
   const [statuses, setStatuses] = React.useState(initialValues.statuses);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
@@ -3371,7 +3371,7 @@ export default function TagCreateForm(props) {
             id: getIDValue.Posts?.(r),
             label: getDisplayValue.Posts?.(r),
           }))}
-          isLoading={PostsLoading}
+          isLoading={postsLoading}
           onSelect={({ id, label }) => {
             setCurrentPostsValue(
               postRecords.find((r) =>
@@ -4415,8 +4415,8 @@ export default function PostUpdateForm(props) {
     initialValues.publishDate
   );
   const [Comments, setComments] = React.useState(initialValues.Comments);
-  const [CommentsLoading, setCommentsLoading] = React.useState(false);
-  const [CommentsRecords, setCommentsRecords] = React.useState([]);
+  const [commentsLoading, setCommentsLoading] = React.useState(false);
+  const [commentsRecords, setCommentsRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -4790,7 +4790,7 @@ export default function PostUpdateForm(props) {
             id: getIDValue.Comments?.(r),
             label: getDisplayValue.Comments?.(r),
           }))}
-          isLoading={CommentsLoading}
+          isLoading={commentsLoading}
           onSelect={({ id, label }) => {
             setCurrentCommentsValue(
               commentRecords.find((r) =>
@@ -6666,8 +6666,8 @@ export default function CommentUpdateForm(props) {
   const [postIDLoading, setPostIDLoading] = React.useState(false);
   const [postIDRecords, setPostIDRecords] = React.useState([]);
   const [Post, setPost] = React.useState(initialValues.Post);
-  const [PostLoading, setPostLoading] = React.useState(false);
-  const [PostRecords, setPostRecords] = React.useState([]);
+  const [postLoading, setPostLoading] = React.useState(false);
+  const [postRecords, setPostRecords] = React.useState([]);
   const [post1, setPost1] = React.useState(initialValues.post);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
@@ -7041,7 +7041,7 @@ export default function CommentUpdateForm(props) {
               id: getIDValue.Post?.(r),
               label: getDisplayValue.Post?.(r),
             }))}
-          isLoading={PostLoading}
+          isLoading={postLoading}
           onSelect={({ id, label }) => {
             setCurrentPostValue(
               postRecords.find((r) =>
@@ -7382,8 +7382,8 @@ export default function CommentUpdateForm(props) {
   const [postIDLoading, setPostIDLoading] = React.useState(false);
   const [postIDRecords, setPostIDRecords] = React.useState([]);
   const [Post, setPost] = React.useState(initialValues.Post);
-  const [PostLoading, setPostLoading] = React.useState(false);
-  const [PostRecords, setPostRecords] = React.useState([]);
+  const [postLoading, setPostLoading] = React.useState(false);
+  const [postRecords, setPostRecords] = React.useState([]);
   const [post1, setPost1] = React.useState(initialValues.post);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
@@ -7757,7 +7757,7 @@ export default function CommentUpdateForm(props) {
               id: getIDValue.Post?.(r),
               label: getDisplayValue.Post?.(r),
             }))}
-          isLoading={PostLoading}
+          isLoading={postLoading}
           onSelect={({ id, label }) => {
             setCurrentPostValue(
               postRecords.find((r) =>
@@ -8718,16 +8718,16 @@ export default function UpdateCPKTeacherForm(props) {
     initialValues.specialTeacherId
   );
   const [CPKStudent, setCPKStudent] = React.useState(initialValues.CPKStudent);
-  const [CPKStudentLoading, setCPKStudentLoading] = React.useState(false);
-  const [CPKStudentRecords, setCPKStudentRecords] = React.useState([]);
+  const [cPKStudentLoading, setCPKStudentLoading] = React.useState(false);
+  const [cPKStudentRecords, setCPKStudentRecords] = React.useState([]);
   const [CPKClasses, setCPKClasses] = React.useState(initialValues.CPKClasses);
-  const [CPKClassesLoading, setCPKClassesLoading] = React.useState(false);
-  const [CPKClassesRecords, setCPKClassesRecords] = React.useState([]);
+  const [cPKClassesLoading, setCPKClassesLoading] = React.useState(false);
+  const [cPKClassesRecords, setCPKClassesRecords] = React.useState([]);
   const [CPKProjects, setCPKProjects] = React.useState(
     initialValues.CPKProjects
   );
-  const [CPKProjectsLoading, setCPKProjectsLoading] = React.useState(false);
-  const [CPKProjectsRecords, setCPKProjectsRecords] = React.useState([]);
+  const [cPKProjectsLoading, setCPKProjectsLoading] = React.useState(false);
+  const [cPKProjectsRecords, setCPKProjectsRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -9236,7 +9236,7 @@ export default function UpdateCPKTeacherForm(props) {
               id: getIDValue.CPKStudent?.(r),
               label: getDisplayValue.CPKStudent?.(r),
             }))}
-          isLoading={CPKStudentLoading}
+          isLoading={cPKStudentLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKStudentValue(
               cPKStudentRecords.find((r) =>
@@ -9313,7 +9313,7 @@ export default function UpdateCPKTeacherForm(props) {
             id: getIDValue.CPKClasses?.(r),
             label: getDisplayValue.CPKClasses?.(r),
           }))}
-          isLoading={CPKClassesLoading}
+          isLoading={cPKClassesLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKClassesValue(
               cPKClassRecords.find((r) =>
@@ -9391,7 +9391,7 @@ export default function UpdateCPKTeacherForm(props) {
               id: getIDValue.CPKProjects?.(r),
               label: getDisplayValue.CPKProjects?.(r),
             }))}
-          isLoading={CPKProjectsLoading}
+          isLoading={cPKProjectsLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKProjectsValue(
               cPKProjectRecords.find((r) =>
@@ -10441,11 +10441,11 @@ export default function CreateCommentForm(props) {
   const [postLoading, setPostLoading] = React.useState(false);
   const [postRecords, setPostRecords] = React.useState([]);
   const [User, setUser] = React.useState(initialValues.User);
-  const [UserLoading, setUserLoading] = React.useState(false);
-  const [UserRecords, setUserRecords] = React.useState([]);
+  const [userLoading, setUserLoading] = React.useState(false);
+  const [userRecords, setUserRecords] = React.useState([]);
   const [Org, setOrg] = React.useState(initialValues.Org);
-  const [OrgLoading, setOrgLoading] = React.useState(false);
-  const [OrgRecords, setOrgRecords] = React.useState([]);
+  const [orgLoading, setOrgLoading] = React.useState(false);
+  const [orgRecords, setOrgRecords] = React.useState([]);
   const [postCommentsId, setPostCommentsId] = React.useState(
     initialValues.postCommentsId
   );
@@ -10875,7 +10875,7 @@ export default function CreateCommentForm(props) {
               id: getIDValue.User?.(r),
               label: getDisplayValue.User?.(r),
             }))}
-          isLoading={UserLoading}
+          isLoading={userLoading}
           onSelect={({ id, label }) => {
             setCurrentUserValue(
               userRecords.find((r) =>
@@ -10951,7 +10951,7 @@ export default function CreateCommentForm(props) {
               id: getIDValue.Org?.(r),
               label: getDisplayValue.Org?.(r),
             }))}
-          isLoading={OrgLoading}
+          isLoading={orgLoading}
           onSelect={({ id, label }) => {
             setCurrentOrgValue(
               orgRecords.find((r) =>
@@ -11363,24 +11363,24 @@ export default function CreateCompositeDogForm(props) {
   const [CompositeBowl, setCompositeBowl] = React.useState(
     initialValues.CompositeBowl
   );
-  const [CompositeBowlLoading, setCompositeBowlLoading] = React.useState(false);
-  const [CompositeBowlRecords, setCompositeBowlRecords] = React.useState([]);
+  const [compositeBowlLoading, setCompositeBowlLoading] = React.useState(false);
+  const [compositeBowlRecords, setCompositeBowlRecords] = React.useState([]);
   const [CompositeOwner, setCompositeOwner] = React.useState(
     initialValues.CompositeOwner
   );
-  const [CompositeOwnerLoading, setCompositeOwnerLoading] =
+  const [compositeOwnerLoading, setCompositeOwnerLoading] =
     React.useState(false);
-  const [CompositeOwnerRecords, setCompositeOwnerRecords] = React.useState([]);
+  const [compositeOwnerRecords, setCompositeOwnerRecords] = React.useState([]);
   const [CompositeToys, setCompositeToys] = React.useState(
     initialValues.CompositeToys
   );
-  const [CompositeToysLoading, setCompositeToysLoading] = React.useState(false);
-  const [CompositeToysRecords, setCompositeToysRecords] = React.useState([]);
+  const [compositeToysLoading, setCompositeToysLoading] = React.useState(false);
+  const [compositeToysRecords, setCompositeToysRecords] = React.useState([]);
   const [CompositeVets, setCompositeVets] = React.useState(
     initialValues.CompositeVets
   );
-  const [CompositeVetsLoading, setCompositeVetsLoading] = React.useState(false);
-  const [CompositeVetsRecords, setCompositeVetsRecords] = React.useState([]);
+  const [compositeVetsLoading, setCompositeVetsLoading] = React.useState(false);
+  const [compositeVetsRecords, setCompositeVetsRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -11864,7 +11864,7 @@ export default function CreateCompositeDogForm(props) {
               id: getIDValue.CompositeBowl?.(r),
               label: getDisplayValue.CompositeBowl?.(r),
             }))}
-          isLoading={CompositeBowlLoading}
+          isLoading={compositeBowlLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeBowlValue(
               compositeBowlRecords.find((r) =>
@@ -11950,7 +11950,7 @@ export default function CreateCompositeDogForm(props) {
               id: getIDValue.CompositeOwner?.(r),
               label: getDisplayValue.CompositeOwner?.(r),
             }))}
-          isLoading={CompositeOwnerLoading}
+          isLoading={compositeOwnerLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeOwnerValue(
               compositeOwnerRecords.find((r) =>
@@ -12035,7 +12035,7 @@ export default function CreateCompositeDogForm(props) {
               id: getIDValue.CompositeToys?.(r),
               label: getDisplayValue.CompositeToys?.(r),
             }))}
-          isLoading={CompositeToysLoading}
+          isLoading={compositeToysLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeToysValue(
               compositeToyRecords.find((r) =>
@@ -12116,7 +12116,7 @@ export default function CreateCompositeDogForm(props) {
             id: getIDValue.CompositeVets?.(r),
             label: getDisplayValue.CompositeVets?.(r),
           }))}
-          isLoading={CompositeVetsLoading}
+          isLoading={compositeVetsLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeVetsValue(
               compositeVetRecords.find((r) =>
@@ -13562,8 +13562,8 @@ export default function CreateDogForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Owner, setOwner] = React.useState(initialValues.Owner);
-  const [OwnerLoading, setOwnerLoading] = React.useState(false);
-  const [OwnerRecords, setOwnerRecords] = React.useState([]);
+  const [ownerLoading, setOwnerLoading] = React.useState(false);
+  const [ownerRecords, setOwnerRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -13801,7 +13801,7 @@ export default function CreateDogForm(props) {
               id: getIDValue.Owner?.(r),
               label: getDisplayValue.Owner?.(r),
             }))}
-          isLoading={OwnerLoading}
+          isLoading={ownerLoading}
           onSelect={({ id, label }) => {
             setCurrentOwnerValue(
               ownerRecords.find((r) =>
@@ -14099,8 +14099,8 @@ export default function CreateOwnerForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Dog, setDog] = React.useState(initialValues.Dog);
-  const [DogLoading, setDogLoading] = React.useState(false);
-  const [DogRecords, setDogRecords] = React.useState([]);
+  const [dogLoading, setDogLoading] = React.useState(false);
+  const [dogRecords, setDogRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -14343,7 +14343,7 @@ export default function CreateOwnerForm(props) {
               id: getIDValue.Dog?.(r),
               label: getDisplayValue.Dog?.(r),
             }))}
-          isLoading={DogLoading}
+          isLoading={dogLoading}
           onSelect={({ id, label }) => {
             setCurrentDogValue(
               dogRecords.find((r) =>

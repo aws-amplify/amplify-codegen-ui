@@ -77,6 +77,9 @@ export const getRecordsName = (modelName: string, capitalized = false) =>
 export const getRecordName = (modelName: string, capitalized = false) =>
   `${(capitalized ? capitalizeFirstLetter : lowerCaseFirst)(modelName)}Record`;
 
+export const getLoadingName = (modelName: string, capitalized = false) =>
+  `${(capitalized ? capitalizeFirstLetter : lowerCaseFirst)(modelName)}Loading`;
+
 export const getLinkedDataName = (modelName: string) => `linked${capitalizeFirstLetter(modelName)}`;
 
 export const getCanUnlinkModelName = (modelName: string) => `canUnlink${capitalizeFirstLetter(modelName)}`;
@@ -266,8 +269,10 @@ export const getUseStateHooks = (
     }
 
     if (dataApi === 'GraphQL' && relationship) {
-      acc.push(buildUseStateExpression(`${renderedFieldName}Loading`, factory.createFalse()));
-      acc.push(buildUseStateExpression(`${renderedFieldName}Records`, factory.createArrayLiteralExpression([], false)));
+      acc.push(buildUseStateExpression(getLoadingName(renderedFieldName), factory.createFalse()));
+      acc.push(
+        buildUseStateExpression(getRecordsName(renderedFieldName), factory.createArrayLiteralExpression([], false)),
+      );
     }
     return acc;
   }, []);

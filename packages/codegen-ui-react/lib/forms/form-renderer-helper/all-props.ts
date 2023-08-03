@@ -29,7 +29,7 @@ import {
   buildOnBlurStatement,
   buildOnSelect,
 } from './event-handler-props';
-import { getArrayChildRefName, resetValuesName, getPropName } from './form-state';
+import { getArrayChildRefName, resetValuesName, getPropName, getLoadingName } from './form-state';
 import { shouldWrapInArrayField } from './render-checkers';
 import { getAutocompleteOptionsProp } from './model-values';
 import { buildCtaLayoutProperties } from '../../react-component-render-helper';
@@ -100,7 +100,7 @@ export const addFormAttributes = (
         attributes.push(
           factory.createJsxAttribute(
             factory.createIdentifier('isLoading'),
-            factory.createJsxExpression(undefined, factory.createIdentifier(`${renderedVariableName}Loading`)),
+            factory.createJsxExpression(undefined, factory.createIdentifier(getLoadingName(renderedVariableName))),
           ),
         );
       }
