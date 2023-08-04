@@ -379,10 +379,12 @@ export function buildOnSelect({
   sanitizedFieldName,
   fieldName,
   fieldConfig,
+  dataApi,
 }: {
   sanitizedFieldName: string;
   fieldName: string;
   fieldConfig: FieldConfigMetadata;
+  dataApi?: DataApiKind;
 }): JsxAttribute {
   const labelString = 'label';
   const idString = 'id';
@@ -405,7 +407,7 @@ export function buildOnSelect({
     nextCurrentDisplayValue = factory.createIdentifier(labelString);
 
     nextCurrentValue = getMatchEveryModelFieldCallExpression({
-      recordsArrayName: getRecordsName(model),
+      recordsArrayName: dataApi === 'GraphQL' ? `${fieldName}Records` : getRecordsName(model),
       JSONName: idString,
     });
   }

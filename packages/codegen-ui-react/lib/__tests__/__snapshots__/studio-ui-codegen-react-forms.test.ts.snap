@@ -340,12 +340,12 @@ export default function CreateOwnerForm(props) {
                 variables: {
                   input: {
                     ...Dog,
-                    Owner: owner,
+                    owner: owner,
                   },
                 },
               })
             );
-            const ownerToUnlink = await dogToLink.Owner;
+            const ownerToUnlink = await dogToLink.owner;
             if (ownerToUnlink) {
               promises.push(
                 API.graphql({
@@ -437,16 +437,16 @@ export default function CreateOwnerForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Dog\\"
           value={currentDogDisplayValue}
-          options={dogRecords
-            .filter((r) => !DogIdSet.has(getIDValue.Dog?.(r)))
-            .map((r) => ({
-              id: getIDValue.Dog?.(r),
-              label: getDisplayValue.Dog?.(r),
-            }))}
+          options={DogRecords.filter(
+            (r) => !DogIdSet.has(getIDValue.Dog?.(r))
+          ).map((r) => ({
+            id: getIDValue.Dog?.(r),
+            label: getDisplayValue.Dog?.(r),
+          }))}
           isLoading={DogLoading}
           onSelect={({ id, label }) => {
             setCurrentDogValue(
-              dogRecords.find((r) =>
+              DogRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -1765,16 +1765,16 @@ export default function MyMemberForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Team\\"
           value={currentTeamDisplayValue}
-          options={teamRecords
-            .filter((r) => !TeamIdSet.has(getIDValue.Team?.(r)))
-            .map((r) => ({
-              id: getIDValue.Team?.(r),
-              label: getDisplayValue.Team?.(r),
-            }))}
+          options={TeamRecords.filter(
+            (r) => !TeamIdSet.has(getIDValue.Team?.(r))
+          ).map((r) => ({
+            id: getIDValue.Team?.(r),
+            label: getDisplayValue.Team?.(r),
+          }))}
           isLoading={TeamLoading}
           onSelect={({ id, label }) => {
             setCurrentTeamValue(
-              teamRecords.find((r) =>
+              TeamRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -2279,16 +2279,16 @@ export default function SchoolCreateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Student\\"
           value={currentStudentsDisplayValue}
-          options={studentsRecords
-            .filter((r) => !StudentsIdSet.has(getIDValue.Students?.(r)))
-            .map((r) => ({
-              id: getIDValue.Students?.(r),
-              label: getDisplayValue.Students?.(r),
-            }))}
+          options={StudentsRecords.filter(
+            (r) => !StudentsIdSet.has(getIDValue.Students?.(r))
+          ).map((r) => ({
+            id: getIDValue.Students?.(r),
+            label: getDisplayValue.Students?.(r),
+          }))}
           isLoading={StudentsLoading}
           onSelect={({ id, label }) => {
             setCurrentStudentsValue(
-              studentRecords.find((r) =>
+              StudentsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -2857,7 +2857,7 @@ export default function BookCreateForm(props) {
           isLoading={primaryAuthorLoading}
           onSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(
-              authorRecords.find((r) =>
+              primaryAuthorRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -3383,14 +3383,14 @@ export default function TagCreateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Post\\"
           value={currentPostsDisplayValue}
-          options={postsRecords.map((r) => ({
+          options={PostsRecords.map((r) => ({
             id: getIDValue.Posts?.(r),
             label: getDisplayValue.Posts?.(r),
           }))}
           isLoading={PostsLoading}
           onSelect={({ id, label }) => {
             setCurrentPostsValue(
-              postRecords.find((r) =>
+              PostsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -4072,7 +4072,7 @@ export default function BookCreateForm(props) {
           isLoading={primaryAuthorLoading}
           onSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(
-              authorRecords.find((r) =>
+              primaryAuthorRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -4153,7 +4153,7 @@ export default function BookCreateForm(props) {
           isLoading={primaryTitleLoading}
           onSelect={({ id, label }) => {
             setCurrentPrimaryTitleValue(
-              titleRecords.find((r) =>
+              primaryTitleRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -4809,14 +4809,14 @@ export default function PostUpdateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Comment\\"
           value={currentCommentsDisplayValue}
-          options={commentsRecords.map((r) => ({
+          options={CommentsRecords.map((r) => ({
             id: getIDValue.Comments?.(r),
             label: getDisplayValue.Comments?.(r),
           }))}
           isLoading={CommentsLoading}
           onSelect={({ id, label }) => {
             setCurrentCommentsValue(
-              commentRecords.find((r) =>
+              CommentsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -6373,7 +6373,7 @@ export default function MovieUpdateForm(props) {
           isLoading={tagsLoading}
           onSelect={({ id, label }) => {
             setCurrentTagsValue(
-              tagRecords.find((r) =>
+              tagsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -7065,16 +7065,16 @@ export default function CommentUpdateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Post\\"
           value={currentPostDisplayValue}
-          options={postRecords
-            .filter((r) => !PostIdSet.has(getIDValue.Post?.(r)))
-            .map((r) => ({
-              id: getIDValue.Post?.(r),
-              label: getDisplayValue.Post?.(r),
-            }))}
+          options={PostRecords.filter(
+            (r) => !PostIdSet.has(getIDValue.Post?.(r))
+          ).map((r) => ({
+            id: getIDValue.Post?.(r),
+            label: getDisplayValue.Post?.(r),
+          }))}
           isLoading={PostLoading}
           onSelect={({ id, label }) => {
             setCurrentPostValue(
-              postRecords.find((r) =>
+              PostRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -7785,16 +7785,16 @@ export default function CommentUpdateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Post\\"
           value={currentPostDisplayValue}
-          options={postRecords
-            .filter((r) => !PostIdSet.has(getIDValue.Post?.(r)))
-            .map((r) => ({
-              id: getIDValue.Post?.(r),
-              label: getDisplayValue.Post?.(r),
-            }))}
+          options={PostRecords.filter(
+            (r) => !PostIdSet.has(getIDValue.Post?.(r))
+          ).map((r) => ({
+            id: getIDValue.Post?.(r),
+            label: getDisplayValue.Post?.(r),
+          }))}
           isLoading={PostLoading}
           onSelect={({ id, label }) => {
             setCurrentPostValue(
-              postRecords.find((r) =>
+              PostRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -8439,7 +8439,7 @@ export default function ClassUpdateForm(props) {
           isLoading={studentsLoading}
           onSelect={({ id, label }) => {
             setCurrentStudentsValue(
-              studentRecords.find((r) =>
+              studentsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -9272,16 +9272,16 @@ export default function UpdateCPKTeacherForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CPKStudent\\"
           value={currentCPKStudentDisplayValue}
-          options={cPKStudentRecords
-            .filter((r) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(r)))
-            .map((r) => ({
-              id: getIDValue.CPKStudent?.(r),
-              label: getDisplayValue.CPKStudent?.(r),
-            }))}
+          options={CPKStudentRecords.filter(
+            (r) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(r))
+          ).map((r) => ({
+            id: getIDValue.CPKStudent?.(r),
+            label: getDisplayValue.CPKStudent?.(r),
+          }))}
           isLoading={CPKStudentLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKStudentValue(
-              cPKStudentRecords.find((r) =>
+              CPKStudentRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -9351,14 +9351,14 @@ export default function UpdateCPKTeacherForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CPKClass\\"
           value={currentCPKClassesDisplayValue}
-          options={cPKClassesRecords.map((r) => ({
+          options={CPKClassesRecords.map((r) => ({
             id: getIDValue.CPKClasses?.(r),
             label: getDisplayValue.CPKClasses?.(r),
           }))}
           isLoading={CPKClassesLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKClassesValue(
-              cPKClassRecords.find((r) =>
+              CPKClassesRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -9427,16 +9427,16 @@ export default function UpdateCPKTeacherForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CPKProject\\"
           value={currentCPKProjectsDisplayValue}
-          options={cPKProjectsRecords
-            .filter((r) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(r)))
-            .map((r) => ({
-              id: getIDValue.CPKProjects?.(r),
-              label: getDisplayValue.CPKProjects?.(r),
-            }))}
+          options={CPKProjectsRecords.filter(
+            (r) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(r))
+          ).map((r) => ({
+            id: getIDValue.CPKProjects?.(r),
+            label: getDisplayValue.CPKProjects?.(r),
+          }))}
           isLoading={CPKProjectsLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKProjectsValue(
-              cPKProjectRecords.find((r) =>
+              CPKProjectsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -10921,16 +10921,16 @@ export default function CreateCommentForm(props) {
           isReadOnly={false}
           placeholder=\\"Search User\\"
           value={currentUserDisplayValue}
-          options={userRecords
-            .filter((r) => !UserIdSet.has(getIDValue.User?.(r)))
-            .map((r) => ({
-              id: getIDValue.User?.(r),
-              label: getDisplayValue.User?.(r),
-            }))}
+          options={UserRecords.filter(
+            (r) => !UserIdSet.has(getIDValue.User?.(r))
+          ).map((r) => ({
+            id: getIDValue.User?.(r),
+            label: getDisplayValue.User?.(r),
+          }))}
           isLoading={UserLoading}
           onSelect={({ id, label }) => {
             setCurrentUserValue(
-              userRecords.find((r) =>
+              UserRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -10997,16 +10997,16 @@ export default function CreateCommentForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Org\\"
           value={currentOrgDisplayValue}
-          options={orgRecords
-            .filter((r) => !OrgIdSet.has(getIDValue.Org?.(r)))
-            .map((r) => ({
-              id: getIDValue.Org?.(r),
-              label: getDisplayValue.Org?.(r),
-            }))}
+          options={OrgRecords.filter(
+            (r) => !OrgIdSet.has(getIDValue.Org?.(r))
+          ).map((r) => ({
+            id: getIDValue.Org?.(r),
+            label: getDisplayValue.Org?.(r),
+          }))}
           isLoading={OrgLoading}
           onSelect={({ id, label }) => {
             setCurrentOrgValue(
-              orgRecords.find((r) =>
+              OrgRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -11914,18 +11914,16 @@ export default function CreateCompositeDogForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeBowl\\"
           value={currentCompositeBowlDisplayValue}
-          options={compositeBowlRecords
-            .filter(
-              (r) => !CompositeBowlIdSet.has(getIDValue.CompositeBowl?.(r))
-            )
-            .map((r) => ({
-              id: getIDValue.CompositeBowl?.(r),
-              label: getDisplayValue.CompositeBowl?.(r),
-            }))}
+          options={CompositeBowlRecords.filter(
+            (r) => !CompositeBowlIdSet.has(getIDValue.CompositeBowl?.(r))
+          ).map((r) => ({
+            id: getIDValue.CompositeBowl?.(r),
+            label: getDisplayValue.CompositeBowl?.(r),
+          }))}
           isLoading={CompositeBowlLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeBowlValue(
-              compositeBowlRecords.find((r) =>
+              CompositeBowlRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -12000,18 +11998,16 @@ export default function CreateCompositeDogForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeOwner\\"
           value={currentCompositeOwnerDisplayValue}
-          options={compositeOwnerRecords
-            .filter(
-              (r) => !CompositeOwnerIdSet.has(getIDValue.CompositeOwner?.(r))
-            )
-            .map((r) => ({
-              id: getIDValue.CompositeOwner?.(r),
-              label: getDisplayValue.CompositeOwner?.(r),
-            }))}
+          options={CompositeOwnerRecords.filter(
+            (r) => !CompositeOwnerIdSet.has(getIDValue.CompositeOwner?.(r))
+          ).map((r) => ({
+            id: getIDValue.CompositeOwner?.(r),
+            label: getDisplayValue.CompositeOwner?.(r),
+          }))}
           isLoading={CompositeOwnerLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeOwnerValue(
-              compositeOwnerRecords.find((r) =>
+              CompositeOwnerRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -12085,18 +12081,16 @@ export default function CreateCompositeDogForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeToy\\"
           value={currentCompositeToysDisplayValue}
-          options={compositeToysRecords
-            .filter(
-              (r) => !CompositeToysIdSet.has(getIDValue.CompositeToys?.(r))
-            )
-            .map((r) => ({
-              id: getIDValue.CompositeToys?.(r),
-              label: getDisplayValue.CompositeToys?.(r),
-            }))}
+          options={CompositeToysRecords.filter(
+            (r) => !CompositeToysIdSet.has(getIDValue.CompositeToys?.(r))
+          ).map((r) => ({
+            id: getIDValue.CompositeToys?.(r),
+            label: getDisplayValue.CompositeToys?.(r),
+          }))}
           isLoading={CompositeToysLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeToysValue(
-              compositeToyRecords.find((r) =>
+              CompositeToysRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -12170,14 +12164,14 @@ export default function CreateCompositeDogForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeVet\\"
           value={currentCompositeVetsDisplayValue}
-          options={compositeVetsRecords.map((r) => ({
+          options={CompositeVetsRecords.map((r) => ({
             id: getIDValue.CompositeVets?.(r),
             label: getDisplayValue.CompositeVets?.(r),
           }))}
           isLoading={CompositeVetsLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeVetsValue(
-              compositeVetRecords.find((r) =>
+              CompositeVetsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -12730,7 +12724,7 @@ export default function CreatePostForm(props) {
           isLoading={commentsLoading}
           onSelect={({ id, label }) => {
             setCurrentCommentsValue(
-              commentRecords.find((r) =>
+              commentsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -13324,7 +13318,7 @@ export default function UpdatePostForm(props) {
           isLoading={commentsLoading}
           onSelect={({ id, label }) => {
             setCurrentCommentsValue(
-              commentRecords.find((r) =>
+              commentsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -13447,6 +13441,7 @@ import {
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Owner } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listOwners } from \\"../graphql/queries\\";
@@ -13622,17 +13617,17 @@ export default function CreateDogForm(props) {
   } = props;
   const initialValues = {
     name: \\"\\",
-    Owner: undefined,
+    owner: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
-  const [Owner, setOwner] = React.useState(initialValues.Owner);
-  const [OwnerLoading, setOwnerLoading] = React.useState(false);
-  const [OwnerRecords, setOwnerRecords] = React.useState([]);
+  const [owner, setOwner] = React.useState(initialValues.owner);
+  const [ownerLoading, setOwnerLoading] = React.useState(false);
+  const [ownerRecords, setOwnerRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
-    setOwner(initialValues.Owner);
+    setOwner(initialValues.owner);
     setCurrentOwnerValue(undefined);
     setCurrentOwnerDisplayValue(\\"\\");
     setErrors({});
@@ -13640,21 +13635,21 @@ export default function CreateDogForm(props) {
   const [currentOwnerDisplayValue, setCurrentOwnerDisplayValue] =
     React.useState(\\"\\");
   const [currentOwnerValue, setCurrentOwnerValue] = React.useState(undefined);
-  const OwnerRef = React.createRef();
+  const ownerRef = React.createRef();
   const getIDValue = {
-    Owner: (r) => JSON.stringify({ id: r?.id }),
+    owner: (r) => JSON.stringify({ id: r?.id }),
   };
-  const OwnerIdSet = new Set(
-    Array.isArray(Owner)
-      ? Owner.map((r) => getIDValue.Owner?.(r))
-      : getIDValue.Owner?.(Owner)
+  const ownerIdSet = new Set(
+    Array.isArray(owner)
+      ? owner.map((r) => getIDValue.owner?.(r))
+      : getIDValue.owner?.(owner)
   );
   const getDisplayValue = {
-    Owner: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+    owner: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
   const validations = {
     name: [],
-    Owner: [{ type: \\"Required\\", validationMessage: \\"Owner is required.\\" }],
+    owner: [{ type: \\"Required\\", validationMessage: \\"Owner is required.\\" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -13694,7 +13689,7 @@ export default function CreateDogForm(props) {
         })
       )?.data?.listOwners?.items;
       var loaded = result.filter(
-        (item) => !OwnerIdSet.has(getIDValue.Owner?.(item))
+        (item) => !ownerIdSet.has(getIDValue.owner?.(item))
       );
       newOptions.push(...loaded);
       newNext = result.nextToken;
@@ -13715,7 +13710,7 @@ export default function CreateDogForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          Owner,
+          owner,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -13762,7 +13757,7 @@ export default function CreateDogForm(props) {
             },
           });
           const promises = [];
-          const ownerToLink = modelFields.Owner;
+          const ownerToLink = modelFields.owner;
           if (ownerToLink) {
             promises.push(
               API.graphql({
@@ -13810,7 +13805,7 @@ export default function CreateDogForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
-              Owner,
+              owner,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -13832,10 +13827,10 @@ export default function CreateDogForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              Owner: value,
+              owner: value,
             };
             const result = onChange(modelFields);
-            value = result?.Owner ?? value;
+            value = result?.owner ?? value;
           }
           setOwner(value);
           setCurrentOwnerValue(undefined);
@@ -13843,17 +13838,17 @@ export default function CreateDogForm(props) {
         }}
         currentFieldValue={currentOwnerValue}
         label={\\"Owner\\"}
-        items={Owner ? [Owner] : []}
-        hasError={errors?.Owner?.hasError}
-        errorMessage={errors?.Owner?.errorMessage}
-        getBadgeText={getDisplayValue.Owner}
+        items={owner ? [owner] : []}
+        hasError={errors?.owner?.hasError}
+        errorMessage={errors?.owner?.errorMessage}
+        getBadgeText={getDisplayValue.owner}
         setFieldValue={(model) => {
           setCurrentOwnerDisplayValue(
-            model ? getDisplayValue.Owner(model) : \\"\\"
+            model ? getDisplayValue.owner(model) : \\"\\"
           );
           setCurrentOwnerValue(model);
         }}
-        inputFieldRef={OwnerRef}
+        inputFieldRef={ownerRef}
         defaultFieldValue={\\"\\"}
       >
         <Autocomplete
@@ -13863,12 +13858,12 @@ export default function CreateDogForm(props) {
           placeholder=\\"Search Owner\\"
           value={currentOwnerDisplayValue}
           options={ownerRecords
-            .filter((r) => !OwnerIdSet.has(getIDValue.Owner?.(r)))
+            .filter((r) => !ownerIdSet.has(getIDValue.owner?.(r)))
             .map((r) => ({
-              id: getIDValue.Owner?.(r),
-              label: getDisplayValue.Owner?.(r),
+              id: getIDValue.owner?.(r),
+              label: getDisplayValue.owner?.(r),
             }))}
-          isLoading={OwnerLoading}
+          isLoading={ownerLoading}
           onSelect={({ id, label }) => {
             setCurrentOwnerValue(
               ownerRecords.find((r) =>
@@ -13878,7 +13873,7 @@ export default function CreateDogForm(props) {
               )
             );
             setCurrentOwnerDisplayValue(label);
-            runValidationTasks(\\"Owner\\", label);
+            runValidationTasks(\\"owner\\", label);
           }}
           onClear={() => {
             setCurrentOwnerDisplayValue(\\"\\");
@@ -13886,18 +13881,18 @@ export default function CreateDogForm(props) {
           onChange={(e) => {
             let { value } = e.target;
             fetchOwnerRecords(value);
-            if (errors.Owner?.hasError) {
-              runValidationTasks(\\"Owner\\", value);
+            if (errors.owner?.hasError) {
+              runValidationTasks(\\"owner\\", value);
             }
             setCurrentOwnerDisplayValue(value);
             setCurrentOwnerValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"Owner\\", currentOwnerDisplayValue)}
-          errorMessage={errors.Owner?.errorMessage}
-          hasError={errors.Owner?.hasError}
-          ref={OwnerRef}
+          onBlur={() => runValidationTasks(\\"owner\\", currentOwnerDisplayValue)}
+          errorMessage={errors.owner?.errorMessage}
+          hasError={errors.owner?.hasError}
+          ref={ownerRef}
           labelHidden={true}
-          {...getOverrideProps(overrides, \\"Owner\\")}
+          {...getOverrideProps(overrides, \\"owner\\")}
         ></Autocomplete>
       </ArrayField>
       <Flex
@@ -13944,17 +13939,17 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type CreateDogFormInputValues = {
     name?: string;
-    Owner?: Owner;
+    owner?: Owner;
 };
 export declare type CreateDogFormValidationValues = {
     name?: ValidationFunction<string>;
-    Owner?: ValidationFunction<Owner>;
+    owner?: ValidationFunction<Owner>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CreateDogFormOverridesProps = {
     CreateDogFormGrid?: PrimitiveOverrideProps<GridProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
-    Owner?: PrimitiveOverrideProps<AutocompleteProps>;
+    owner?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type CreateDogFormProps = React.PropsWithChildren<{
     overrides?: CreateDogFormOverridesProps | undefined | null;
@@ -14310,12 +14305,12 @@ export default function CreateOwnerForm(props) {
                 variables: {
                   input: {
                     ...Dog,
-                    Owner: owner,
+                    owner: owner,
                   },
                 },
               })
             );
-            const ownerToUnlink = await dogToLink.Owner;
+            const ownerToUnlink = await dogToLink.owner;
             if (ownerToUnlink) {
               promises.push(
                 API.graphql({
@@ -14407,16 +14402,16 @@ export default function CreateOwnerForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Dog\\"
           value={currentDogDisplayValue}
-          options={dogRecords
-            .filter((r) => !DogIdSet.has(getIDValue.Dog?.(r)))
-            .map((r) => ({
-              id: getIDValue.Dog?.(r),
-              label: getDisplayValue.Dog?.(r),
-            }))}
+          options={DogRecords.filter(
+            (r) => !DogIdSet.has(getIDValue.Dog?.(r))
+          ).map((r) => ({
+            id: getIDValue.Dog?.(r),
+            label: getDisplayValue.Dog?.(r),
+          }))}
           isLoading={DogLoading}
           onSelect={({ id, label }) => {
             setCurrentDogValue(
-              dogRecords.find((r) =>
+              DogRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -26723,7 +26718,7 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Dog, Owner as Owner0 } from \\"../models\\";
+import { Dog, Owner } from \\"../models\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
@@ -26897,14 +26892,14 @@ export default function CreateDogForm(props) {
   } = props;
   const initialValues = {
     name: \\"\\",
-    Owner: undefined,
+    owner: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
-  const [Owner, setOwner] = React.useState(initialValues.Owner);
+  const [owner, setOwner] = React.useState(initialValues.owner);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
-    setOwner(initialValues.Owner);
+    setOwner(initialValues.owner);
     setCurrentOwnerValue(undefined);
     setCurrentOwnerDisplayValue(\\"\\");
     setErrors({});
@@ -26912,25 +26907,25 @@ export default function CreateDogForm(props) {
   const [currentOwnerDisplayValue, setCurrentOwnerDisplayValue] =
     React.useState(\\"\\");
   const [currentOwnerValue, setCurrentOwnerValue] = React.useState(undefined);
-  const OwnerRef = React.createRef();
+  const ownerRef = React.createRef();
   const getIDValue = {
-    Owner: (r) => JSON.stringify({ id: r?.id }),
+    owner: (r) => JSON.stringify({ id: r?.id }),
   };
-  const OwnerIdSet = new Set(
-    Array.isArray(Owner)
-      ? Owner.map((r) => getIDValue.Owner?.(r))
-      : getIDValue.Owner?.(Owner)
+  const ownerIdSet = new Set(
+    Array.isArray(owner)
+      ? owner.map((r) => getIDValue.owner?.(r))
+      : getIDValue.owner?.(owner)
   );
   const ownerRecords = useDataStoreBinding({
     type: \\"collection\\",
-    model: Owner0,
+    model: Owner,
   }).items;
   const getDisplayValue = {
-    Owner: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+    owner: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
   const validations = {
     name: [],
-    Owner: [{ type: \\"Required\\", validationMessage: \\"Owner is required.\\" }],
+    owner: [{ type: \\"Required\\", validationMessage: \\"Owner is required.\\" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -26959,7 +26954,7 @@ export default function CreateDogForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          Owner,
+          owner,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -26999,11 +26994,11 @@ export default function CreateDogForm(props) {
           });
           const dog = await DataStore.save(new Dog(modelFields));
           const promises = [];
-          const ownerToLink = modelFields.Owner;
+          const ownerToLink = modelFields.owner;
           if (ownerToLink) {
             promises.push(
               DataStore.save(
-                Owner0.copyOf(ownerToLink, (updated) => {
+                Owner.copyOf(ownerToLink, (updated) => {
                   updated.Dog = dog;
                 })
               )
@@ -27043,7 +27038,7 @@ export default function CreateDogForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
-              Owner,
+              owner,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -27065,10 +27060,10 @@ export default function CreateDogForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              Owner: value,
+              owner: value,
             };
             const result = onChange(modelFields);
-            value = result?.Owner ?? value;
+            value = result?.owner ?? value;
           }
           setOwner(value);
           setCurrentOwnerValue(undefined);
@@ -27076,17 +27071,17 @@ export default function CreateDogForm(props) {
         }}
         currentFieldValue={currentOwnerValue}
         label={\\"Owner\\"}
-        items={Owner ? [Owner] : []}
-        hasError={errors?.Owner?.hasError}
-        errorMessage={errors?.Owner?.errorMessage}
-        getBadgeText={getDisplayValue.Owner}
+        items={owner ? [owner] : []}
+        hasError={errors?.owner?.hasError}
+        errorMessage={errors?.owner?.errorMessage}
+        getBadgeText={getDisplayValue.owner}
         setFieldValue={(model) => {
           setCurrentOwnerDisplayValue(
-            model ? getDisplayValue.Owner(model) : \\"\\"
+            model ? getDisplayValue.owner(model) : \\"\\"
           );
           setCurrentOwnerValue(model);
         }}
-        inputFieldRef={OwnerRef}
+        inputFieldRef={ownerRef}
         defaultFieldValue={\\"\\"}
       >
         <Autocomplete
@@ -27096,10 +27091,10 @@ export default function CreateDogForm(props) {
           placeholder=\\"Search Owner\\"
           value={currentOwnerDisplayValue}
           options={ownerRecords
-            .filter((r) => !OwnerIdSet.has(getIDValue.Owner?.(r)))
+            .filter((r) => !ownerIdSet.has(getIDValue.owner?.(r)))
             .map((r) => ({
-              id: getIDValue.Owner?.(r),
-              label: getDisplayValue.Owner?.(r),
+              id: getIDValue.owner?.(r),
+              label: getDisplayValue.owner?.(r),
             }))}
           onSelect={({ id, label }) => {
             setCurrentOwnerValue(
@@ -27110,25 +27105,25 @@ export default function CreateDogForm(props) {
               )
             );
             setCurrentOwnerDisplayValue(label);
-            runValidationTasks(\\"Owner\\", label);
+            runValidationTasks(\\"owner\\", label);
           }}
           onClear={() => {
             setCurrentOwnerDisplayValue(\\"\\");
           }}
           onChange={(e) => {
             let { value } = e.target;
-            if (errors.Owner?.hasError) {
-              runValidationTasks(\\"Owner\\", value);
+            if (errors.owner?.hasError) {
+              runValidationTasks(\\"owner\\", value);
             }
             setCurrentOwnerDisplayValue(value);
             setCurrentOwnerValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"Owner\\", currentOwnerDisplayValue)}
-          errorMessage={errors.Owner?.errorMessage}
-          hasError={errors.Owner?.hasError}
-          ref={OwnerRef}
+          onBlur={() => runValidationTasks(\\"owner\\", currentOwnerDisplayValue)}
+          errorMessage={errors.owner?.errorMessage}
+          hasError={errors.owner?.hasError}
+          ref={ownerRef}
           labelHidden={true}
-          {...getOverrideProps(overrides, \\"Owner\\")}
+          {...getOverrideProps(overrides, \\"owner\\")}
         ></Autocomplete>
       </ArrayField>
       <Flex
@@ -27167,7 +27162,7 @@ exports[`amplify form renderer tests datastore form tests custom form tests shou
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Owner as Owner0 } from \\"../models\\";
+import { Owner } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -27175,17 +27170,17 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type CreateDogFormInputValues = {
     name?: string;
-    Owner?: Owner0;
+    owner?: Owner;
 };
 export declare type CreateDogFormValidationValues = {
     name?: ValidationFunction<string>;
-    Owner?: ValidationFunction<Owner0>;
+    owner?: ValidationFunction<Owner>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CreateDogFormOverridesProps = {
     CreateDogFormGrid?: PrimitiveOverrideProps<GridProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
-    Owner?: PrimitiveOverrideProps<AutocompleteProps>;
+    owner?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type CreateDogFormProps = React.PropsWithChildren<{
     overrides?: CreateDogFormOverridesProps | undefined | null;
@@ -27221,7 +27216,7 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Dog, Owner as Owner0 } from \\"../models\\";
+import { Dog, Owner } from \\"../models\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
@@ -27396,17 +27391,17 @@ export default function UpdateDogForm(props) {
   } = props;
   const initialValues = {
     name: \\"\\",
-    Owner: undefined,
+    owner: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
-  const [Owner, setOwner] = React.useState(initialValues.Owner);
+  const [owner, setOwner] = React.useState(initialValues.owner);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = dogRecord
-      ? { ...initialValues, ...dogRecord, Owner }
+      ? { ...initialValues, ...dogRecord, owner }
       : initialValues;
     setName(cleanValues.name);
-    setOwner(cleanValues.Owner);
+    setOwner(cleanValues.owner);
     setCurrentOwnerValue(undefined);
     setCurrentOwnerDisplayValue(\\"\\");
     setErrors({});
@@ -27416,34 +27411,34 @@ export default function UpdateDogForm(props) {
     const queryData = async () => {
       const record = idProp ? await DataStore.query(Dog, idProp) : dogModelProp;
       setDogRecord(record);
-      const OwnerRecord = record ? await record.Owner : undefined;
-      setOwner(OwnerRecord);
+      const ownerRecord = record ? await record.owner : undefined;
+      setOwner(ownerRecord);
     };
     queryData();
   }, [idProp, dogModelProp]);
-  React.useEffect(resetStateValues, [dogRecord, Owner]);
+  React.useEffect(resetStateValues, [dogRecord, owner]);
   const [currentOwnerDisplayValue, setCurrentOwnerDisplayValue] =
     React.useState(\\"\\");
   const [currentOwnerValue, setCurrentOwnerValue] = React.useState(undefined);
-  const OwnerRef = React.createRef();
+  const ownerRef = React.createRef();
   const getIDValue = {
-    Owner: (r) => JSON.stringify({ id: r?.id }),
+    owner: (r) => JSON.stringify({ id: r?.id }),
   };
-  const OwnerIdSet = new Set(
-    Array.isArray(Owner)
-      ? Owner.map((r) => getIDValue.Owner?.(r))
-      : getIDValue.Owner?.(Owner)
+  const ownerIdSet = new Set(
+    Array.isArray(owner)
+      ? owner.map((r) => getIDValue.owner?.(r))
+      : getIDValue.owner?.(owner)
   );
   const ownerRecords = useDataStoreBinding({
     type: \\"collection\\",
-    model: Owner0,
+    model: Owner,
   }).items;
   const getDisplayValue = {
-    Owner: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+    owner: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
   const validations = {
     name: [],
-    Owner: [{ type: \\"Required\\", validationMessage: \\"Owner is required.\\" }],
+    owner: [{ type: \\"Required\\", validationMessage: \\"Owner is required.\\" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -27472,7 +27467,7 @@ export default function UpdateDogForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          Owner,
+          owner,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -27511,22 +27506,22 @@ export default function UpdateDogForm(props) {
             }
           });
           const promises = [];
-          const ownerToUnlink = await dogRecord.Owner;
+          const ownerToUnlink = await dogRecord.owner;
           if (ownerToUnlink) {
             promises.push(
               DataStore.save(
-                Owner0.copyOf(ownerToUnlink, (updated) => {
+                Owner.copyOf(ownerToUnlink, (updated) => {
                   updated.Dog = undefined;
                   updated.ownerDogId = undefined;
                 })
               )
             );
           }
-          const ownerToLink = modelFields.Owner;
+          const ownerToLink = modelFields.owner;
           if (ownerToLink) {
             promises.push(
               DataStore.save(
-                Owner0.copyOf(ownerToLink, (updated) => {
+                Owner.copyOf(ownerToLink, (updated) => {
                   updated.Dog = dogRecord;
                 })
               )
@@ -27544,7 +27539,7 @@ export default function UpdateDogForm(props) {
             DataStore.save(
               Dog.copyOf(dogRecord, (updated) => {
                 Object.assign(updated, modelFields);
-                if (!modelFields.Owner) {
+                if (!modelFields.owner) {
                   updated.dogOwnerId = undefined;
                 }
               })
@@ -27573,7 +27568,7 @@ export default function UpdateDogForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
-              Owner,
+              owner,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -27595,10 +27590,10 @@ export default function UpdateDogForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              Owner: value,
+              owner: value,
             };
             const result = onChange(modelFields);
-            value = result?.Owner ?? value;
+            value = result?.owner ?? value;
           }
           setOwner(value);
           setCurrentOwnerValue(undefined);
@@ -27606,17 +27601,17 @@ export default function UpdateDogForm(props) {
         }}
         currentFieldValue={currentOwnerValue}
         label={\\"Owner\\"}
-        items={Owner ? [Owner] : []}
-        hasError={errors?.Owner?.hasError}
-        errorMessage={errors?.Owner?.errorMessage}
-        getBadgeText={getDisplayValue.Owner}
+        items={owner ? [owner] : []}
+        hasError={errors?.owner?.hasError}
+        errorMessage={errors?.owner?.errorMessage}
+        getBadgeText={getDisplayValue.owner}
         setFieldValue={(model) => {
           setCurrentOwnerDisplayValue(
-            model ? getDisplayValue.Owner(model) : \\"\\"
+            model ? getDisplayValue.owner(model) : \\"\\"
           );
           setCurrentOwnerValue(model);
         }}
-        inputFieldRef={OwnerRef}
+        inputFieldRef={ownerRef}
         defaultFieldValue={\\"\\"}
       >
         <Autocomplete
@@ -27626,10 +27621,10 @@ export default function UpdateDogForm(props) {
           placeholder=\\"Search Owner\\"
           value={currentOwnerDisplayValue}
           options={ownerRecords
-            .filter((r) => !OwnerIdSet.has(getIDValue.Owner?.(r)))
+            .filter((r) => !ownerIdSet.has(getIDValue.owner?.(r)))
             .map((r) => ({
-              id: getIDValue.Owner?.(r),
-              label: getDisplayValue.Owner?.(r),
+              id: getIDValue.owner?.(r),
+              label: getDisplayValue.owner?.(r),
             }))}
           onSelect={({ id, label }) => {
             setCurrentOwnerValue(
@@ -27640,26 +27635,26 @@ export default function UpdateDogForm(props) {
               )
             );
             setCurrentOwnerDisplayValue(label);
-            runValidationTasks(\\"Owner\\", label);
+            runValidationTasks(\\"owner\\", label);
           }}
           onClear={() => {
             setCurrentOwnerDisplayValue(\\"\\");
           }}
-          defaultValue={Owner}
+          defaultValue={owner}
           onChange={(e) => {
             let { value } = e.target;
-            if (errors.Owner?.hasError) {
-              runValidationTasks(\\"Owner\\", value);
+            if (errors.owner?.hasError) {
+              runValidationTasks(\\"owner\\", value);
             }
             setCurrentOwnerDisplayValue(value);
             setCurrentOwnerValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"Owner\\", currentOwnerDisplayValue)}
-          errorMessage={errors.Owner?.errorMessage}
-          hasError={errors.Owner?.hasError}
-          ref={OwnerRef}
+          onBlur={() => runValidationTasks(\\"owner\\", currentOwnerDisplayValue)}
+          errorMessage={errors.owner?.errorMessage}
+          hasError={errors.owner?.hasError}
+          ref={ownerRef}
           labelHidden={true}
-          {...getOverrideProps(overrides, \\"Owner\\")}
+          {...getOverrideProps(overrides, \\"owner\\")}
         ></Autocomplete>
       </ArrayField>
       <Flex
@@ -27702,7 +27697,7 @@ exports[`amplify form renderer tests datastore form tests custom form tests shou
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Dog, Owner as Owner0 } from \\"../models\\";
+import { Dog, Owner } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -27710,17 +27705,17 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type UpdateDogFormInputValues = {
     name?: string;
-    Owner?: Owner0;
+    owner?: Owner;
 };
 export declare type UpdateDogFormValidationValues = {
     name?: ValidationFunction<string>;
-    Owner?: ValidationFunction<Owner0>;
+    owner?: ValidationFunction<Owner>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type UpdateDogFormOverridesProps = {
     UpdateDogFormGrid?: PrimitiveOverrideProps<GridProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
-    Owner?: PrimitiveOverrideProps<AutocompleteProps>;
+    owner?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type UpdateDogFormProps = React.PropsWithChildren<{
     overrides?: UpdateDogFormOverridesProps | undefined | null;
@@ -28038,11 +28033,11 @@ export default function CreateOwnerForm(props) {
             promises.push(
               DataStore.save(
                 Dog0.copyOf(dogToLink, (updated) => {
-                  updated.Owner = owner;
+                  updated.owner = owner;
                 })
               )
             );
-            const ownerToUnlink = await dogToLink.Owner;
+            const ownerToUnlink = await dogToLink.owner;
             if (ownerToUnlink) {
               promises.push(
                 DataStore.save(
@@ -28563,11 +28558,11 @@ export default function UpdateOwnerForm(props) {
             promises.push(
               DataStore.save(
                 Dog0.copyOf(dogToLink, (updated) => {
-                  updated.Owner = ownerRecord;
+                  updated.owner = ownerRecord;
                 })
               )
             );
-            const ownerToUnlink = await dogToLink.Owner;
+            const ownerToUnlink = await dogToLink.owner;
             if (ownerToUnlink) {
               promises.push(
                 DataStore.save(

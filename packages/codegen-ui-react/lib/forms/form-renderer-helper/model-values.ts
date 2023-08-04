@@ -282,7 +282,7 @@ function getModelTypeSuggestions({
 }): CallExpression {
   const recordString = 'r';
   const labelExpression = getDisplayValueCallChain({ fieldName, recordString });
-  const optionsRecords = dataApi === 'GraphQL' ? getRecordsName(fieldName) : getRecordsName(modelName);
+  const optionsRecords = dataApi === 'GraphQL' ? `${fieldName}Records` : getRecordsName(modelName);
 
   const mappingFunction = factory.createArrowFunction(
     undefined,

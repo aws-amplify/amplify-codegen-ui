@@ -105,7 +105,7 @@ export const addFormAttributes = (
         );
       }
       attributes.push(
-        buildOnSelect({ sanitizedFieldName: renderedVariableName, fieldConfig, fieldName: componentName }),
+        buildOnSelect({ sanitizedFieldName: renderedVariableName, fieldConfig, fieldName: componentName, dataApi }),
       );
       attributes.push(buildOnClearStatement(componentName, fieldConfig));
     }
