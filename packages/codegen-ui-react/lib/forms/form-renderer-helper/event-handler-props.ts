@@ -36,7 +36,7 @@ import {
   Expression,
   ExpressionStatement,
 } from 'typescript';
-import { lowerCaseFirst, getSetNameIdentifier, getModelNameProp } from '../../helpers';
+import { lowerCaseFirst, getSetNameIdentifier, getModelNameProp, fieldMatchesModel } from '../../helpers';
 import { buildTargetVariable } from './event-targets';
 import {
   buildAccessChain,
@@ -379,10 +379,12 @@ export function buildOnSelect({
   sanitizedFieldName,
   fieldName,
   fieldConfig,
+  dataApi,
 }: {
   sanitizedFieldName: string;
   fieldName: string;
   fieldConfig: FieldConfigMetadata;
+  dataApi?: DataApiKind;
 }): JsxAttribute {
   const labelString = 'label';
   const idString = 'id';
@@ -405,7 +407,8 @@ export function buildOnSelect({
     nextCurrentDisplayValue = factory.createIdentifier(labelString);
 
     nextCurrentValue = getMatchEveryModelFieldCallExpression({
-      recordsArrayName: getRecordsName(model),
+      recordsArrayName:
+        dataApi === 'GraphQL' ? getRecordsName(fieldName, fieldMatchesModel(fieldName, model)) : getRecordsName(model),
       JSONName: idString,
     });
   }
