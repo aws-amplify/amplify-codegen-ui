@@ -319,8 +319,8 @@ export default function CreateOwnerForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const owner = await API.graphql({
@@ -838,8 +838,8 @@ export default function MyPostForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -1562,8 +1562,8 @@ export default function MyMemberForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await API.graphql({
@@ -2170,8 +2170,8 @@ export default function SchoolCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -2723,8 +2723,8 @@ export default function BookCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await API.graphql({
@@ -3271,8 +3271,8 @@ export default function TagCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -3936,8 +3936,8 @@ export default function BookCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await API.graphql({
@@ -4605,8 +4605,8 @@ export default function PostUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -5263,8 +5263,8 @@ export default function MyPostForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -6092,8 +6092,8 @@ export default function MovieUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -6889,8 +6889,8 @@ export default function CommentUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -7609,8 +7609,8 @@ export default function CommentUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -8283,8 +8283,8 @@ export default function ClassUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -9029,8 +9029,8 @@ export default function UpdateCPKTeacherForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -9930,8 +9930,8 @@ export default function CreateCompositeToyForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await API.graphql({
@@ -10752,8 +10752,8 @@ export default function CreateCommentForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await API.graphql({
@@ -11715,8 +11715,8 @@ export default function CreateCompositeDogForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -12613,8 +12613,8 @@ export default function CreatePostForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -13175,8 +13175,8 @@ export default function UpdatePostForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -13749,8 +13749,8 @@ export default function CreateDogForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const dog = await API.graphql({
@@ -14289,8 +14289,8 @@ export default function CreateOwnerForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const owner = await API.graphql({
@@ -14847,8 +14847,8 @@ export default function CommentUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await API.graphql({
@@ -15878,8 +15878,8 @@ export default function CreateCompositeToyForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(new CompositeToy(modelFields));
@@ -16565,8 +16565,8 @@ export default function CreateCommentForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(new Comment(modelFields));
@@ -17390,8 +17390,8 @@ export default function CreateCompositeDogForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -19982,8 +19982,8 @@ export default function MyPostForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -20717,8 +20717,8 @@ export default function UpdateOrgForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -21410,8 +21410,8 @@ export default function UpdateCompositeDogForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -22489,8 +22489,8 @@ export default function UpdateCPKTeacherForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -25826,8 +25826,8 @@ export default function UpdateCompositeDogForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -26993,8 +26993,8 @@ export default function CreateDogForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const dog = await DataStore.save(new Dog(modelFields));
@@ -27506,8 +27506,8 @@ export default function UpdateDogForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -28027,8 +28027,8 @@ export default function CreateOwnerForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const owner = await DataStore.save(new Owner(modelFields));
@@ -28543,8 +28543,8 @@ export default function UpdateOwnerForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -29068,8 +29068,8 @@ export default function MyPostForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -29733,8 +29733,8 @@ export default function TagCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -30317,8 +30317,8 @@ export default function MyMemberForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(new Member(modelFields));
@@ -30885,8 +30885,8 @@ export default function SchoolCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -31396,8 +31396,8 @@ export default function BookCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(new Book(modelFields));
@@ -31908,8 +31908,8 @@ export default function TagCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -32510,8 +32510,8 @@ export default function BookCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(new Book(modelFields));
@@ -33124,8 +33124,8 @@ export default function MyPostForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -33880,8 +33880,8 @@ export default function SchoolUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -34448,8 +34448,8 @@ export default function SchoolUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -35067,8 +35067,8 @@ export default function MyMemberForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(
@@ -35687,8 +35687,8 @@ export default function TagUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -36315,8 +36315,8 @@ export default function MyFlexCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -36908,8 +36908,8 @@ export default function BlogCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(new Blog(modelFields));
@@ -37510,8 +37510,8 @@ export default function InputGalleryCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(new InputGallery(modelFields));
@@ -38496,8 +38496,8 @@ export default function InputGalleryUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(
@@ -39377,8 +39377,8 @@ export default function MyFlexUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -40044,8 +40044,8 @@ export default function PostCreateFormRow(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -40756,8 +40756,8 @@ export default function MyMemberForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(new Member(modelFields));
@@ -41121,8 +41121,8 @@ export default function CreateProductForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(new Product(modelFields));
@@ -41348,8 +41348,8 @@ export default function UpdateProductForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(
@@ -41623,8 +41623,8 @@ export default function UpdateProductForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(
@@ -42061,8 +42061,8 @@ export default function UpdateCarForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(
@@ -42571,8 +42571,8 @@ export default function UpdateDealershipForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
-              modelFields[key] = undefined;
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
             }
           });
           const promises = [];

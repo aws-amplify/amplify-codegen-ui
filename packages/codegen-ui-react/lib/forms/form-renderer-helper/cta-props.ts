@@ -166,7 +166,7 @@ const getRecordUpdateDataStoreCallExpression = ({
 
 /**
   Object.entries(modelFields).forEach(([key, value]) => {
-    if (typeof value === 'string' && value.trim() === "") {
+    if (typeof value === 'string' && value === "") {
       modelFields[key] = undefined;
     }
   });
@@ -213,14 +213,7 @@ export const replaceEmptyStringStatement = factory.createExpressionStatement(
                 ),
                 factory.createToken(SyntaxKind.AmpersandAmpersandToken),
                 factory.createBinaryExpression(
-                  factory.createCallExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('value'),
-                      factory.createIdentifier('trim'),
-                    ),
-                    undefined,
-                    [],
-                  ),
+                  factory.createIdentifier('value'),
                   factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
                   factory.createStringLiteral(''),
                 ),
@@ -234,7 +227,7 @@ export const replaceEmptyStringStatement = factory.createExpressionStatement(
                         factory.createIdentifier('key'),
                       ),
                       factory.createToken(SyntaxKind.EqualsToken),
-                      factory.createIdentifier('undefined'),
+                      factory.createNull(),
                     ),
                   ),
                 ],
