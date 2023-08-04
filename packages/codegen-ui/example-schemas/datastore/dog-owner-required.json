@@ -5,8 +5,8 @@
       "fields": {
         "id": { "name": "id", "isArray": false, "type": "ID", "isRequired": true, "attributes": [] },
         "name": { "name": "name", "isArray": false, "type": "String", "isRequired": false, "attributes": [] },
-        "Owner": {
-          "name": "Owner",
+        "owner": {
+          "name": "owner",
           "isArray": false,
           "type": { "model": "Owner" },
           "isRequired": true,

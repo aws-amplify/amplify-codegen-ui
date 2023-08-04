@@ -46,7 +46,6 @@ import { buildAccessChain, getRecordsName } from './form-state';
 import { getElementAccessExpression, getValidProperty } from './invalid-variable-helpers';
 import { isEnumDataType, isModelDataType } from './render-checkers';
 import { DataApiKind } from '../../react-render-config';
-import { fieldMatchesModel } from '../../helpers';
 
 export const getDisplayValueObjectName = 'getDisplayValue';
 
@@ -283,10 +282,7 @@ function getModelTypeSuggestions({
 }): CallExpression {
   const recordString = 'r';
   const labelExpression = getDisplayValueCallChain({ fieldName, recordString });
-  const optionsRecords =
-    dataApi === 'GraphQL'
-      ? getRecordsName(fieldName, fieldMatchesModel(fieldName, modelName))
-      : getRecordsName(modelName);
+  const optionsRecords = dataApi === 'GraphQL' ? `${fieldName}Records` : getRecordsName(modelName);
 
   const mappingFunction = factory.createArrowFunction(
     undefined,

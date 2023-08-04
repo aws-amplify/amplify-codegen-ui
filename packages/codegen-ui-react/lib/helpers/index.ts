@@ -15,7 +15,6 @@
  */
 import { GenericDataField, GenericDataSchema, StudioFormFields } from '@aws-amplify/codegen-ui/lib/types';
 import { factory, Statement, Expression, NodeFlags, Identifier, ParameterDeclaration, SyntaxKind } from 'typescript';
-import { plural } from 'pluralize';
 import { isPrimitive } from '../primitive';
 
 export const lowerCaseFirst = (input: string) => input.charAt(0).toLowerCase() + input.slice(1);
@@ -219,8 +218,4 @@ export function getControlledComponentDefaultValue(
     }
   });
   return defaultValue;
-}
-
-export function fieldMatchesModel(fieldName: string, modelName: string): boolean {
-  return fieldName === modelName || fieldName === plural(modelName);
 }
