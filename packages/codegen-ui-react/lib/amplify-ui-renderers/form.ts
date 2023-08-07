@@ -22,7 +22,16 @@ import {
   StudioForm,
   StudioNode,
 } from '@aws-amplify/codegen-ui';
-import { factory, JsxAttribute, JsxChild, JsxElement, JsxOpeningElement, Statement, SyntaxKind } from 'typescript';
+import {
+  factory,
+  JsxAttribute,
+  JsxChild,
+  JsxElement,
+  JsxOpeningElement,
+  NodeFlags,
+  Statement,
+  SyntaxKind,
+} from 'typescript';
 import { ReactComponentRenderer } from '../react-component-renderer';
 import { buildFormLayoutProperties, buildOpeningElementProperties } from '../react-component-render-helper';
 import { ImportCollection, ImportSource, ImportValue } from '../imports';
@@ -47,6 +56,10 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     super(component, componentMetadata, importCollection, parent);
   }
 
+  protected isRenderingGraphQL = () => {
+    return this.renderConfig.apiConfiguration?.dataApi === 'GraphQL';
+  };
+
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
     const children = this.component.children ?? [];
 
@@ -57,10 +70,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     );
 
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
-    if (
-      this.form.dataType.dataSourceType === 'DataStore' &&
-      this.renderConfig.apiConfiguration?.dataApi === 'GraphQL'
-    ) {
+    if (this.form.dataType.dataSourceType === 'DataStore' && this.isRenderingGraphQL()) {
       this.importCollection.addMappedImport(ImportValue.API);
     } else if (this.form.dataType.dataSourceType === 'DataStore') {
       this.importCollection.addImport('aws-amplify', 'DataStore');
@@ -184,17 +194,79 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                 factory.createIfStatement(
                   factory.createIdentifier('onError'),
                   factory.createBlock(
-                    [
-                      factory.createExpressionStatement(
-                        factory.createCallExpression(factory.createIdentifier('onError'), undefined, [
-                          factory.createIdentifier('modelFields'),
-                          factory.createPropertyAccessExpression(
-                            factory.createIdentifier('err'),
-                            factory.createIdentifier('message'),
+                    this.isRenderingGraphQL()
+                      ? [
+                          factory.createVariableStatement(
+                            undefined,
+                            factory.createVariableDeclarationList(
+                              [
+                                factory.createVariableDeclaration(
+                                  factory.createIdentifier('messages'),
+                                  undefined,
+                                  undefined,
+                                  factory.createCallExpression(
+                                    factory.createPropertyAccessExpression(
+                                      factory.createCallExpression(
+                                        factory.createPropertyAccessExpression(
+                                          factory.createPropertyAccessExpression(
+                                            factory.createIdentifier('err'),
+                                            factory.createIdentifier('errors'),
+                                          ),
+                                          factory.createIdentifier('map'),
+                                        ),
+                                        undefined,
+                                        [
+                                          factory.createArrowFunction(
+                                            undefined,
+                                            undefined,
+                                            [
+                                              factory.createParameterDeclaration(
+                                                undefined,
+                                                undefined,
+                                                undefined,
+                                                factory.createIdentifier('e'),
+                                                undefined,
+                                                undefined,
+                                                undefined,
+                                              ),
+                                            ],
+                                            undefined,
+                                            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                                            factory.createPropertyAccessExpression(
+                                              factory.createIdentifier('e'),
+                                              factory.createIdentifier('message'),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      factory.createIdentifier('join'),
+                                    ),
+                                    undefined,
+                                    [factory.createStringLiteral('\n')],
+                                  ),
+                                ),
+                              ],
+                              NodeFlags.Const,
+                            ),
                           ),
-                        ]),
-                      ),
-                    ],
+                          factory.createExpressionStatement(
+                            factory.createCallExpression(factory.createIdentifier('onError'), undefined, [
+                              factory.createIdentifier('modelFields'),
+                              factory.createIdentifier('messages'),
+                            ]),
+                          ),
+                        ]
+                      : [
+                          factory.createExpressionStatement(
+                            factory.createCallExpression(factory.createIdentifier('onError'), undefined, [
+                              factory.createIdentifier('modelFields'),
+                              factory.createPropertyAccessExpression(
+                                factory.createIdentifier('err'),
+                                factory.createIdentifier('message'),
+                              ),
+                            ]),
+                          ),
+                        ],
                     true,
                   ),
                   undefined,
