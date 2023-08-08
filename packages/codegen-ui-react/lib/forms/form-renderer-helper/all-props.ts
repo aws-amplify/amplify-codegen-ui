@@ -113,7 +113,9 @@ export const addFormAttributes = (
     if (formMetadata.formActionType === 'update' && !fieldConfig.isArray && !isControlledComponent(componentType)) {
       attributes.push(renderDefaultValueAttribute(renderedVariableName, fieldConfig, componentType));
     }
-    attributes.push(buildOnChangeStatement(component, formMetadata.fieldConfigs, dataApi));
+    attributes.push(
+      buildOnChangeStatement(component, formMetadata.fieldConfigs, dataApi, dataSchema?.models, dataApi === 'GraphQL'),
+    );
     attributes.push(buildOnBlurStatement(componentName, fieldConfig));
     attributes.push(
       factory.createJsxAttribute(

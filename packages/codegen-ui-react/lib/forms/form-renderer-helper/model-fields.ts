@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { factory, NodeFlags, ObjectLiteralElementLike } from 'typescript';
-import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, GenericDataModel } from '@aws-amplify/codegen-ui';
 
 /**
  * builds modelFields object which is used to validate, onSubmit, onSuccess/onError
@@ -33,30 +33,49 @@ import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
 export const buildModelFieldObject = (
   shouldBeConst: boolean,
   fieldConfigs: Record<string, FieldConfigMetadata> = {},
+  models: Record<string, GenericDataModel> = {},
   nameOverrides: Record<string, ObjectLiteralElementLike> = {},
+  isRenderingGraphQL = false,
 ) => {
   const fieldSet = new Set<string>();
   const fields = Object.keys(fieldConfigs).reduce<ObjectLiteralElementLike[]>((acc, value) => {
     const fieldName = value.split('.')[0];
-    const { sanitizedFieldName } = fieldConfigs[value];
+    const { sanitizedFieldName, relationship } = fieldConfigs[value];
     const renderedFieldName = sanitizedFieldName || fieldName;
     if (!fieldSet.has(renderedFieldName)) {
-      let assignment: ObjectLiteralElementLike = factory.createShorthandPropertyAssignment(
-        factory.createIdentifier(fieldName),
-        undefined,
-      );
-
+      let assignments: ObjectLiteralElementLike[] = [
+        factory.createShorthandPropertyAssignment(factory.createIdentifier(fieldName), undefined),
+      ];
       if (nameOverrides[fieldName]) {
-        assignment = nameOverrides[fieldName];
+        assignments = [nameOverrides[fieldName]];
+      } else if (
+        isRenderingGraphQL &&
+        typeof fieldConfigs[value].dataType === 'object' &&
+        relationship &&
+        (relationship.type === 'BELONGS_TO' || relationship.type === 'HAS_ONE')
+      ) {
+        assignments =
+          relationship.associatedFields?.map((associatedField, index) => {
+            return factory.createPropertyAssignment(
+              factory.createStringLiteral(associatedField),
+              factory.createPropertyAccessChain(
+                factory.createIdentifier(fieldName),
+                undefined,
+                models[relationship.relatedModelName].primaryKeys[index],
+              ),
+            );
+          }) || [];
       } else if (sanitizedFieldName) {
         // if overrides present, ignore sanitizedFieldName
-        assignment = factory.createPropertyAssignment(
-          factory.createStringLiteral(fieldName),
-          factory.createIdentifier(sanitizedFieldName),
-        );
+        assignments = [
+          factory.createPropertyAssignment(
+            factory.createStringLiteral(fieldName),
+            factory.createIdentifier(sanitizedFieldName),
+          ),
+        ];
       }
 
-      acc.push(assignment);
+      acc.push(...assignments);
       fieldSet.add(renderedFieldName);
     }
     return acc;
