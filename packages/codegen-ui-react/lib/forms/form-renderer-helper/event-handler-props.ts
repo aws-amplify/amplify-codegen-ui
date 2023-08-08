@@ -22,6 +22,7 @@ import {
   isValidVariableName,
   shouldIncludeCancel,
   InvalidInputError,
+  GenericDataModel,
 } from '@aws-amplify/codegen-ui';
 import {
   BindingElement,
@@ -211,6 +212,8 @@ export const buildOverrideOnChangeStatement = (
   fieldName: string,
   fieldConfigs: Record<string, FieldConfigMetadata>,
   valueNameOverride?: Identifier,
+  models?: Record<string, GenericDataModel>,
+  isRenderingGraphQL = false,
 ): IfStatement => {
   const keyPath = fieldName.split('.');
   const keyName = keyPath[0];
@@ -229,9 +232,15 @@ export const buildOverrideOnChangeStatement = (
     factory.createIdentifier('onChange'),
     factory.createBlock(
       [
-        buildModelFieldObject(true, fieldConfigs, {
-          [keyName]: keyValueExpression,
-        }),
+        buildModelFieldObject(
+          true,
+          fieldConfigs,
+          models || {},
+          {
+            [keyName]: keyValueExpression,
+          },
+          isRenderingGraphQL,
+        ),
         factory.createVariableStatement(
           undefined,
           factory.createVariableDeclarationList(
@@ -286,7 +295,9 @@ function getCallbackVarName(fieldType: string): string {
 export const buildOnChangeStatement = (
   component: StudioComponent | StudioComponentChild,
   fieldConfigs: Record<string, FieldConfigMetadata>,
-  dataApi?: DataApiKind,
+  dataApi: DataApiKind | undefined,
+  models: Record<string, GenericDataModel> = {},
+  isRenderingGraphQL = false,
 ) => {
   const { name: fieldName, componentType: fieldType } = component;
   const fieldConfig = fieldConfigs[fieldName];
@@ -309,7 +320,9 @@ export const buildOnChangeStatement = (
   }
 
   if (!shouldWrapInArrayField(fieldConfig)) {
-    handleChangeStatements.push(buildOverrideOnChangeStatement(fieldName, fieldConfigs));
+    handleChangeStatements.push(
+      buildOverrideOnChangeStatement(fieldName, fieldConfigs, undefined, models, isRenderingGraphQL),
+    );
   }
 
   handleChangeStatements.push(getOnChangeValidationBlock(fieldName));
@@ -515,6 +528,7 @@ export const buildStorageManagerOnChangeStatement = (
   component: StudioComponent | StudioComponentChild,
   fieldConfigs: Record<string, FieldConfigMetadata>,
   handlerName: 'onUploadSuccess' | 'onFileRemove',
+  isRenderingGraphQL: boolean,
 ) => {
   const { name: fieldName } = component;
   const fieldConfig = fieldConfigs[fieldName];
@@ -581,7 +595,7 @@ export const buildStorageManagerOnChangeStatement = (
                           NodeFlags.Let,
                         ),
                       ),
-                      buildOverrideOnChangeStatement(fieldName, fieldConfigs),
+                      buildOverrideOnChangeStatement(fieldName, fieldConfigs, undefined, undefined, isRenderingGraphQL),
                       factory.createReturnStatement(factory.createIdentifier('value')),
                     ],
                     true,

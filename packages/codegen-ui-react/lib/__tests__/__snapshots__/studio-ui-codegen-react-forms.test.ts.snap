@@ -285,7 +285,7 @@ export default function CreateOwnerForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          Dog,
+          ownerDogId: Dog.id,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -388,7 +388,7 @@ export default function CreateOwnerForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
-              Dog,
+              ownerDogId: Dog.id,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -1530,7 +1530,7 @@ export default function MyMemberForm(props) {
         let modelFields = {
           name,
           teamID,
-          Team,
+          teamMembersId: Team.id,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -1637,7 +1637,7 @@ export default function MyMemberForm(props) {
             const modelFields = {
               name: value,
               teamID,
-              Team,
+              teamMembersId: Team.id,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -1660,7 +1660,7 @@ export default function MyMemberForm(props) {
             const modelFields = {
               name,
               teamID: value,
-              Team,
+              teamMembersId: Team.id,
             };
             const result = onChange(modelFields);
             value = result?.teamID ?? value;
@@ -2693,7 +2693,7 @@ export default function BookCreateForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          primaryAuthor,
+          authorId: primaryAuthor.id,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -2799,7 +2799,7 @@ export default function BookCreateForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
-              primaryAuthor,
+              authorId: primaryAuthor.id,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -3907,8 +3907,8 @@ export default function BookCreateForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          primaryAuthor,
-          primaryTitle,
+          authorId: primaryAuthor.id,
+          titleId: primaryTitle.id,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -4014,8 +4014,8 @@ export default function BookCreateForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
-              primaryAuthor,
-              primaryTitle,
+              authorId: primaryAuthor.id,
+              titleId: primaryTitle.id,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -4038,7 +4038,7 @@ export default function BookCreateForm(props) {
             const modelFields = {
               name,
               primaryAuthor: value,
-              primaryTitle,
+              titleId: primaryTitle.id,
             };
             const result = onChange(modelFields);
             value = result?.primaryAuthor ?? value;
@@ -4120,7 +4120,7 @@ export default function BookCreateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              primaryAuthor,
+              authorId: primaryAuthor.id,
               primaryTitle: value,
             };
             const result = onChange(modelFields);
@@ -6864,7 +6864,7 @@ export default function CommentUpdateForm(props) {
         let modelFields = {
           content,
           postID,
-          Post,
+          postCommentsId: Post.id,
           post: post1,
         };
         const validationResponses = await Promise.all(
@@ -6941,7 +6941,7 @@ export default function CommentUpdateForm(props) {
             const modelFields = {
               content: value,
               postID,
-              Post,
+              postCommentsId: Post.id,
               post: post1,
             };
             const result = onChange(modelFields);
@@ -6965,7 +6965,7 @@ export default function CommentUpdateForm(props) {
             const modelFields = {
               content,
               postID: value,
-              Post,
+              postCommentsId: Post.id,
               post: post1,
             };
             const result = onChange(modelFields);
@@ -7124,7 +7124,7 @@ export default function CommentUpdateForm(props) {
             const modelFields = {
               content,
               postID,
-              Post,
+              postCommentsId: Post.id,
               post: value,
             };
             const result = onChange(modelFields);
@@ -7585,7 +7585,7 @@ export default function CommentUpdateForm(props) {
         let modelFields = {
           content,
           postID,
-          Post,
+          postCommentsId: Post.id,
           post: post1,
         };
         const validationResponses = await Promise.all(
@@ -7662,7 +7662,7 @@ export default function CommentUpdateForm(props) {
             const modelFields = {
               content: value,
               postID,
-              Post,
+              postCommentsId: Post.id,
               post: post1,
             };
             const result = onChange(modelFields);
@@ -7686,7 +7686,7 @@ export default function CommentUpdateForm(props) {
             const modelFields = {
               content,
               postID: value,
-              Post,
+              postCommentsId: Post.id,
               post: post1,
             };
             const result = onChange(modelFields);
@@ -7845,7 +7845,7 @@ export default function CommentUpdateForm(props) {
             const modelFields = {
               content,
               postID,
-              Post,
+              postCommentsId: Post.id,
               post: value,
             };
             const result = onChange(modelFields);
@@ -9006,7 +9006,7 @@ export default function UpdateCPKTeacherForm(props) {
         event.preventDefault();
         let modelFields = {
           specialTeacherId,
-          CPKStudent,
+          cPKTeacherCPKStudentSpecialStudentId: CPKStudent.specialStudentId,
           CPKClasses,
           CPKProjects,
         };
@@ -9230,7 +9230,7 @@ export default function UpdateCPKTeacherForm(props) {
           if (onChange) {
             const modelFields = {
               specialTeacherId: value,
-              CPKStudent,
+              cPKTeacherCPKStudentSpecialStudentId: CPKStudent.specialStudentId,
               CPKClasses,
               CPKProjects,
             };
@@ -9333,7 +9333,7 @@ export default function UpdateCPKTeacherForm(props) {
           if (onChange) {
             const modelFields = {
               specialTeacherId,
-              CPKStudent,
+              cPKTeacherCPKStudentSpecialStudentId: CPKStudent.specialStudentId,
               CPKClasses: values,
               CPKProjects,
             };
@@ -9409,7 +9409,7 @@ export default function UpdateCPKTeacherForm(props) {
           if (onChange) {
             const modelFields = {
               specialTeacherId,
-              CPKStudent,
+              cPKTeacherCPKStudentSpecialStudentId: CPKStudent.specialStudentId,
               CPKClasses,
               CPKProjects: values,
             };
@@ -10730,9 +10730,9 @@ export default function CreateCommentForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          post,
-          User,
-          Org,
+          postID: post.id,
+          userCommentsId: User.id,
+          orgCommentsId: Org.id,
           postCommentsId,
         };
         const validationResponses = await Promise.all(
@@ -10805,9 +10805,9 @@ export default function CreateCommentForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
-              post,
-              User,
-              Org,
+              postID: post.id,
+              userCommentsId: User.id,
+              orgCommentsId: Org.id,
               postCommentsId,
             };
             const result = onChange(modelFields);
@@ -10831,8 +10831,8 @@ export default function CreateCommentForm(props) {
             const modelFields = {
               name,
               post: value,
-              User,
-              Org,
+              userCommentsId: User.id,
+              orgCommentsId: Org.id,
               postCommentsId,
             };
             const result = onChange(modelFields);
@@ -10906,9 +10906,9 @@ export default function CreateCommentForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              post,
+              postID: post.id,
               User: value,
-              Org,
+              orgCommentsId: Org.id,
               postCommentsId,
             };
             const result = onChange(modelFields);
@@ -10982,8 +10982,8 @@ export default function CreateCommentForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              post,
-              User,
+              postID: post.id,
+              userCommentsId: User.id,
               Org: value,
               postCommentsId,
             };
@@ -11058,9 +11058,9 @@ export default function CreateCommentForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              post,
-              User,
-              Org,
+              postID: post.id,
+              userCommentsId: User.id,
+              orgCommentsId: Org.id,
               postCommentsId: value,
             };
             const result = onChange(modelFields);
@@ -11694,8 +11694,10 @@ export default function CreateCompositeDogForm(props) {
         let modelFields = {
           name,
           description,
-          CompositeBowl,
-          CompositeOwner,
+          compositeDogCompositeBowlShape: CompositeBowl.shape,
+          compositeDogCompositeBowlSize: CompositeBowl.size,
+          compositeDogCompositeOwnerLastName: CompositeOwner.lastName,
+          compositeDogCompositeOwnerFirstName: CompositeOwner.firstName,
           CompositeToys,
           CompositeVets,
         };
@@ -11843,8 +11845,10 @@ export default function CreateCompositeDogForm(props) {
             const modelFields = {
               name: value,
               description,
-              CompositeBowl,
-              CompositeOwner,
+              compositeDogCompositeBowlShape: CompositeBowl.shape,
+              compositeDogCompositeBowlSize: CompositeBowl.size,
+              compositeDogCompositeOwnerLastName: CompositeOwner.lastName,
+              compositeDogCompositeOwnerFirstName: CompositeOwner.firstName,
               CompositeToys,
               CompositeVets,
             };
@@ -11872,8 +11876,10 @@ export default function CreateCompositeDogForm(props) {
             const modelFields = {
               name,
               description: value,
-              CompositeBowl,
-              CompositeOwner,
+              compositeDogCompositeBowlShape: CompositeBowl.shape,
+              compositeDogCompositeBowlSize: CompositeBowl.size,
+              compositeDogCompositeOwnerLastName: CompositeOwner.lastName,
+              compositeDogCompositeOwnerFirstName: CompositeOwner.firstName,
               CompositeToys,
               CompositeVets,
             };
@@ -11899,7 +11905,8 @@ export default function CreateCompositeDogForm(props) {
               name,
               description,
               CompositeBowl: value,
-              CompositeOwner,
+              compositeDogCompositeOwnerLastName: CompositeOwner.lastName,
+              compositeDogCompositeOwnerFirstName: CompositeOwner.firstName,
               CompositeToys,
               CompositeVets,
             };
@@ -11982,7 +11989,8 @@ export default function CreateCompositeDogForm(props) {
             const modelFields = {
               name,
               description,
-              CompositeBowl,
+              compositeDogCompositeBowlShape: CompositeBowl.shape,
+              compositeDogCompositeBowlSize: CompositeBowl.size,
               CompositeOwner: value,
               CompositeToys,
               CompositeVets,
@@ -12065,8 +12073,10 @@ export default function CreateCompositeDogForm(props) {
             const modelFields = {
               name,
               description,
-              CompositeBowl,
-              CompositeOwner,
+              compositeDogCompositeBowlShape: CompositeBowl.shape,
+              compositeDogCompositeBowlSize: CompositeBowl.size,
+              compositeDogCompositeOwnerLastName: CompositeOwner.lastName,
+              compositeDogCompositeOwnerFirstName: CompositeOwner.firstName,
               CompositeToys: values,
               CompositeVets,
             };
@@ -12148,8 +12158,10 @@ export default function CreateCompositeDogForm(props) {
             const modelFields = {
               name,
               description,
-              CompositeBowl,
-              CompositeOwner,
+              compositeDogCompositeBowlShape: CompositeBowl.shape,
+              compositeDogCompositeBowlSize: CompositeBowl.size,
+              compositeDogCompositeOwnerLastName: CompositeOwner.lastName,
+              compositeDogCompositeOwnerFirstName: CompositeOwner.firstName,
               CompositeToys,
               CompositeVets: values,
             };
@@ -13729,7 +13741,7 @@ export default function CreateDogForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          owner,
+          dogOwnerId: owner.id,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -13825,7 +13837,7 @@ export default function CreateDogForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
-              owner,
+              dogOwnerId: owner.id,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -14270,7 +14282,7 @@ export default function CreateOwnerForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          Dog,
+          ownerDogId: Dog.id,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -14373,7 +14385,7 @@ export default function CreateOwnerForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
-              Dog,
+              ownerDogId: Dog.id,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
