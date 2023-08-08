@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.15.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.0...v2.15.1) (2023-08-08)
+
+### Bug Fixes
+
+- update variables to match local state ([#1062](https://github.com/aws-amplify/amplify-codegen-ui/issues/1062)) ([f016f36](https://github.com/aws-amplify/amplify-codegen-ui/commit/f016f36b3e1a5e5dc7f2724e4bb67048ea6fdc40))
+
 # [2.15.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.14.3...v2.15.0) (2023-08-01)
 
 ### Bug Fixes

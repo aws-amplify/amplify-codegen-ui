@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.15.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.0...v2.15.1) (2023-08-08)
+
+### Bug Fixes
+
+- add fallback to record items ([4d95d36](https://github.com/aws-amplify/amplify-codegen-ui/commit/4d95d36a85d19cb496bc2b488c84ddc8f0fa921d))
+- consolidate batch errors when using GraphQL ([af94de2](https://github.com/aws-amplify/amplify-codegen-ui/commit/af94de230c3a16dc329329bd3ed16477ba04ea89))
+- fetch all related records initially ([37ce0b5](https://github.com/aws-amplify/amplify-codegen-ui/commit/37ce0b5b8869976b189eb9c51429f3635bf7e0b0))
+- remove trim on empty string replace, use null for replacement value ([7ab5bc3](https://github.com/aws-amplify/amplify-codegen-ui/commit/7ab5bc36c5ffac9477a4e3e17a2ae1c3b99fc8c9))
+- update variables to match local state ([#1062](https://github.com/aws-amplify/amplify-codegen-ui/issues/1062)) ([f016f36](https://github.com/aws-amplify/amplify-codegen-ui/commit/f016f36b3e1a5e5dc7f2724e4bb67048ea6fdc40))
+- use related fields for has_one and belongs_to properties when building GraphQL API payloads ([e12116a](https://github.com/aws-amplify/amplify-codegen-ui/commit/e12116aebf2c65e16b64914d754dca5ee59dc5f1))
+
 # [2.15.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.14.3...v2.15.0) (2023-08-01)
 
 ### Bug Fixes
