@@ -1001,9 +1001,9 @@ describe('amplify form renderer tests', () => {
       );
 
       expect(componentText).toContain('postCommentsId');
-      expect(componentText).toContain('postID');
-      expect(componentText).toContain('userCommentsId');
-      expect(componentText).toContain('orgCommentsId');
+      expect(componentText).not.toContain('postID');
+      expect(componentText).not.toContain('userCommentsId');
+      expect(componentText).not.toContain('orgCommentsId');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });

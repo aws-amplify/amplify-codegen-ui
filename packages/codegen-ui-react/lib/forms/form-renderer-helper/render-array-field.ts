@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata, GenericDataModel, LabelDecorator } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, LabelDecorator } from '@aws-amplify/codegen-ui';
 import { Expression, factory, Identifier, JsxAttribute, JsxChild, NodeFlags, SyntaxKind } from 'typescript';
 import {
   buildAccessChain,
@@ -38,16 +38,12 @@ function getOnChangeAttribute({
   renderedFieldName,
   fieldConfigs,
   isLimitedToOneValue,
-  models,
-  isRenderingGraphQL,
 }: {
   setStateName: Identifier;
   fieldName: string;
   renderedFieldName: string;
   fieldConfigs: Record<string, FieldConfigMetadata>;
   isLimitedToOneValue?: boolean;
-  models: Record<string, GenericDataModel> | undefined;
-  isRenderingGraphQL: boolean;
 }): JsxAttribute {
   const fieldConfig = fieldConfigs[fieldName];
   const { dataType, componentType } = fieldConfig;
@@ -101,7 +97,7 @@ function getOnChangeAttribute({
                 NodeFlags.Let,
               ),
             ),
-            buildOverrideOnChangeStatement(fieldName, fieldConfigs, valueName, models, isRenderingGraphQL),
+            buildOverrideOnChangeStatement(fieldName, fieldConfigs, valueName),
             ...setStateStatements,
           ],
           true,
@@ -136,7 +132,6 @@ export const renderArrayFieldComponent = (
   labelDecorator?: LabelDecorator,
   isRequired?: boolean,
   dataApi: DataApiKind = 'DataStore',
-  models: Record<string, GenericDataModel> = {},
 ) => {
   const fieldConfig = fieldConfigs[fieldName];
   const { sanitizedFieldName, dataType, componentType } = fieldConfig;
@@ -177,17 +172,7 @@ export const renderArrayFieldComponent = (
     );
   }
 
-  props.push(
-    getOnChangeAttribute({
-      fieldName,
-      isLimitedToOneValue,
-      fieldConfigs,
-      renderedFieldName,
-      setStateName,
-      models,
-      isRenderingGraphQL: dataApi === 'GraphQL',
-    }),
-  );
+  props.push(getOnChangeAttribute({ fieldName, isLimitedToOneValue, fieldConfigs, renderedFieldName, setStateName }));
   let labelAttribute = factory.createJsxAttribute(
     factory.createIdentifier('label'),
     factory.createJsxExpression(undefined, factory.createStringLiteral(fieldLabel)),
