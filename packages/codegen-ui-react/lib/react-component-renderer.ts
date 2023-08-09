@@ -98,7 +98,6 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
           fieldConfigs,
           labelDecorator,
           isRequired,
-          this.importCollection.rendererConfig?.apiConfiguration?.dataApi === 'GraphQL',
         );
       }
 
@@ -119,7 +118,6 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
           labelDecorator,
           isRequired,
           this.importCollection.rendererConfig?.apiConfiguration?.dataApi,
-          this.componentMetadata.dataSchemaMetadata?.models,
         );
       }
     }

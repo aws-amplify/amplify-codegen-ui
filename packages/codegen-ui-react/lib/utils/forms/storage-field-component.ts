@@ -324,7 +324,6 @@ export const renderStorageFieldComponent = (
   fieldConfigs: Record<string, FieldConfigMetadata>,
   labelDecorator?: LabelDecorator,
   isRequired?: boolean,
-  isRenderingGraphQL = false,
 ) => {
   const { name: componentName } = component;
   const dataTypeName = componentMetadata.formMetadata?.dataType.dataTypeName || '';
@@ -419,12 +418,8 @@ export const renderStorageFieldComponent = (
       );
     }
 
-    storageManagerAttributes.push(
-      buildStorageManagerOnChangeStatement(component, fieldConfigs, 'onUploadSuccess', isRenderingGraphQL),
-    );
-    storageManagerAttributes.push(
-      buildStorageManagerOnChangeStatement(component, fieldConfigs, 'onFileRemove', isRenderingGraphQL),
-    );
+    storageManagerAttributes.push(buildStorageManagerOnChangeStatement(component, fieldConfigs, 'onUploadSuccess'));
+    storageManagerAttributes.push(buildStorageManagerOnChangeStatement(component, fieldConfigs, 'onFileRemove'));
     storageManagerAttributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('processFile'),
