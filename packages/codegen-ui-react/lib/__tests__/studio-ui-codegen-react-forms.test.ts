@@ -1086,6 +1086,18 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
+
+    it('should generate a create form with composite primary key', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/relationships/create-movie',
+        'models/composite-key-movie',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
   });
 
   describe('NoApi form tests', () => {
