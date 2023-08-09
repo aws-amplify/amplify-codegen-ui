@@ -323,14 +323,16 @@ export default function CreateOwnerForm(props) {
               modelFields[key] = null;
             }
           });
-          const owner = await API.graphql({
-            query: createOwner,
-            variables: {
-              input: {
-                ...modelFields,
+          const owner = (
+            await API.graphql({
+              query: createOwner,
+              variables: {
+                input: {
+                  ...modelFields,
+                },
               },
-            },
-          });
+            })
+          )?.data?.createOwner;
           const promises = [];
           const dogToLink = modelFields.Dog;
           if (dogToLink) {
@@ -1854,6 +1856,661 @@ export default function MyMemberForm(props: MyMemberFormProps): React.ReactEleme
 "
 `;
 
+exports[`amplify form renderer tests GraphQL form tests should generate a create form with composite primary key 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Tag } from \\"../API\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
+import { listTags } from \\"../graphql/queries\\";
+import { createMovie, createMovieTags } from \\"../graphql/mutations\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function MovieCreateForm(props) {
+  const {
+    clearOnSuccess = true,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    movieKey: \\"\\",
+    title: \\"\\",
+    genre: \\"\\",
+    rating: \\"\\",
+    tags: [],
+  };
+  const [movieKey, setMovieKey] = React.useState(initialValues.movieKey);
+  const [title, setTitle] = React.useState(initialValues.title);
+  const [genre, setGenre] = React.useState(initialValues.genre);
+  const [rating, setRating] = React.useState(initialValues.rating);
+  const [tags, setTags] = React.useState(initialValues.tags);
+  const [tagsLoading, setTagsLoading] = React.useState(false);
+  const [tagsRecords, setTagsRecords] = React.useState([]);
+  const autocompleteLength = 10;
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setMovieKey(initialValues.movieKey);
+    setTitle(initialValues.title);
+    setGenre(initialValues.genre);
+    setRating(initialValues.rating);
+    setTags(initialValues.tags);
+    setCurrentTagsValue(undefined);
+    setCurrentTagsDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [currentTagsDisplayValue, setCurrentTagsDisplayValue] =
+    React.useState(\\"\\");
+  const [currentTagsValue, setCurrentTagsValue] = React.useState(undefined);
+  const tagsRef = React.createRef();
+  const getIDValue = {
+    tags: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const tagsIdSet = new Set(
+    Array.isArray(tags)
+      ? tags.map((r) => getIDValue.tags?.(r))
+      : getIDValue.tags?.(tags)
+  );
+  const getDisplayValue = {
+    tags: (r) => \`\${r?.label ? r?.label + \\" - \\" : \\"\\"}\${r?.id}\`,
+  };
+  const validations = {
+    movieKey: [{ type: \\"Required\\" }],
+    title: [{ type: \\"Required\\" }],
+    genre: [{ type: \\"Required\\" }],
+    rating: [],
+    tags: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  const fetchTagsRecords = async (value) => {
+    setTagsLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ label: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listTags,
+          variables,
+        })
+      )?.data?.listTags?.items;
+      var loaded = result.filter(
+        (item) => !tagsIdSet.has(getIDValue.tags?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setTagsRecords(newOptions.slice(0, autocompleteLength));
+    setTagsLoading(false);
+  };
+  React.useEffect(() => {
+    fetchTagsRecords(\\"\\");
+  }, []);
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          movieKey,
+          title,
+          genre,
+          rating,
+          tags,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
+            }
+          });
+          const modelFieldsToSave = {
+            movieKey: modelFields.movieKey,
+            title: modelFields.title,
+            genre: modelFields.genre,
+            rating: modelFields.rating,
+          };
+          const movie = (
+            await API.graphql({
+              query: createMovie,
+              variables: {
+                input: {
+                  ...modelFieldsToSave,
+                },
+              },
+            })
+          )?.data?.createMovie;
+          const promises = [];
+          promises.push(
+            ...tags.reduce((promises, tag) => {
+              promises.push(
+                API.graphql({
+                  query: createMovieTags,
+                  variables: {
+                    input: {
+                      movieMovieKey: movie.movieKey,
+                      movietitle: movie.title,
+                      moviegenre: movie.genre,
+                      tagId: Tag.id,
+                    },
+                  },
+                })
+              );
+              return promises;
+            }, [])
+          );
+          await Promise.all(promises);
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
+        } catch (err) {
+          if (onError) {
+            const messages = err.errors.map((e) => e.message).join(\\"\\\\n\\");
+            onError(modelFields, messages);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"MovieCreateForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Movie key\\"
+        isRequired={true}
+        isReadOnly={false}
+        value={movieKey}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              movieKey: value,
+              title,
+              genre,
+              rating,
+              tags,
+            };
+            const result = onChange(modelFields);
+            value = result?.movieKey ?? value;
+          }
+          if (errors.movieKey?.hasError) {
+            runValidationTasks(\\"movieKey\\", value);
+          }
+          setMovieKey(value);
+        }}
+        onBlur={() => runValidationTasks(\\"movieKey\\", movieKey)}
+        errorMessage={errors.movieKey?.errorMessage}
+        hasError={errors.movieKey?.hasError}
+        {...getOverrideProps(overrides, \\"movieKey\\")}
+      ></TextField>
+      <TextField
+        label=\\"Title\\"
+        isRequired={true}
+        isReadOnly={false}
+        value={title}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              movieKey,
+              title: value,
+              genre,
+              rating,
+              tags,
+            };
+            const result = onChange(modelFields);
+            value = result?.title ?? value;
+          }
+          if (errors.title?.hasError) {
+            runValidationTasks(\\"title\\", value);
+          }
+          setTitle(value);
+        }}
+        onBlur={() => runValidationTasks(\\"title\\", title)}
+        errorMessage={errors.title?.errorMessage}
+        hasError={errors.title?.hasError}
+        {...getOverrideProps(overrides, \\"title\\")}
+      ></TextField>
+      <TextField
+        label=\\"Genre\\"
+        isRequired={true}
+        isReadOnly={false}
+        value={genre}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              movieKey,
+              title,
+              genre: value,
+              rating,
+              tags,
+            };
+            const result = onChange(modelFields);
+            value = result?.genre ?? value;
+          }
+          if (errors.genre?.hasError) {
+            runValidationTasks(\\"genre\\", value);
+          }
+          setGenre(value);
+        }}
+        onBlur={() => runValidationTasks(\\"genre\\", genre)}
+        errorMessage={errors.genre?.errorMessage}
+        hasError={errors.genre?.hasError}
+        {...getOverrideProps(overrides, \\"genre\\")}
+      ></TextField>
+      <TextField
+        label=\\"Rating\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={rating}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              movieKey,
+              title,
+              genre,
+              rating: value,
+              tags,
+            };
+            const result = onChange(modelFields);
+            value = result?.rating ?? value;
+          }
+          if (errors.rating?.hasError) {
+            runValidationTasks(\\"rating\\", value);
+          }
+          setRating(value);
+        }}
+        onBlur={() => runValidationTasks(\\"rating\\", rating)}
+        errorMessage={errors.rating?.errorMessage}
+        hasError={errors.rating?.hasError}
+        {...getOverrideProps(overrides, \\"rating\\")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              movieKey,
+              title,
+              genre,
+              rating,
+              tags: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.tags ?? values;
+          }
+          setTags(values);
+          setCurrentTagsValue(undefined);
+          setCurrentTagsDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentTagsValue}
+        label={\\"Tags\\"}
+        items={tags}
+        hasError={errors?.tags?.hasError}
+        errorMessage={errors?.tags?.errorMessage}
+        getBadgeText={getDisplayValue.tags}
+        setFieldValue={(model) => {
+          setCurrentTagsDisplayValue(model ? getDisplayValue.tags(model) : \\"\\");
+          setCurrentTagsValue(model);
+        }}
+        inputFieldRef={tagsRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Tags\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search Tag\\"
+          value={currentTagsDisplayValue}
+          options={tagsRecords.map((r) => ({
+            id: getIDValue.tags?.(r),
+            label: getDisplayValue.tags?.(r),
+          }))}
+          isLoading={tagsLoading}
+          onSelect={({ id, label }) => {
+            setCurrentTagsValue(
+              tagsRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentTagsDisplayValue(label);
+            runValidationTasks(\\"tags\\", label);
+          }}
+          onClear={() => {
+            setCurrentTagsDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            fetchTagsRecords(value);
+            if (errors.tags?.hasError) {
+              runValidationTasks(\\"tags\\", value);
+            }
+            setCurrentTagsDisplayValue(value);
+            setCurrentTagsValue(undefined);
+          }}
+          onBlur={() => runValidationTasks(\\"tags\\", currentTagsDisplayValue)}
+          errorMessage={errors.tags?.errorMessage}
+          hasError={errors.tags?.hasError}
+          ref={tagsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"tags\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should generate a create form with composite primary key 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Tag } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type MovieCreateFormInputValues = {
+    movieKey?: string;
+    title?: string;
+    genre?: string;
+    rating?: string;
+    tags?: Tag[];
+};
+export declare type MovieCreateFormValidationValues = {
+    movieKey?: ValidationFunction<string>;
+    title?: ValidationFunction<string>;
+    genre?: ValidationFunction<string>;
+    rating?: ValidationFunction<string>;
+    tags?: ValidationFunction<Tag>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type MovieCreateFormOverridesProps = {
+    MovieCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    movieKey?: PrimitiveOverrideProps<TextFieldProps>;
+    title?: PrimitiveOverrideProps<TextFieldProps>;
+    genre?: PrimitiveOverrideProps<TextFieldProps>;
+    rating?: PrimitiveOverrideProps<TextFieldProps>;
+    tags?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type MovieCreateFormProps = React.PropsWithChildren<{
+    overrides?: MovieCreateFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: MovieCreateFormInputValues) => MovieCreateFormInputValues;
+    onSuccess?: (fields: MovieCreateFormInputValues) => void;
+    onError?: (fields: MovieCreateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: MovieCreateFormInputValues) => MovieCreateFormInputValues;
+    onValidate?: MovieCreateFormValidationValues;
+} & React.CSSProperties>;
+export default function MovieCreateForm(props: MovieCreateFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should generate a create form with hasMany relationship 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
@@ -1874,7 +2531,7 @@ import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listStudents } from \\"../graphql/queries\\";
-import { createSchool, updateSchool } from \\"../graphql/mutations\\";
+import { createSchool, updateStudent } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
   onChange,
@@ -2180,23 +2837,25 @@ export default function SchoolCreateForm(props) {
           const modelFieldsToSave = {
             name: modelFields.name,
           };
-          const school = await API.graphql({
-            query: createSchool,
-            variables: {
-              input: {
-                ...modelFieldsToSave,
+          const school = (
+            await API.graphql({
+              query: createSchool,
+              variables: {
+                input: {
+                  ...modelFieldsToSave,
+                },
               },
-            },
-          });
+            })
+          )?.data?.createSchool;
           const promises = [];
           promises.push(
             ...Students.reduce((promises, original) => {
               promises.push(
                 API.graphql({
-                  query: updateSchool,
+                  query: updateStudent,
                   variables: {
                     input: {
-                      ...original,
+                      id: original.id,
                       schoolID: school.id,
                     },
                   },
@@ -3284,14 +3943,16 @@ export default function TagCreateForm(props) {
             label: modelFields.label,
             statuses: modelFields.statuses,
           };
-          const tag = await API.graphql({
-            query: createTag,
-            variables: {
-              input: {
-                ...modelFieldsToSave,
+          const tag = (
+            await API.graphql({
+              query: createTag,
+              variables: {
+                input: {
+                  ...modelFieldsToSave,
+                },
               },
-            },
-          });
+            })
+          )?.data?.createTag;
           const promises = [];
           promises.push(
             ...Posts.reduce((promises, post) => {
@@ -4471,7 +5132,7 @@ export default function PostUpdateForm(props) {
             })
           )?.data?.getPost
         : postModelProp;
-      const linkedComments = record?.Comment?.items ?? [];
+      const linkedComments = record?.Comments?.items ?? [];
       setLinkedComments(linkedComments);
       setPostRecord(record);
     };
@@ -8833,7 +9494,7 @@ export default function UpdateCPKTeacherForm(props) {
           )
         : [];
       setLinkedCPKClasses(linkedCPKClasses);
-      const linkedCPKProjects = record?.CPKProject?.items ?? [];
+      const linkedCPKProjects = record?.CPKProjects?.items ?? [];
       setLinkedCPKProjects(linkedCPKProjects);
       setCPKTeacherRecord(record);
     };
@@ -11233,6 +11894,7 @@ import {
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { CompositeVet } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import {
@@ -11246,6 +11908,7 @@ import {
   createCompositeDogCompositeVet,
   updateCompositeDog,
   updateCompositeOwner,
+  updateCompositeToy,
 } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
@@ -11743,14 +12406,16 @@ export default function CreateCompositeDogForm(props) {
             CompositeBowl: modelFields.CompositeBowl,
             CompositeOwner: modelFields.CompositeOwner,
           };
-          const compositeDog = await API.graphql({
-            query: createCompositeDog,
-            variables: {
-              input: {
-                ...modelFieldsToSave,
+          const compositeDog = (
+            await API.graphql({
+              query: createCompositeDog,
+              variables: {
+                input: {
+                  ...modelFieldsToSave,
+                },
               },
-            },
-          });
+            })
+          )?.data?.createCompositeDog;
           const promises = [];
           const compositeOwnerToLink = modelFields.CompositeOwner;
           if (compositeOwnerToLink) {
@@ -11787,10 +12452,10 @@ export default function CreateCompositeDogForm(props) {
             ...CompositeToys.reduce((promises, original) => {
               promises.push(
                 API.graphql({
-                  query: updateCompositeDog,
+                  query: updateCompositeToy,
                   variables: {
                     input: {
-                      ...original,
+                      id: original.id,
                       compositeDogCompositeToysName: compositeDog.name,
                       compositeDogCompositeToysDescription:
                         compositeDog.description,
@@ -11808,8 +12473,10 @@ export default function CreateCompositeDogForm(props) {
                   query: createCompositeDogCompositeVet,
                   variables: {
                     input: {
-                      compositeDog,
-                      compositeVet,
+                      compositeDogName: compositeDog.name,
+                      compositeDogdescription: compositeDog.description,
+                      compositeVetSpecialty: CompositeVet.specialty,
+                      compositeVetcity: CompositeVet.city,
                     },
                   },
                 })
@@ -12336,7 +13003,7 @@ import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listComments } from \\"../graphql/queries\\";
-import { createPost, updatePost } from \\"../graphql/mutations\\";
+import { createPost, updateComment } from \\"../graphql/mutations\\";
 function ArrayField({
   items = [],
   onChange,
@@ -12643,23 +13310,25 @@ export default function CreatePostForm(props) {
           const modelFieldsToSave = {
             name: modelFields.name,
           };
-          const post = await API.graphql({
-            query: createPost,
-            variables: {
-              input: {
-                ...modelFieldsToSave,
+          const post = (
+            await API.graphql({
+              query: createPost,
+              variables: {
+                input: {
+                  ...modelFieldsToSave,
+                },
               },
-            },
-          });
+            })
+          )?.data?.createPost;
           const promises = [];
           promises.push(
             ...comments.reduce((promises, original) => {
               promises.push(
                 API.graphql({
-                  query: updatePost,
+                  query: updateComment,
                   variables: {
                     input: {
-                      ...original,
+                      id: original.id,
                       postCommentsId: post.id,
                       post: post,
                     },
@@ -13079,7 +13748,7 @@ export default function UpdatePostForm(props) {
             })
           )?.data?.getPost
         : postModelProp;
-      const linkedComments = record?.Comment?.items ?? [];
+      const linkedComments = record?.comments?.items ?? [];
       setLinkedComments(linkedComments);
       setPostRecord(record);
     };
@@ -13779,14 +14448,16 @@ export default function CreateDogForm(props) {
               modelFields[key] = null;
             }
           });
-          const dog = await API.graphql({
-            query: createDog,
-            variables: {
-              input: {
-                ...modelFields,
+          const dog = (
+            await API.graphql({
+              query: createDog,
+              variables: {
+                input: {
+                  ...modelFields,
+                },
               },
-            },
-          });
+            })
+          )?.data?.createDog;
           const promises = [];
           const ownerToLink = modelFields.owner;
           if (ownerToLink) {
@@ -14320,14 +14991,16 @@ export default function CreateOwnerForm(props) {
               modelFields[key] = null;
             }
           });
-          const owner = await API.graphql({
-            query: createOwner,
-            variables: {
-              input: {
-                ...modelFields,
+          const owner = (
+            await API.graphql({
+              query: createOwner,
+              variables: {
+                input: {
+                  ...modelFields,
+                },
               },
-            },
-          });
+            })
+          )?.data?.createOwner;
           const promises = [];
           const dogToLink = modelFields.Dog;
           if (dogToLink) {

@@ -265,6 +265,7 @@ export const buildManyToManyRelationshipStatements = (
   const joinTableThisModelName = relatedModelFields[0];
   const joinTableRelatedModelName = relatedJoinFieldName;
   const isGraphql = dataApi === 'GraphQL';
+  const isCompositeKey = thisModelPrimaryKeys.length > 1;
 
   if (!relatedJoinTableName) {
     throw new InternalError(`Cannot find join table for ${fieldName}`);
@@ -274,6 +275,11 @@ export const buildManyToManyRelationshipStatements = (
   }
   const joinTableThisModelFields = extractAssociatedFields(joinTable.fields[joinTableThisModelName]);
   const joinTableRelatedModelFields = extractAssociatedFields(joinTable.fields[joinTableRelatedModelName]);
+  const { keys: relatedModelPrimaryKeys } = extractModelAndKeys(fieldConfigMetaData.valueMappings);
+
+  if (!relatedModelPrimaryKeys) {
+    throw new InternalError(`Could not identify primary key(s) for ${relatedModelName}`);
+  }
 
   if (!joinTableThisModelFields || !joinTableRelatedModelFields) {
     throw new InternalError(`Cannot find associated fields to build ${fieldName}`);
@@ -287,11 +293,6 @@ export const buildManyToManyRelationshipStatements = (
     const thisModelRecord = getRecordName(modelName);
     const updatedMap = `${lowerCaseFirst(fieldName)}Map`;
     const originalMap = `${linkedDataName}Map`;
-
-    const { keys: relatedModelPrimaryKeys } = extractModelAndKeys(fieldConfigMetaData.valueMappings);
-    if (!relatedModelPrimaryKeys) {
-      throw new InternalError(`Could not identify primary key(s) for ${relatedModelName}`);
-    }
 
     return [
       factory.createVariableStatement(
@@ -1024,14 +1025,25 @@ export const buildManyToManyRelationshipStatements = (
                             ),
                             undefined,
                             [
-                              getCreateJoinTableExpression(
-                                relatedJoinTableName,
-                                savedModelName,
-                                joinTableThisModelName,
-                                joinTableRelatedModelName,
-                                importCollection,
-                                dataApi,
-                              ),
+                              isGraphql && isCompositeKey
+                                ? getGraphQLJoinTableCreateExpression(
+                                    relatedJoinTableName,
+                                    savedModelName,
+                                    thisModelPrimaryKeys,
+                                    joinTableThisModelFields,
+                                    relatedModelName,
+                                    relatedModelPrimaryKeys,
+                                    joinTableRelatedModelFields,
+                                    importCollection,
+                                  )
+                                : getCreateJoinTableExpression(
+                                    relatedJoinTableName,
+                                    savedModelName,
+                                    joinTableThisModelName,
+                                    joinTableRelatedModelName,
+                                    importCollection,
+                                    dataApi,
+                                  ),
                             ],
                           ),
                         ),
@@ -1254,8 +1266,6 @@ export const buildGetRelationshipModels = (
       }
     } else {
       // hasMany relationship has one related field.
-      const { relatedModelName } = fieldConfigMetaData.relationship;
-
       lazyLoadLinkedDataStatement = factory.createVariableStatement(
         undefined,
         factory.createVariableDeclarationList(
@@ -1265,7 +1275,7 @@ export const buildGetRelationshipModels = (
               undefined,
               undefined,
               dataApi === 'GraphQL'
-                ? graphqlLinkedRecordsFallback(relatedModelName)
+                ? graphqlLinkedRecordsFallback(fieldName)
                 : factory.createConditionalExpression(
                     recordIdentifier,
                     factory.createToken(SyntaxKind.QuestionToken),
@@ -2043,15 +2053,21 @@ const getUpdateRelatedModelExpression = (
      *    query: updateStudent,
      *    variables: {
      *      input: {
-     *        ...original,
+     *        id: original.id,
      *        schoolID: school.id
      *      }
      *    }
      * })
      */
-    const inputs = [factory.createSpreadAssignment(factory.createIdentifier('original')), ...statements];
+    const inputs = [
+      factory.createPropertyAssignment(
+        factory.createIdentifier('id'),
+        factory.createPropertyAccessExpression(factory.createIdentifier('original'), factory.createIdentifier('id')),
+      ),
+      ...statements,
+    ];
 
-    return getGraphqlCallExpression(ActionType.UPDATE, capitalizeFirstLetter(savedModelName), importCollection, {
+    return getGraphqlCallExpression(ActionType.UPDATE, capitalizeFirstLetter(relatedModelName), importCollection, {
       inputs,
     });
   }

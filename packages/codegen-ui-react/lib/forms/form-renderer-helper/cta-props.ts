@@ -409,7 +409,19 @@ export const buildExpression = (
                 factory.createIdentifier(savedRecordName),
                 undefined,
                 undefined,
-                factory.createAwaitExpression(recordCreateCallExpression),
+                dataApi === 'GraphQL'
+                  ? factory.createPropertyAccessChain(
+                      factory.createPropertyAccessChain(
+                        factory.createParenthesizedExpression(
+                          factory.createAwaitExpression(recordCreateCallExpression),
+                        ),
+                        factory.createToken(SyntaxKind.QuestionDotToken),
+                        factory.createIdentifier('data'),
+                      ),
+                      factory.createToken(SyntaxKind.QuestionDotToken),
+                      factory.createIdentifier(getGraphqlQueryForModel(ActionType.CREATE, importedModelName)),
+                    )
+                  : factory.createAwaitExpression(recordCreateCallExpression),
               ),
             ],
             NodeFlags.Const,
