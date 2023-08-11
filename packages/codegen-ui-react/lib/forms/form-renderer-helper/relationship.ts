@@ -265,7 +265,6 @@ export const buildManyToManyRelationshipStatements = (
   const joinTableThisModelName = relatedModelFields[0];
   const joinTableRelatedModelName = relatedJoinFieldName;
   const isGraphql = dataApi === 'GraphQL';
-  const isCompositeKey = thisModelPrimaryKeys.length > 1;
 
   if (!relatedJoinTableName) {
     throw new InternalError(`Cannot find join table for ${fieldName}`);
@@ -1025,7 +1024,7 @@ export const buildManyToManyRelationshipStatements = (
                             ),
                             undefined,
                             [
-                              isGraphql && isCompositeKey
+                              isGraphql
                                 ? getGraphQLJoinTableCreateExpression(
                                     relatedJoinTableName,
                                     savedModelName,
@@ -1781,6 +1780,7 @@ export const buildHasManyRelationshipStatements = (
                                 ),
                             })
                           : getUpdateRelatedModelExpression(
+                              keys,
                               thisModelRecord,
                               relatedModelVariableName,
                               relatedModelFields,
@@ -1859,6 +1859,7 @@ export const buildHasManyRelationshipStatements = (
                               ],
                             })
                           : getUpdateRelatedModelExpression(
+                              keys,
                               thisModelRecord,
                               relatedModelVariableName,
                               relatedModelFields,
@@ -1881,6 +1882,7 @@ export const buildHasManyRelationshipStatements = (
   }
 
   const updateRelatedModelExpression = getUpdateRelatedModelExpression(
+    keys,
     savedModelName,
     relatedModelName,
     relatedModelFields,
@@ -2010,6 +2012,7 @@ export const getRelationshipBasedRecordUpdateStatements = ({
 };
 
 const getUpdateRelatedModelExpression = (
+  primaryKeys: string[],
   savedModelName: string,
   relatedModelName: string,
   relatedModelFields: string[],
@@ -2060,9 +2063,11 @@ const getUpdateRelatedModelExpression = (
      * })
      */
     const inputs = [
-      factory.createPropertyAssignment(
-        factory.createIdentifier('id'),
-        factory.createPropertyAccessExpression(factory.createIdentifier('original'), factory.createIdentifier('id')),
+      ...primaryKeys.map((key) =>
+        factory.createPropertyAssignment(
+          factory.createIdentifier(key),
+          factory.createPropertyAccessExpression(factory.createIdentifier('original'), factory.createIdentifier(key)),
+        ),
       ),
       ...statements,
     ];

@@ -3618,6 +3618,7 @@ import {
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Post } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listPosts } from \\"../graphql/queries\\";
@@ -3961,8 +3962,8 @@ export default function TagCreateForm(props) {
                   query: createTagPost,
                   variables: {
                     input: {
-                      tag,
-                      post,
+                      tagID: tag.id,
+                      postID: Post.id,
                     },
                   },
                 })
@@ -4897,6 +4898,841 @@ export declare type BookCreateFormProps = React.PropsWithChildren<{
     onValidate?: BookCreateFormValidationValues;
 } & React.CSSProperties>;
 export default function BookCreateForm(props: BookCreateFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should generate a create form with multiple relationship & cpk 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { CPKClass } from \\"../API\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
+import {
+  listCPKClasses,
+  listCPKProjects,
+  listCPKStudents,
+} from \\"../graphql/queries\\";
+import {
+  createCPKTeacher,
+  createCPKTeacherCPKClass,
+  updateCPKProject,
+} from \\"../graphql/mutations\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function CreateCPKTeacherForm(props) {
+  const {
+    clearOnSuccess = true,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    specialTeacherId: \\"\\",
+    CPKStudent: undefined,
+    CPKClasses: [],
+    CPKProjects: [],
+  };
+  const [specialTeacherId, setSpecialTeacherId] = React.useState(
+    initialValues.specialTeacherId
+  );
+  const [CPKStudent, setCPKStudent] = React.useState(initialValues.CPKStudent);
+  const [CPKStudentLoading, setCPKStudentLoading] = React.useState(false);
+  const [CPKStudentRecords, setCPKStudentRecords] = React.useState([]);
+  const [CPKClasses, setCPKClasses] = React.useState(initialValues.CPKClasses);
+  const [CPKClassesLoading, setCPKClassesLoading] = React.useState(false);
+  const [CPKClassesRecords, setCPKClassesRecords] = React.useState([]);
+  const [CPKProjects, setCPKProjects] = React.useState(
+    initialValues.CPKProjects
+  );
+  const [CPKProjectsLoading, setCPKProjectsLoading] = React.useState(false);
+  const [CPKProjectsRecords, setCPKProjectsRecords] = React.useState([]);
+  const autocompleteLength = 10;
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setSpecialTeacherId(initialValues.specialTeacherId);
+    setCPKStudent(initialValues.CPKStudent);
+    setCurrentCPKStudentValue(undefined);
+    setCurrentCPKStudentDisplayValue(\\"\\");
+    setCPKClasses(initialValues.CPKClasses);
+    setCurrentCPKClassesValue(undefined);
+    setCurrentCPKClassesDisplayValue(\\"\\");
+    setCPKProjects(initialValues.CPKProjects);
+    setCurrentCPKProjectsValue(undefined);
+    setCurrentCPKProjectsDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [currentCPKStudentDisplayValue, setCurrentCPKStudentDisplayValue] =
+    React.useState(\\"\\");
+  const [currentCPKStudentValue, setCurrentCPKStudentValue] =
+    React.useState(undefined);
+  const CPKStudentRef = React.createRef();
+  const [currentCPKClassesDisplayValue, setCurrentCPKClassesDisplayValue] =
+    React.useState(\\"\\");
+  const [currentCPKClassesValue, setCurrentCPKClassesValue] =
+    React.useState(undefined);
+  const CPKClassesRef = React.createRef();
+  const [currentCPKProjectsDisplayValue, setCurrentCPKProjectsDisplayValue] =
+    React.useState(\\"\\");
+  const [currentCPKProjectsValue, setCurrentCPKProjectsValue] =
+    React.useState(undefined);
+  const CPKProjectsRef = React.createRef();
+  const getIDValue = {
+    CPKStudent: (r) =>
+      JSON.stringify({ specialStudentId: r?.specialStudentId }),
+    CPKClasses: (r) => JSON.stringify({ specialClassId: r?.specialClassId }),
+    CPKProjects: (r) =>
+      JSON.stringify({ specialProjectId: r?.specialProjectId }),
+  };
+  const CPKStudentIdSet = new Set(
+    Array.isArray(CPKStudent)
+      ? CPKStudent.map((r) => getIDValue.CPKStudent?.(r))
+      : getIDValue.CPKStudent?.(CPKStudent)
+  );
+  const CPKClassesIdSet = new Set(
+    Array.isArray(CPKClasses)
+      ? CPKClasses.map((r) => getIDValue.CPKClasses?.(r))
+      : getIDValue.CPKClasses?.(CPKClasses)
+  );
+  const CPKProjectsIdSet = new Set(
+    Array.isArray(CPKProjects)
+      ? CPKProjects.map((r) => getIDValue.CPKProjects?.(r))
+      : getIDValue.CPKProjects?.(CPKProjects)
+  );
+  const getDisplayValue = {
+    CPKStudent: (r) => r?.specialStudentId,
+    CPKClasses: (r) => r?.specialClassId,
+    CPKProjects: (r) => r?.specialProjectId,
+  };
+  const validations = {
+    specialTeacherId: [{ type: \\"Required\\" }],
+    CPKStudent: [],
+    CPKClasses: [],
+    CPKProjects: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  const fetchCPKStudentRecords = async (value) => {
+    setCPKStudentLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: { or: [{ specialStudentId: { contains: value } }] },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listCPKStudents,
+          variables,
+        })
+      )?.data?.listCPKStudents?.items;
+      var loaded = result.filter(
+        (item) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setCPKStudentRecords(newOptions.slice(0, autocompleteLength));
+    setCPKStudentLoading(false);
+  };
+  const fetchCPKClassesRecords = async (value) => {
+    setCPKClassesLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: { or: [{ specialClassId: { contains: value } }] },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listCPKClasses,
+          variables,
+        })
+      )?.data?.listCPKClasses?.items;
+      var loaded = result.filter(
+        (item) => !CPKClassesIdSet.has(getIDValue.CPKClasses?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setCPKClassesRecords(newOptions.slice(0, autocompleteLength));
+    setCPKClassesLoading(false);
+  };
+  const fetchCPKProjectsRecords = async (value) => {
+    setCPKProjectsLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: { or: [{ specialProjectId: { contains: value } }] },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listCPKProjects,
+          variables,
+        })
+      )?.data?.listCPKProjects?.items;
+      var loaded = result.filter(
+        (item) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setCPKProjectsRecords(newOptions.slice(0, autocompleteLength));
+    setCPKProjectsLoading(false);
+  };
+  React.useEffect(() => {
+    fetchCPKStudentRecords(\\"\\");
+    fetchCPKClassesRecords(\\"\\");
+    fetchCPKProjectsRecords(\\"\\");
+  }, []);
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          specialTeacherId,
+          cPKTeacherCPKStudentSpecialStudentId: CPKStudent.specialStudentId,
+          CPKClasses,
+          CPKProjects,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
+            }
+          });
+          const modelFieldsToSave = {
+            specialTeacherId: modelFields.specialTeacherId,
+            CPKStudent: modelFields.CPKStudent,
+          };
+          const cPKTeacher = (
+            await API.graphql({
+              query: createCPKTeacher,
+              variables: {
+                input: {
+                  ...modelFieldsToSave,
+                },
+              },
+            })
+          )?.data?.createCPKTeacher;
+          const promises = [];
+          promises.push(
+            ...CPKClasses.reduce((promises, cpkClass) => {
+              promises.push(
+                API.graphql({
+                  query: createCPKTeacherCPKClass,
+                  variables: {
+                    input: {
+                      cPKTeacherSpecialTeacherId: cPKTeacher.specialTeacherId,
+                      cPKClassSpecialClassId: CPKClass.specialClassId,
+                    },
+                  },
+                })
+              );
+              return promises;
+            }, [])
+          );
+          promises.push(
+            ...CPKProjects.reduce((promises, original) => {
+              promises.push(
+                API.graphql({
+                  query: updateCPKProject,
+                  variables: {
+                    input: {
+                      specialProjectId: original.specialProjectId,
+                      cPKTeacherID: cPKTeacher.specialTeacherId,
+                    },
+                  },
+                })
+              );
+              return promises;
+            }, [])
+          );
+          await Promise.all(promises);
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
+        } catch (err) {
+          if (onError) {
+            const messages = err.errors.map((e) => e.message).join(\\"\\\\n\\");
+            onError(modelFields, messages);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"CreateCPKTeacherForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Special teacher id\\"
+        isRequired={true}
+        isReadOnly={false}
+        value={specialTeacherId}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              specialTeacherId: value,
+              cPKTeacherCPKStudentSpecialStudentId: CPKStudent.specialStudentId,
+              CPKClasses,
+              CPKProjects,
+            };
+            const result = onChange(modelFields);
+            value = result?.specialTeacherId ?? value;
+          }
+          if (errors.specialTeacherId?.hasError) {
+            runValidationTasks(\\"specialTeacherId\\", value);
+          }
+          setSpecialTeacherId(value);
+        }}
+        onBlur={() => runValidationTasks(\\"specialTeacherId\\", specialTeacherId)}
+        errorMessage={errors.specialTeacherId?.errorMessage}
+        hasError={errors.specialTeacherId?.hasError}
+        {...getOverrideProps(overrides, \\"specialTeacherId\\")}
+      ></TextField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              specialTeacherId,
+              CPKStudent: value,
+              CPKClasses,
+              CPKProjects,
+            };
+            const result = onChange(modelFields);
+            value = result?.CPKStudent ?? value;
+          }
+          setCPKStudent(value);
+          setCurrentCPKStudentValue(undefined);
+          setCurrentCPKStudentDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCPKStudentValue}
+        label={\\"Cpk student\\"}
+        items={CPKStudent ? [CPKStudent] : []}
+        hasError={errors?.CPKStudent?.hasError}
+        errorMessage={errors?.CPKStudent?.errorMessage}
+        getBadgeText={getDisplayValue.CPKStudent}
+        setFieldValue={(model) => {
+          setCurrentCPKStudentDisplayValue(
+            model ? getDisplayValue.CPKStudent(model) : \\"\\"
+          );
+          setCurrentCPKStudentValue(model);
+        }}
+        inputFieldRef={CPKStudentRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Cpk student\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search CPKStudent\\"
+          value={currentCPKStudentDisplayValue}
+          options={CPKStudentRecords.filter(
+            (r) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(r))
+          ).map((r) => ({
+            id: getIDValue.CPKStudent?.(r),
+            label: getDisplayValue.CPKStudent?.(r),
+          }))}
+          isLoading={CPKStudentLoading}
+          onSelect={({ id, label }) => {
+            setCurrentCPKStudentValue(
+              CPKStudentRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCPKStudentDisplayValue(label);
+            runValidationTasks(\\"CPKStudent\\", label);
+          }}
+          onClear={() => {
+            setCurrentCPKStudentDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            fetchCPKStudentRecords(value);
+            if (errors.CPKStudent?.hasError) {
+              runValidationTasks(\\"CPKStudent\\", value);
+            }
+            setCurrentCPKStudentDisplayValue(value);
+            setCurrentCPKStudentValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"CPKStudent\\", currentCPKStudentDisplayValue)
+          }
+          errorMessage={errors.CPKStudent?.errorMessage}
+          hasError={errors.CPKStudent?.hasError}
+          ref={CPKStudentRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"CPKStudent\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              specialTeacherId,
+              cPKTeacherCPKStudentSpecialStudentId: CPKStudent.specialStudentId,
+              CPKClasses: values,
+              CPKProjects,
+            };
+            const result = onChange(modelFields);
+            values = result?.CPKClasses ?? values;
+          }
+          setCPKClasses(values);
+          setCurrentCPKClassesValue(undefined);
+          setCurrentCPKClassesDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCPKClassesValue}
+        label={\\"Cpk classes\\"}
+        items={CPKClasses}
+        hasError={errors?.CPKClasses?.hasError}
+        errorMessage={errors?.CPKClasses?.errorMessage}
+        getBadgeText={getDisplayValue.CPKClasses}
+        setFieldValue={(model) => {
+          setCurrentCPKClassesDisplayValue(
+            model ? getDisplayValue.CPKClasses(model) : \\"\\"
+          );
+          setCurrentCPKClassesValue(model);
+        }}
+        inputFieldRef={CPKClassesRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Cpk classes\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search CPKClass\\"
+          value={currentCPKClassesDisplayValue}
+          options={CPKClassesRecords.map((r) => ({
+            id: getIDValue.CPKClasses?.(r),
+            label: getDisplayValue.CPKClasses?.(r),
+          }))}
+          isLoading={CPKClassesLoading}
+          onSelect={({ id, label }) => {
+            setCurrentCPKClassesValue(
+              CPKClassesRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCPKClassesDisplayValue(label);
+            runValidationTasks(\\"CPKClasses\\", label);
+          }}
+          onClear={() => {
+            setCurrentCPKClassesDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            fetchCPKClassesRecords(value);
+            if (errors.CPKClasses?.hasError) {
+              runValidationTasks(\\"CPKClasses\\", value);
+            }
+            setCurrentCPKClassesDisplayValue(value);
+            setCurrentCPKClassesValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"CPKClasses\\", currentCPKClassesDisplayValue)
+          }
+          errorMessage={errors.CPKClasses?.errorMessage}
+          hasError={errors.CPKClasses?.hasError}
+          ref={CPKClassesRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"CPKClasses\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              specialTeacherId,
+              cPKTeacherCPKStudentSpecialStudentId: CPKStudent.specialStudentId,
+              CPKClasses,
+              CPKProjects: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.CPKProjects ?? values;
+          }
+          setCPKProjects(values);
+          setCurrentCPKProjectsValue(undefined);
+          setCurrentCPKProjectsDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCPKProjectsValue}
+        label={\\"Cpk projects\\"}
+        items={CPKProjects}
+        hasError={errors?.CPKProjects?.hasError}
+        errorMessage={errors?.CPKProjects?.errorMessage}
+        getBadgeText={getDisplayValue.CPKProjects}
+        setFieldValue={(model) => {
+          setCurrentCPKProjectsDisplayValue(
+            model ? getDisplayValue.CPKProjects(model) : \\"\\"
+          );
+          setCurrentCPKProjectsValue(model);
+        }}
+        inputFieldRef={CPKProjectsRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Cpk projects\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search CPKProject\\"
+          value={currentCPKProjectsDisplayValue}
+          options={CPKProjectsRecords.filter(
+            (r) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(r))
+          ).map((r) => ({
+            id: getIDValue.CPKProjects?.(r),
+            label: getDisplayValue.CPKProjects?.(r),
+          }))}
+          isLoading={CPKProjectsLoading}
+          onSelect={({ id, label }) => {
+            setCurrentCPKProjectsValue(
+              CPKProjectsRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCPKProjectsDisplayValue(label);
+            runValidationTasks(\\"CPKProjects\\", label);
+          }}
+          onClear={() => {
+            setCurrentCPKProjectsDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            fetchCPKProjectsRecords(value);
+            if (errors.CPKProjects?.hasError) {
+              runValidationTasks(\\"CPKProjects\\", value);
+            }
+            setCurrentCPKProjectsDisplayValue(value);
+            setCurrentCPKProjectsValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"CPKProjects\\", currentCPKProjectsDisplayValue)
+          }
+          errorMessage={errors.CPKProjects?.errorMessage}
+          hasError={errors.CPKProjects?.hasError}
+          ref={CPKProjectsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"CPKProjects\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should generate a create form with multiple relationship & cpk 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { CPKClass, CPKProject, CPKStudent } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CreateCPKTeacherFormInputValues = {
+    specialTeacherId?: string;
+    CPKStudent?: CPKStudent;
+    CPKClasses?: CPKClass[];
+    CPKProjects?: CPKProject[];
+};
+export declare type CreateCPKTeacherFormValidationValues = {
+    specialTeacherId?: ValidationFunction<string>;
+    CPKStudent?: ValidationFunction<CPKStudent>;
+    CPKClasses?: ValidationFunction<CPKClass>;
+    CPKProjects?: ValidationFunction<CPKProject>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CreateCPKTeacherFormOverridesProps = {
+    CreateCPKTeacherFormGrid?: PrimitiveOverrideProps<GridProps>;
+    specialTeacherId?: PrimitiveOverrideProps<TextFieldProps>;
+    CPKStudent?: PrimitiveOverrideProps<AutocompleteProps>;
+    CPKClasses?: PrimitiveOverrideProps<AutocompleteProps>;
+    CPKProjects?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type CreateCPKTeacherFormProps = React.PropsWithChildren<{
+    overrides?: CreateCPKTeacherFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: CreateCPKTeacherFormInputValues) => CreateCPKTeacherFormInputValues;
+    onSuccess?: (fields: CreateCPKTeacherFormInputValues) => void;
+    onError?: (fields: CreateCPKTeacherFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: CreateCPKTeacherFormInputValues) => CreateCPKTeacherFormInputValues;
+    onValidate?: CreateCPKTeacherFormValidationValues;
+} & React.CSSProperties>;
+export default function CreateCPKTeacherForm(props: CreateCPKTeacherFormProps): React.ReactElement;
 "
 `;
 
@@ -12455,7 +13291,8 @@ export default function CreateCompositeDogForm(props) {
                   query: updateCompositeToy,
                   variables: {
                     input: {
-                      id: original.id,
+                      kind: original.kind,
+                      color: original.color,
                       compositeDogCompositeToysName: compositeDog.name,
                       compositeDogCompositeToysDescription:
                         compositeDog.description,

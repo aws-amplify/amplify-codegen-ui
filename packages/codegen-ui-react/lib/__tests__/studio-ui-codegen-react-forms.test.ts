@@ -1098,6 +1098,21 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
+
+    it('should generate a create form with multiple relationship & cpk', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/cpk-teacher-datastore-create',
+        'datastore/cpk-relationships',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
   });
 
   describe('NoApi form tests', () => {
