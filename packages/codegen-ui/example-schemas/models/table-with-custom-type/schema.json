@@ -1,0 +1,200 @@
+{
+  "models": {
+      "ParentTable": {
+          "name": "ParentTable",
+          "fields": {
+              "id": {
+                  "name": "id",
+                  "isArray": false,
+                  "type": "ID",
+                  "isRequired": true,
+                  "attributes": []
+              },
+              "name": {
+                  "name": "name",
+                  "isArray": false,
+                  "type": "String",
+                  "isRequired": false,
+                  "attributes": []
+              },
+              "BasicTables": {
+                  "name": "BasicTables",
+                  "isArray": true,
+                  "type": {
+                      "model": "BasicTable"
+                  },
+                  "isRequired": false,
+                  "attributes": [],
+                  "isArrayNullable": true,
+                  "association": {
+                      "connectionType": "HAS_MANY",
+                      "associatedWith": [
+                          "parentTableBasicTablesId"
+                      ]
+                  }
+              },
+              "createdAt": {
+                  "name": "createdAt",
+                  "isArray": false,
+                  "type": "AWSDateTime",
+                  "isRequired": false,
+                  "attributes": [],
+                  "isReadOnly": true
+              },
+              "updatedAt": {
+                  "name": "updatedAt",
+                  "isArray": false,
+                  "type": "AWSDateTime",
+                  "isRequired": false,
+                  "attributes": [],
+                  "isReadOnly": true
+              }
+          },
+          "syncable": true,
+          "pluralName": "ParentTables",
+          "attributes": [
+              {
+                  "type": "model",
+                  "properties": {}
+              },
+              {
+                  "type": "auth",
+                  "properties": {
+                      "rules": [
+                          {
+                              "allow": "public",
+                              "operations": [
+                                  "create",
+                                  "update",
+                                  "delete",
+                                  "read"
+                              ]
+                          }
+                      ]
+                  }
+              }
+          ]
+      },
+      "BasicTable": {
+          "name": "BasicTable",
+          "fields": {
+              "id": {
+                  "name": "id",
+                  "isArray": false,
+                  "type": "ID",
+                  "isRequired": true,
+                  "attributes": []
+              },
+              "name": {
+                  "name": "name",
+                  "isArray": false,
+                  "type": "String",
+                  "isRequired": false,
+                  "attributes": []
+              },
+              "nmTest": {
+                  "name": "nmTest",
+                  "isArray": false,
+                  "type": {
+                      "nonModel": "NewStructure"
+                  },
+                  "isRequired": false,
+                  "attributes": []
+              },
+              "parentTable": {
+                  "name": "parentTable",
+                  "isArray": false,
+                  "type": {
+                      "model": "ParentTable"
+                  },
+                  "isRequired": false,
+                  "attributes": [],
+                  "association": {
+                      "connectionType": "BELONGS_TO",
+                      "targetNames": [
+                          "parentTableBasicTablesId"
+                      ]
+                  }
+              },
+              "createdAt": {
+                  "name": "createdAt",
+                  "isArray": false,
+                  "type": "AWSDateTime",
+                  "isRequired": false,
+                  "attributes": [],
+                  "isReadOnly": true
+              },
+              "updatedAt": {
+                  "name": "updatedAt",
+                  "isArray": false,
+                  "type": "AWSDateTime",
+                  "isRequired": false,
+                  "attributes": [],
+                  "isReadOnly": true
+              },
+              "parentTableBasicTablesId": {
+                  "name": "parentTableBasicTablesId",
+                  "isArray": false,
+                  "type": "ID",
+                  "isRequired": false,
+                  "attributes": []
+              }
+          },
+          "syncable": true,
+          "pluralName": "BasicTables",
+          "attributes": [
+              {
+                  "type": "model",
+                  "properties": {}
+              },
+              {
+                  "type": "auth",
+                  "properties": {
+                      "rules": [
+                          {
+                              "allow": "public",
+                              "operations": [
+                                  "create",
+                                  "update",
+                                  "delete",
+                                  "read"
+                              ]
+                          }
+                      ]
+                  }
+              }
+          ]
+      }
+  },
+  "enums": {},
+  "nonModels": {
+      "NewStructure": {
+          "name": "NewStructure",
+          "fields": {
+              "title": {
+                  "name": "title",
+                  "isArray": false,
+                  "type": "String",
+                  "isRequired": false,
+                  "attributes": []
+              },
+              "name": {
+                  "name": "name",
+                  "isArray": false,
+                  "type": "String",
+                  "isRequired": false,
+                  "attributes": []
+              },
+              "address": {
+                  "name": "address",
+                  "isArray": false,
+                  "type": "String",
+                  "isRequired": false,
+                  "attributes": []
+              }
+          }
+      }
+  },
+  "codegenVersion": "3.4.3",
+  "version": "bb62490af963fba88b40e50e1b7dd9e2"
+}

@@ -932,6 +932,36 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should generate a create form with nonModel field', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'models/table-with-custom-type/forms/BasicTableCreateFormDefault',
+        'models/table-with-custom-type/schema',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate an update form with nonModel field', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'models/table-with-custom-type/forms/BasicTableUpdateFormDefault',
+        'models/table-with-custom-type/schema',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should generate a create form with manyToMany relationship', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/tag-datastore-create',
@@ -1001,9 +1031,9 @@ describe('amplify form renderer tests', () => {
       );
 
       expect(componentText).toContain('postCommentsId');
-      expect(componentText).not.toContain('postID');
-      expect(componentText).not.toContain('userCommentsId');
-      expect(componentText).not.toContain('orgCommentsId');
+      expect(componentText).toContain('postID');
+      expect(componentText).toContain('userCommentsId');
+      expect(componentText).toContain('orgCommentsId');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
