@@ -1,0 +1,12 @@
+{
+    "name": "CreateCPKTeacherForm",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "CPKTeacher"
+    },
+    "formActionType": "create",
+    "fields": {},
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+}
