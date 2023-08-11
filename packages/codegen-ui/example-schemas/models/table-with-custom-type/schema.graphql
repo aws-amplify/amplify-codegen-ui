@@ -1,0 +1,18 @@
+type ParentTable @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  BasicTables: [BasicTable] @hasMany
+}
+
+type NewStructure {
+  title: String
+  name: String
+  address: String
+}
+
+type BasicTable @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  nmTest: NewStructure
+  parentTable: ParentTable @belongsTo
+}

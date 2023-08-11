@@ -323,12 +323,16 @@ export default function CreateOwnerForm(props) {
               modelFields[key] = null;
             }
           });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+            ownerDogId: modelFields?.Dog?.id,
+          };
           const owner = (
             await API.graphql({
               query: createOwner,
               variables: {
                 input: {
-                  ...modelFields,
+                  ...modelFieldsToSave,
                 },
               },
             })
@@ -1570,11 +1574,15 @@ export default function MyMemberForm(props) {
               modelFields[key] = null;
             }
           });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+            teamMembersId: modelFields?.Team?.id,
+          };
           await API.graphql({
             query: createMember,
             variables: {
               input: {
-                ...modelFields,
+                ...modelFieldsToSave,
               },
             },
           });
@@ -3390,11 +3398,15 @@ export default function BookCreateForm(props) {
               modelFields[key] = null;
             }
           });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+            authorId: modelFields?.primaryAuthor?.id,
+          };
           await API.graphql({
             query: createBook,
             variables: {
               input: {
-                ...modelFields,
+                ...modelFieldsToSave,
               },
             },
           });
@@ -4608,11 +4620,16 @@ export default function BookCreateForm(props) {
               modelFields[key] = null;
             }
           });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+            authorId: modelFields?.primaryAuthor?.id,
+            titleId: modelFields?.primaryTitle?.id,
+          };
           await API.graphql({
             query: createBook,
             variables: {
               input: {
-                ...modelFields,
+                ...modelFieldsToSave,
               },
             },
           });
@@ -5296,7 +5313,7 @@ export default function CreateCPKTeacherForm(props) {
         event.preventDefault();
         let modelFields = {
           specialTeacherId,
-          cPKTeacherCPKStudentSpecialStudentId: CPKStudent.specialStudentId,
+          CPKStudent,
           CPKClasses,
           CPKProjects,
         };
@@ -5338,7 +5355,8 @@ export default function CreateCPKTeacherForm(props) {
           });
           const modelFieldsToSave = {
             specialTeacherId: modelFields.specialTeacherId,
-            CPKStudent: modelFields.CPKStudent,
+            cPKTeacherCPKStudentSpecialStudentId:
+              modelFields?.CPKStudent?.specialStudentId,
           };
           const cPKTeacher = (
             await API.graphql({
@@ -5410,7 +5428,7 @@ export default function CreateCPKTeacherForm(props) {
           if (onChange) {
             const modelFields = {
               specialTeacherId: value,
-              cPKTeacherCPKStudentSpecialStudentId: CPKStudent.specialStudentId,
+              CPKStudent,
               CPKClasses,
               CPKProjects,
             };
@@ -5512,7 +5530,7 @@ export default function CreateCPKTeacherForm(props) {
           if (onChange) {
             const modelFields = {
               specialTeacherId,
-              cPKTeacherCPKStudentSpecialStudentId: CPKStudent.specialStudentId,
+              CPKStudent,
               CPKClasses: values,
               CPKProjects,
             };
@@ -5588,7 +5606,7 @@ export default function CreateCPKTeacherForm(props) {
           if (onChange) {
             const modelFields = {
               specialTeacherId,
-              cPKTeacherCPKStudentSpecialStudentId: CPKStudent.specialStudentId,
+              CPKStudent,
               CPKClasses,
               CPKProjects: values,
             };
@@ -5733,6 +5751,571 @@ export declare type CreateCPKTeacherFormProps = React.PropsWithChildren<{
     onValidate?: CreateCPKTeacherFormValidationValues;
 } & React.CSSProperties>;
 export default function CreateCPKTeacherForm(props: CreateCPKTeacherFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should generate a create form with nonModel field 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextAreaField,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
+import { listParentTables } from \\"../graphql/queries\\";
+import { createBasicTable } from \\"../graphql/mutations\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function CreateForm(props) {
+  const {
+    clearOnSuccess = true,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    name: \\"\\",
+    nmTest: \\"\\",
+    parentTable: undefined,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [nmTest, setNmTest] = React.useState(initialValues.nmTest);
+  const [parentTable, setParentTable] = React.useState(
+    initialValues.parentTable
+  );
+  const [parentTableLoading, setParentTableLoading] = React.useState(false);
+  const [parentTableRecords, setParentTableRecords] = React.useState([]);
+  const autocompleteLength = 10;
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setName(initialValues.name);
+    setNmTest(initialValues.nmTest);
+    setParentTable(initialValues.parentTable);
+    setCurrentParentTableValue(undefined);
+    setCurrentParentTableDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [currentParentTableDisplayValue, setCurrentParentTableDisplayValue] =
+    React.useState(\\"\\");
+  const [currentParentTableValue, setCurrentParentTableValue] =
+    React.useState(undefined);
+  const parentTableRef = React.createRef();
+  const getIDValue = {
+    parentTable: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const parentTableIdSet = new Set(
+    Array.isArray(parentTable)
+      ? parentTable.map((r) => getIDValue.parentTable?.(r))
+      : getIDValue.parentTable?.(parentTable)
+  );
+  const getDisplayValue = {
+    parentTable: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+  };
+  const validations = {
+    name: [],
+    nmTest: [{ type: \\"JSON\\" }],
+    parentTable: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  const fetchParentTableRecords = async (value) => {
+    setParentTableLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ name: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listParentTables,
+          variables,
+        })
+      )?.data?.listParentTables?.items;
+      var loaded = result.filter(
+        (item) => !parentTableIdSet.has(getIDValue.parentTable?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setParentTableRecords(newOptions.slice(0, autocompleteLength));
+    setParentTableLoading(false);
+  };
+  React.useEffect(() => {
+    fetchParentTableRecords(\\"\\");
+  }, []);
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          name,
+          nmTest,
+          parentTable,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
+            }
+          });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+            parentTableBasicTablesId: modelFields?.parentTable?.id,
+            nmTest: modelFields.nmTest
+              ? JSON.parse(modelFields.nmTest)
+              : modelFields.nmTest,
+          };
+          await API.graphql({
+            query: createBasicTable,
+            variables: {
+              input: {
+                ...modelFieldsToSave,
+              },
+            },
+          });
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
+        } catch (err) {
+          if (onError) {
+            const messages = err.errors.map((e) => e.message).join(\\"\\\\n\\");
+            onError(modelFields, messages);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"CreateForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Name\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              nmTest,
+              parentTable,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <TextAreaField
+        label=\\"Nm test\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              nmTest: value,
+              parentTable,
+            };
+            const result = onChange(modelFields);
+            value = result?.nmTest ?? value;
+          }
+          if (errors.nmTest?.hasError) {
+            runValidationTasks(\\"nmTest\\", value);
+          }
+          setNmTest(value);
+        }}
+        onBlur={() => runValidationTasks(\\"nmTest\\", nmTest)}
+        errorMessage={errors.nmTest?.errorMessage}
+        hasError={errors.nmTest?.hasError}
+        {...getOverrideProps(overrides, \\"nmTest\\")}
+      ></TextAreaField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              nmTest,
+              parentTable: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.parentTable ?? value;
+          }
+          setParentTable(value);
+          setCurrentParentTableValue(undefined);
+          setCurrentParentTableDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentParentTableValue}
+        label={\\"Parent table\\"}
+        items={parentTable ? [parentTable] : []}
+        hasError={errors?.parentTable?.hasError}
+        errorMessage={errors?.parentTable?.errorMessage}
+        getBadgeText={getDisplayValue.parentTable}
+        setFieldValue={(model) => {
+          setCurrentParentTableDisplayValue(
+            model ? getDisplayValue.parentTable(model) : \\"\\"
+          );
+          setCurrentParentTableValue(model);
+        }}
+        inputFieldRef={parentTableRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Parent table\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search ParentTable\\"
+          value={currentParentTableDisplayValue}
+          options={parentTableRecords
+            .filter((r) => !parentTableIdSet.has(getIDValue.parentTable?.(r)))
+            .map((r) => ({
+              id: getIDValue.parentTable?.(r),
+              label: getDisplayValue.parentTable?.(r),
+            }))}
+          isLoading={parentTableLoading}
+          onSelect={({ id, label }) => {
+            setCurrentParentTableValue(
+              parentTableRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentParentTableDisplayValue(label);
+            runValidationTasks(\\"parentTable\\", label);
+          }}
+          onClear={() => {
+            setCurrentParentTableDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            fetchParentTableRecords(value);
+            if (errors.parentTable?.hasError) {
+              runValidationTasks(\\"parentTable\\", value);
+            }
+            setCurrentParentTableDisplayValue(value);
+            setCurrentParentTableValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"parentTable\\", currentParentTableDisplayValue)
+          }
+          errorMessage={errors.parentTable?.errorMessage}
+          hasError={errors.parentTable?.hasError}
+          ref={parentTableRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"parentTable\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should generate a create form with nonModel field 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { ParentTable } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CreateFormInputValues = {
+    name?: string;
+    nmTest?: string;
+    parentTable?: ParentTable;
+};
+export declare type CreateFormValidationValues = {
+    name?: ValidationFunction<string>;
+    nmTest?: ValidationFunction<string>;
+    parentTable?: ValidationFunction<ParentTable>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CreateFormOverridesProps = {
+    CreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    nmTest?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    parentTable?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type CreateFormProps = React.PropsWithChildren<{
+    overrides?: CreateFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: CreateFormInputValues) => CreateFormInputValues;
+    onSuccess?: (fields: CreateFormInputValues) => void;
+    onError?: (fields: CreateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: CreateFormInputValues) => CreateFormInputValues;
+    onValidate?: CreateFormValidationValues;
+} & React.CSSProperties>;
+export default function CreateForm(props: CreateFormProps): React.ReactElement;
 "
 `;
 
@@ -8402,8 +8985,7 @@ export default function CommentUpdateForm(props) {
           });
           const modelFieldsToSave = {
             content: modelFields.content,
-            postID: modelFields.postID,
-            Post: modelFields.Post,
+            postCommentsId: modelFields?.Post?.id,
           };
           await API.graphql({
             query: updateComment,
@@ -9123,8 +9705,7 @@ export default function CommentUpdateForm(props) {
           });
           const modelFieldsToSave = {
             content: modelFields.content,
-            postID: modelFields.postID,
-            Post: modelFields.Post,
+            postCommentsId: modelFields?.Post?.id,
           };
           await API.graphql({
             query: updateComment,
@@ -10052,6 +10633,603 @@ export default function ClassUpdateForm(props: ClassUpdateFormProps): React.Reac
 "
 `;
 
+exports[`amplify form renderer tests GraphQL form tests should generate an update form with nonModel field 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextAreaField,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
+import { getBasicTable, listParentTables } from \\"../graphql/queries\\";
+import { updateBasicTable } from \\"../graphql/mutations\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function UpdateForm(props) {
+  const {
+    id: idProp,
+    basicTable: basicTableModelProp,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    name: \\"\\",
+    nmTest: \\"\\",
+    parentTable: undefined,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [nmTest, setNmTest] = React.useState(initialValues.nmTest);
+  const [parentTable, setParentTable] = React.useState(
+    initialValues.parentTable
+  );
+  const [parentTableLoading, setParentTableLoading] = React.useState(false);
+  const [parentTableRecords, setParentTableRecords] = React.useState([]);
+  const autocompleteLength = 10;
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = basicTableRecord
+      ? { ...initialValues, ...basicTableRecord, parentTable }
+      : initialValues;
+    setName(cleanValues.name);
+    setNmTest(
+      typeof cleanValues.nmTest === \\"string\\" || cleanValues.nmTest === null
+        ? cleanValues.nmTest
+        : JSON.stringify(cleanValues.nmTest)
+    );
+    setParentTable(cleanValues.parentTable);
+    setCurrentParentTableValue(undefined);
+    setCurrentParentTableDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [basicTableRecord, setBasicTableRecord] =
+    React.useState(basicTableModelProp);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = idProp
+        ? (
+            await API.graphql({
+              query: getBasicTable,
+              variables: { id: idProp },
+            })
+          )?.data?.getBasicTable
+        : basicTableModelProp;
+      const parentTableRecord = record ? await record.parentTable : undefined;
+      setParentTable(parentTableRecord);
+      setBasicTableRecord(record);
+    };
+    queryData();
+  }, [idProp, basicTableModelProp]);
+  React.useEffect(resetStateValues, [basicTableRecord, parentTable]);
+  const [currentParentTableDisplayValue, setCurrentParentTableDisplayValue] =
+    React.useState(\\"\\");
+  const [currentParentTableValue, setCurrentParentTableValue] =
+    React.useState(undefined);
+  const parentTableRef = React.createRef();
+  const getIDValue = {
+    parentTable: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const parentTableIdSet = new Set(
+    Array.isArray(parentTable)
+      ? parentTable.map((r) => getIDValue.parentTable?.(r))
+      : getIDValue.parentTable?.(parentTable)
+  );
+  const getDisplayValue = {
+    parentTable: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+  };
+  const validations = {
+    name: [],
+    nmTest: [{ type: \\"JSON\\" }],
+    parentTable: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  const fetchParentTableRecords = async (value) => {
+    setParentTableLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ name: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listParentTables,
+          variables,
+        })
+      )?.data?.listParentTables?.items;
+      var loaded = result.filter(
+        (item) => !parentTableIdSet.has(getIDValue.parentTable?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setParentTableRecords(newOptions.slice(0, autocompleteLength));
+    setParentTableLoading(false);
+  };
+  React.useEffect(() => {
+    fetchParentTableRecords(\\"\\");
+  }, []);
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          name,
+          nmTest,
+          parentTable,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
+            }
+          });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+            parentTableBasicTablesId: modelFields?.parentTable?.id,
+            nmTest: modelFields.nmTest
+              ? JSON.parse(modelFields.nmTest)
+              : modelFields.nmTest,
+          };
+          await API.graphql({
+            query: updateBasicTable,
+            variables: {
+              input: {
+                id: basicTableRecord.id,
+                ...modelFieldsToSave,
+              },
+            },
+          });
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            const messages = err.errors.map((e) => e.message).join(\\"\\\\n\\");
+            onError(modelFields, messages);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"UpdateForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Name\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              nmTest,
+              parentTable,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <TextAreaField
+        label=\\"Nm test\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={nmTest}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              nmTest: value,
+              parentTable,
+            };
+            const result = onChange(modelFields);
+            value = result?.nmTest ?? value;
+          }
+          if (errors.nmTest?.hasError) {
+            runValidationTasks(\\"nmTest\\", value);
+          }
+          setNmTest(value);
+        }}
+        onBlur={() => runValidationTasks(\\"nmTest\\", nmTest)}
+        errorMessage={errors.nmTest?.errorMessage}
+        hasError={errors.nmTest?.hasError}
+        {...getOverrideProps(overrides, \\"nmTest\\")}
+      ></TextAreaField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              nmTest,
+              parentTable: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.parentTable ?? value;
+          }
+          setParentTable(value);
+          setCurrentParentTableValue(undefined);
+          setCurrentParentTableDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentParentTableValue}
+        label={\\"Parent table\\"}
+        items={parentTable ? [parentTable] : []}
+        hasError={errors?.parentTable?.hasError}
+        errorMessage={errors?.parentTable?.errorMessage}
+        getBadgeText={getDisplayValue.parentTable}
+        setFieldValue={(model) => {
+          setCurrentParentTableDisplayValue(
+            model ? getDisplayValue.parentTable(model) : \\"\\"
+          );
+          setCurrentParentTableValue(model);
+        }}
+        inputFieldRef={parentTableRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Parent table\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search ParentTable\\"
+          value={currentParentTableDisplayValue}
+          options={parentTableRecords
+            .filter((r) => !parentTableIdSet.has(getIDValue.parentTable?.(r)))
+            .map((r) => ({
+              id: getIDValue.parentTable?.(r),
+              label: getDisplayValue.parentTable?.(r),
+            }))}
+          isLoading={parentTableLoading}
+          onSelect={({ id, label }) => {
+            setCurrentParentTableValue(
+              parentTableRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentParentTableDisplayValue(label);
+            runValidationTasks(\\"parentTable\\", label);
+          }}
+          onClear={() => {
+            setCurrentParentTableDisplayValue(\\"\\");
+          }}
+          defaultValue={parentTable}
+          onChange={(e) => {
+            let { value } = e.target;
+            fetchParentTableRecords(value);
+            if (errors.parentTable?.hasError) {
+              runValidationTasks(\\"parentTable\\", value);
+            }
+            setCurrentParentTableDisplayValue(value);
+            setCurrentParentTableValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"parentTable\\", currentParentTableDisplayValue)
+          }
+          errorMessage={errors.parentTable?.errorMessage}
+          hasError={errors.parentTable?.hasError}
+          ref={parentTableRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"parentTable\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Reset\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || basicTableModelProp)}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={
+              !(idProp || basicTableModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should generate an update form with nonModel field 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { BasicTable, ParentTable } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UpdateFormInputValues = {
+    name?: string;
+    nmTest?: string;
+    parentTable?: ParentTable;
+};
+export declare type UpdateFormValidationValues = {
+    name?: ValidationFunction<string>;
+    nmTest?: ValidationFunction<string>;
+    parentTable?: ValidationFunction<ParentTable>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type UpdateFormOverridesProps = {
+    UpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    nmTest?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    parentTable?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type UpdateFormProps = React.PropsWithChildren<{
+    overrides?: UpdateFormOverridesProps | undefined | null;
+} & {
+    id?: string;
+    basicTable?: BasicTable;
+    onSubmit?: (fields: UpdateFormInputValues) => UpdateFormInputValues;
+    onSuccess?: (fields: UpdateFormInputValues) => void;
+    onError?: (fields: UpdateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: UpdateFormInputValues) => UpdateFormInputValues;
+    onValidate?: UpdateFormValidationValues;
+} & React.CSSProperties>;
+export default function UpdateForm(props: UpdateFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should generate an upgrade form with multiple relationship & cpk 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
@@ -10690,7 +11868,8 @@ export default function UpdateCPKTeacherForm(props) {
           });
           const modelFieldsToSave = {
             specialTeacherId: modelFields.specialTeacherId,
-            CPKStudent: modelFields.CPKStudent,
+            cPKTeacherCPKStudentSpecialStudentId:
+              modelFields?.CPKStudent?.specialStudentId,
           };
           promises.push(
             API.graphql({
@@ -11445,11 +12624,15 @@ export default function CreateCompositeToyForm(props) {
               modelFields[key] = null;
             }
           });
+          const modelFieldsToSave = {
+            kind: modelFields.kind,
+            color: modelFields.color,
+          };
           await API.graphql({
             query: createCompositeToy,
             variables: {
               input: {
-                ...modelFields,
+                ...modelFieldsToSave,
               },
             },
           });
@@ -12268,11 +13451,17 @@ export default function CreateCommentForm(props) {
               modelFields[key] = null;
             }
           });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+            postID: modelFields?.post?.id,
+            userCommentsId: modelFields?.User?.id,
+            orgCommentsId: modelFields?.Org?.id,
+          };
           await API.graphql({
             query: createComment,
             variables: {
               input: {
-                ...modelFields,
+                ...modelFieldsToSave,
               },
             },
           });
@@ -13237,8 +14426,12 @@ export default function CreateCompositeDogForm(props) {
           const modelFieldsToSave = {
             name: modelFields.name,
             description: modelFields.description,
-            CompositeBowl: modelFields.CompositeBowl,
-            CompositeOwner: modelFields.CompositeOwner,
+            compositeDogCompositeBowlShape: modelFields?.CompositeBowl?.shape,
+            compositeDogCompositeBowlSize: modelFields?.CompositeBowl?.size,
+            compositeDogCompositeOwnerLastName:
+              modelFields?.CompositeOwner?.lastName,
+            compositeDogCompositeOwnerFirstName:
+              modelFields?.CompositeOwner?.firstName,
           };
           const compositeDog = (
             await API.graphql({
@@ -15273,12 +16466,16 @@ export default function CreateDogForm(props) {
               modelFields[key] = null;
             }
           });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+            dogOwnerId: modelFields?.owner?.id,
+          };
           const dog = (
             await API.graphql({
               query: createDog,
               variables: {
                 input: {
-                  ...modelFields,
+                  ...modelFieldsToSave,
                 },
               },
             })
@@ -15816,12 +17013,16 @@ export default function CreateOwnerForm(props) {
               modelFields[key] = null;
             }
           });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+            ownerDogId: modelFields?.Dog?.id,
+          };
           const owner = (
             await API.graphql({
               query: createOwner,
               variables: {
                 input: {
-                  ...modelFields,
+                  ...modelFieldsToSave,
                 },
               },
             })
@@ -16377,12 +17578,15 @@ export default function CommentUpdateForm(props) {
               modelFields[key] = null;
             }
           });
+          const modelFieldsToSave = {
+            content: modelFields.content,
+          };
           await API.graphql({
             query: updateComment,
             variables: {
               input: {
                 id: commentRecord.id,
-                ...modelFields,
+                ...modelFieldsToSave,
               },
             },
           });

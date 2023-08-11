@@ -1,0 +1,12 @@
+{
+  "name": "CreateForm",
+  "dataType": {
+      "dataSourceType": "DataStore",
+      "dataTypeName": "BasicTable"
+  },
+  "formActionType": "create",
+  "fields": {},
+  "sectionalElements": {},
+  "style": {},
+  "cta": {}
+}

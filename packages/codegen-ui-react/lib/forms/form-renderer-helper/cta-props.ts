@@ -327,6 +327,8 @@ export const buildExpression = (
   const { modelObjectToSave, isDifferentFromModelObject } = generateModelObjectToSave(
     fieldConfigs,
     modelFieldsObjectName,
+    dataSchema.models,
+    dataApi === 'GraphQL',
   );
 
   const modelObjectToSaveStatements: Statement[] = [];

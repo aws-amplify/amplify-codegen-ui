@@ -1,0 +1,12 @@
+{
+  "name": "UpdateForm",
+  "dataType": {
+      "dataSourceType": "DataStore",
+      "dataTypeName": "BasicTable"
+  },
+  "formActionType": "update",
+  "fields": {},
+  "sectionalElements": {},
+  "style": {},
+  "cta": {}
+}

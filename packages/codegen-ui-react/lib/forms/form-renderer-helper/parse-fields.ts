@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { isNonModelDataType, FieldConfigMetadata } from '@aws-amplify/codegen-ui';
+import { isNonModelDataType, FieldConfigMetadata, GenericDataModel } from '@aws-amplify/codegen-ui';
 import {
   PropertyAccessExpression,
   Identifier,
@@ -114,6 +114,8 @@ export const generateParsePropertyAssignments = (
 export const generateModelObjectToSave = (
   fieldConfigs: Record<string, FieldConfigMetadata>,
   modelFieldsObjectName: string,
+  models: Record<string, GenericDataModel>,
+  isGraphQL: boolean,
 ): { modelObjectToSave: ObjectLiteralExpression; isDifferentFromModelObject: boolean } => {
   const nonModelFields: string[] = [];
   const nonModelArrayFields: string[] = [];
@@ -122,18 +124,32 @@ export const generateModelObjectToSave = (
 
   Object.entries(fieldConfigs).forEach(([name, { dataType, sanitizedFieldName, isArray, relationship }]) => {
     const shouldExclude = !dataType || relationship?.type === 'HAS_MANY';
+    const renderedFieldName = sanitizedFieldName || name;
     if (shouldExclude) {
       isDifferentFromModelObject = true;
       return;
     }
     if (isNonModelDataType(dataType)) {
-      const renderedFieldName = sanitizedFieldName || name;
       if (!isArray) {
         nonModelFields.push(renderedFieldName);
       } else {
         nonModelArrayFields.push(renderedFieldName);
       }
       isDifferentFromModelObject = true;
+      return;
+    }
+    // TODO: test difference between has_one/belongs_to vs has_many/belongs_to
+    if (isGraphQL && (relationship?.type === 'BELONGS_TO' || relationship?.type === 'HAS_ONE')) {
+      isDifferentFromModelObject = true;
+      const relatedModel = models[relationship.relatedModelName];
+      relationship.associatedFields?.forEach((associatedFieldName, index) => {
+        inheritFromModelFieldsPropertyAssignments.push(
+          factory.createPropertyAssignment(
+            factory.createIdentifier(associatedFieldName),
+            buildAccessChain([modelFieldsObjectName, renderedFieldName, relatedModel.primaryKeys[index]], true),
+          ),
+        );
+      });
       return;
     }
 
