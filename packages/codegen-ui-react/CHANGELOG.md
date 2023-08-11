@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.15.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.1...v2.15.2) (2023-08-11)
+
+### Bug Fixes
+
+- support update graphql call with custom keys ([4fdcb32](https://github.com/aws-amplify/amplify-codegen-ui/commit/4fdcb32543498f083864b7afab97adcf7d951de1))
+- update create parent and update child graphql expressions ([f19993f](https://github.com/aws-amplify/amplify-codegen-ui/commit/f19993f9a235c0c48acb8778d79bb92f40be088f))
+- use key values for relationships on modelFieldsToSave instead of full models ([102206b](https://github.com/aws-amplify/amplify-codegen-ui/commit/102206bb1ab77438f73579989a97a44e9a7debe9))
+
+### Reverts
+
+- Revert "fix: use related fields for has_one and belongs_to properties when building GraphQL API payloads" ([c7df29a](https://github.com/aws-amplify/amplify-codegen-ui/commit/c7df29a5781d78931187ef6dd0db4a7f580f6333))
+
 ## [2.15.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.0...v2.15.1) (2023-08-08)
 
 ### Bug Fixes
