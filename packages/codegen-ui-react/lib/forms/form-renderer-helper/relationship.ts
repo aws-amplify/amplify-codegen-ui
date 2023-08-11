@@ -31,6 +31,7 @@ import {
   GenericDataField,
   GenericDataSchema,
 } from '@aws-amplify/codegen-ui';
+import { plural } from 'pluralize';
 import {
   getRecordsName,
   getLinkedDataName,
@@ -1083,7 +1084,7 @@ export const buildGetRelationshipModels = (
         const joinTableThisModelName = fieldConfigMetaData.relationship.relatedModelFields[0];
         const joinTableThisModelFields =
           extractAssociatedFields(joinTableMetadata!.fields[joinTableThisModelName]) || [];
-        const joinTableIndexedQuery = `${lowerCaseFirst(relatedJoinTableName)}By${joinTableThisModelFields
+        const joinTableIndexedQuery = `${plural(lowerCaseFirst(relatedJoinTableName))}By${joinTableThisModelFields
           .map(capitalizeFirstLetter)
           .join('And')}`;
         importCollection.addGraphqlQueryImport(joinTableIndexedQuery);
