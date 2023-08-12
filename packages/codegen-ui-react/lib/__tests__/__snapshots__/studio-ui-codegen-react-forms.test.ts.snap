@@ -15348,7 +15348,6 @@ export default function CreatePostForm(props) {
                     input: {
                       id: original.id,
                       postCommentsId: post.id,
-                      post: post,
                     },
                   },
                 })

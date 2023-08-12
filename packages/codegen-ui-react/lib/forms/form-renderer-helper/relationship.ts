@@ -2043,15 +2043,6 @@ const getUpdateRelatedModelExpression = (
       );
     });
 
-    if (belongsToFieldOnRelatedModel) {
-      statements.push(
-        factory.createPropertyAssignment(
-          factory.createIdentifier(belongsToFieldOnRelatedModel),
-          setToNull ? factory.createNull() : factory.createIdentifier(savedModelName),
-        ),
-      );
-    }
-
     /**
      * API.graphql({
      *    query: updateStudent,
