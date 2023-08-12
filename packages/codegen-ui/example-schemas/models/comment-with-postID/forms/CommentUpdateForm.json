@@ -1,0 +1,12 @@
+{
+    "name": "CommentUpdateForm",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "Comment"
+    },
+    "formActionType": "update",
+    "fields": {},
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+  }

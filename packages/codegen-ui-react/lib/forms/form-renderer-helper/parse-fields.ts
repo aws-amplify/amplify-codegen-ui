@@ -110,7 +110,6 @@ export const generateParsePropertyAssignments = (
   return [...parseArrayFields, ...parseFields];
 };
 
-//
 export const generateModelObjectToSave = (
   fieldConfigs: Record<string, FieldConfigMetadata>,
   modelFieldsObjectName: string,
@@ -138,11 +137,14 @@ export const generateModelObjectToSave = (
       isDifferentFromModelObject = true;
       return;
     }
-    // TODO: test difference between has_one/belongs_to vs has_many/belongs_to
-    if (isGraphQL && (relationship?.type === 'BELONGS_TO' || relationship?.type === 'HAS_ONE')) {
+    if (
+      isGraphQL &&
+      (relationship?.type === 'BELONGS_TO' || relationship?.type === 'HAS_ONE') &&
+      relationship.associatedFields
+    ) {
       isDifferentFromModelObject = true;
       const relatedModel = models[relationship.relatedModelName];
-      relationship.associatedFields?.forEach((associatedFieldName, index) => {
+      relationship.associatedFields.forEach((associatedFieldName, index) => {
         inheritFromModelFieldsPropertyAssignments.push(
           factory.createPropertyAssignment(
             factory.createIdentifier(associatedFieldName),
