@@ -1143,6 +1143,30 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
+
+    it('should generate an update form with id field instead of belongsTo', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'models/comment-with-postID/forms/CommentUpdateForm',
+        'models/comment-with-postID/schema',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate a create form with id field instead of belongsTo', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'models/comment-with-postID/forms/CommentCreateForm',
+        'models/comment-with-postID/schema',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
   });
 
   describe('NoApi form tests', () => {
