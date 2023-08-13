@@ -683,22 +683,22 @@ export const buildUpdateDatastoreQuery = (
   importedModelName: string,
   lowerCaseDataTypeName: string,
   relatedModelStatements: Statement[],
-  primaryKey: string,
+  primaryKeyPropName: string,
   importCollection: ImportCollection,
-  isCompositeKey: boolean,
+  primaryKeys: string[],
   dataApi?: DataApiKind,
 ) => {
   // if there are multiple primaryKeys, it's a composite key and we're using 'id' for a composite key prop
-  const pkQueryIdentifier = factory.createIdentifier(primaryKey);
+  const pkPropIdentifier = factory.createIdentifier(primaryKeyPropName);
 
   const queryCall =
     dataApi === 'GraphQL'
       ? wrapInParenthesizedExpression(
           getGraphqlCallExpression(ActionType.GET, importedModelName, importCollection, {
             inputs: [
-              isCompositeKey
-                ? factory.createSpreadAssignment(pkQueryIdentifier)
-                : factory.createPropertyAssignment(factory.createIdentifier('id'), pkQueryIdentifier),
+              primaryKeys.length > 1
+                ? factory.createSpreadAssignment(pkPropIdentifier)
+                : factory.createPropertyAssignment(factory.createIdentifier(primaryKeys[0]), pkPropIdentifier),
             ],
           }),
           ['data', getGraphqlQueryForModel(ActionType.GET, importedModelName)],
@@ -710,7 +710,7 @@ export const buildUpdateDatastoreQuery = (
               factory.createIdentifier('query'),
             ),
             undefined,
-            [factory.createIdentifier(importedModelName), pkQueryIdentifier],
+            [factory.createIdentifier(importedModelName), pkPropIdentifier],
           ),
         );
 
@@ -755,7 +755,7 @@ export const buildUpdateDatastoreQuery = (
                           undefined,
                           undefined,
                           factory.createConditionalExpression(
-                            pkQueryIdentifier,
+                            pkPropIdentifier,
                             factory.createToken(SyntaxKind.QuestionToken),
                             queryCall,
                             factory.createToken(SyntaxKind.ColonToken),

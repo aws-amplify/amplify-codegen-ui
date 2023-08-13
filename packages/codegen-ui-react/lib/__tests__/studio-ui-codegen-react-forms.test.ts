@@ -962,6 +962,23 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should use custom primary key on fetch query for update form', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'models/custom-key-model/forms/CustomKeyModelUpdateForm',
+        'models/custom-key-model/schema',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+      expect(componentText).toContain('variables: { mycustomkey: mycustomkeyProp },');
+      expect(componentText).not.toContain('variables: { id: mycustomkeyProp },');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should generate a create form with manyToMany relationship', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/tag-datastore-create',

@@ -1,0 +1,10 @@
+type CustomKeyModel @model @auth(rules: [{allow: public}]) {
+  mycustomkey: String! @primaryKey
+  content: String!
+  children: [ChildItem] @hasMany
+}
+
+type ChildItem @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  content: String!
+}
