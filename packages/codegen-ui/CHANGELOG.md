@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.15.3](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.2...v2.15.3) (2023-08-13)
+
+### Bug Fixes
+
+- add parent id to update requests ([4c029a2](https://github.com/aws-amplify/amplify-codegen-ui/commit/4c029a20d38f060803f956396eb86550b1e7811c))
+
 ## [2.15.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.1...v2.15.2) (2023-08-11)
 
 ### Bug Fixes
