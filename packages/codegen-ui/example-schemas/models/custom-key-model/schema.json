@@ -1,0 +1,166 @@
+{
+  "models": {
+      "CustomKeyModel": {
+          "name": "CustomKeyModel",
+          "fields": {
+              "mycustomkey": {
+                  "name": "mycustomkey",
+                  "isArray": false,
+                  "type": "String",
+                  "isRequired": true,
+                  "attributes": []
+              },
+              "content": {
+                  "name": "content",
+                  "isArray": false,
+                  "type": "String",
+                  "isRequired": true,
+                  "attributes": []
+              },
+              "children": {
+                  "name": "children",
+                  "isArray": true,
+                  "type": {
+                      "model": "ChildItem"
+                  },
+                  "isRequired": false,
+                  "attributes": [],
+                  "isArrayNullable": true,
+                  "association": {
+                      "connectionType": "HAS_MANY",
+                      "associatedWith": [
+                          "customKeyModelChildrenMycustomkey"
+                      ]
+                  }
+              },
+              "createdAt": {
+                  "name": "createdAt",
+                  "isArray": false,
+                  "type": "AWSDateTime",
+                  "isRequired": false,
+                  "attributes": [],
+                  "isReadOnly": true
+              },
+              "updatedAt": {
+                  "name": "updatedAt",
+                  "isArray": false,
+                  "type": "AWSDateTime",
+                  "isRequired": false,
+                  "attributes": [],
+                  "isReadOnly": true
+              }
+          },
+          "syncable": true,
+          "pluralName": "CustomKeyModels",
+          "attributes": [
+              {
+                  "type": "model",
+                  "properties": {}
+              },
+              {
+                  "type": "key",
+                  "properties": {
+                      "fields": [
+                          "mycustomkey"
+                      ]
+                  }
+              },
+              {
+                  "type": "auth",
+                  "properties": {
+                      "rules": [
+                          {
+                              "allow": "public",
+                              "operations": [
+                                  "create",
+                                  "update",
+                                  "delete",
+                                  "read"
+                              ]
+                          }
+                      ]
+                  }
+              }
+          ]
+      },
+      "ChildItem": {
+          "name": "ChildItem",
+          "fields": {
+              "id": {
+                  "name": "id",
+                  "isArray": false,
+                  "type": "ID",
+                  "isRequired": true,
+                  "attributes": []
+              },
+              "content": {
+                  "name": "content",
+                  "isArray": false,
+                  "type": "String",
+                  "isRequired": true,
+                  "attributes": []
+              },
+              "createdAt": {
+                  "name": "createdAt",
+                  "isArray": false,
+                  "type": "AWSDateTime",
+                  "isRequired": false,
+                  "attributes": [],
+                  "isReadOnly": true
+              },
+              "updatedAt": {
+                  "name": "updatedAt",
+                  "isArray": false,
+                  "type": "AWSDateTime",
+                  "isRequired": false,
+                  "attributes": [],
+                  "isReadOnly": true
+              },
+              "customKeyModelChildrenMycustomkey": {
+                  "name": "customKeyModelChildrenMycustomkey",
+                  "isArray": false,
+                  "type": "String",
+                  "isRequired": false,
+                  "attributes": []
+              }
+          },
+          "syncable": true,
+          "pluralName": "ChildItems",
+          "attributes": [
+              {
+                  "type": "model",
+                  "properties": {}
+              },
+              {
+                  "type": "key",
+                  "properties": {
+                      "name": "gsi-CustomKeyModel.children",
+                      "fields": [
+                          "customKeyModelChildrenMycustomkey"
+                      ]
+                  }
+              },
+              {
+                  "type": "auth",
+                  "properties": {
+                      "rules": [
+                          {
+                              "allow": "public",
+                              "operations": [
+                                  "create",
+                                  "update",
+                                  "delete",
+                                  "read"
+                              ]
+                          }
+                      ]
+                  }
+              }
+          ]
+      }
+  },
+  "enums": {},
+  "nonModels": {},
+  "codegenVersion": "3.4.3",
+  "version": "d5f6d906b43f31ad19da125a428925b6"
+}

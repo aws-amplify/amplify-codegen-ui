@@ -12532,7 +12532,7 @@ export default function UpdateCPKTeacherForm(props) {
         ? (
             await API.graphql({
               query: getCPKTeacher,
-              variables: { id: specialTeacherIdProp },
+              variables: { specialTeacherId: specialTeacherIdProp },
             })
           )?.data?.getCPKTeacher
         : cPKTeacherModelProp;
@@ -18816,6 +18816,650 @@ export declare type CommentUpdateFormProps = React.PropsWithChildren<{
     onValidate?: CommentUpdateFormValidationValues;
 } & React.CSSProperties>;
 export default function CommentUpdateForm(props: CommentUpdateFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should use custom primary key on fetch query for update form 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
+import { getCustomKeyModel, listChildItems } from \\"../graphql/queries\\";
+import { updateChildItem, updateCustomKeyModel } from \\"../graphql/mutations\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function UpdateForm(props) {
+  const {
+    mycustomkey: mycustomkeyProp,
+    customKeyModel: customKeyModelModelProp,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    mycustomkey: \\"\\",
+    content: \\"\\",
+    children: [],
+  };
+  const [mycustomkey, setMycustomkey] = React.useState(
+    initialValues.mycustomkey
+  );
+  const [content, setContent] = React.useState(initialValues.content);
+  const [children, setChildren] = React.useState(initialValues.children);
+  const [childrenLoading, setChildrenLoading] = React.useState(false);
+  const [childrenRecords, setChildrenRecords] = React.useState([]);
+  const autocompleteLength = 10;
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = customKeyModelRecord
+      ? { ...initialValues, ...customKeyModelRecord, children: linkedChildren }
+      : initialValues;
+    setMycustomkey(cleanValues.mycustomkey);
+    setContent(cleanValues.content);
+    setChildren(cleanValues.children ?? []);
+    setCurrentChildrenValue(undefined);
+    setCurrentChildrenDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [customKeyModelRecord, setCustomKeyModelRecord] = React.useState(
+    customKeyModelModelProp
+  );
+  const [linkedChildren, setLinkedChildren] = React.useState([]);
+  const canUnlinkChildren = true;
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = mycustomkeyProp
+        ? (
+            await API.graphql({
+              query: getCustomKeyModel,
+              variables: { mycustomkey: mycustomkeyProp },
+            })
+          )?.data?.getCustomKeyModel
+        : customKeyModelModelProp;
+      const linkedChildren = record?.children?.items ?? [];
+      setLinkedChildren(linkedChildren);
+      setCustomKeyModelRecord(record);
+    };
+    queryData();
+  }, [mycustomkeyProp, customKeyModelModelProp]);
+  React.useEffect(resetStateValues, [customKeyModelRecord, linkedChildren]);
+  const [currentChildrenDisplayValue, setCurrentChildrenDisplayValue] =
+    React.useState(\\"\\");
+  const [currentChildrenValue, setCurrentChildrenValue] =
+    React.useState(undefined);
+  const childrenRef = React.createRef();
+  const getIDValue = {
+    children: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const childrenIdSet = new Set(
+    Array.isArray(children)
+      ? children.map((r) => getIDValue.children?.(r))
+      : getIDValue.children?.(children)
+  );
+  const getDisplayValue = {
+    children: (r) => \`\${r?.content ? r?.content + \\" - \\" : \\"\\"}\${r?.id}\`,
+  };
+  const validations = {
+    mycustomkey: [{ type: \\"Required\\" }],
+    content: [{ type: \\"Required\\" }],
+    children: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  const fetchChildrenRecords = async (value) => {
+    setChildrenLoading(true);
+    const newOptions = [];
+    let newNext = \\"\\";
+    while (newOptions.length < autocompleteLength && newNext != null) {
+      const variables = {
+        limit: autocompleteLength * 5,
+        filter: {
+          or: [{ content: { contains: value } }, { id: { contains: value } }],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listChildItems,
+          variables,
+        })
+      )?.data?.listChildItems?.items;
+      var loaded = result.filter(
+        (item) => !childrenIdSet.has(getIDValue.children?.(item))
+      );
+      newOptions.push(...loaded);
+      newNext = result.nextToken;
+    }
+    setChildrenRecords(newOptions.slice(0, autocompleteLength));
+    setChildrenLoading(false);
+  };
+  React.useEffect(() => {
+    fetchChildrenRecords(\\"\\");
+  }, []);
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          mycustomkey,
+          content,
+          children,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
+            }
+          });
+          const promises = [];
+          const childrenToLink = [];
+          const childrenToUnLink = [];
+          const childrenSet = new Set();
+          const linkedChildrenSet = new Set();
+          children.forEach((r) => childrenSet.add(getIDValue.children?.(r)));
+          linkedChildren.forEach((r) =>
+            linkedChildrenSet.add(getIDValue.children?.(r))
+          );
+          linkedChildren.forEach((r) => {
+            if (!childrenSet.has(getIDValue.children?.(r))) {
+              childrenToUnLink.push(r);
+            }
+          });
+          children.forEach((r) => {
+            if (!linkedChildrenSet.has(getIDValue.children?.(r))) {
+              childrenToLink.push(r);
+            }
+          });
+          childrenToUnLink.forEach((original) => {
+            if (!canUnlinkChildren) {
+              throw Error(
+                \`ChildItem \${original.id} cannot be unlinked from CustomKeyModel because customKeyModelChildrenMycustomkey is a required field.\`
+              );
+            }
+            promises.push(
+              API.graphql({
+                query: updateChildItem,
+                variables: {
+                  input: {
+                    id: original.id,
+                    customKeyModelChildrenMycustomkey: null,
+                  },
+                },
+              })
+            );
+          });
+          childrenToLink.forEach((original) => {
+            promises.push(
+              API.graphql({
+                query: updateChildItem,
+                variables: {
+                  input: {
+                    id: original.id,
+                    customKeyModelChildrenMycustomkey:
+                      customKeyModelRecord.mycustomkey,
+                  },
+                },
+              })
+            );
+          });
+          const modelFieldsToSave = {
+            mycustomkey: modelFields.mycustomkey,
+            content: modelFields.content,
+          };
+          promises.push(
+            API.graphql({
+              query: updateCustomKeyModel,
+              variables: {
+                input: {
+                  mycustomkey: customKeyModelRecord.mycustomkey,
+                  ...modelFieldsToSave,
+                },
+              },
+            })
+          );
+          await Promise.all(promises);
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            const messages = err.errors.map((e) => e.message).join(\\"\\\\n\\");
+            onError(modelFields, messages);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"UpdateForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Mycustomkey\\"
+        isRequired={true}
+        isReadOnly={true}
+        value={mycustomkey}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              mycustomkey: value,
+              content,
+              children,
+            };
+            const result = onChange(modelFields);
+            value = result?.mycustomkey ?? value;
+          }
+          if (errors.mycustomkey?.hasError) {
+            runValidationTasks(\\"mycustomkey\\", value);
+          }
+          setMycustomkey(value);
+        }}
+        onBlur={() => runValidationTasks(\\"mycustomkey\\", mycustomkey)}
+        errorMessage={errors.mycustomkey?.errorMessage}
+        hasError={errors.mycustomkey?.hasError}
+        {...getOverrideProps(overrides, \\"mycustomkey\\")}
+      ></TextField>
+      <TextField
+        label=\\"Content\\"
+        isRequired={true}
+        isReadOnly={false}
+        value={content}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              mycustomkey,
+              content: value,
+              children,
+            };
+            const result = onChange(modelFields);
+            value = result?.content ?? value;
+          }
+          if (errors.content?.hasError) {
+            runValidationTasks(\\"content\\", value);
+          }
+          setContent(value);
+        }}
+        onBlur={() => runValidationTasks(\\"content\\", content)}
+        errorMessage={errors.content?.errorMessage}
+        hasError={errors.content?.hasError}
+        {...getOverrideProps(overrides, \\"content\\")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              mycustomkey,
+              content,
+              children: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.children ?? values;
+          }
+          setChildren(values);
+          setCurrentChildrenValue(undefined);
+          setCurrentChildrenDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentChildrenValue}
+        label={\\"Children\\"}
+        items={children}
+        hasError={errors?.children?.hasError}
+        errorMessage={errors?.children?.errorMessage}
+        getBadgeText={getDisplayValue.children}
+        setFieldValue={(model) => {
+          setCurrentChildrenDisplayValue(
+            model ? getDisplayValue.children(model) : \\"\\"
+          );
+          setCurrentChildrenValue(model);
+        }}
+        inputFieldRef={childrenRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Children\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search ChildItem\\"
+          value={currentChildrenDisplayValue}
+          options={childrenRecords
+            .filter((r) => !childrenIdSet.has(getIDValue.children?.(r)))
+            .map((r) => ({
+              id: getIDValue.children?.(r),
+              label: getDisplayValue.children?.(r),
+            }))}
+          isLoading={childrenLoading}
+          onSelect={({ id, label }) => {
+            setCurrentChildrenValue(
+              childrenRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentChildrenDisplayValue(label);
+            runValidationTasks(\\"children\\", label);
+          }}
+          onClear={() => {
+            setCurrentChildrenDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            fetchChildrenRecords(value);
+            if (errors.children?.hasError) {
+              runValidationTasks(\\"children\\", value);
+            }
+            setCurrentChildrenDisplayValue(value);
+            setCurrentChildrenValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"children\\", currentChildrenDisplayValue)
+          }
+          errorMessage={errors.children?.errorMessage}
+          hasError={errors.children?.hasError}
+          ref={childrenRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"children\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Reset\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(mycustomkeyProp || customKeyModelModelProp)}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={
+              !(mycustomkeyProp || customKeyModelModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should use custom primary key on fetch query for update form 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { ChildItem, CustomKeyModel } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UpdateFormInputValues = {
+    mycustomkey?: string;
+    content?: string;
+    children?: ChildItem[];
+};
+export declare type UpdateFormValidationValues = {
+    mycustomkey?: ValidationFunction<string>;
+    content?: ValidationFunction<string>;
+    children?: ValidationFunction<ChildItem>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type UpdateFormOverridesProps = {
+    UpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    mycustomkey?: PrimitiveOverrideProps<TextFieldProps>;
+    content?: PrimitiveOverrideProps<TextFieldProps>;
+    children?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type UpdateFormProps = React.PropsWithChildren<{
+    overrides?: UpdateFormOverridesProps | undefined | null;
+} & {
+    mycustomkey?: string;
+    customKeyModel?: CustomKeyModel;
+    onSubmit?: (fields: UpdateFormInputValues) => UpdateFormInputValues;
+    onSuccess?: (fields: UpdateFormInputValues) => void;
+    onError?: (fields: UpdateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: UpdateFormInputValues) => UpdateFormInputValues;
+    onValidate?: UpdateFormValidationValues;
+} & React.CSSProperties>;
+export default function UpdateForm(props: UpdateFormProps): React.ReactElement;
 "
 `;
 
