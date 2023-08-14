@@ -303,6 +303,27 @@ export const generateArrayFieldComponent = () => {
               factory.createToken(SyntaxKind.EqualsGreaterThanToken),
               factory.createBlock(
                 [
+                  factory.createVariableStatement(
+                    undefined,
+                    factory.createVariableDeclarationList(
+                      [
+                        factory.createVariableDeclaration(
+                          factory.createObjectBindingPattern([
+                            factory.createBindingElement(
+                              undefined,
+                              undefined,
+                              factory.createIdentifier('hasError'),
+                              undefined,
+                            ),
+                          ]),
+                          undefined,
+                          undefined,
+                          factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, []),
+                        ),
+                      ],
+                      NodeFlags.Const,
+                    ),
+                  ),
                   factory.createIfStatement(
                     factory.createBinaryExpression(
                       factory.createBinaryExpression(
@@ -1083,10 +1104,6 @@ export const generateArrayFieldComponent = () => {
                               factory.createStringLiteral('link'),
                             ),
                             factory.createJsxAttribute(
-                              factory.createIdentifier('isDisabled'),
-                              factory.createJsxExpression(undefined, factory.createIdentifier('hasError')),
-                            ),
-                            factory.createJsxAttribute(
                               factory.createIdentifier('onClick'),
                               factory.createJsxExpression(undefined, factory.createIdentifier('addItem')),
                             ),
@@ -1158,6 +1175,7 @@ export const generateArrayFieldComponent = () => {
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('defaultFieldValue'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('lengthLimit'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('getBadgeText'), undefined),
+          factory.createBindingElement(undefined, undefined, factory.createIdentifier('runValidationTasks'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier(errorMessagePropName), undefined),
         ]),
         undefined,
