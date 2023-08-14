@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.15.3](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.2...v2.15.3) (2023-08-14)
+
+### Bug Fixes
+
+- add parent id to update requests ([4c029a2](https://github.com/aws-amplify/amplify-codegen-ui/commit/4c029a20d38f060803f956396eb86550b1e7811c))
+- pluralize table name when building join table index query ([96059ad](https://github.com/aws-amplify/amplify-codegen-ui/commit/96059ad1577c94befe03966519de9daa9ab043f9))
+- remove belongsto field for update related model expression ([#1071](https://github.com/aws-amplify/amplify-codegen-ui/issues/1071)) ([5c5ae99](https://github.com/aws-amplify/amplify-codegen-ui/commit/5c5ae9912147ea7cbf5ab2ddc761f64a1ede8fd6))
+- use custom primary key name when fetching record for update form ([210f9e0](https://github.com/aws-amplify/amplify-codegen-ui/commit/210f9e0fcc31239c32e5ef16ad745b6e099b457b))
+
 ## [2.15.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.1...v2.15.2) (2023-08-11)
 
 ### Bug Fixes
