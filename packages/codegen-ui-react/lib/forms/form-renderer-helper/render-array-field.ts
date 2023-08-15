@@ -205,6 +205,28 @@ export const renderArrayFieldComponent = (
 
   props.push(
     factory.createJsxAttribute(
+      factory.createIdentifier('runValidationTasks'),
+      factory.createJsxExpression(
+        undefined,
+        factory.createArrowFunction(
+          [factory.createToken(SyntaxKind.AsyncKeyword)],
+          undefined,
+          [],
+          undefined,
+          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+          factory.createAwaitExpression(
+            factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
+              factory.createStringLiteral(fieldName),
+              stateName,
+            ]),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  props.push(
+    factory.createJsxAttribute(
       factory.createIdentifier('errorMessage'),
       factory.createJsxExpression(undefined, buildAccessChain(['errors', fieldName, 'errorMessage'])),
     ),

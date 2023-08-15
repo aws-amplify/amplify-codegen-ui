@@ -33,6 +33,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -56,6 +57,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -165,12 +167,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -429,6 +426,9 @@ export default function CreateOwnerForm(props) {
         label={\\"Dog\\"}
         items={Dog ? [Dog] : []}
         hasError={errors?.Dog?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Dog\\", currentDogValue)
+        }
         errorMessage={errors?.Dog?.errorMessage}
         getBadgeText={getDisplayValue.Dog}
         setFieldValue={(model) => {
@@ -583,6 +583,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -606,6 +607,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -715,12 +717,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -1121,6 +1118,12 @@ export default function MyPostForm(props) {
         label={\\"Non model field array\\"}
         items={nonModelFieldArray}
         hasError={errors?.nonModelFieldArray?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            \\"nonModelFieldArray\\",
+            currentNonModelFieldArrayValue
+          )
+        }
         errorMessage={errors?.nonModelFieldArray?.errorMessage}
         setFieldValue={setCurrentNonModelFieldArrayValue}
         inputFieldRef={nonModelFieldArrayRef}
@@ -1243,6 +1246,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -1266,6 +1270,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -1375,12 +1380,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -1683,6 +1683,9 @@ export default function MyMemberForm(props) {
         label={\\"Team id\\"}
         items={teamID ? [teamID] : []}
         hasError={errors?.teamID?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"teamID\\", currentTeamIDValue)
+        }
         errorMessage={errors?.teamID?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -1764,6 +1767,9 @@ export default function MyMemberForm(props) {
         label={\\"Team Label\\"}
         items={Team ? [Team] : []}
         hasError={errors?.Team?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Team\\", currentTeamValue)
+        }
         errorMessage={errors?.Team?.errorMessage}
         getBadgeText={getDisplayValue.Team}
         setFieldValue={(model) => {
@@ -1899,6 +1905,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -1922,6 +1929,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -2031,12 +2039,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -2390,6 +2393,9 @@ export default function MovieCreateForm(props) {
         label={\\"Tags\\"}
         items={tags}
         hasError={errors?.tags?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"tags\\", currentTagsValue)
+        }
         errorMessage={errors?.tags?.errorMessage}
         getBadgeText={getDisplayValue.tags}
         setFieldValue={(model) => {
@@ -2553,6 +2559,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -2576,6 +2583,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -2685,12 +2693,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -2934,6 +2937,9 @@ export default function SchoolCreateForm(props) {
         label={\\"Students\\"}
         items={Students}
         hasError={errors?.Students?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Students\\", currentStudentsValue)
+        }
         errorMessage={errors?.Students?.errorMessage}
         getBadgeText={getDisplayValue.Students}
         setFieldValue={(model) => {
@@ -3103,6 +3109,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -3126,6 +3133,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -3235,12 +3243,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -3506,6 +3509,9 @@ export default function BookCreateForm(props) {
         label={\\"Primary author\\"}
         items={primaryAuthor ? [primaryAuthor] : []}
         hasError={errors?.primaryAuthor?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"primaryAuthor\\", currentPrimaryAuthorValue)
+        }
         errorMessage={errors?.primaryAuthor?.errorMessage}
         getBadgeText={getDisplayValue.primaryAuthor}
         setFieldValue={(model) => {
@@ -3646,6 +3652,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -3669,6 +3676,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -3778,12 +3786,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -3986,6 +3989,9 @@ export default function CommentCreateForm(props) {
         label={\\"Post id\\"}
         items={postID ? [postID] : []}
         hasError={errors?.postID?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"postID\\", currentPostIDValue)
+        }
         errorMessage={errors?.postID?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -4150,6 +4156,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -4173,6 +4180,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -4282,12 +4290,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -4549,6 +4552,9 @@ export default function TagCreateForm(props) {
         label={\\"Posts\\"}
         items={Posts}
         hasError={errors?.Posts?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Posts\\", currentPostsValue)
+        }
         errorMessage={errors?.Posts?.errorMessage}
         getBadgeText={getDisplayValue.Posts}
         setFieldValue={(model) => {
@@ -4621,6 +4627,9 @@ export default function TagCreateForm(props) {
         label={\\"Statuses\\"}
         items={statuses}
         hasError={errors?.statuses?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"statuses\\", currentStatusesValue)
+        }
         errorMessage={errors?.statuses?.errorMessage}
         getBadgeText={getDisplayValue.statuses}
         setFieldValue={setCurrentStatusesValue}
@@ -4778,6 +4787,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -4801,6 +4811,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -4910,12 +4921,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -5233,6 +5239,9 @@ export default function BookCreateForm(props) {
         label={\\"Primary author\\"}
         items={primaryAuthor ? [primaryAuthor] : []}
         hasError={errors?.primaryAuthor?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"primaryAuthor\\", currentPrimaryAuthorValue)
+        }
         errorMessage={errors?.primaryAuthor?.errorMessage}
         getBadgeText={getDisplayValue.primaryAuthor}
         setFieldValue={(model) => {
@@ -5316,6 +5325,9 @@ export default function BookCreateForm(props) {
         label={\\"Primary title\\"}
         items={primaryTitle ? [primaryTitle] : []}
         hasError={errors?.primaryTitle?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"primaryTitle\\", currentPrimaryTitleValue)
+        }
         errorMessage={errors?.primaryTitle?.errorMessage}
         getBadgeText={getDisplayValue.primaryTitle}
         setFieldValue={(model) => {
@@ -5463,6 +5475,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -5486,6 +5499,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -5595,12 +5609,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -5970,6 +5979,9 @@ export default function CreateCPKTeacherForm(props) {
         label={\\"Cpk student\\"}
         items={CPKStudent ? [CPKStudent] : []}
         hasError={errors?.CPKStudent?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CPKStudent\\", currentCPKStudentValue)
+        }
         errorMessage={errors?.CPKStudent?.errorMessage}
         getBadgeText={getDisplayValue.CPKStudent}
         setFieldValue={(model) => {
@@ -6048,6 +6060,9 @@ export default function CreateCPKTeacherForm(props) {
         label={\\"Cpk classes\\"}
         items={CPKClasses}
         hasError={errors?.CPKClasses?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CPKClasses\\", currentCPKClassesValue)
+        }
         errorMessage={errors?.CPKClasses?.errorMessage}
         getBadgeText={getDisplayValue.CPKClasses}
         setFieldValue={(model) => {
@@ -6124,6 +6139,9 @@ export default function CreateCPKTeacherForm(props) {
         label={\\"Cpk projects\\"}
         items={CPKProjects}
         hasError={errors?.CPKProjects?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CPKProjects\\", currentCPKProjectsValue)
+        }
         errorMessage={errors?.CPKProjects?.errorMessage}
         getBadgeText={getDisplayValue.CPKProjects}
         setFieldValue={(model) => {
@@ -6291,6 +6309,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -6314,6 +6333,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -6423,12 +6443,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -6692,6 +6707,9 @@ export default function CreateForm(props) {
         label={\\"Parent table\\"}
         items={parentTable ? [parentTable] : []}
         hasError={errors?.parentTable?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"parentTable\\", currentParentTableValue)
+        }
         errorMessage={errors?.parentTable?.errorMessage}
         getBadgeText={getDisplayValue.parentTable}
         setFieldValue={(model) => {
@@ -6855,6 +6873,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -6878,6 +6897,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -6987,12 +7007,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -7383,6 +7398,9 @@ export default function PostUpdateForm(props) {
         label={\\"Comments\\"}
         items={Comments}
         hasError={errors?.Comments?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Comments\\", currentCommentsValue)
+        }
         errorMessage={errors?.Comments?.errorMessage}
         getBadgeText={getDisplayValue.Comments}
         setFieldValue={(model) => {
@@ -7552,6 +7570,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -7575,6 +7594,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -7684,12 +7704,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -8172,6 +8187,12 @@ export default function MyPostForm(props) {
         label={\\"Non model field array\\"}
         items={nonModelFieldArray}
         hasError={errors?.nonModelFieldArray?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            \\"nonModelFieldArray\\",
+            currentNonModelFieldArrayValue
+          )
+        }
         errorMessage={errors?.nonModelFieldArray?.errorMessage}
         setFieldValue={setCurrentNonModelFieldArrayValue}
         inputFieldRef={nonModelFieldArrayRef}
@@ -8346,6 +8367,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -8369,6 +8391,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -8478,12 +8501,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -8944,6 +8962,9 @@ export default function MovieUpdateForm(props) {
         label={\\"Tags\\"}
         items={tags}
         hasError={errors?.tags?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"tags\\", currentTagsValue)
+        }
         errorMessage={errors?.tags?.errorMessage}
         getBadgeText={getDisplayValue.tags}
         setFieldValue={(model) => {
@@ -9116,6 +9137,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -9139,6 +9161,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -9248,12 +9271,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -9561,6 +9579,9 @@ export default function CommentUpdateForm(props) {
         label={\\"Post id\\"}
         items={postID ? [postID] : []}
         hasError={errors?.postID?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"postID\\", currentPostIDValue)
+        }
         errorMessage={errors?.postID?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -9644,6 +9665,9 @@ export default function CommentUpdateForm(props) {
         label={\\"Post\\"}
         items={Post ? [Post] : []}
         hasError={errors?.Post?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Post\\", currentPostValue)
+        }
         errorMessage={errors?.Post?.errorMessage}
         getBadgeText={getDisplayValue.Post}
         setFieldValue={(model) => {
@@ -9837,6 +9861,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -9860,6 +9885,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -9969,12 +9995,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -10282,6 +10303,9 @@ export default function CommentUpdateForm(props) {
         label={\\"Post id\\"}
         items={postID ? [postID] : []}
         hasError={errors?.postID?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"postID\\", currentPostIDValue)
+        }
         errorMessage={errors?.postID?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -10365,6 +10389,9 @@ export default function CommentUpdateForm(props) {
         label={\\"Post\\"}
         items={Post ? [Post] : []}
         hasError={errors?.Post?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Post\\", currentPostValue)
+        }
         errorMessage={errors?.Post?.errorMessage}
         getBadgeText={getDisplayValue.Post}
         setFieldValue={(model) => {
@@ -10557,6 +10584,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -10580,6 +10608,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -10689,12 +10718,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -10926,6 +10950,9 @@ export default function CommentUpdateForm(props) {
         label={\\"Post id\\"}
         items={postID ? [postID] : []}
         hasError={errors?.postID?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"postID\\", currentPostIDValue)
+        }
         errorMessage={errors?.postID?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -11103,6 +11130,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -11126,6 +11154,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -11235,12 +11264,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -11549,6 +11573,9 @@ export default function ClassUpdateForm(props) {
         label={\\"Students\\"}
         items={students}
         hasError={errors?.students?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"students\\", currentStudentsValue)
+        }
         errorMessage={errors?.students?.errorMessage}
         getBadgeText={getDisplayValue.students}
         setFieldValue={(model) => {
@@ -11710,6 +11737,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -11733,6 +11761,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -11842,12 +11871,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -12137,6 +12161,9 @@ export default function UpdateForm(props) {
         label={\\"Parent table\\"}
         items={parentTable ? [parentTable] : []}
         hasError={errors?.parentTable?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"parentTable\\", currentParentTableValue)
+        }
         errorMessage={errors?.parentTable?.errorMessage}
         getBadgeText={getDisplayValue.parentTable}
         setFieldValue={(model) => {
@@ -12318,6 +12345,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -12341,6 +12369,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -12450,12 +12479,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -12988,6 +13012,9 @@ export default function UpdateCPKTeacherForm(props) {
         label={\\"Cpk student\\"}
         items={CPKStudent ? [CPKStudent] : []}
         hasError={errors?.CPKStudent?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CPKStudent\\", currentCPKStudentValue)
+        }
         errorMessage={errors?.CPKStudent?.errorMessage}
         getBadgeText={getDisplayValue.CPKStudent}
         setFieldValue={(model) => {
@@ -13067,6 +13094,9 @@ export default function UpdateCPKTeacherForm(props) {
         label={\\"Cpk classes\\"}
         items={CPKClasses}
         hasError={errors?.CPKClasses?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CPKClasses\\", currentCPKClassesValue)
+        }
         errorMessage={errors?.CPKClasses?.errorMessage}
         getBadgeText={getDisplayValue.CPKClasses}
         setFieldValue={(model) => {
@@ -13143,6 +13173,9 @@ export default function UpdateCPKTeacherForm(props) {
         label={\\"Cpk projects\\"}
         items={CPKProjects}
         hasError={errors?.CPKProjects?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CPKProjects\\", currentCPKProjectsValue)
+        }
         errorMessage={errors?.CPKProjects?.errorMessage}
         getBadgeText={getDisplayValue.CPKProjects}
         setFieldValue={(model) => {
@@ -13314,6 +13347,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -13337,6 +13371,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -13446,12 +13481,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -13768,6 +13798,12 @@ export default function CreateCompositeToyForm(props) {
           compositeDogCompositeToysName ? [compositeDogCompositeToysName] : []
         }
         hasError={errors?.compositeDogCompositeToysName?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            \\"compositeDogCompositeToysName\\",
+            currentCompositeDogCompositeToysNameValue
+          )
+        }
         errorMessage={errors?.compositeDogCompositeToysName?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -13864,6 +13900,12 @@ export default function CreateCompositeToyForm(props) {
             : []
         }
         hasError={errors?.compositeDogCompositeToysDescription?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            \\"compositeDogCompositeToysDescription\\",
+            currentCompositeDogCompositeToysDescriptionValue
+          )
+        }
         errorMessage={
           errors?.compositeDogCompositeToysDescription?.errorMessage
         }
@@ -14052,6 +14094,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -14075,6 +14118,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -14184,12 +14228,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -14572,6 +14611,9 @@ export default function CreateCommentForm(props) {
         label={\\"Post\\"}
         items={post ? [post] : []}
         hasError={errors?.post?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"post\\", currentPostValue)
+        }
         errorMessage={errors?.post?.errorMessage}
         getBadgeText={getDisplayValue.post}
         setFieldValue={(model) => {
@@ -14648,6 +14690,9 @@ export default function CreateCommentForm(props) {
         label={\\"User\\"}
         items={User ? [User] : []}
         hasError={errors?.User?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"User\\", currentUserValue)
+        }
         errorMessage={errors?.User?.errorMessage}
         getBadgeText={getDisplayValue.User}
         setFieldValue={(model) => {
@@ -14724,6 +14769,9 @@ export default function CreateCommentForm(props) {
         label={\\"Org\\"}
         items={Org ? [Org] : []}
         hasError={errors?.Org?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Org\\", currentOrgValue)
+        }
         errorMessage={errors?.Org?.errorMessage}
         getBadgeText={getDisplayValue.Org}
         setFieldValue={(model) => {
@@ -14799,6 +14847,9 @@ export default function CreateCommentForm(props) {
         label={\\"Post comments id\\"}
         items={postCommentsId ? [postCommentsId] : []}
         hasError={errors?.postCommentsId?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"postCommentsId\\", currentPostCommentsIdValue)
+        }
         errorMessage={errors?.postCommentsId?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -14987,6 +15038,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -15010,6 +15062,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -15119,12 +15172,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -15651,6 +15699,9 @@ export default function CreateCompositeDogForm(props) {
         label={\\"Composite bowl\\"}
         items={CompositeBowl ? [CompositeBowl] : []}
         hasError={errors?.CompositeBowl?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CompositeBowl\\", currentCompositeBowlValue)
+        }
         errorMessage={errors?.CompositeBowl?.errorMessage}
         getBadgeText={getDisplayValue.CompositeBowl}
         setFieldValue={(model) => {
@@ -15735,6 +15786,9 @@ export default function CreateCompositeDogForm(props) {
         label={\\"Composite owner\\"}
         items={CompositeOwner ? [CompositeOwner] : []}
         hasError={errors?.CompositeOwner?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CompositeOwner\\", currentCompositeOwnerValue)
+        }
         errorMessage={errors?.CompositeOwner?.errorMessage}
         getBadgeText={getDisplayValue.CompositeOwner}
         setFieldValue={(model) => {
@@ -15818,6 +15872,9 @@ export default function CreateCompositeDogForm(props) {
         label={\\"Composite toys\\"}
         items={CompositeToys}
         hasError={errors?.CompositeToys?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CompositeToys\\", currentCompositeToysValue)
+        }
         errorMessage={errors?.CompositeToys?.errorMessage}
         getBadgeText={getDisplayValue.CompositeToys}
         setFieldValue={(model) => {
@@ -15901,6 +15958,9 @@ export default function CreateCompositeDogForm(props) {
         label={\\"Composite vets\\"}
         items={CompositeVets}
         hasError={errors?.CompositeVets?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CompositeVets\\", currentCompositeVetsValue)
+        }
         errorMessage={errors?.CompositeVets?.errorMessage}
         getBadgeText={getDisplayValue.CompositeVets}
         setFieldValue={(model) => {
@@ -16074,6 +16134,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -16097,6 +16158,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -16206,12 +16268,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -16456,6 +16513,9 @@ export default function CreatePostForm(props) {
         label={\\"Comments\\"}
         items={comments}
         hasError={errors?.comments?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"comments\\", currentCommentsValue)
+        }
         errorMessage={errors?.comments?.errorMessage}
         getBadgeText={getDisplayValue.comments}
         setFieldValue={(model) => {
@@ -16614,6 +16674,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -16637,6 +16698,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -16746,12 +16808,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -17051,6 +17108,9 @@ export default function UpdatePostForm(props) {
         label={\\"Comments\\"}
         items={comments}
         hasError={errors?.comments?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"comments\\", currentCommentsValue)
+        }
         errorMessage={errors?.comments?.errorMessage}
         getBadgeText={getDisplayValue.comments}
         setFieldValue={(model) => {
@@ -17215,6 +17275,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -17238,6 +17299,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -17347,12 +17409,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -17604,6 +17661,9 @@ export default function CreateDogForm(props) {
         label={\\"Owner\\"}
         items={owner ? [owner] : []}
         hasError={errors?.owner?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"owner\\", currentOwnerValue)
+        }
         errorMessage={errors?.owner?.errorMessage}
         getBadgeText={getDisplayValue.owner}
         setFieldValue={(model) => {
@@ -17762,6 +17822,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -17785,6 +17846,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -17894,12 +17956,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -18158,6 +18215,9 @@ export default function CreateOwnerForm(props) {
         label={\\"Dog\\"}
         items={Dog ? [Dog] : []}
         hasError={errors?.Dog?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Dog\\", currentDogValue)
+        }
         errorMessage={errors?.Dog?.errorMessage}
         getBadgeText={getDisplayValue.Dog}
         setFieldValue={(model) => {
@@ -18314,6 +18374,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -18337,6 +18398,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -18446,12 +18508,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -18683,6 +18740,9 @@ export default function CommentUpdateForm(props) {
         label={\\"Post id\\"}
         items={postID ? [postID] : []}
         hasError={errors?.postID?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"postID\\", currentPostIDValue)
+        }
         errorMessage={errors?.postID?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -18852,6 +18912,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -18875,6 +18936,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -18984,12 +19046,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -19328,6 +19385,9 @@ export default function UpdateForm(props) {
         label={\\"Children\\"}
         items={children}
         hasError={errors?.children?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"children\\", currentChildrenValue)
+        }
         errorMessage={errors?.children?.errorMessage}
         getBadgeText={getDisplayValue.children}
         setFieldValue={(model) => {
@@ -19493,6 +19553,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -19516,6 +19577,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -19625,12 +19687,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -19783,6 +19840,9 @@ export default function CustomDataForm(props) {
         }
         items={email}
         hasError={errors?.email?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"email\\", currentEmailValue)
+        }
         errorMessage={errors?.email?.errorMessage}
         setFieldValue={setCurrentEmailValue}
         inputFieldRef={emailRef}
@@ -19832,6 +19892,9 @@ export default function CustomDataForm(props) {
         }
         items={phone}
         hasError={errors?.phone?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"phone\\", currentPhoneValue)
+        }
         errorMessage={errors?.phone?.errorMessage}
         setFieldValue={setCurrentPhoneValue}
         inputFieldRef={phoneRef}
@@ -20015,6 +20078,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -20038,6 +20102,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -20147,12 +20212,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -20386,6 +20446,12 @@ export default function CreateCompositeToyForm(props) {
           compositeDogCompositeToysName ? [compositeDogCompositeToysName] : []
         }
         hasError={errors?.compositeDogCompositeToysName?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            \\"compositeDogCompositeToysName\\",
+            currentCompositeDogCompositeToysNameValue
+          )
+        }
         errorMessage={errors?.compositeDogCompositeToysName?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -20476,6 +20542,12 @@ export default function CreateCompositeToyForm(props) {
             : []
         }
         hasError={errors?.compositeDogCompositeToysDescription?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            \\"compositeDogCompositeToysDescription\\",
+            currentCompositeDogCompositeToysDescriptionValue
+          )
+        }
         errorMessage={
           errors?.compositeDogCompositeToysDescription?.errorMessage
         }
@@ -20660,6 +20732,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -20683,6 +20756,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -20792,12 +20866,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -21047,6 +21116,9 @@ export default function CreateCommentForm(props) {
         label={\\"Post\\"}
         items={post ? [post] : []}
         hasError={errors?.post?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"post\\", currentPostValue)
+        }
         errorMessage={errors?.post?.errorMessage}
         getBadgeText={getDisplayValue.post}
         setFieldValue={(model) => {
@@ -21121,6 +21193,9 @@ export default function CreateCommentForm(props) {
         label={\\"User\\"}
         items={User ? [User] : []}
         hasError={errors?.User?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"User\\", currentUserValue)
+        }
         errorMessage={errors?.User?.errorMessage}
         getBadgeText={getDisplayValue.User}
         setFieldValue={(model) => {
@@ -21195,6 +21270,9 @@ export default function CreateCommentForm(props) {
         label={\\"Org\\"}
         items={Org ? [Org] : []}
         hasError={errors?.Org?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Org\\", currentOrgValue)
+        }
         errorMessage={errors?.Org?.errorMessage}
         getBadgeText={getDisplayValue.Org}
         setFieldValue={(model) => {
@@ -21268,6 +21346,9 @@ export default function CreateCommentForm(props) {
         label={\\"Post comments id\\"}
         items={postCommentsId ? [postCommentsId] : []}
         hasError={errors?.postCommentsId?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"postCommentsId\\", currentPostCommentsIdValue)
+        }
         errorMessage={errors?.postCommentsId?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -21451,6 +21532,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -21474,6 +21556,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -21583,12 +21666,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -21963,6 +22041,9 @@ export default function CreateCompositeDogForm(props) {
         label={\\"Composite bowl\\"}
         items={CompositeBowl ? [CompositeBowl] : []}
         hasError={errors?.CompositeBowl?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CompositeBowl\\", currentCompositeBowlValue)
+        }
         errorMessage={errors?.CompositeBowl?.errorMessage}
         getBadgeText={getDisplayValue.CompositeBowl}
         setFieldValue={(model) => {
@@ -22047,6 +22128,9 @@ export default function CreateCompositeDogForm(props) {
         label={\\"Composite owner\\"}
         items={CompositeOwner ? [CompositeOwner] : []}
         hasError={errors?.CompositeOwner?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CompositeOwner\\", currentCompositeOwnerValue)
+        }
         errorMessage={errors?.CompositeOwner?.errorMessage}
         getBadgeText={getDisplayValue.CompositeOwner}
         setFieldValue={(model) => {
@@ -22130,6 +22214,9 @@ export default function CreateCompositeDogForm(props) {
         label={\\"Composite toys\\"}
         items={CompositeToys}
         hasError={errors?.CompositeToys?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CompositeToys\\", currentCompositeToysValue)
+        }
         errorMessage={errors?.CompositeToys?.errorMessage}
         getBadgeText={getDisplayValue.CompositeToys}
         setFieldValue={(model) => {
@@ -22213,6 +22300,9 @@ export default function CreateCompositeDogForm(props) {
         label={\\"Composite vets\\"}
         items={CompositeVets}
         hasError={errors?.CompositeVets?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CompositeVets\\", currentCompositeVetsValue)
+        }
         errorMessage={errors?.CompositeVets?.errorMessage}
         getBadgeText={getDisplayValue.CompositeVets}
         setFieldValue={(model) => {
@@ -23177,6 +23267,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -23200,6 +23291,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -23309,12 +23401,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -23467,6 +23554,9 @@ export default function CustomDataForm(props) {
         }
         items={email}
         hasError={errors?.email?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"email\\", currentEmailValue)
+        }
         errorMessage={errors?.email?.errorMessage}
         setFieldValue={setCurrentEmailValue}
         inputFieldRef={emailRef}
@@ -23516,6 +23606,9 @@ export default function CustomDataForm(props) {
         }
         items={phone}
         hasError={errors?.phone?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"phone\\", currentPhoneValue)
+        }
         errorMessage={errors?.phone?.errorMessage}
         setFieldValue={setCurrentPhoneValue}
         inputFieldRef={phoneRef}
@@ -24116,6 +24209,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -24139,6 +24233,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -24248,12 +24343,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -24555,6 +24645,9 @@ export default function MyPostForm(props) {
         label={\\"Tags\\"}
         items={Customtags}
         hasError={errors?.Customtags?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Customtags\\", currentCustomtagsValue)
+        }
         errorMessage={errors?.Customtags?.errorMessage}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
@@ -24727,6 +24820,12 @@ export default function MyPostForm(props) {
         label={\\"Non model field array\\"}
         items={nonModelFieldArray}
         hasError={errors?.nonModelFieldArray?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            \\"nonModelFieldArray\\",
+            currentNonModelFieldArrayValue
+          )
+        }
         errorMessage={errors?.nonModelFieldArray?.errorMessage}
         setFieldValue={setCurrentNonModelFieldArrayValue}
         inputFieldRef={nonModelFieldArrayRef}
@@ -24855,6 +24954,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -24878,6 +24978,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -24987,12 +25088,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -25243,6 +25339,9 @@ export default function UpdateOrgForm(props) {
         label={\\"Comments\\"}
         items={comments}
         hasError={errors?.comments?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"comments\\", currentCommentsValue)
+        }
         errorMessage={errors?.comments?.errorMessage}
         getBadgeText={getDisplayValue.comments}
         setFieldValue={(model) => {
@@ -25415,6 +25514,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -25438,6 +25538,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -25547,12 +25648,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -26102,6 +26198,9 @@ export default function UpdateCompositeDogForm(props) {
         label={\\"Composite bowl\\"}
         items={CompositeBowl ? [CompositeBowl] : []}
         hasError={errors?.CompositeBowl?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CompositeBowl\\", currentCompositeBowlValue)
+        }
         errorMessage={errors?.CompositeBowl?.errorMessage}
         getBadgeText={getDisplayValue.CompositeBowl}
         setFieldValue={(model) => {
@@ -26187,6 +26286,9 @@ export default function UpdateCompositeDogForm(props) {
         label={\\"Composite owner\\"}
         items={CompositeOwner ? [CompositeOwner] : []}
         hasError={errors?.CompositeOwner?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CompositeOwner\\", currentCompositeOwnerValue)
+        }
         errorMessage={errors?.CompositeOwner?.errorMessage}
         getBadgeText={getDisplayValue.CompositeOwner}
         setFieldValue={(model) => {
@@ -26271,6 +26373,9 @@ export default function UpdateCompositeDogForm(props) {
         label={\\"Composite toys\\"}
         items={CompositeToys}
         hasError={errors?.CompositeToys?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CompositeToys\\", currentCompositeToysValue)
+        }
         errorMessage={errors?.CompositeToys?.errorMessage}
         getBadgeText={getDisplayValue.CompositeToys}
         setFieldValue={(model) => {
@@ -26354,6 +26459,9 @@ export default function UpdateCompositeDogForm(props) {
         label={\\"Composite vets\\"}
         items={CompositeVets}
         hasError={errors?.CompositeVets?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CompositeVets\\", currentCompositeVetsValue)
+        }
         errorMessage={errors?.CompositeVets?.errorMessage}
         getBadgeText={getDisplayValue.CompositeVets}
         setFieldValue={(model) => {
@@ -26545,6 +26653,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -26568,6 +26677,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -26677,12 +26787,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -27095,6 +27200,9 @@ export default function UpdateCPKTeacherForm(props) {
         label={\\"Cpk student\\"}
         items={CPKStudent ? [CPKStudent] : []}
         hasError={errors?.CPKStudent?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CPKStudent\\", currentCPKStudentValue)
+        }
         errorMessage={errors?.CPKStudent?.errorMessage}
         getBadgeText={getDisplayValue.CPKStudent}
         setFieldValue={(model) => {
@@ -27172,6 +27280,9 @@ export default function UpdateCPKTeacherForm(props) {
         label={\\"Cpk classes\\"}
         items={CPKClasses}
         hasError={errors?.CPKClasses?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CPKClasses\\", currentCPKClassesValue)
+        }
         errorMessage={errors?.CPKClasses?.errorMessage}
         getBadgeText={getDisplayValue.CPKClasses}
         setFieldValue={(model) => {
@@ -27248,6 +27359,9 @@ export default function UpdateCPKTeacherForm(props) {
         label={\\"Cpk projects\\"}
         items={CPKProjects}
         hasError={errors?.CPKProjects?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CPKProjects\\", currentCPKProjectsValue)
+        }
         errorMessage={errors?.CPKProjects?.errorMessage}
         getBadgeText={getDisplayValue.CPKProjects}
         setFieldValue={(model) => {
@@ -27415,6 +27529,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -27438,6 +27553,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -27547,12 +27663,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -27736,6 +27847,12 @@ export default function HappyPathJSONCreate(props) {
         label={\\"Animals\\"}
         items={favoriteThings.animals ?? []}
         hasError={errors?.[\\"favoriteThings.animals\\"]?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            \\"favoriteThings.animals\\",
+            currentFavoriteThingsAnimalsValue
+          )
+        }
         errorMessage={errors?.[\\"favoriteThings.animals\\"]?.errorMessage}
         setFieldValue={setCurrentFavoriteThingsAnimalsValue}
         inputFieldRef={favoriteThingsAnimalsRef}
@@ -27999,6 +28116,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -28022,6 +28140,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -28131,12 +28250,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -28333,6 +28447,12 @@ export default function HappyPathJSONUpdate(props) {
         label={\\"Animals\\"}
         items={favoriteThings.animals ?? []}
         hasError={errors?.[\\"favoriteThings.animals\\"]?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            \\"favoriteThings.animals\\",
+            currentFavoriteThingsAnimalsValue
+          )
+        }
         errorMessage={errors?.[\\"favoriteThings.animals\\"]?.errorMessage}
         setFieldValue={setCurrentFavoriteThingsAnimalsValue}
         inputFieldRef={favoriteThingsAnimalsRef}
@@ -28597,6 +28717,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -28620,6 +28741,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -28729,12 +28851,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -29000,6 +29117,12 @@ export default function NestedJson(props) {
         label={\\"favorite trees\\"}
         items={bio.favorite - trees ?? []}
         hasError={errors?.[\\"bio.favorite-trees\\"]?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            \\"bio.favorite-trees\\",
+            currentBioFavoritetreesValue
+          )
+        }
         errorMessage={errors?.[\\"bio.favorite-trees\\"]?.errorMessage}
         setFieldValue={setCurrentBioFavoritetreesValue}
         inputFieldRef={bioFavoritetreesRef}
@@ -29056,6 +29179,9 @@ export default function NestedJson(props) {
         label={\\"Nick Names1\\"}
         items={Nicknames1}
         hasError={errors?.Nicknames1?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Nicknames1\\", currentNicknames1Value)
+        }
         errorMessage={errors?.Nicknames1?.errorMessage}
         setFieldValue={setCurrentNicknames1Value}
         inputFieldRef={Nicknames1Ref}
@@ -29104,6 +29230,9 @@ export default function NestedJson(props) {
         label={\\"nick-Names2\\"}
         items={nickNames}
         hasError={errors?.[\\"nick-names2\\"]?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"nick-names2\\", currentNickNamesValue)
+        }
         errorMessage={errors?.[\\"nick-names2\\"]?.errorMessage}
         setFieldValue={setCurrentNickNamesValue}
         inputFieldRef={nickNamesRef}
@@ -29314,6 +29443,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -29337,6 +29467,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -29446,12 +29577,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -29629,6 +29755,9 @@ export default function NestedJson(props) {
         label={\\"lastName\\"}
         items={lastName1}
         hasError={errors?.lastName?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"lastName\\", currentLastName1Value)
+        }
         errorMessage={errors?.lastName?.errorMessage}
         setFieldValue={setCurrentLastName1Value}
         inputFieldRef={lastName1Ref}
@@ -29834,6 +29963,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -29857,6 +29987,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -29966,12 +30097,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -30515,6 +30641,9 @@ export default function UpdateCompositeDogForm(props) {
         label={\\"Composite owner\\"}
         items={CompositeOwner ? [CompositeOwner] : []}
         hasError={errors?.CompositeOwner?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CompositeOwner\\", currentCompositeOwnerValue)
+        }
         errorMessage={errors?.CompositeOwner?.errorMessage}
         getBadgeText={getDisplayValue.CompositeOwner}
         setFieldValue={(model) => {
@@ -30599,6 +30728,9 @@ export default function UpdateCompositeDogForm(props) {
         label={\\"Composite toys\\"}
         items={CompositeToys}
         hasError={errors?.CompositeToys?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CompositeToys\\", currentCompositeToysValue)
+        }
         errorMessage={errors?.CompositeToys?.errorMessage}
         getBadgeText={getDisplayValue.CompositeToys}
         setFieldValue={(model) => {
@@ -30682,6 +30814,9 @@ export default function UpdateCompositeDogForm(props) {
         label={\\"Composite vets\\"}
         items={CompositeVets}
         hasError={errors?.CompositeVets?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"CompositeVets\\", currentCompositeVetsValue)
+        }
         errorMessage={errors?.CompositeVets?.errorMessage}
         getBadgeText={getDisplayValue.CompositeVets}
         setFieldValue={(model) => {
@@ -30767,6 +30902,12 @@ export default function UpdateCompositeDogForm(props) {
           compositeDogCompositeBowlShape ? [compositeDogCompositeBowlShape] : []
         }
         hasError={errors?.compositeDogCompositeBowlShape?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            \\"compositeDogCompositeBowlShape\\",
+            currentCompositeDogCompositeBowlShapeValue
+          )
+        }
         errorMessage={errors?.compositeDogCompositeBowlShape?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -31149,6 +31290,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -31172,6 +31314,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -31281,12 +31424,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -31489,6 +31627,9 @@ export default function CreateDogForm(props) {
         label={\\"Owner\\"}
         items={owner ? [owner] : []}
         hasError={errors?.owner?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"owner\\", currentOwnerValue)
+        }
         errorMessage={errors?.owner?.errorMessage}
         getBadgeText={getDisplayValue.owner}
         setFieldValue={(model) => {
@@ -31647,6 +31788,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -31670,6 +31812,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -31779,12 +31922,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -32019,6 +32157,9 @@ export default function UpdateDogForm(props) {
         label={\\"Owner\\"}
         items={owner ? [owner] : []}
         hasError={errors?.owner?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"owner\\", currentOwnerValue)
+        }
         errorMessage={errors?.owner?.errorMessage}
         getBadgeText={getDisplayValue.owner}
         setFieldValue={(model) => {
@@ -32183,6 +32324,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -32206,6 +32348,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -32315,12 +32458,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -32526,6 +32664,9 @@ export default function CreateOwnerForm(props) {
         label={\\"Dog\\"}
         items={Dog ? [Dog] : []}
         hasError={errors?.Dog?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Dog\\", currentDogValue)
+        }
         errorMessage={errors?.Dog?.errorMessage}
         getBadgeText={getDisplayValue.Dog}
         setFieldValue={(model) => {
@@ -32682,6 +32823,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -32705,6 +32847,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -32814,12 +32957,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -33058,6 +33196,9 @@ export default function UpdateOwnerForm(props) {
         label={\\"Dog\\"}
         items={Dog ? [Dog] : []}
         hasError={errors?.Dog?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Dog\\", currentDogValue)
+        }
         errorMessage={errors?.Dog?.errorMessage}
         getBadgeText={getDisplayValue.Dog}
         setFieldValue={(model) => {
@@ -33217,6 +33358,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -33240,6 +33382,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -33349,12 +33492,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -33747,6 +33885,12 @@ export default function MyPostForm(props) {
         label={\\"Non model field array\\"}
         items={nonModelFieldArray}
         hasError={errors?.nonModelFieldArray?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            \\"nonModelFieldArray\\",
+            currentNonModelFieldArrayValue
+          )
+        }
         errorMessage={errors?.nonModelFieldArray?.errorMessage}
         setFieldValue={setCurrentNonModelFieldArrayValue}
         inputFieldRef={nonModelFieldArrayRef}
@@ -33872,6 +34016,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -33895,6 +34040,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -34004,12 +34150,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -34229,6 +34370,9 @@ export default function TagCreateForm(props) {
         label={\\"Posts\\"}
         items={Posts}
         hasError={errors?.Posts?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Posts\\", currentPostsValue)
+        }
         errorMessage={errors?.Posts?.errorMessage}
         getBadgeText={getDisplayValue.Posts}
         setFieldValue={(model) => {
@@ -34301,6 +34445,9 @@ export default function TagCreateForm(props) {
         label={\\"Statuses\\"}
         items={statuses}
         hasError={errors?.statuses?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"statuses\\", currentStatusesValue)
+        }
         errorMessage={errors?.statuses?.errorMessage}
         getBadgeText={getDisplayValue.statuses}
         setFieldValue={setCurrentStatusesValue}
@@ -34460,6 +34607,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -34483,6 +34631,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -34592,12 +34741,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -34828,6 +34972,9 @@ export default function MyMemberForm(props) {
         label={\\"Team id\\"}
         items={teamID ? [teamID] : []}
         hasError={errors?.teamID?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"teamID\\", currentTeamIDValue)
+        }
         errorMessage={errors?.teamID?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -34905,6 +35052,9 @@ export default function MyMemberForm(props) {
         label={\\"Team Label\\"}
         items={Team ? [Team] : []}
         hasError={errors?.Team?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Team\\", currentTeamValue)
+        }
         errorMessage={errors?.Team?.errorMessage}
         getBadgeText={getDisplayValue.Team}
         setFieldValue={(model) => {
@@ -35039,6 +35189,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -35062,6 +35213,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -35171,12 +35323,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -35377,6 +35524,9 @@ export default function SchoolCreateForm(props) {
         label={\\"Students\\"}
         items={Students}
         hasError={errors?.Students?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Students\\", currentStudentsValue)
+        }
         errorMessage={errors?.Students?.errorMessage}
         getBadgeText={getDisplayValue.Students}
         setFieldValue={(model) => {
@@ -35546,6 +35696,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -35569,6 +35720,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -35678,12 +35830,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -35906,6 +36053,9 @@ export default function BookCreateForm(props) {
         label={\\"Primary author\\"}
         items={primaryAuthor ? [primaryAuthor] : []}
         hasError={errors?.primaryAuthor?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"primaryAuthor\\", currentPrimaryAuthorValue)
+        }
         errorMessage={errors?.primaryAuthor?.errorMessage}
         getBadgeText={getDisplayValue.primaryAuthor}
         setFieldValue={(model) => {
@@ -36047,6 +36197,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -36070,6 +36221,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -36179,12 +36331,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -36404,6 +36551,9 @@ export default function TagCreateForm(props) {
         label={\\"Posts\\"}
         items={Posts}
         hasError={errors?.Posts?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Posts\\", currentPostsValue)
+        }
         errorMessage={errors?.Posts?.errorMessage}
         getBadgeText={getDisplayValue.Posts}
         setFieldValue={(model) => {
@@ -36476,6 +36626,9 @@ export default function TagCreateForm(props) {
         label={\\"Statuses\\"}
         items={statuses}
         hasError={errors?.statuses?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"statuses\\", currentStatusesValue)
+        }
         errorMessage={errors?.statuses?.errorMessage}
         getBadgeText={getDisplayValue.statuses}
         setFieldValue={setCurrentStatusesValue}
@@ -36635,6 +36788,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -36658,6 +36812,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -36767,12 +36922,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -37022,6 +37172,9 @@ export default function BookCreateForm(props) {
         label={\\"Primary author\\"}
         items={primaryAuthor ? [primaryAuthor] : []}
         hasError={errors?.primaryAuthor?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"primaryAuthor\\", currentPrimaryAuthorValue)
+        }
         errorMessage={errors?.primaryAuthor?.errorMessage}
         getBadgeText={getDisplayValue.primaryAuthor}
         setFieldValue={(model) => {
@@ -37103,6 +37256,9 @@ export default function BookCreateForm(props) {
         label={\\"Primary title\\"}
         items={primaryTitle ? [primaryTitle] : []}
         hasError={errors?.primaryTitle?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"primaryTitle\\", currentPrimaryTitleValue)
+        }
         errorMessage={errors?.primaryTitle?.errorMessage}
         getBadgeText={getDisplayValue.primaryTitle}
         setFieldValue={(model) => {
@@ -37238,6 +37394,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -37261,6 +37418,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -37370,12 +37528,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -37848,6 +38001,12 @@ export default function MyPostForm(props) {
         label={\\"Non model field array\\"}
         items={nonModelFieldArray}
         hasError={errors?.nonModelFieldArray?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            \\"nonModelFieldArray\\",
+            currentNonModelFieldArrayValue
+          )
+        }
         errorMessage={errors?.nonModelFieldArray?.errorMessage}
         setFieldValue={setCurrentNonModelFieldArrayValue}
         inputFieldRef={nonModelFieldArrayRef}
@@ -38015,6 +38174,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -38038,6 +38198,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -38147,12 +38308,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -38404,6 +38560,9 @@ export default function SchoolUpdateForm(props) {
         label={\\"Students\\"}
         items={Students}
         hasError={errors?.Students?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Students\\", currentStudentsValue)
+        }
         errorMessage={errors?.Students?.errorMessage}
         getBadgeText={getDisplayValue.Students}
         setFieldValue={(model) => {
@@ -38578,6 +38737,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -38601,6 +38761,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -38710,12 +38871,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -38974,6 +39130,9 @@ export default function SchoolUpdateForm(props) {
         label={\\"Student\\"}
         items={Student}
         hasError={errors?.Student?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Student\\", currentStudentValue)
+        }
         errorMessage={errors?.Student?.errorMessage}
         getBadgeText={getDisplayValue.Student}
         setFieldValue={(model) => {
@@ -39191,6 +39350,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -39214,6 +39374,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -39323,12 +39484,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -39586,6 +39742,9 @@ export default function MyMemberForm(props) {
         label={\\"Team id\\"}
         items={teamID ? [teamID] : []}
         hasError={errors?.teamID?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"teamID\\", currentTeamIDValue)
+        }
         errorMessage={errors?.teamID?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -39664,6 +39823,9 @@ export default function MyMemberForm(props) {
         label={\\"Team Label\\"}
         items={Team ? [Team] : []}
         hasError={errors?.Team?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Team\\", currentTeamValue)
+        }
         errorMessage={errors?.Team?.errorMessage}
         getBadgeText={getDisplayValue.Team}
         setFieldValue={(model) => {
@@ -39801,6 +39963,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -39824,6 +39987,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -39933,12 +40097,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -40237,6 +40396,9 @@ export default function TagUpdateForm(props) {
         label={\\"Posts\\"}
         items={Posts}
         hasError={errors?.Posts?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Posts\\", currentPostsValue)
+        }
         errorMessage={errors?.Posts?.errorMessage}
         getBadgeText={getDisplayValue.Posts}
         setFieldValue={(model) => {
@@ -40309,6 +40471,9 @@ export default function TagUpdateForm(props) {
         label={\\"Statuses\\"}
         items={statuses}
         hasError={errors?.statuses?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"statuses\\", currentStatusesValue)
+        }
         errorMessage={errors?.statuses?.errorMessage}
         getBadgeText={getDisplayValue.statuses}
         setFieldValue={setCurrentStatusesValue}
@@ -40469,6 +40634,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -40492,6 +40658,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -40601,12 +40768,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -40872,6 +41034,9 @@ export default function MyFlexCreateForm(props) {
         label={\\"Tags\\"}
         items={Customtags}
         hasError={errors?.Customtags?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Customtags\\", currentCustomtagsValue)
+        }
         errorMessage={errors?.Customtags?.errorMessage}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
@@ -40919,6 +41084,9 @@ export default function MyFlexCreateForm(props) {
         label={\\"Tags\\"}
         items={tags}
         hasError={errors?.tags?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"tags\\", currentTagsValue)
+        }
         errorMessage={errors?.tags?.errorMessage}
         setFieldValue={setCurrentTagsValue}
         inputFieldRef={tagsRef}
@@ -41058,6 +41226,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -41081,6 +41250,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -41190,12 +41360,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -41474,6 +41639,9 @@ export default function BlogCreateForm(props) {
         label={\\"Edited at\\"}
         items={editedAt}
         hasError={errors?.editedAt?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"editedAt\\", currentEditedAtValue)
+        }
         errorMessage={errors?.editedAt?.errorMessage}
         setFieldValue={setCurrentEditedAtValue}
         inputFieldRef={editedAtRef}
@@ -41617,6 +41785,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -41640,6 +41809,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -41749,12 +41919,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -42206,6 +42371,9 @@ export default function InputGalleryCreateForm(props) {
         }
         items={arrayTypeField}
         hasError={errors?.arrayTypeField?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"arrayTypeField\\", currentArrayTypeFieldValue)
+        }
         errorMessage={errors?.arrayTypeField?.errorMessage}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
@@ -42268,6 +42436,9 @@ export default function InputGalleryCreateForm(props) {
         }
         items={jsonArray}
         hasError={errors?.jsonArray?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"jsonArray\\", currentJsonArrayValue)
+        }
         errorMessage={errors?.jsonArray?.errorMessage}
         setFieldValue={setCurrentJsonArrayValue}
         inputFieldRef={jsonArrayRef}
@@ -42604,6 +42775,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -42627,6 +42799,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -42736,12 +42909,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -43147,6 +43315,9 @@ export default function InputGalleryUpdateForm(props) {
         label={\\"Array type field\\"}
         items={arrayTypeField}
         hasError={errors?.arrayTypeField?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"arrayTypeField\\", currentArrayTypeFieldValue)
+        }
         errorMessage={errors?.arrayTypeField?.errorMessage}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
@@ -43201,6 +43372,9 @@ export default function InputGalleryUpdateForm(props) {
         label={\\"Json array\\"}
         items={jsonArray}
         hasError={errors?.jsonArray?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"jsonArray\\", currentJsonArrayValue)
+        }
         errorMessage={errors?.jsonArray?.errorMessage}
         setFieldValue={setCurrentJsonArrayValue}
         inputFieldRef={jsonArrayRef}
@@ -43509,6 +43683,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -43532,6 +43707,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -43641,12 +43817,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -43942,6 +44113,9 @@ export default function MyFlexUpdateForm(props) {
         label={\\"Tags\\"}
         items={Customtags}
         hasError={errors?.Customtags?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Customtags\\", currentCustomtagsValue)
+        }
         errorMessage={errors?.Customtags?.errorMessage}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
@@ -44036,6 +44210,9 @@ export default function MyFlexUpdateForm(props) {
         label={\\"Tags\\"}
         items={tags}
         hasError={errors?.tags?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"tags\\", currentTagsValue)
+        }
         errorMessage={errors?.tags?.errorMessage}
         setFieldValue={setCurrentTagsValue}
         inputFieldRef={tagsRef}
@@ -44182,6 +44359,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -44205,6 +44383,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -44314,12 +44493,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -44737,6 +44911,12 @@ export default function PostCreateFormRow(props) {
         label={\\"Non model field array\\"}
         items={nonModelFieldArray}
         hasError={errors?.nonModelFieldArray?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            \\"nonModelFieldArray\\",
+            currentNonModelFieldArrayValue
+          )
+        }
         errorMessage={errors?.nonModelFieldArray?.errorMessage}
         setFieldValue={setCurrentNonModelFieldArrayValue}
         inputFieldRef={nonModelFieldArrayRef}
@@ -44899,6 +45079,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -44922,6 +45103,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -45031,12 +45213,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -45267,6 +45444,9 @@ export default function MyMemberForm(props) {
         label={\\"Team id\\"}
         items={teamID ? [teamID] : []}
         hasError={errors?.teamID?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"teamID\\", currentTeamIDValue)
+        }
         errorMessage={errors?.teamID?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -45344,6 +45524,9 @@ export default function MyMemberForm(props) {
         label={\\"Team Label\\"}
         items={Team ? [Team] : []}
         hasError={errors?.Team?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Team\\", currentTeamValue)
+        }
         errorMessage={errors?.Team?.errorMessage}
         getBadgeText={getDisplayValue.Team}
         setFieldValue={(model) => {
@@ -46201,6 +46384,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -46224,6 +46408,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -46333,12 +46518,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -46541,6 +46721,9 @@ export default function UpdateCarForm(props) {
         label={\\"Dealership\\"}
         items={dealership ? [dealership] : []}
         hasError={errors?.dealership?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"dealership\\", currentDealershipValue)
+        }
         errorMessage={errors?.dealership?.errorMessage}
         getBadgeText={getDisplayValue.dealership}
         setFieldValue={(model) => {
@@ -46707,6 +46890,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -46730,6 +46914,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -46839,12 +47024,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
           </Button>
         </Flex>
@@ -47095,6 +47275,9 @@ export default function UpdateDealershipForm(props) {
         label={\\"Cars\\"}
         items={cars}
         hasError={errors?.cars?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"cars\\", currentCarsValue)
+        }
         errorMessage={errors?.cars?.errorMessage}
         getBadgeText={getDisplayValue.cars}
         setFieldValue={(model) => {
