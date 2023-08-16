@@ -46,6 +46,7 @@ import { buildAccessChain, getRecordsName } from './form-state';
 import { getElementAccessExpression, getValidProperty } from './invalid-variable-helpers';
 import { isEnumDataType, isModelDataType } from './render-checkers';
 import { DataApiKind } from '../../react-render-config';
+import { capitalizeFirstLetter } from '../../helpers';
 
 export const getDisplayValueObjectName = 'getDisplayValue';
 
@@ -74,7 +75,7 @@ const getDisplayValueCallChain = ({ fieldName, recordString }: { fieldName: stri
     compositeDogRecords.find((r) => r.description === value)
   )
  */
-export function getDisplayValueScalar(fieldName: string, model: string, key: string) {
+export function getDisplayValueScalar(fieldName: string, model: string, key: string, dataApi?: DataApiKind) {
   const recordString = 'r';
 
   return factory.createConditionalExpression(
@@ -87,39 +88,110 @@ export function getDisplayValueScalar(fieldName: string, model: string, key: str
       ),
       undefined,
       [
-        factory.createCallExpression(
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier(getRecordsName(model)),
-            factory.createIdentifier('find'),
-          ),
-          undefined,
-          [
-            factory.createArrowFunction(
-              undefined,
+        dataApi === 'GraphQL'
+          ? factory.createBinaryExpression(
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier(`selected${capitalizeFirstLetter(fieldName)}Records`),
+                  factory.createIdentifier('find'),
+                ),
+                undefined,
+                [
+                  factory.createArrowFunction(
+                    undefined,
+                    undefined,
+                    [
+                      factory.createParameterDeclaration(
+                        undefined,
+                        undefined,
+                        undefined,
+                        factory.createIdentifier(recordString),
+                        undefined,
+                        undefined,
+                        undefined,
+                      ),
+                    ],
+                    undefined,
+                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                    factory.createBinaryExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier(recordString),
+                        factory.createIdentifier('id'),
+                      ),
+                      factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+                      factory.createIdentifier('value'),
+                    ),
+                  ),
+                ],
+              ),
+              factory.createToken(SyntaxKind.QuestionQuestionToken),
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier(getRecordsName(model)),
+                  factory.createIdentifier('find'),
+                ),
+                undefined,
+                [
+                  factory.createArrowFunction(
+                    undefined,
+                    undefined,
+                    [
+                      factory.createParameterDeclaration(
+                        undefined,
+                        undefined,
+                        undefined,
+                        factory.createIdentifier(recordString),
+                        undefined,
+                        undefined,
+                      ),
+                    ],
+                    undefined,
+                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                    factory.createBinaryExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier(recordString),
+                        factory.createIdentifier(key),
+                      ),
+                      factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+                      factory.createIdentifier('value'),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : factory.createCallExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier(getRecordsName(model)),
+                factory.createIdentifier('find'),
+              ),
               undefined,
               [
-                factory.createParameterDeclaration(
+                factory.createArrowFunction(
                   undefined,
                   undefined,
+                  [
+                    factory.createParameterDeclaration(
+                      undefined,
+                      undefined,
+                      undefined,
+                      factory.createIdentifier(recordString),
+                      undefined,
+                      undefined,
+                    ),
+                  ],
                   undefined,
-                  factory.createIdentifier(recordString),
-                  undefined,
-                  undefined,
+                  factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                  factory.createBinaryExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier(recordString),
+                      factory.createIdentifier(key),
+                    ),
+                    factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+                    factory.createIdentifier('value'),
+                  ),
                 ),
               ],
-              undefined,
-              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-              factory.createBinaryExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier(recordString),
-                  factory.createIdentifier(key),
-                ),
-                factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
-                factory.createIdentifier('value'),
-              ),
             ),
-          ],
-        ),
       ],
     ),
     factory.createToken(SyntaxKind.ColonToken),

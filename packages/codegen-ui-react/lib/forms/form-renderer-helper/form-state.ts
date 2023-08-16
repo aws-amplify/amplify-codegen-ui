@@ -20,6 +20,7 @@ import {
   isValidVariableName,
   isNonModelDataType,
   StudioForm,
+  StudioFormActionType,
 } from '@aws-amplify/codegen-ui';
 import {
   factory,
@@ -49,7 +50,7 @@ import {
   buildInitConstVariableExpression,
 } from '../../helpers';
 import { getElementAccessExpression } from './invalid-variable-helpers';
-import { shouldWrapInArrayField } from './render-checkers';
+import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
 import { DataApiKind } from '../../react-render-config';
 
 // used just to sanitize nested array field names
@@ -237,10 +238,13 @@ export const getInitialValues = (
  */
 export const getUseStateHooks = (
   fieldConfigs: Record<string, FieldConfigMetadata>,
+  formActionType: StudioFormActionType,
   dataApi?: DataApiKind,
+  hasAutoComplete?: boolean,
 ): Statement[] => {
   const stateNames = new Set();
-  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { sanitizedFieldName, relationship }]) => {
+  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, fieldConfig) => {
+    const [name, { sanitizedFieldName, relationship }] = fieldConfig;
     const fieldName = name.split('.')[0];
     const renderedFieldName = sanitizedFieldName || fieldName;
 
@@ -268,6 +272,14 @@ export const getUseStateHooks = (
     if (dataApi === 'GraphQL' && relationship) {
       acc.push(buildUseStateExpression(`${renderedFieldName}Loading`, factory.createFalse()));
       acc.push(buildUseStateExpression(`${renderedFieldName}Records`, factory.createArrayLiteralExpression([], false)));
+      if (hasAutoComplete && !isModelDataType(fieldConfig[1])) {
+        acc.push(
+          buildUseStateExpression(
+            `selected${capitalizeFirstLetter(renderedFieldName)}Records`,
+            factory.createArrayLiteralExpression([], false),
+          ),
+        );
+      }
     }
     return acc;
   }, []);

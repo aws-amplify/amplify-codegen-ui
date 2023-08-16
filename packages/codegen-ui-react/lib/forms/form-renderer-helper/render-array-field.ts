@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { FieldConfigMetadata, LabelDecorator } from '@aws-amplify/codegen-ui';
-import { Expression, factory, Identifier, JsxAttribute, JsxChild, NodeFlags, SyntaxKind } from 'typescript';
+import { Expression, factory, Identifier, JsxAttribute, JsxChild, NodeFlags, Statement, SyntaxKind } from 'typescript';
 import {
   buildAccessChain,
   getArrayChildRefName,
@@ -22,6 +22,7 @@ import {
   getCurrentValueIdentifier,
   getCurrentValueName,
   getDefaultValueExpression,
+  getRecordsName,
   setFieldState,
 } from './form-state';
 import { buildOverrideOnChangeStatement } from './event-handler-props';
@@ -264,8 +265,8 @@ export const renderArrayFieldComponent = (
       undefined,
       factory.createToken(SyntaxKind.EqualsGreaterThanToken),
       dataApi === 'GraphQL' && !isModelDataType(fieldConfig)
-        ? getDisplayValueScalar(fieldName, fieldName, scalarKey)
-        : getDisplayValueScalar(fieldName, scalarModel, scalarKey),
+        ? getDisplayValueScalar(fieldName, fieldName, scalarKey, dataApi)
+        : getDisplayValueScalar(fieldName, scalarModel, scalarKey, dataApi),
     );
   }
 
@@ -348,7 +349,61 @@ export const renderArrayFieldComponent = (
         ),
       );
     } else if (scalarModel && scalarKey) {
+      const setStateStatements: Statement[] = [];
       const valueArgument = 'value';
+
+      setStateStatements.push(
+        factory.createExpressionStatement(
+          factory.createCallExpression(setStateName, undefined, [factory.createIdentifier(valueArgument)]),
+        ),
+      );
+
+      if (dataApi === 'GraphQL') {
+        setStateStatements.push(
+          factory.createExpressionStatement(
+            factory.createCallExpression(
+              getSetNameIdentifier(`selected${capitalizeFirstLetter(fieldName)}Records`),
+              undefined,
+              [
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier(getRecordsName(fieldName)),
+                    factory.createIdentifier('find'),
+                  ),
+                  undefined,
+                  [
+                    factory.createArrowFunction(
+                      undefined,
+                      undefined,
+                      [
+                        factory.createParameterDeclaration(
+                          undefined,
+                          undefined,
+                          undefined,
+                          factory.createIdentifier('r'),
+                          undefined,
+                          undefined,
+                        ),
+                      ],
+                      undefined,
+                      factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                      factory.createBinaryExpression(
+                        factory.createPropertyAccessExpression(
+                          factory.createIdentifier('r'),
+                          factory.createIdentifier(scalarKey),
+                        ),
+                        factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+                        factory.createIdentifier('value'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+
       props.push(
         factory.createJsxAttribute(
           factory.createIdentifier('setFieldValue'),
@@ -375,13 +430,11 @@ export const renderArrayFieldComponent = (
                   factory.createExpressionStatement(
                     factory.createCallExpression(setFieldValueIdentifier, undefined, [
                       dataApi === 'GraphQL'
-                        ? getDisplayValueScalar(fieldName, fieldName, scalarKey)
-                        : getDisplayValueScalar(fieldName, scalarModel, scalarKey),
+                        ? getDisplayValueScalar(fieldName, fieldName, scalarKey, dataApi)
+                        : getDisplayValueScalar(fieldName, scalarModel, scalarKey, dataApi),
                     ]),
                   ),
-                  factory.createExpressionStatement(
-                    factory.createCallExpression(setStateName, undefined, [factory.createIdentifier(valueArgument)]),
-                  ),
+                  ...setStateStatements,
                 ],
                 true,
               ),

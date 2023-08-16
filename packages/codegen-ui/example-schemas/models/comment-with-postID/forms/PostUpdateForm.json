@@ -1,0 +1,12 @@
+{
+    "name": "PostUpdateForm",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "Post"
+    },
+    "formActionType": "update",
+    "fields": {},
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+  }

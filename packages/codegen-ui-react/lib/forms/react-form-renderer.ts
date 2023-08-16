@@ -478,7 +478,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     statements.push(getInitialValues(formMetadata.fieldConfigs, this.component));
 
-    statements.push(...getUseStateHooks(formMetadata.fieldConfigs, dataApi));
+    statements.push(...getUseStateHooks(formMetadata.fieldConfigs, formActionType, dataApi, hasAutoComplete));
 
     statements.push(...getAutocompleteOptions(formMetadata.fieldConfigs, hasAutoComplete, dataApi));
 

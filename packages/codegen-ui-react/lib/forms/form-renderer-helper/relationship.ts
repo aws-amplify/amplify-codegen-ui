@@ -1371,9 +1371,11 @@ export const buildGetRelationshipModels = (
         ]),
       ),
       factory.createExpressionStatement(
-        factory.createCallExpression(getSetNameIdentifier(`${fieldName}Records`), undefined, [
-          factory.createArrayLiteralExpression([factory.createIdentifier(`${relatedModelName}Record`)]),
-        ]),
+        factory.createCallExpression(
+          getSetNameIdentifier(`selected${capitalizeFirstLetter(fieldName)}Records`),
+          undefined,
+          [factory.createArrayLiteralExpression([factory.createIdentifier(`${relatedModelName}Record`)])],
+        ),
       ),
     ];
   }
