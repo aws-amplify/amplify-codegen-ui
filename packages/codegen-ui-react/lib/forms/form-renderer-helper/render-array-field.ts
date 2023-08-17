@@ -365,39 +365,41 @@ export const renderArrayFieldComponent = (
               getSetNameIdentifier(`selected${capitalizeFirstLetter(fieldName)}Records`),
               undefined,
               [
-                factory.createCallExpression(
-                  factory.createPropertyAccessExpression(
-                    factory.createIdentifier(getRecordsName(fieldName)),
-                    factory.createIdentifier('find'),
-                  ),
-                  undefined,
-                  [
-                    factory.createArrowFunction(
-                      undefined,
-                      undefined,
-                      [
-                        factory.createParameterDeclaration(
-                          undefined,
-                          undefined,
-                          undefined,
-                          factory.createIdentifier('r'),
-                          undefined,
-                          undefined,
-                        ),
-                      ],
-                      undefined,
-                      factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                      factory.createBinaryExpression(
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier('r'),
-                          factory.createIdentifier(scalarKey),
-                        ),
-                        factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
-                        factory.createIdentifier('value'),
-                      ),
+                factory.createArrayLiteralExpression([
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier(getRecordsName(fieldName)),
+                      factory.createIdentifier('find'),
                     ),
-                  ],
-                ),
+                    undefined,
+                    [
+                      factory.createArrowFunction(
+                        undefined,
+                        undefined,
+                        [
+                          factory.createParameterDeclaration(
+                            undefined,
+                            undefined,
+                            undefined,
+                            factory.createIdentifier('r'),
+                            undefined,
+                            undefined,
+                          ),
+                        ],
+                        undefined,
+                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                        factory.createBinaryExpression(
+                          factory.createPropertyAccessExpression(
+                            factory.createIdentifier('r'),
+                            factory.createIdentifier(scalarKey),
+                          ),
+                          factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+                          factory.createIdentifier('value'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ]),
               ],
             ),
           ),
