@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.15.4](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.3...v2.15.4) (2023-08-17)
+
+### Bug Fixes
+
+- store selected relationship data for scalar fields ([#1077](https://github.com/aws-amplify/amplify-codegen-ui/issues/1077)) ([0ed3590](https://github.com/aws-amplify/amplify-codegen-ui/commit/0ed3590daa59274f6e2cef3470585d98a521f464))
+
 ## [2.15.3](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.2...v2.15.3) (2023-08-14)
 
 ### Bug Fixes
