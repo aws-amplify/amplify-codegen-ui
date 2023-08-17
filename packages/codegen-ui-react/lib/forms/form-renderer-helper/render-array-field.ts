@@ -359,13 +359,17 @@ export const renderArrayFieldComponent = (
       );
 
       if (dataApi === 'GraphQL') {
+        const selectedRecordName = 'selectedRecord';
+
         setStateStatements.push(
-          factory.createExpressionStatement(
-            factory.createCallExpression(
-              getSetNameIdentifier(`selected${capitalizeFirstLetter(fieldName)}Records`),
-              undefined,
+          factory.createVariableStatement(
+            undefined,
+            factory.createVariableDeclarationList(
               [
-                factory.createArrayLiteralExpression([
+                factory.createVariableDeclaration(
+                  factory.createIdentifier(selectedRecordName),
+                  undefined,
+                  undefined,
                   factory.createCallExpression(
                     factory.createPropertyAccessExpression(
                       factory.createIdentifier(getRecordsName(fieldName)),
@@ -384,6 +388,7 @@ export const renderArrayFieldComponent = (
                             factory.createIdentifier('r'),
                             undefined,
                             undefined,
+                            undefined,
                           ),
                         ],
                         undefined,
@@ -399,9 +404,24 @@ export const renderArrayFieldComponent = (
                       ),
                     ],
                   ),
-                ]),
+                ),
               ],
+              NodeFlags.Const,
             ),
+          ),
+        );
+        setStateStatements.push(
+          factory.createIfStatement(
+            factory.createIdentifier(selectedRecordName),
+            factory.createBlock([
+              factory.createExpressionStatement(
+                factory.createCallExpression(
+                  getSetNameIdentifier(`selected${capitalizeFirstLetter(fieldName)}Records`),
+                  undefined,
+                  [factory.createArrayLiteralExpression([factory.createIdentifier(selectedRecordName)])],
+                ),
+              ),
+            ]),
           ),
         );
       }
