@@ -1706,7 +1706,10 @@ export default function MyMemberForm(props) {
               : \\"\\"
           );
           setCurrentTeamIDValue(value);
-          setSelectedTeamIDRecords([teamIDRecords.find((r) => r.id === value)]);
+          const selectedRecord = teamIDRecords.find((r) => r.id === value);
+          if (selectedRecord) {
+            setSelectedTeamIDRecords([selectedRecord]);
+          }
         }}
         inputFieldRef={teamIDRef}
         defaultFieldValue={\\"\\"}
@@ -4018,7 +4021,10 @@ export default function CommentCreateForm(props) {
               : \\"\\"
           );
           setCurrentPostIDValue(value);
-          setSelectedPostIDRecords([postIDRecords.find((r) => r.id === value)]);
+          const selectedRecord = postIDRecords.find((r) => r.id === value);
+          if (selectedRecord) {
+            setSelectedPostIDRecords([selectedRecord]);
+          }
         }}
         inputFieldRef={postIDRef}
         defaultFieldValue={\\"\\"}
@@ -9614,7 +9620,10 @@ export default function CommentUpdateForm(props) {
               : \\"\\"
           );
           setCurrentPostIDValue(value);
-          setSelectedPostIDRecords([postIDRecords.find((r) => r.id === value)]);
+          const selectedRecord = postIDRecords.find((r) => r.id === value);
+          if (selectedRecord) {
+            setSelectedPostIDRecords([selectedRecord]);
+          }
         }}
         inputFieldRef={postIDRef}
         defaultFieldValue={\\"\\"}
@@ -10344,7 +10353,10 @@ export default function CommentUpdateForm(props) {
               : \\"\\"
           );
           setCurrentPostIDValue(value);
-          setSelectedPostIDRecords([postIDRecords.find((r) => r.id === value)]);
+          const selectedRecord = postIDRecords.find((r) => r.id === value);
+          if (selectedRecord) {
+            setSelectedPostIDRecords([selectedRecord]);
+          }
         }}
         inputFieldRef={postIDRef}
         defaultFieldValue={\\"\\"}
@@ -10997,7 +11009,10 @@ export default function CommentUpdateForm(props) {
               : \\"\\"
           );
           setCurrentPostIDValue(value);
-          setSelectedPostIDRecords([postIDRecords.find((r) => r.id === value)]);
+          const selectedRecord = postIDRecords.find((r) => r.id === value);
+          if (selectedRecord) {
+            setSelectedPostIDRecords([selectedRecord]);
+          }
         }}
         inputFieldRef={postIDRef}
         defaultFieldValue={\\"\\"}
@@ -13869,9 +13884,12 @@ export default function CreateCompositeToyForm(props) {
               : \\"\\"
           );
           setCurrentCompositeDogCompositeToysNameValue(value);
-          setSelectedCompositeDogCompositeToysNameRecords([
-            compositeDogCompositeToysNameRecords.find((r) => r.name === value),
-          ]);
+          const selectedRecord = compositeDogCompositeToysNameRecords.find(
+            (r) => r.name === value
+          );
+          if (selectedRecord) {
+            setSelectedCompositeDogCompositeToysNameRecords([selectedRecord]);
+          }
         }}
         inputFieldRef={compositeDogCompositeToysNameRef}
         defaultFieldValue={\\"\\"}
@@ -13982,11 +14000,15 @@ export default function CreateCompositeToyForm(props) {
               : \\"\\"
           );
           setCurrentCompositeDogCompositeToysDescriptionValue(value);
-          setSelectedCompositeDogCompositeToysDescriptionRecords([
+          const selectedRecord =
             compositeDogCompositeToysDescriptionRecords.find(
               (r) => r.description === value
-            ),
-          ]);
+            );
+          if (selectedRecord) {
+            setSelectedCompositeDogCompositeToysDescriptionRecords([
+              selectedRecord,
+            ]);
+          }
         }}
         inputFieldRef={compositeDogCompositeToysDescriptionRef}
         defaultFieldValue={\\"\\"}
@@ -14929,9 +14951,12 @@ export default function CreateCommentForm(props) {
               : \\"\\"
           );
           setCurrentPostCommentsIdValue(value);
-          setSelectedPostCommentsIdRecords([
-            postCommentsIdRecords.find((r) => r.id === value),
-          ]);
+          const selectedRecord = postCommentsIdRecords.find(
+            (r) => r.id === value
+          );
+          if (selectedRecord) {
+            setSelectedPostCommentsIdRecords([selectedRecord]);
+          }
         }}
         inputFieldRef={postCommentsIdRef}
         defaultFieldValue={\\"\\"}
@@ -17788,11 +17813,14 @@ export default function ChildItemUpdateForm(props) {
               : \\"\\"
           );
           setCurrentCustomKeyModelChildrenMycustomkeyValue(value);
-          setSelectedCustomKeyModelChildrenMycustomkeyRecords([
-            customKeyModelChildrenMycustomkeyRecords.find(
-              (r) => r.mycustomkey === value
-            ),
-          ]);
+          const selectedRecord = customKeyModelChildrenMycustomkeyRecords.find(
+            (r) => r.mycustomkey === value
+          );
+          if (selectedRecord) {
+            setSelectedCustomKeyModelChildrenMycustomkeyRecords([
+              selectedRecord,
+            ]);
+          }
         }}
         inputFieldRef={customKeyModelChildrenMycustomkeyRef}
         defaultFieldValue={\\"\\"}
@@ -20181,7 +20209,10 @@ export default function CommentUpdateForm(props) {
               : \\"\\"
           );
           setCurrentPostIDValue(value);
-          setSelectedPostIDRecords([postIDRecords.find((r) => r.id === value)]);
+          const selectedRecord = postIDRecords.find((r) => r.id === value);
+          if (selectedRecord) {
+            setSelectedPostIDRecords([selectedRecord]);
+          }
         }}
         inputFieldRef={postIDRef}
         defaultFieldValue={\\"\\"}
