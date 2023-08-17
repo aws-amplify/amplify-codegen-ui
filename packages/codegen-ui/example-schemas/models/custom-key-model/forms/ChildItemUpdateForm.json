@@ -1,0 +1,12 @@
+{
+    "name": "ChildItemUpdateForm",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "ChildItem"
+    },
+    "formActionType": "update",
+    "fields": {},
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+  }
