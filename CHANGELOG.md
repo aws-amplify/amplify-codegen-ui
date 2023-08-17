@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.15.5](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.4...v2.15.5) (2023-08-17)
+
+### Bug Fixes
+
+- wrap set state with array expression ([#1079](https://github.com/aws-amplify/amplify-codegen-ui/issues/1079)) ([5c73726](https://github.com/aws-amplify/amplify-codegen-ui/commit/5c737260239da55fd4a76236088b4b4f61f937cb))
+
 ## [2.15.4](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.3...v2.15.4) (2023-08-17)
 
 ### Bug Fixes
