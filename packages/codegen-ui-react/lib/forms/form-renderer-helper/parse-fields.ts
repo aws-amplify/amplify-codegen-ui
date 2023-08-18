@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { isNonModelDataType, FieldConfigMetadata, GenericDataModel } from '@aws-amplify/codegen-ui';
+import { isNonModelDataType, FieldConfigMetadata, GenericDataModel, ValidationTypes } from '@aws-amplify/codegen-ui';
 import {
   PropertyAccessExpression,
   Identifier,
@@ -121,47 +121,59 @@ export const generateModelObjectToSave = (
   const inheritFromModelFieldsPropertyAssignments: PropertyAssignment[] = [];
   let isDifferentFromModelObject = false;
 
-  Object.entries(fieldConfigs).forEach(([name, { dataType, sanitizedFieldName, isArray, relationship }]) => {
-    const shouldExclude = !dataType || relationship?.type === 'HAS_MANY';
-    const renderedFieldName = sanitizedFieldName || name;
-    if (shouldExclude) {
-      isDifferentFromModelObject = true;
-      return;
-    }
-    if (isNonModelDataType(dataType)) {
-      if (!isArray) {
-        nonModelFields.push(renderedFieldName);
-      } else {
-        nonModelArrayFields.push(renderedFieldName);
+  Object.entries(fieldConfigs).forEach(
+    ([name, { validationRules, dataType, sanitizedFieldName, isArray, relationship }]) => {
+      const shouldExclude = !dataType || relationship?.type === 'HAS_MANY';
+      const renderedFieldName = sanitizedFieldName || name;
+      if (shouldExclude) {
+        isDifferentFromModelObject = true;
+        return;
       }
-      isDifferentFromModelObject = true;
-      return;
-    }
-    if (
-      isGraphQL &&
-      (relationship?.type === 'BELONGS_TO' || relationship?.type === 'HAS_ONE') &&
-      relationship.associatedFields
-    ) {
-      isDifferentFromModelObject = true;
-      const relatedModel = models[relationship.relatedModelName];
-      relationship.associatedFields.forEach((associatedFieldName, index) => {
-        inheritFromModelFieldsPropertyAssignments.push(
-          factory.createPropertyAssignment(
-            factory.createIdentifier(associatedFieldName),
-            buildAccessChain([modelFieldsObjectName, renderedFieldName, relatedModel.primaryKeys[index]], true),
-          ),
-        );
-      });
-      return;
-    }
+      if (isNonModelDataType(dataType)) {
+        if (!isArray) {
+          nonModelFields.push(renderedFieldName);
+        } else {
+          nonModelArrayFields.push(renderedFieldName);
+        }
+        isDifferentFromModelObject = true;
+        return;
+      }
+      if (
+        isGraphQL &&
+        (relationship?.type === 'BELONGS_TO' || relationship?.type === 'HAS_ONE') &&
+        relationship.associatedFields
+      ) {
+        isDifferentFromModelObject = true;
+        const relatedModel = models[relationship.relatedModelName];
+        relationship.associatedFields.forEach((associatedFieldName, index) => {
+          inheritFromModelFieldsPropertyAssignments.push(
+            factory.createPropertyAssignment(
+              factory.createIdentifier(associatedFieldName),
+              factory.createBinaryExpression(
+                buildAccessChain([modelFieldsObjectName, renderedFieldName, relatedModel.primaryKeys[index]], true),
+                SyntaxKind.QuestionQuestionToken,
+                factory.createNull(),
+              ),
+            ),
+          );
+        });
+        return;
+      }
 
-    inheritFromModelFieldsPropertyAssignments.push(
-      factory.createPropertyAssignment(
-        factory.createIdentifier(name),
-        buildAccessChain([modelFieldsObjectName, name], false),
-      ),
-    );
-  });
+      inheritFromModelFieldsPropertyAssignments.push(
+        factory.createPropertyAssignment(
+          factory.createIdentifier(name),
+          isGraphQL && !validationRules.find((r) => r.type === ValidationTypes.REQUIRED)
+            ? factory.createBinaryExpression(
+                buildAccessChain([modelFieldsObjectName, name], false),
+                SyntaxKind.QuestionQuestionToken,
+                factory.createNull(),
+              )
+            : buildAccessChain([modelFieldsObjectName, name], false),
+        ),
+      );
+    },
+  );
   const parsePropertyAssignments = generateParsePropertyAssignments(
     nonModelArrayFields,
     nonModelFields,
