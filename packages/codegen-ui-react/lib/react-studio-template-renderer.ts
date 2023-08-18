@@ -2064,107 +2064,42 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                       undefined,
                       factory.createPropertyAccessExpression(
                         factory.createPropertyAccessExpression(
-                          factory.createParenthesizedExpression(
-                            factory.createAwaitExpression(
-                              factory.createCallExpression(
-                                factory.createPropertyAccessExpression(
-                                  factory.createIdentifier('API'),
-                                  factory.createIdentifier('graphql'),
-                                ),
-                                undefined,
-                                [
-                                  factory.createObjectLiteralExpression(
-                                    [
-                                      factory.createPropertyAssignment(
-                                        factory.createIdentifier('query'),
-                                        factory.createIdentifier(modelQuery),
-                                      ),
-                                      factory.createShorthandPropertyAssignment(
-                                        factory.createIdentifier('variables'),
-                                        undefined,
-                                      ),
-                                    ],
-                                    true,
+                          factory.createPropertyAccessExpression(
+                            factory.createParenthesizedExpression(
+                              factory.createAwaitExpression(
+                                factory.createCallExpression(
+                                  factory.createPropertyAccessExpression(
+                                    factory.createIdentifier('API'),
+                                    factory.createIdentifier('graphql'),
                                   ),
-                                ],
+                                  undefined,
+                                  [
+                                    factory.createObjectLiteralExpression(
+                                      [
+                                        factory.createPropertyAssignment(
+                                          factory.createIdentifier('query'),
+                                          factory.createIdentifier(modelQuery),
+                                        ),
+                                        factory.createShorthandPropertyAssignment(
+                                          factory.createIdentifier('variables'),
+                                          undefined,
+                                        ),
+                                      ],
+                                      true,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
+                            factory.createIdentifier('data'),
                           ),
-                          factory.createIdentifier('data'),
+                          factory.createIdentifier(modelQuery),
                         ),
-                        factory.createIdentifier(modelQuery),
+                        factory.createIdentifier('items'),
                       ),
                     ),
                   ],
                   ts.NodeFlags.Const,
-                ),
-              ),
-              factory.createVariableStatement(
-                undefined,
-                factory.createVariableDeclarationList(
-                  [
-                    factory.createVariableDeclaration(
-                      factory.createIdentifier('loaded'),
-                      undefined,
-                      undefined,
-                      factory.createAwaitExpression(
-                        factory.createCallExpression(
-                          factory.createPropertyAccessExpression(
-                            factory.createIdentifier('Promise'),
-                            factory.createIdentifier('all'),
-                          ),
-                          undefined,
-                          [
-                            factory.createCallExpression(
-                              factory.createPropertyAccessExpression(
-                                factory.createPropertyAccessExpression(
-                                  factory.createIdentifier('result'),
-                                  factory.createIdentifier('items'),
-                                ),
-                                factory.createIdentifier('map'),
-                              ),
-                              undefined,
-                              [
-                                factory.createArrowFunction(
-                                  [factory.createToken(ts.SyntaxKind.AsyncKeyword)],
-                                  undefined,
-                                  [
-                                    factory.createParameterDeclaration(
-                                      undefined,
-                                      undefined,
-                                      undefined,
-                                      factory.createIdentifier('item'),
-                                      undefined,
-                                      undefined,
-                                      undefined,
-                                    ),
-                                  ],
-                                  undefined,
-                                  factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-                                  factory.createBlock(
-                                    [
-                                      ...loadedFieldStatements,
-                                      factory.createReturnStatement(
-                                        factory.createObjectLiteralExpression(
-                                          [
-                                            factory.createSpreadAssignment(factory.createIdentifier('item')),
-                                            ...loadedFields,
-                                          ],
-                                          true,
-                                        ),
-                                      ),
-                                    ],
-                                    true,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                  ts.NodeFlags.AwaitContext,
                 ),
               ),
               factory.createExpressionStatement(
@@ -2174,7 +2109,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                     factory.createIdentifier('push'),
                   ),
                   undefined,
-                  [factory.createSpreadElement(factory.createIdentifier('loaded'))],
+                  [factory.createSpreadElement(factory.createIdentifier('result'))],
                 ),
               ),
               factory.createExpressionStatement(

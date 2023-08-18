@@ -946,15 +946,8 @@ export default function AuthorProfileCollection(
           query: listAuthors,
           variables,
         })
-      ).data.listAuthors;
-      var loaded = await Promise.all(
-        result.items.map(async (item) => {
-          return {
-            ...item,
-          };
-        })
-      );
-      newCache.push(...loaded);
+      ).data.listAuthors.items;
+      newCache.push(...result);
       newNext = result.nextToken;
     }
     const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
@@ -1128,15 +1121,8 @@ export default function CollectionOfCustomButtons(
           query: listUsers,
           variables,
         })
-      ).data.listUsers;
-      var loaded = await Promise.all(
-        result.items.map(async (item) => {
-          return {
-            ...item,
-          };
-        })
-      );
-      newCache.push(...loaded);
+      ).data.listUsers.items;
+      newCache.push(...result);
       newNext = result.nextToken;
     }
     const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
@@ -1301,15 +1287,8 @@ export default function ListingCardCollection(
           query: listUntitledModels,
           variables,
         })
-      ).data.listUntitledModels;
-      var loaded = await Promise.all(
-        result.items.map(async (item) => {
-          return {
-            ...item,
-          };
-        })
-      );
-      newCache.push(...loaded);
+      ).data.listUntitledModels.items;
+      newCache.push(...result);
       newNext = result.nextToken;
     }
     const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
@@ -1573,29 +1552,8 @@ export default function AuthorProfileCollection(
           query: listAuthors,
           variables,
         })
-      ).data.listAuthors;
-      var loaded = await Promise.all(
-        result.items.map(async (item) => {
-          const Books = (
-            await API.graphql({
-              query: booksByAuthorID,
-              variables: { authorID: item.id },
-            })
-          ).data.booksByAuthorID.items;
-          const Publishers = (
-            await API.graphql({
-              query: publishersByAuthorID,
-              variables: { authorID: item.id },
-            })
-          ).data.publishersByAuthorID.items;
-          return {
-            ...item,
-            Books,
-            Publisher,
-          };
-        })
-      );
-      newCache.push(...loaded);
+      ).data.listAuthors.items;
+      newCache.push(...result);
       newNext = result.nextToken;
     }
     const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
