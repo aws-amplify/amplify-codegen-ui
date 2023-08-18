@@ -342,8 +342,8 @@ export default function CreateOwnerForm(props) {
                 query: updateDog,
                 variables: {
                   input: {
-                    ...Dog,
-                    owner: owner,
+                    id: Dog.id,
+                    dogOwnerId: owner.id,
                   },
                 },
               })
@@ -355,9 +355,8 @@ export default function CreateOwnerForm(props) {
                   query: updateOwner,
                   variables: {
                     input: {
-                      ...ownerToUnlink,
-                      Dog: undefined,
-                      ownerDogId: undefined,
+                      id: ownerToUnlink.id,
+                      ownerDogId: null,
                     },
                   },
                 })
@@ -15632,8 +15631,11 @@ export default function CreateCompositeDogForm(props) {
                 query: updateCompositeOwner,
                 variables: {
                   input: {
-                    ...CompositeOwner,
-                    CompositeDog: compositeDog,
+                    lastName: CompositeOwner.lastName,
+                    firstName: CompositeOwner.firstName,
+                    compositeOwnerCompositeDogName: compositeDog.name,
+                    compositeOwnerCompositeDogDescription:
+                      compositeDog.description,
                   },
                 },
               })
@@ -15646,10 +15648,10 @@ export default function CreateCompositeDogForm(props) {
                   query: updateCompositeDog,
                   variables: {
                     input: {
-                      ...compositeDogToUnlink,
-                      CompositeOwner: undefined,
-                      compositeDogCompositeOwnerLastName: undefined,
-                      compositeDogCompositeOwnerFirstName: undefined,
+                      name: compositeDogToUnlink.name,
+                      description: compositeDogToUnlink.description,
+                      compositeDogCompositeOwnerLastName: null,
+                      compositeDogCompositeOwnerFirstName: null,
                     },
                   },
                 })
@@ -18708,7 +18710,6 @@ import {
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Owner } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listOwners } from \\"../graphql/queries\\";
@@ -19034,8 +19035,8 @@ export default function CreateDogForm(props) {
                 query: updateOwner,
                 variables: {
                   input: {
-                    ...Owner,
-                    Dog: dog,
+                    id: owner.id,
+                    ownerDogId: dog.id,
                   },
                 },
               })
@@ -19581,8 +19582,8 @@ export default function CreateOwnerForm(props) {
                 query: updateDog,
                 variables: {
                   input: {
-                    ...Dog,
-                    owner: owner,
+                    id: Dog.id,
+                    dogOwnerId: owner.id,
                   },
                 },
               })
@@ -19594,9 +19595,8 @@ export default function CreateOwnerForm(props) {
                   query: updateOwner,
                   variables: {
                     input: {
-                      ...ownerToUnlink,
-                      Dog: undefined,
-                      ownerDogId: undefined,
+                      id: ownerToUnlink.id,
+                      ownerDogId: null,
                     },
                   },
                 })

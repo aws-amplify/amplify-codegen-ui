@@ -85,6 +85,7 @@ function getFieldBiDirectionalWith({
 
 function unlinkModelRecordExpression({
   modelName,
+  primaryKeys,
   recordNameToUnlink,
   fieldName,
   associatedFields,
@@ -92,6 +93,7 @@ function unlinkModelRecordExpression({
   dataApi,
 }: {
   modelName: string;
+  primaryKeys: string[];
   recordNameToUnlink: string;
   fieldName: string;
   associatedFields: string[];
@@ -100,10 +102,14 @@ function unlinkModelRecordExpression({
 }) {
   if (dataApi === 'GraphQL') {
     const inputs = [
-      factory.createSpreadAssignment(factory.createIdentifier(recordNameToUnlink)),
-      factory.createPropertyAssignment(factory.createIdentifier(fieldName), factory.createIdentifier('undefined')),
+      ...primaryKeys.map((primaryKey) =>
+        factory.createPropertyAssignment(
+          factory.createIdentifier(primaryKey),
+          factory.createPropertyAccessChain(factory.createIdentifier(recordNameToUnlink), undefined, primaryKey),
+        ),
+      ),
       ...associatedFields.map((field) =>
-        factory.createPropertyAssignment(factory.createIdentifier(field), factory.createIdentifier('undefined')),
+        factory.createPropertyAssignment(factory.createIdentifier(field), factory.createNull()),
       ),
     ];
 
@@ -254,23 +260,38 @@ function linkModelRecordExpression({
   importedRelatedModelName,
   relatedRecordToLink,
   fieldBiDirectionalWithName,
+  fieldName,
   currentRecord,
   importCollection,
+  primaryKeys,
+  associatedPrimaryKeys,
+  associatedFieldsBiDirectionalWith,
   dataApi,
 }: {
   importedRelatedModelName: string;
   relatedRecordToLink: string;
   fieldBiDirectionalWithName: string;
+  fieldName: string;
   currentRecord: string;
   importCollection: ImportCollection;
+  primaryKeys: string[];
+  associatedPrimaryKeys: string[];
+  associatedFieldsBiDirectionalWith: string[];
   dataApi?: DataApiKind;
 }) {
   if (dataApi === 'GraphQL') {
     const inputs = [
-      factory.createSpreadAssignment(factory.createIdentifier(importedRelatedModelName)),
-      factory.createPropertyAssignment(
-        factory.createIdentifier(fieldBiDirectionalWithName),
-        factory.createIdentifier(currentRecord),
+      ...associatedPrimaryKeys.map((associatedPrimaryKey) =>
+        factory.createPropertyAssignment(
+          factory.createIdentifier(associatedPrimaryKey),
+          factory.createPropertyAccessChain(factory.createIdentifier(fieldName), undefined, associatedPrimaryKey),
+        ),
+      ),
+      ...associatedFieldsBiDirectionalWith.map((associatedField, index) =>
+        factory.createPropertyAssignment(
+          factory.createIdentifier(associatedField),
+          factory.createPropertyAccessChain(factory.createIdentifier(currentRecord), undefined, primaryKeys[index]),
+        ),
       ),
     ];
 
@@ -351,6 +372,7 @@ export function getBiDirectionalRelationshipStatements({
   fieldConfig,
   modelName,
   savedRecordName,
+  thisModelPrimaryKeys,
   dataApi,
 }: {
   formActionType: 'create' | 'update';
@@ -359,6 +381,7 @@ export function getBiDirectionalRelationshipStatements({
   fieldConfig: [string, FieldConfigMetadata];
   modelName: string;
   savedRecordName: string;
+  thisModelPrimaryKeys: string[];
   dataApi?: DataApiKind;
 }) {
   const getFieldBiDirectionalWithReturnValue = getFieldBiDirectionalWith({
@@ -445,6 +468,7 @@ export function getBiDirectionalRelationshipStatements({
                   })
                 : unlinkModelRecordExpression({
                     modelName: importedRelatedModelName,
+                    primaryKeys: thisModelPrimaryKeys,
                     recordNameToUnlink: relatedRecordToUnlink,
                     fieldName: fieldBiDirectionalWithName,
                     associatedFields: associatedFieldsBiDirectionalWith,
@@ -530,8 +554,12 @@ export function getBiDirectionalRelationshipStatements({
               importedRelatedModelName,
               relatedRecordToLink,
               fieldBiDirectionalWithName,
+              fieldName,
               currentRecord,
               importCollection,
+              primaryKeys: thisModelPrimaryKeys,
+              associatedPrimaryKeys: fieldBiDirectionalWithPrimaryKeys,
+              associatedFieldsBiDirectionalWith,
               dataApi,
             }),
             factory.createVariableStatement(
@@ -571,6 +599,7 @@ export function getBiDirectionalRelationshipStatements({
                       })
                     : unlinkModelRecordExpression({
                         modelName: importedThisModelName,
+                        primaryKeys: thisModelPrimaryKeys,
                         recordNameToUnlink: thisModelRecordToUnlink,
                         fieldName,
                         associatedFields,
