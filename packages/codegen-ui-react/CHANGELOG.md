@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.15.6](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.5...v2.15.6) (2023-08-18)
+
+### Bug Fixes
+
+- add fallback for non-required fields on submit ([ae87118](https://github.com/aws-amplify/amplify-codegen-ui/commit/ae8711804b183f1a882a75051c65ce05c07069a0))
+- collection components should not directly query for child collection data ([0a83efb](https://github.com/aws-amplify/amplify-codegen-ui/commit/0a83efbebda640b5ecd5395ab69cf794bfadcd42))
+- conditionally set selected record state ([604e0e9](https://github.com/aws-amplify/amplify-codegen-ui/commit/604e0e96a3579de6b89f37070d6040f29a175775))
+- reorder state for badge text and field value ([e17d8b5](https://github.com/aws-amplify/amplify-codegen-ui/commit/e17d8b5222e0ae5c03fae9fd22fc03c75e4c0eaf))
+
 ## [2.15.5](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.4...v2.15.5) (2023-08-17)
 
 ### Bug Fixes

@@ -1,7 +1,7 @@
 {
   "packages": ["packages/*"],
   "exact": true,
-  "version": "2.15.5",
+  "version": "2.15.6",
   "command": {
     "version": {
       "message": "chore(release): %s"
