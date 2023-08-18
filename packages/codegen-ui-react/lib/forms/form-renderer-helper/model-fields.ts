@@ -13,8 +13,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { factory, NodeFlags, ObjectLiteralElementLike } from 'typescript';
-import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
+import { factory, NodeFlags, ObjectLiteralElementLike, SyntaxKind } from 'typescript';
+import { FieldConfigMetadata, ValidationTypes } from '@aws-amplify/codegen-ui';
+import { DataApiKind } from '../../react-render-config';
 
 /**
  * builds modelFields object which is used to validate, onSubmit, onSuccess/onError
@@ -34,11 +35,12 @@ export const buildModelFieldObject = (
   shouldBeConst: boolean,
   fieldConfigs: Record<string, FieldConfigMetadata> = {},
   nameOverrides: Record<string, ObjectLiteralElementLike> = {},
+  dataApi: DataApiKind = 'DataStore',
 ) => {
   const fieldSet = new Set<string>();
   const fields = Object.keys(fieldConfigs).reduce<ObjectLiteralElementLike[]>((acc, value) => {
     const fieldName = value.split('.')[0];
-    const { sanitizedFieldName } = fieldConfigs[value];
+    const { validationRules, sanitizedFieldName } = fieldConfigs[value];
     const renderedFieldName = sanitizedFieldName || fieldName;
     if (!fieldSet.has(renderedFieldName)) {
       let assignment: ObjectLiteralElementLike = factory.createShorthandPropertyAssignment(
@@ -46,7 +48,16 @@ export const buildModelFieldObject = (
         undefined,
       );
 
-      if (nameOverrides[fieldName]) {
+      if (dataApi === 'GraphQL' && !validationRules.find((r) => r.type === ValidationTypes.REQUIRED)) {
+        assignment = factory.createPropertyAssignment(
+          factory.createIdentifier(fieldName),
+          factory.createBinaryExpression(
+            factory.createIdentifier(fieldName),
+            SyntaxKind.QuestionQuestionToken,
+            factory.createNull(),
+          ),
+        );
+      } else if (nameOverrides[fieldName]) {
         assignment = nameOverrides[fieldName];
       } else if (sanitizedFieldName) {
         // if overrides present, ignore sanitizedFieldName
