@@ -92,6 +92,40 @@ export function getDisplayValueScalar(fieldName: string, model: string, key: str
           ? factory.createBinaryExpression(
               factory.createCallExpression(
                 factory.createPropertyAccessExpression(
+                  factory.createIdentifier(getRecordsName(model)),
+                  factory.createIdentifier('find'),
+                ),
+                undefined,
+                [
+                  factory.createArrowFunction(
+                    undefined,
+                    undefined,
+                    [
+                      factory.createParameterDeclaration(
+                        undefined,
+                        undefined,
+                        undefined,
+                        factory.createIdentifier(recordString),
+                        undefined,
+                        undefined,
+                      ),
+                    ],
+                    undefined,
+                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                    factory.createBinaryExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier(recordString),
+                        factory.createIdentifier(key),
+                      ),
+                      factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+                      factory.createIdentifier('value'),
+                    ),
+                  ),
+                ],
+              ),
+              factory.createToken(SyntaxKind.QuestionQuestionToken),
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
                   factory.createIdentifier(`selected${capitalizeFirstLetter(fieldName)}Records`),
                   factory.createIdentifier('find'),
                 ),
@@ -117,40 +151,6 @@ export function getDisplayValueScalar(fieldName: string, model: string, key: str
                       factory.createPropertyAccessExpression(
                         factory.createIdentifier(recordString),
                         factory.createIdentifier('id'),
-                      ),
-                      factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
-                      factory.createIdentifier('value'),
-                    ),
-                  ),
-                ],
-              ),
-              factory.createToken(SyntaxKind.QuestionQuestionToken),
-              factory.createCallExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier(getRecordsName(model)),
-                  factory.createIdentifier('find'),
-                ),
-                undefined,
-                [
-                  factory.createArrowFunction(
-                    undefined,
-                    undefined,
-                    [
-                      factory.createParameterDeclaration(
-                        undefined,
-                        undefined,
-                        undefined,
-                        factory.createIdentifier(recordString),
-                        undefined,
-                        undefined,
-                      ),
-                    ],
-                    undefined,
-                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                    factory.createBinaryExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier(recordString),
-                        factory.createIdentifier(key),
                       ),
                       factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
                       factory.createIdentifier('value'),

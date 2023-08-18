@@ -1691,8 +1691,8 @@ export default function MyMemberForm(props) {
         getBadgeText={(value) =>
           value
             ? getDisplayValue.teamID(
-                selectedTeamIDRecords.find((r) => r.id === value) ??
-                  teamIDRecords.find((r) => r.id === value)
+                teamIDRecords.find((r) => r.id === value) ??
+                  selectedTeamIDRecords.find((r) => r.id === value)
               )
             : \\"\\"
         }
@@ -1700,8 +1700,8 @@ export default function MyMemberForm(props) {
           setCurrentTeamIDDisplayValue(
             value
               ? getDisplayValue.teamID(
-                  selectedTeamIDRecords.find((r) => r.id === value) ??
-                    teamIDRecords.find((r) => r.id === value)
+                  teamIDRecords.find((r) => r.id === value) ??
+                    selectedTeamIDRecords.find((r) => r.id === value)
                 )
               : \\"\\"
           );
@@ -4006,8 +4006,8 @@ export default function CommentCreateForm(props) {
         getBadgeText={(value) =>
           value
             ? getDisplayValue.postID(
-                selectedPostIDRecords.find((r) => r.id === value) ??
-                  postIDRecords.find((r) => r.id === value)
+                postIDRecords.find((r) => r.id === value) ??
+                  selectedPostIDRecords.find((r) => r.id === value)
               )
             : \\"\\"
         }
@@ -4015,8 +4015,8 @@ export default function CommentCreateForm(props) {
           setCurrentPostIDDisplayValue(
             value
               ? getDisplayValue.postID(
-                  selectedPostIDRecords.find((r) => r.id === value) ??
-                    postIDRecords.find((r) => r.id === value)
+                  postIDRecords.find((r) => r.id === value) ??
+                    selectedPostIDRecords.find((r) => r.id === value)
                 )
               : \\"\\"
           );
@@ -9605,8 +9605,8 @@ export default function CommentUpdateForm(props) {
         getBadgeText={(value) =>
           value
             ? getDisplayValue.postID(
-                selectedPostIDRecords.find((r) => r.id === value) ??
-                  postIDRecords.find((r) => r.id === value)
+                postIDRecords.find((r) => r.id === value) ??
+                  selectedPostIDRecords.find((r) => r.id === value)
               )
             : \\"\\"
         }
@@ -9614,8 +9614,8 @@ export default function CommentUpdateForm(props) {
           setCurrentPostIDDisplayValue(
             value
               ? getDisplayValue.postID(
-                  selectedPostIDRecords.find((r) => r.id === value) ??
-                    postIDRecords.find((r) => r.id === value)
+                  postIDRecords.find((r) => r.id === value) ??
+                    selectedPostIDRecords.find((r) => r.id === value)
                 )
               : \\"\\"
           );
@@ -10338,8 +10338,8 @@ export default function CommentUpdateForm(props) {
         getBadgeText={(value) =>
           value
             ? getDisplayValue.postID(
-                selectedPostIDRecords.find((r) => r.id === value) ??
-                  postIDRecords.find((r) => r.id === value)
+                postIDRecords.find((r) => r.id === value) ??
+                  selectedPostIDRecords.find((r) => r.id === value)
               )
             : \\"\\"
         }
@@ -10347,8 +10347,8 @@ export default function CommentUpdateForm(props) {
           setCurrentPostIDDisplayValue(
             value
               ? getDisplayValue.postID(
-                  selectedPostIDRecords.find((r) => r.id === value) ??
-                    postIDRecords.find((r) => r.id === value)
+                  postIDRecords.find((r) => r.id === value) ??
+                    selectedPostIDRecords.find((r) => r.id === value)
                 )
               : \\"\\"
           );
@@ -10994,8 +10994,8 @@ export default function CommentUpdateForm(props) {
         getBadgeText={(value) =>
           value
             ? getDisplayValue.postID(
-                selectedPostIDRecords.find((r) => r.id === value) ??
-                  postIDRecords.find((r) => r.id === value)
+                postIDRecords.find((r) => r.id === value) ??
+                  selectedPostIDRecords.find((r) => r.id === value)
               )
             : \\"\\"
         }
@@ -11003,8 +11003,8 @@ export default function CommentUpdateForm(props) {
           setCurrentPostIDDisplayValue(
             value
               ? getDisplayValue.postID(
-                  selectedPostIDRecords.find((r) => r.id === value) ??
-                    postIDRecords.find((r) => r.id === value)
+                  postIDRecords.find((r) => r.id === value) ??
+                    selectedPostIDRecords.find((r) => r.id === value)
                 )
               : \\"\\"
           );
@@ -13861,11 +13861,11 @@ export default function CreateCompositeToyForm(props) {
         getBadgeText={(value) =>
           value
             ? getDisplayValue.compositeDogCompositeToysName(
-                selectedCompositeDogCompositeToysNameRecords.find(
-                  (r) => r.id === value
+                compositeDogCompositeToysNameRecords.find(
+                  (r) => r.name === value
                 ) ??
-                  compositeDogCompositeToysNameRecords.find(
-                    (r) => r.name === value
+                  selectedCompositeDogCompositeToysNameRecords.find(
+                    (r) => r.id === value
                   )
               )
             : \\"\\"
@@ -13874,11 +13874,11 @@ export default function CreateCompositeToyForm(props) {
           setCurrentCompositeDogCompositeToysNameDisplayValue(
             value
               ? getDisplayValue.compositeDogCompositeToysName(
-                  selectedCompositeDogCompositeToysNameRecords.find(
-                    (r) => r.id === value
+                  compositeDogCompositeToysNameRecords.find(
+                    (r) => r.name === value
                   ) ??
-                    compositeDogCompositeToysNameRecords.find(
-                      (r) => r.name === value
+                    selectedCompositeDogCompositeToysNameRecords.find(
+                      (r) => r.id === value
                     )
                 )
               : \\"\\"
@@ -13977,11 +13977,11 @@ export default function CreateCompositeToyForm(props) {
         getBadgeText={(value) =>
           value
             ? getDisplayValue.compositeDogCompositeToysDescription(
-                selectedCompositeDogCompositeToysDescriptionRecords.find(
-                  (r) => r.id === value
+                compositeDogCompositeToysDescriptionRecords.find(
+                  (r) => r.description === value
                 ) ??
-                  compositeDogCompositeToysDescriptionRecords.find(
-                    (r) => r.description === value
+                  selectedCompositeDogCompositeToysDescriptionRecords.find(
+                    (r) => r.id === value
                   )
               )
             : \\"\\"
@@ -13990,11 +13990,11 @@ export default function CreateCompositeToyForm(props) {
           setCurrentCompositeDogCompositeToysDescriptionDisplayValue(
             value
               ? getDisplayValue.compositeDogCompositeToysDescription(
-                  selectedCompositeDogCompositeToysDescriptionRecords.find(
-                    (r) => r.id === value
+                  compositeDogCompositeToysDescriptionRecords.find(
+                    (r) => r.description === value
                   ) ??
-                    compositeDogCompositeToysDescriptionRecords.find(
-                      (r) => r.description === value
+                    selectedCompositeDogCompositeToysDescriptionRecords.find(
+                      (r) => r.id === value
                     )
                 )
               : \\"\\"
@@ -14936,8 +14936,8 @@ export default function CreateCommentForm(props) {
         getBadgeText={(value) =>
           value
             ? getDisplayValue.postCommentsId(
-                selectedPostCommentsIdRecords.find((r) => r.id === value) ??
-                  postCommentsIdRecords.find((r) => r.id === value)
+                postCommentsIdRecords.find((r) => r.id === value) ??
+                  selectedPostCommentsIdRecords.find((r) => r.id === value)
               )
             : \\"\\"
         }
@@ -14945,8 +14945,8 @@ export default function CreateCommentForm(props) {
           setCurrentPostCommentsIdDisplayValue(
             value
               ? getDisplayValue.postCommentsId(
-                  selectedPostCommentsIdRecords.find((r) => r.id === value) ??
-                    postCommentsIdRecords.find((r) => r.id === value)
+                  postCommentsIdRecords.find((r) => r.id === value) ??
+                    selectedPostCommentsIdRecords.find((r) => r.id === value)
                 )
               : \\"\\"
           );
@@ -17790,11 +17790,11 @@ export default function ChildItemUpdateForm(props) {
         getBadgeText={(value) =>
           value
             ? getDisplayValue.customKeyModelChildrenMycustomkey(
-                selectedCustomKeyModelChildrenMycustomkeyRecords.find(
-                  (r) => r.id === value
+                customKeyModelChildrenMycustomkeyRecords.find(
+                  (r) => r.mycustomkey === value
                 ) ??
-                  customKeyModelChildrenMycustomkeyRecords.find(
-                    (r) => r.mycustomkey === value
+                  selectedCustomKeyModelChildrenMycustomkeyRecords.find(
+                    (r) => r.id === value
                   )
               )
             : \\"\\"
@@ -17803,11 +17803,11 @@ export default function ChildItemUpdateForm(props) {
           setCurrentCustomKeyModelChildrenMycustomkeyDisplayValue(
             value
               ? getDisplayValue.customKeyModelChildrenMycustomkey(
-                  selectedCustomKeyModelChildrenMycustomkeyRecords.find(
-                    (r) => r.id === value
+                  customKeyModelChildrenMycustomkeyRecords.find(
+                    (r) => r.mycustomkey === value
                   ) ??
-                    customKeyModelChildrenMycustomkeyRecords.find(
-                      (r) => r.mycustomkey === value
+                    selectedCustomKeyModelChildrenMycustomkeyRecords.find(
+                      (r) => r.id === value
                     )
                 )
               : \\"\\"
@@ -20194,8 +20194,8 @@ export default function CommentUpdateForm(props) {
         getBadgeText={(value) =>
           value
             ? getDisplayValue.postID(
-                selectedPostIDRecords.find((r) => r.id === value) ??
-                  postIDRecords.find((r) => r.id === value)
+                postIDRecords.find((r) => r.id === value) ??
+                  selectedPostIDRecords.find((r) => r.id === value)
               )
             : \\"\\"
         }
@@ -20203,8 +20203,8 @@ export default function CommentUpdateForm(props) {
           setCurrentPostIDDisplayValue(
             value
               ? getDisplayValue.postID(
-                  selectedPostIDRecords.find((r) => r.id === value) ??
-                    postIDRecords.find((r) => r.id === value)
+                  postIDRecords.find((r) => r.id === value) ??
+                    selectedPostIDRecords.find((r) => r.id === value)
                 )
               : \\"\\"
           );
