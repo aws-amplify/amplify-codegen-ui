@@ -271,6 +271,7 @@ export const buildExpression = (
         fieldConfig,
         modelName,
         savedRecordName,
+        thisModelPrimaryKeys,
         dataApi,
       }),
     );
