@@ -10235,6 +10235,26 @@ export default function CustomButton(
 "
 `;
 
+exports[`amplify render tests renderer configurations with NoApi should render component without graphql types 1`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { ButtonProps } from \\"@aws-amplify/ui-react\\";
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type ComponentWithDataBindingOverridesProps = {
+    ComponentWithDataBinding?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
+export declare type ComponentWithDataBindingProps = React.PropsWithChildren<Partial<ButtonProps> & {
+    width?: Number;
+    isDisabled?: Boolean;
+    buttonUser?: any;
+    buttonColor?: String;
+} & {
+    overrides?: ComponentWithDataBindingOverridesProps | undefined | null;
+}>;
+export default function ComponentWithDataBinding(props: ComponentWithDataBindingProps): React.ReactElement;
+"
+`;
+
 exports[`amplify render tests sample code snippet tests should generate a sample code snippet for components 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
