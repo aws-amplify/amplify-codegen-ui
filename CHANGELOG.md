@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.15.7](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.6...v2.15.7) (2023-08-22)
+
+### Bug Fixes
+
+- change model type to any if no graphql types ([#1086](https://github.com/aws-amplify/amplify-codegen-ui/issues/1086)) ([4cc0755](https://github.com/aws-amplify/amplify-codegen-ui/commit/4cc075509426a348d4d42e7e235576d626698179))
+- update inputs for linking and unlinking bidirectional relationships ([#1085](https://github.com/aws-amplify/amplify-codegen-ui/issues/1085)) ([f62567e](https://github.com/aws-amplify/amplify-codegen-ui/commit/f62567e7f87338b75d250e2c517e5acf9273296f))
+
 ## [2.15.6](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.5...v2.15.6) (2023-08-18)
 
 ### Bug Fixes
