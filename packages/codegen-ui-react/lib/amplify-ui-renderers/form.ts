@@ -328,6 +328,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                 formMetadata?.fieldConfigs,
                 undefined,
                 this.renderConfig.apiConfiguration?.dataApi,
+                formMetadata?.formActionType,
               ),
               ...onSubmitValidationRun(hasModelField),
               ...this.getOnSubmitDSCall(),

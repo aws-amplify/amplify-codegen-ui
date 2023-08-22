@@ -282,7 +282,7 @@ export default function CreateOwnerForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          Dog: Dog ?? null,
+          Dog,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -322,7 +322,7 @@ export default function CreateOwnerForm(props) {
           });
           const modelFieldsToSave = {
             name: modelFields.name,
-            ownerDogId: modelFields?.Dog?.id ?? null,
+            ownerDogId: modelFields?.Dog?.id,
           };
           const owner = (
             await API.graphql({
@@ -809,13 +809,13 @@ export default function MyPostForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          caption: caption ?? null,
-          username: username ?? null,
-          post_url: post_url ?? null,
-          metadata: metadata ?? null,
-          profile_url: profile_url ?? null,
-          nonModelField: nonModelField ?? null,
-          nonModelFieldArray: nonModelFieldArray ?? null,
+          caption,
+          username,
+          post_url,
+          metadata,
+          profile_url,
+          nonModelField,
+          nonModelFieldArray,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -846,11 +846,11 @@ export default function MyPostForm(props) {
             }
           });
           const modelFieldsToSave = {
-            caption: modelFields.caption ?? null,
-            username: modelFields.username ?? null,
-            post_url: modelFields.post_url ?? null,
-            metadata: modelFields.metadata ?? null,
-            profile_url: modelFields.profile_url ?? null,
+            caption: modelFields.caption,
+            username: modelFields.username,
+            post_url: modelFields.post_url,
+            metadata: modelFields.metadata,
+            profile_url: modelFields.profile_url,
             nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
               JSON.parse(s)
             ),
@@ -1534,9 +1534,9 @@ export default function MyMemberForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          name: name ?? null,
+          name,
           teamID,
-          Team: Team ?? null,
+          Team,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -1575,9 +1575,9 @@ export default function MyMemberForm(props) {
             }
           });
           const modelFieldsToSave = {
-            name: modelFields.name ?? null,
+            name: modelFields.name,
             teamID: modelFields.teamID,
-            teamMembersId: modelFields?.Team?.id ?? null,
+            teamMembersId: modelFields?.Team?.id,
           };
           await API.graphql({
             query: createMember,
@@ -2176,8 +2176,8 @@ export default function MovieCreateForm(props) {
           movieKey,
           title,
           genre,
-          rating: rating ?? null,
-          tags: tags ?? null,
+          rating,
+          tags,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -2219,7 +2219,7 @@ export default function MovieCreateForm(props) {
             movieKey: modelFields.movieKey,
             title: modelFields.title,
             genre: modelFields.genre,
-            rating: modelFields.rating ?? null,
+            rating: modelFields.rating,
           };
           const movie = (
             await API.graphql({
@@ -2815,8 +2815,8 @@ export default function SchoolCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          name: name ?? null,
-          Students: Students ?? null,
+          name,
+          Students,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -2855,7 +2855,7 @@ export default function SchoolCreateForm(props) {
             }
           });
           const modelFieldsToSave = {
-            name: modelFields.name ?? null,
+            name: modelFields.name,
           };
           const school = (
             await API.graphql({
@@ -3371,8 +3371,8 @@ export default function BookCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          name: name ?? null,
-          primaryAuthor: primaryAuthor ?? null,
+          name,
+          primaryAuthor,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -3411,8 +3411,8 @@ export default function BookCreateForm(props) {
             }
           });
           const modelFieldsToSave = {
-            name: modelFields.name ?? null,
-            authorId: modelFields?.primaryAuthor?.id ?? null,
+            name: modelFields.name,
+            authorId: modelFields?.primaryAuthor?.id,
           };
           await API.graphql({
             query: createBook,
@@ -3900,7 +3900,7 @@ export default function CommentCreateForm(props) {
         event.preventDefault();
         let modelFields = {
           content,
-          postID: postID ?? null,
+          postID,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -4435,9 +4435,9 @@ export default function TagCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          label: label ?? null,
-          Posts: Posts ?? null,
-          statuses: statuses ?? null,
+          label,
+          Posts,
+          statuses,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -4476,8 +4476,8 @@ export default function TagCreateForm(props) {
             }
           });
           const modelFieldsToSave = {
-            label: modelFields.label ?? null,
-            statuses: modelFields.statuses ?? null,
+            label: modelFields.label,
+            statuses: modelFields.statuses,
           };
           const tag = (
             await API.graphql({
@@ -5106,9 +5106,9 @@ export default function BookCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          name: name ?? null,
-          primaryAuthor: primaryAuthor ?? null,
-          primaryTitle: primaryTitle ?? null,
+          name,
+          primaryAuthor,
+          primaryTitle,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -5147,9 +5147,9 @@ export default function BookCreateForm(props) {
             }
           });
           const modelFieldsToSave = {
-            name: modelFields.name ?? null,
-            authorId: modelFields?.primaryAuthor?.id ?? null,
-            titleId: modelFields?.primaryTitle?.id ?? null,
+            name: modelFields.name,
+            authorId: modelFields?.primaryAuthor?.id,
+            titleId: modelFields?.primaryTitle?.id,
           };
           await API.graphql({
             query: createBook,
@@ -5842,9 +5842,9 @@ export default function CreateCPKTeacherForm(props) {
         event.preventDefault();
         let modelFields = {
           specialTeacherId,
-          CPKStudent: CPKStudent ?? null,
-          CPKClasses: CPKClasses ?? null,
-          CPKProjects: CPKProjects ?? null,
+          CPKStudent,
+          CPKClasses,
+          CPKProjects,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -5885,7 +5885,7 @@ export default function CreateCPKTeacherForm(props) {
           const modelFieldsToSave = {
             specialTeacherId: modelFields.specialTeacherId,
             cPKTeacherCPKStudentSpecialStudentId:
-              modelFields?.CPKStudent?.specialStudentId ?? null,
+              modelFields?.CPKStudent?.specialStudentId,
           };
           const cPKTeacher = (
             await API.graphql({
@@ -6581,9 +6581,9 @@ export default function CreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          name: name ?? null,
-          nmTest: nmTest ?? null,
-          parentTable: parentTable ?? null,
+          name,
+          nmTest,
+          parentTable,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -6622,8 +6622,8 @@ export default function CreateForm(props) {
             }
           });
           const modelFieldsToSave = {
-            name: modelFields.name ?? null,
-            parentTableBasicTablesId: modelFields?.parentTable?.id ?? null,
+            name: modelFields.name,
+            parentTableBasicTablesId: modelFields?.parentTable?.id,
             nmTest: modelFields.nmTest
               ? JSON.parse(modelFields.nmTest)
               : modelFields.nmTest,
@@ -13718,9 +13718,8 @@ export default function CreateCompositeToyForm(props) {
         let modelFields = {
           kind,
           color,
-          compositeDogCompositeToysName: compositeDogCompositeToysName ?? null,
-          compositeDogCompositeToysDescription:
-            compositeDogCompositeToysDescription ?? null,
+          compositeDogCompositeToysName,
+          compositeDogCompositeToysDescription,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -14570,10 +14569,10 @@ export default function CreateCommentForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          post: post ?? null,
-          User: User ?? null,
+          post,
+          User,
           Org,
-          postCommentsId: postCommentsId ?? null,
+          postCommentsId,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -14613,10 +14612,10 @@ export default function CreateCommentForm(props) {
           });
           const modelFieldsToSave = {
             name: modelFields.name,
-            postID: modelFields?.post?.id ?? null,
-            userCommentsId: modelFields?.User?.id ?? null,
-            orgCommentsId: modelFields?.Org?.id ?? null,
-            postCommentsId: modelFields.postCommentsId ?? null,
+            postID: modelFields?.post?.id,
+            userCommentsId: modelFields?.User?.id,
+            orgCommentsId: modelFields?.Org?.id,
+            postCommentsId: modelFields.postCommentsId,
           };
           await API.graphql({
             query: createComment,
@@ -15560,10 +15559,10 @@ export default function CreateCompositeDogForm(props) {
         let modelFields = {
           name,
           description,
-          CompositeBowl: CompositeBowl ?? null,
-          CompositeOwner: CompositeOwner ?? null,
-          CompositeToys: CompositeToys ?? null,
-          CompositeVets: CompositeVets ?? null,
+          CompositeBowl,
+          CompositeOwner,
+          CompositeToys,
+          CompositeVets,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -15604,14 +15603,12 @@ export default function CreateCompositeDogForm(props) {
           const modelFieldsToSave = {
             name: modelFields.name,
             description: modelFields.description,
-            compositeDogCompositeBowlShape:
-              modelFields?.CompositeBowl?.shape ?? null,
-            compositeDogCompositeBowlSize:
-              modelFields?.CompositeBowl?.size ?? null,
+            compositeDogCompositeBowlShape: modelFields?.CompositeBowl?.shape,
+            compositeDogCompositeBowlSize: modelFields?.CompositeBowl?.size,
             compositeDogCompositeOwnerLastName:
-              modelFields?.CompositeOwner?.lastName ?? null,
+              modelFields?.CompositeOwner?.lastName,
             compositeDogCompositeOwnerFirstName:
-              modelFields?.CompositeOwner?.firstName ?? null,
+              modelFields?.CompositeOwner?.firstName,
           };
           const compositeDog = (
             await API.graphql({
@@ -16478,8 +16475,8 @@ export default function CreatePostForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          name: name ?? null,
-          comments: comments ?? null,
+          name,
+          comments,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -16518,7 +16515,7 @@ export default function CreatePostForm(props) {
             }
           });
           const modelFieldsToSave = {
-            name: modelFields.name ?? null,
+            name: modelFields.name,
           };
           const post = (
             await API.graphql({
@@ -18974,7 +18971,7 @@ export default function CreateDogForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          name: name ?? null,
+          name,
           owner,
         };
         const validationResponses = await Promise.all(
@@ -19014,8 +19011,8 @@ export default function CreateDogForm(props) {
             }
           });
           const modelFieldsToSave = {
-            name: modelFields.name ?? null,
-            dogOwnerId: modelFields?.owner?.id ?? null,
+            name: modelFields.name,
+            dogOwnerId: modelFields?.owner?.id,
           };
           const dog = (
             await API.graphql({
@@ -19522,7 +19519,7 @@ export default function CreateOwnerForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          Dog: Dog ?? null,
+          Dog,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -19562,7 +19559,7 @@ export default function CreateOwnerForm(props) {
           });
           const modelFieldsToSave = {
             name: modelFields.name,
-            ownerDogId: modelFields?.Dog?.id ?? null,
+            ownerDogId: modelFields?.Dog?.id,
           };
           const owner = (
             await API.graphql({
