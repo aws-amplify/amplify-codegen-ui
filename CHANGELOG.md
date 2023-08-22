@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.15.8](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.7...v2.15.8) (2023-08-22)
+
+### Bug Fixes
+
+- remove null coalescing for graphql create forms ([#1088](https://github.com/aws-amplify/amplify-codegen-ui/issues/1088)) ([bfdcb69](https://github.com/aws-amplify/amplify-codegen-ui/commit/bfdcb69a3a5c9d82fe55159ddf7ca73745e5d478))
+
 ## [2.15.7](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.6...v2.15.7) (2023-08-22)
 
 ### Bug Fixes
