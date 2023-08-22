@@ -96,7 +96,8 @@ Then execute an import script in StudioUI to pull the latest external code into 
 1. Ensure you have the latest tags: `git pull --tags -f`
 1. Create new branch: `git checkout -b new-release`
 1. Run version command: `npm run version`
-1. Create new PR with the new branch to mainline: `gh pr create`
+1. Push new branch to GitHub
+1. Create new pull request
 1. Squash and merge PR after approval.
    Ensure the commit message follows the pattern: `chore(release): v{version_number}`.
    The Release GitHub workflow will not work if the commit message is not formated correctly.
