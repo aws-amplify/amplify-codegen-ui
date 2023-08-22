@@ -330,6 +330,7 @@ export const buildExpression = (
     modelFieldsObjectName,
     dataSchema.models,
     dataApi === 'GraphQL',
+    dataStoreActionType,
   );
 
   const modelObjectToSaveStatements: Statement[] = [];

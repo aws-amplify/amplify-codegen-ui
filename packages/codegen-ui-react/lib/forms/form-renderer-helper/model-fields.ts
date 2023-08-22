@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { factory, NodeFlags, ObjectLiteralElementLike, SyntaxKind } from 'typescript';
-import { FieldConfigMetadata, ValidationTypes } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, StudioFormActionType, ValidationTypes } from '@aws-amplify/codegen-ui';
 import { DataApiKind } from '../../react-render-config';
 
 /**
@@ -36,6 +36,7 @@ export const buildModelFieldObject = (
   fieldConfigs: Record<string, FieldConfigMetadata> = {},
   nameOverrides: Record<string, ObjectLiteralElementLike> = {},
   dataApi: DataApiKind = 'DataStore',
+  formActionType?: StudioFormActionType,
 ) => {
   const fieldSet = new Set<string>();
   const fields = Object.keys(fieldConfigs).reduce<ObjectLiteralElementLike[]>((acc, value) => {
@@ -48,7 +49,11 @@ export const buildModelFieldObject = (
         undefined,
       );
 
-      if (dataApi === 'GraphQL' && !validationRules.find((r) => r.type === ValidationTypes.REQUIRED)) {
+      if (
+        dataApi === 'GraphQL' &&
+        formActionType === 'update' &&
+        !validationRules.find((r) => r.type === ValidationTypes.REQUIRED)
+      ) {
         assignment = factory.createPropertyAssignment(
           factory.createIdentifier(fieldName),
           factory.createBinaryExpression(

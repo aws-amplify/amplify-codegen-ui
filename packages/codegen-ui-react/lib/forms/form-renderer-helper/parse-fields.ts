@@ -13,7 +13,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { isNonModelDataType, FieldConfigMetadata, GenericDataModel, ValidationTypes } from '@aws-amplify/codegen-ui';
+import {
+  isNonModelDataType,
+  FieldConfigMetadata,
+  GenericDataModel,
+  ValidationTypes,
+  StudioFormActionType,
+} from '@aws-amplify/codegen-ui';
 import {
   PropertyAccessExpression,
   Identifier,
@@ -115,6 +121,7 @@ export const generateModelObjectToSave = (
   modelFieldsObjectName: string,
   models: Record<string, GenericDataModel>,
   isGraphQL: boolean,
+  formActionType: StudioFormActionType,
 ): { modelObjectToSave: ObjectLiteralExpression; isDifferentFromModelObject: boolean } => {
   const nonModelFields: string[] = [];
   const nonModelArrayFields: string[] = [];
@@ -149,11 +156,13 @@ export const generateModelObjectToSave = (
           inheritFromModelFieldsPropertyAssignments.push(
             factory.createPropertyAssignment(
               factory.createIdentifier(associatedFieldName),
-              factory.createBinaryExpression(
-                buildAccessChain([modelFieldsObjectName, renderedFieldName, relatedModel.primaryKeys[index]], true),
-                SyntaxKind.QuestionQuestionToken,
-                factory.createNull(),
-              ),
+              formActionType === 'update'
+                ? factory.createBinaryExpression(
+                    buildAccessChain([modelFieldsObjectName, renderedFieldName, relatedModel.primaryKeys[index]], true),
+                    SyntaxKind.QuestionQuestionToken,
+                    factory.createNull(),
+                  )
+                : buildAccessChain([modelFieldsObjectName, renderedFieldName, relatedModel.primaryKeys[index]], true),
             ),
           );
         });
@@ -163,7 +172,7 @@ export const generateModelObjectToSave = (
       inheritFromModelFieldsPropertyAssignments.push(
         factory.createPropertyAssignment(
           factory.createIdentifier(name),
-          isGraphQL && !validationRules.find((r) => r.type === ValidationTypes.REQUIRED)
+          isGraphQL && formActionType === 'update' && !validationRules.find((r) => r.type === ValidationTypes.REQUIRED)
             ? factory.createBinaryExpression(
                 buildAccessChain([modelFieldsObjectName, name], false),
                 SyntaxKind.QuestionQuestionToken,
