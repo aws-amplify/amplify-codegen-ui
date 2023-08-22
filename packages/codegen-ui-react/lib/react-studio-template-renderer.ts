@@ -120,7 +120,7 @@ import {
   buildArrowFunctionStatement,
 } from './helpers';
 import { addUseEffectWrapper } from './utils/generate-react-hooks';
-import { ActionType, getGraphqlCallExpression, getGraphqlQueryForModel } from './utils/graphql';
+import { ActionType, getGraphqlCallExpression, getGraphqlQueryForModel, isGraphqlConfig } from './utils/graphql';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -558,7 +558,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           );
           propSignatures.push(propSignature);
         } else if (isDataPropertyBinding(binding)) {
-          const modelName = this.importCollection.getMappedModelAlias(binding.bindingProperties.model);
+          let modelName = this.importCollection.getMappedModelAlias(binding.bindingProperties.model);
+          const apiConfig = this.renderConfig.apiConfiguration;
+          if (isGraphqlConfig(apiConfig) && !apiConfig.typesFilePath) {
+            modelName = 'any';
+          }
           const propSignature = factory.createPropertySignature(
             undefined,
             propName,

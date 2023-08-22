@@ -111,6 +111,24 @@ describe('amplify render tests', () => {
       const generatedCode = generateWithAmplifyRenderer('buttonGolden', rendererConfigWithNoApi);
       expect(generatedCode.componentText).toMatchSnapshot();
     });
+
+    it('should render component without graphql types', () => {
+      const generatedCode = generateWithAmplifyRenderer('componentWithDataBinding', {
+        apiConfiguration: {
+          dataApi: 'GraphQL',
+          typesFilePath: '',
+          fragmentsFilePath: '../graphql/fragments',
+          mutationsFilePath: '../graphql/mutations',
+          queriesFilePath: '../graphql/queries',
+          subscriptionsFilePath: '../graphql/subscriptions',
+        },
+        module: ModuleKind.ES2020,
+        target: ScriptTarget.ES2020,
+        script: ScriptKind.JSX,
+        renderTypeDeclarations: true,
+      });
+      expect(generatedCode.declaration).toMatchSnapshot();
+    });
   });
 
   describe('collection', () => {
