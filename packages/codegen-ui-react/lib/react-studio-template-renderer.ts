@@ -2068,38 +2068,35 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                       undefined,
                       factory.createPropertyAccessExpression(
                         factory.createPropertyAccessExpression(
-                          factory.createPropertyAccessExpression(
-                            factory.createParenthesizedExpression(
-                              factory.createAwaitExpression(
-                                factory.createCallExpression(
-                                  factory.createPropertyAccessExpression(
-                                    factory.createIdentifier('API'),
-                                    factory.createIdentifier('graphql'),
-                                  ),
-                                  undefined,
-                                  [
-                                    factory.createObjectLiteralExpression(
-                                      [
-                                        factory.createPropertyAssignment(
-                                          factory.createIdentifier('query'),
-                                          factory.createIdentifier(modelQuery),
-                                        ),
-                                        factory.createShorthandPropertyAssignment(
-                                          factory.createIdentifier('variables'),
-                                          undefined,
-                                        ),
-                                      ],
-                                      true,
-                                    ),
-                                  ],
+                          factory.createParenthesizedExpression(
+                            factory.createAwaitExpression(
+                              factory.createCallExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('API'),
+                                  factory.createIdentifier('graphql'),
                                 ),
+                                undefined,
+                                [
+                                  factory.createObjectLiteralExpression(
+                                    [
+                                      factory.createPropertyAssignment(
+                                        factory.createIdentifier('query'),
+                                        factory.createIdentifier(modelQuery),
+                                      ),
+                                      factory.createShorthandPropertyAssignment(
+                                        factory.createIdentifier('variables'),
+                                        undefined,
+                                      ),
+                                    ],
+                                    true,
+                                  ),
+                                ],
                               ),
                             ),
-                            factory.createIdentifier('data'),
                           ),
-                          factory.createIdentifier(modelQuery),
+                          factory.createIdentifier('data'),
                         ),
-                        factory.createIdentifier('items'),
+                        factory.createIdentifier(modelQuery),
                       ),
                     ),
                   ],
@@ -2113,7 +2110,14 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                     factory.createIdentifier('push'),
                   ),
                   undefined,
-                  [factory.createSpreadElement(factory.createIdentifier('result'))],
+                  [
+                    factory.createSpreadElement(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier('result'),
+                        factory.createIdentifier('items'),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               factory.createExpressionStatement(
