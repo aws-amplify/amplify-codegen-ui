@@ -946,8 +946,8 @@ export default function AuthorProfileCollection(
           query: listAuthors,
           variables,
         })
-      ).data.listAuthors.items;
-      newCache.push(...result);
+      ).data.listAuthors;
+      newCache.push(...result.items);
       newNext = result.nextToken;
     }
     const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
@@ -1121,8 +1121,8 @@ export default function CollectionOfCustomButtons(
           query: listUsers,
           variables,
         })
-      ).data.listUsers.items;
-      newCache.push(...result);
+      ).data.listUsers;
+      newCache.push(...result.items);
       newNext = result.nextToken;
     }
     const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
@@ -1287,8 +1287,8 @@ export default function ListingCardCollection(
           query: listUntitledModels,
           variables,
         })
-      ).data.listUntitledModels.items;
-      newCache.push(...result);
+      ).data.listUntitledModels;
+      newCache.push(...result.items);
       newNext = result.nextToken;
     }
     const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
@@ -1552,8 +1552,8 @@ export default function AuthorProfileCollection(
           query: listAuthors,
           variables,
         })
-      ).data.listAuthors.items;
-      newCache.push(...result);
+      ).data.listAuthors;
+      newCache.push(...result.items);
       newNext = result.nextToken;
     }
     const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
