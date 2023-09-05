@@ -912,7 +912,7 @@ export default function AuthorProfileCollection(
   const [instanceKey, setInstanceKey] = React.useState(\\"newGuid\\");
   const [loading, setLoading] = React.useState(true);
   const [maxViewed, setMaxViewed] = React.useState(1);
-  const pageSize = 4;
+  const pageSize = 8;
   React.useEffect(() => {
     nextToken[instanceKey] = \\"\\";
     apiCache[instanceKey] = [];
@@ -968,7 +968,6 @@ export default function AuthorProfileCollection(
     <div>
       <Collection
         type=\\"list\\"
-        itemsPerPage={6}
         templateColumns=\\"1fr 1fr\\"
         autoFlow=\\"row\\"
         alignItems=\\"stretch\\"
@@ -1075,7 +1074,7 @@ export default function CollectionOfCustomButtons(
   const [instanceKey, setInstanceKey] = React.useState(\\"newGuid\\");
   const [loading, setLoading] = React.useState(true);
   const [maxViewed, setMaxViewed] = React.useState(1);
-  const pageSize = 4;
+  const pageSize = 6;
   React.useEffect(() => {
     nextToken[instanceKey] = \\"\\";
     apiCache[instanceKey] = [];
@@ -1253,7 +1252,7 @@ export default function ListingCardCollection(
   const [instanceKey, setInstanceKey] = React.useState(\\"newGuid\\");
   const [loading, setLoading] = React.useState(true);
   const [maxViewed, setMaxViewed] = React.useState(1);
-  const pageSize = 4;
+  const pageSize = 6;
   React.useEffect(() => {
     nextToken[instanceKey] = \\"\\";
     apiCache[instanceKey] = [];
@@ -1397,7 +1396,7 @@ export default function ListingCardCollection(
   const [instanceKey, setInstanceKey] = React.useState(\\"newGuid\\");
   const [loading, setLoading] = React.useState(true);
   const [maxViewed, setMaxViewed] = React.useState(1);
-  const pageSize = 4;
+  const pageSize = 6;
   React.useEffect(() => {
     nextToken[instanceKey] = \\"\\";
     apiCache[instanceKey] = [];
@@ -1518,7 +1517,7 @@ export default function AuthorProfileCollection(
   const [instanceKey, setInstanceKey] = React.useState(\\"newGuid\\");
   const [loading, setLoading] = React.useState(true);
   const [maxViewed, setMaxViewed] = React.useState(1);
-  const pageSize = 4;
+  const pageSize = 8;
   React.useEffect(() => {
     nextToken[instanceKey] = \\"\\";
     apiCache[instanceKey] = [];
@@ -1574,7 +1573,6 @@ export default function AuthorProfileCollection(
     <div>
       <Collection
         type=\\"list\\"
-        itemsPerPage={6}
         templateColumns=\\"1fr 1fr\\"
         autoFlow=\\"row\\"
         alignItems=\\"stretch\\"
@@ -1662,7 +1660,7 @@ export default function AuthorProfileCollection(
     /* @ts-ignore: TS2322 */
     <Collection
       type=\\"list\\"
-      itemsPerPage={6}
+      itemsPerPage={8}
       templateColumns=\\"1fr 1fr\\"
       autoFlow=\\"row\\"
       alignItems=\\"stretch\\"
@@ -2470,7 +2468,7 @@ export default function AuthorProfileCollection(
     /* @ts-ignore: TS2322 */
     <Collection
       type=\\"list\\"
-      itemsPerPage={6}
+      itemsPerPage={8}
       templateColumns=\\"1fr 1fr\\"
       autoFlow=\\"row\\"
       alignItems=\\"stretch\\"

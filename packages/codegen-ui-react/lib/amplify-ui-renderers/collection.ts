@@ -64,21 +64,29 @@ export default class CollectionRenderer extends ReactComponentRenderer<BaseCompo
   }
 
   private renderCollectionOpeningElement(itemsVariableName?: string): JsxOpeningElement {
-    const propsArray = Object.entries(this.component.properties).map(([key, value]) => {
-      if (key === 'isPaginated' && this.renderConfig.apiConfiguration?.dataApi === 'GraphQL') {
-        return factory.createJsxAttribute(
-          factory.createIdentifier('isPaginated'),
-          factory.createJsxExpression(
-            undefined,
-            factory.createPrefixUnaryExpression(
-              ts.SyntaxKind.ExclamationToken,
-              factory.createIdentifier('isApiPagination'),
+    const propsArray = Object.entries(this.component.properties).reduce((acc: JsxAttribute[], [key, value]) => {
+      if (this.renderConfig.apiConfiguration?.dataApi === 'GraphQL') {
+        if (key === 'isPaginated') {
+          return [
+            ...acc,
+            factory.createJsxAttribute(
+              factory.createIdentifier('isPaginated'),
+              factory.createJsxExpression(
+                undefined,
+                factory.createPrefixUnaryExpression(
+                  ts.SyntaxKind.ExclamationToken,
+                  factory.createIdentifier('isApiPagination'),
+                ),
+              ),
             ),
-          ),
-        );
+          ];
+        }
+        if (key === 'itemsPerPage') {
+          return acc;
+        }
       }
-      return buildOpeningElementProperties(this.componentMetadata, value, key);
-    });
+      return [...acc, buildOpeningElementProperties(this.componentMetadata, value, key)];
+    }, []);
 
     let itemsAttribute: JsxAttribute;
 

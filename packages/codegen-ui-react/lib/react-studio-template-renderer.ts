@@ -78,6 +78,7 @@ import {
   addBindingPropertiesImports,
   getComponentPropName,
   getConditionalOperandExpression,
+  isFixedPropertyWithValue,
   parseNumberOperand,
 } from './react-component-render-helper';
 import {
@@ -1653,8 +1654,13 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       statements.push(buildUseStateExpression(state.name, state.default));
     });
 
-    // const pageSize = 4;
-    statements.push(buildInitConstVariableExpression('pageSize', factory.createNumericLiteral('4')));
+    // const pageSize = 6;
+    let pageSize = 6;
+    if (isFixedPropertyWithValue(component.properties.itemsPerPage)) {
+      const num = Number(component.properties.itemsPerPage.value);
+      pageSize = Number.isNaN(num) ? pageSize : num;
+    }
+    statements.push(buildInitConstVariableExpression('pageSize', factory.createNumericLiteral(pageSize)));
 
     /*
       React.useEffect(() => {
