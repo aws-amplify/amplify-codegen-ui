@@ -913,6 +913,7 @@ export default function AuthorProfileCollection(
   const [loading, setLoading] = React.useState(true);
   const [maxViewed, setMaxViewed] = React.useState(1);
   const pageSize = 8;
+  const isPaginated = false;
   React.useEffect(() => {
     nextToken[instanceKey] = \\"\\";
     apiCache[instanceKey] = [];
@@ -933,7 +934,7 @@ export default function AuthorProfileCollection(
     const cacheUntil = page * pageSize + 1;
     const newCache = apiCache[instanceKey].slice();
     let newNext = nextToken[instanceKey];
-    while (newCache.length < cacheUntil && newNext != null) {
+    while ((newCache.length < cacheUntil || !isPaginated) && newNext != null) {
       setLoading(true);
       const variables: any = {
         limit: pageSize,
@@ -950,7 +951,9 @@ export default function AuthorProfileCollection(
       newCache.push(...result.items);
       newNext = result.nextToken;
     }
-    const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
+    const cacheSlice = isPaginated
+      ? newCache.slice((page - 1) * pageSize, page * pageSize)
+      : newCache;
     setItems(cacheSlice);
     setHasMorePages(!!newNext);
     setLoading(false);
@@ -973,6 +976,7 @@ export default function AuthorProfileCollection(
         alignItems=\\"stretch\\"
         justifyContent=\\"stretch\\"
         itemsPerPage={pageSize}
+        isPaginated={!isApiPagination && isPaginated}
         items={itemsProp || (loading ? new Array(pageSize).fill({}) : items)}
         {...getOverrideProps(overrides, \\"AuthorProfileCollection\\")}
         {...rest}
@@ -990,7 +994,7 @@ export default function AuthorProfileCollection(
           );
         }}
       </Collection>
-      {isApiPagination && (
+      {isApiPagination && isPaginated && (
         <Pagination
           currentPage={pageIndex}
           totalPages={maxViewed}
@@ -1075,6 +1079,7 @@ export default function CollectionOfCustomButtons(
   const [loading, setLoading] = React.useState(true);
   const [maxViewed, setMaxViewed] = React.useState(1);
   const pageSize = 6;
+  const isPaginated = true;
   React.useEffect(() => {
     nextToken[instanceKey] = \\"\\";
     apiCache[instanceKey] = [];
@@ -1095,7 +1100,7 @@ export default function CollectionOfCustomButtons(
     const cacheUntil = page * pageSize + 1;
     const newCache = apiCache[instanceKey].slice();
     let newNext = nextToken[instanceKey];
-    while (newCache.length < cacheUntil && newNext != null) {
+    while ((newCache.length < cacheUntil || !isPaginated) && newNext != null) {
       setLoading(true);
       const variables: any = {
         limit: pageSize,
@@ -1124,7 +1129,9 @@ export default function CollectionOfCustomButtons(
       newCache.push(...result.items);
       newNext = result.nextToken;
     }
-    const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
+    const cacheSlice = isPaginated
+      ? newCache.slice((page - 1) * pageSize, page * pageSize)
+      : newCache;
     setItems(cacheSlice);
     setHasMorePages(!!newNext);
     setLoading(false);
@@ -1160,10 +1167,10 @@ export default function CollectionOfCustomButtons(
     <div>
       <Collection
         type=\\"list\\"
-        isPaginated={!isApiPagination}
         gap=\\"1.5rem\\"
         backgroundColor={backgroundColor}
         itemsPerPage={pageSize}
+        isPaginated={!isApiPagination && isPaginated}
         items={itemsProp || (loading ? new Array(pageSize).fill({}) : items)}
         {...getOverrideProps(overrides, \\"CollectionOfCustomButtons\\")}
         {...rest}
@@ -1188,7 +1195,7 @@ export default function CollectionOfCustomButtons(
           );
         }}
       </Collection>
-      {isApiPagination && (
+      {isApiPagination && isPaginated && (
         <Pagination
           currentPage={pageIndex}
           totalPages={maxViewed}
@@ -1253,6 +1260,7 @@ export default function ListingCardCollection(
   const [loading, setLoading] = React.useState(true);
   const [maxViewed, setMaxViewed] = React.useState(1);
   const pageSize = 6;
+  const isPaginated = true;
   React.useEffect(() => {
     nextToken[instanceKey] = \\"\\";
     apiCache[instanceKey] = [];
@@ -1273,7 +1281,7 @@ export default function ListingCardCollection(
     const cacheUntil = page * pageSize + 1;
     const newCache = apiCache[instanceKey].slice();
     let newNext = nextToken[instanceKey];
-    while (newCache.length < cacheUntil && newNext != null) {
+    while ((newCache.length < cacheUntil || !isPaginated) && newNext != null) {
       setLoading(true);
       const variables: any = {
         limit: pageSize,
@@ -1290,7 +1298,9 @@ export default function ListingCardCollection(
       newCache.push(...result.items);
       newNext = result.nextToken;
     }
-    const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
+    const cacheSlice = isPaginated
+      ? newCache.slice((page - 1) * pageSize, page * pageSize)
+      : newCache;
     setItems(cacheSlice);
     setHasMorePages(!!newNext);
     setLoading(false);
@@ -1307,12 +1317,12 @@ export default function ListingCardCollection(
     /* @ts-ignore: TS2322 */
     <div>
       <Collection
-        isPaginated={!isApiPagination}
         collectionType=\\"grid\\"
         type=\\"list\\"
         columns=\\"2\\"
         order=\\"left-to-right\\"
         itemsPerPage={pageSize}
+        isPaginated={!isApiPagination && isPaginated}
         items={itemsProp || (loading ? new Array(pageSize).fill({}) : items)}
         {...getOverrideProps(overrides, \\"ListingCardCollection\\")}
         {...rest}
@@ -1333,7 +1343,7 @@ export default function ListingCardCollection(
           );
         }}
       </Collection>
-      {isApiPagination && (
+      {isApiPagination && isPaginated && (
         <Pagination
           currentPage={pageIndex}
           totalPages={maxViewed}
@@ -1397,6 +1407,7 @@ export default function ListingCardCollection(
   const [loading, setLoading] = React.useState(true);
   const [maxViewed, setMaxViewed] = React.useState(1);
   const pageSize = 6;
+  const isPaginated = true;
   React.useEffect(() => {
     nextToken[instanceKey] = \\"\\";
     apiCache[instanceKey] = [];
@@ -1417,7 +1428,9 @@ export default function ListingCardCollection(
     const cacheUntil = page * pageSize + 1;
     const newCache = apiCache[instanceKey].slice();
     let newNext = nextToken[instanceKey];
-    const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
+    const cacheSlice = isPaginated
+      ? newCache.slice((page - 1) * pageSize, page * pageSize)
+      : newCache;
     setItems(cacheSlice);
     setHasMorePages(!!newNext);
     setLoading(false);
@@ -1435,8 +1448,8 @@ export default function ListingCardCollection(
     <div>
       <Collection
         type=\\"list\\"
-        isPaginated={!isApiPagination}
         itemsPerPage={pageSize}
+        isPaginated={!isApiPagination && isPaginated}
         items={itemsProp || (loading ? new Array(pageSize).fill({}) : items)}
         {...getOverrideProps(overrides, \\"ListingCardCollection\\")}
         {...rest}
@@ -1453,7 +1466,7 @@ export default function ListingCardCollection(
           );
         }}
       </Collection>
-      {isApiPagination && (
+      {isApiPagination && isPaginated && (
         <Pagination
           currentPage={pageIndex}
           totalPages={maxViewed}
@@ -1518,6 +1531,7 @@ export default function AuthorProfileCollection(
   const [loading, setLoading] = React.useState(true);
   const [maxViewed, setMaxViewed] = React.useState(1);
   const pageSize = 8;
+  const isPaginated = false;
   React.useEffect(() => {
     nextToken[instanceKey] = \\"\\";
     apiCache[instanceKey] = [];
@@ -1538,7 +1552,7 @@ export default function AuthorProfileCollection(
     const cacheUntil = page * pageSize + 1;
     const newCache = apiCache[instanceKey].slice();
     let newNext = nextToken[instanceKey];
-    while (newCache.length < cacheUntil && newNext != null) {
+    while ((newCache.length < cacheUntil || !isPaginated) && newNext != null) {
       setLoading(true);
       const variables: any = {
         limit: pageSize,
@@ -1555,7 +1569,9 @@ export default function AuthorProfileCollection(
       newCache.push(...result.items);
       newNext = result.nextToken;
     }
-    const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
+    const cacheSlice = isPaginated
+      ? newCache.slice((page - 1) * pageSize, page * pageSize)
+      : newCache;
     setItems(cacheSlice);
     setHasMorePages(!!newNext);
     setLoading(false);
@@ -1578,6 +1594,7 @@ export default function AuthorProfileCollection(
         alignItems=\\"stretch\\"
         justifyContent=\\"stretch\\"
         itemsPerPage={pageSize}
+        isPaginated={!isApiPagination && isPaginated}
         items={itemsProp || (loading ? new Array(pageSize).fill({}) : items)}
         {...getOverrideProps(overrides, \\"AuthorProfileCollection\\")}
         {...rest}
@@ -1595,7 +1612,7 @@ export default function AuthorProfileCollection(
           );
         }}
       </Collection>
-      {isApiPagination && (
+      {isApiPagination && isPaginated && (
         <Pagination
           currentPage={pageIndex}
           totalPages={maxViewed}

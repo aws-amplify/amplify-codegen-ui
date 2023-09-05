@@ -1662,6 +1662,14 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     }
     statements.push(buildInitConstVariableExpression('pageSize', factory.createNumericLiteral(pageSize)));
 
+    // const isPaginated = false;
+    let factoryMethodIsPaginatedValue: () => ts.TrueLiteral | ts.FalseLiteral = factory.createFalse;
+    if (isFixedPropertyWithValue(component.properties.isPaginated)) {
+      const isPaginated = Boolean(component.properties.isPaginated.value);
+      factoryMethodIsPaginatedValue = isPaginated ? factory.createTrue : factory.createFalse;
+    }
+    statements.push(buildInitConstVariableExpression('isPaginated', factoryMethodIsPaginatedValue()));
+
     /*
       React.useEffect(() => {
         nextToken[instanceKey] = '';
@@ -1993,13 +2001,22 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       statements.push(
         factory.createWhileStatement(
           factory.createBinaryExpression(
-            factory.createBinaryExpression(
-              factory.createPropertyAccessExpression(
-                factory.createIdentifier('newCache'),
-                factory.createIdentifier('length'),
+            factory.createParenthesizedExpression(
+              factory.createBinaryExpression(
+                factory.createBinaryExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('newCache'),
+                    factory.createIdentifier('length'),
+                  ),
+                  factory.createToken(ts.SyntaxKind.LessThanToken),
+                  factory.createIdentifier('cacheUntil'),
+                ),
+                factory.createToken(ts.SyntaxKind.BarBarToken),
+                factory.createPrefixUnaryExpression(
+                  ts.SyntaxKind.ExclamationToken,
+                  factory.createIdentifier('isPaginated'),
+                ),
               ),
-              factory.createToken(ts.SyntaxKind.LessThanToken),
-              factory.createIdentifier('cacheUntil'),
             ),
             factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
             factory.createParenthesizedExpression(
@@ -2154,30 +2171,36 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     statements.push(
       buildInitConstVariableExpression(
         'cacheSlice',
-        factory.createCallExpression(
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier('newCache'),
-            factory.createIdentifier('slice'),
-          ),
-          undefined,
-          [
-            factory.createBinaryExpression(
-              factory.createParenthesizedExpression(
-                factory.createBinaryExpression(
-                  factory.createIdentifier('page'),
-                  factory.createToken(ts.SyntaxKind.MinusToken),
-                  factory.createNumericLiteral('1'),
+        factory.createConditionalExpression(
+          factory.createIdentifier('isPaginated'),
+          factory.createToken(ts.SyntaxKind.QuestionToken),
+          factory.createCallExpression(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('newCache'),
+              factory.createIdentifier('slice'),
+            ),
+            undefined,
+            [
+              factory.createBinaryExpression(
+                factory.createParenthesizedExpression(
+                  factory.createBinaryExpression(
+                    factory.createIdentifier('page'),
+                    factory.createToken(ts.SyntaxKind.MinusToken),
+                    factory.createNumericLiteral('1'),
+                  ),
                 ),
+                factory.createToken(ts.SyntaxKind.AsteriskToken),
+                factory.createIdentifier('pageSize'),
               ),
-              factory.createToken(ts.SyntaxKind.AsteriskToken),
-              factory.createIdentifier('pageSize'),
-            ),
-            factory.createBinaryExpression(
-              factory.createIdentifier('page'),
-              factory.createToken(ts.SyntaxKind.AsteriskToken),
-              factory.createIdentifier('pageSize'),
-            ),
-          ],
+              factory.createBinaryExpression(
+                factory.createIdentifier('page'),
+                factory.createToken(ts.SyntaxKind.AsteriskToken),
+                factory.createIdentifier('pageSize'),
+              ),
+            ],
+          ),
+          factory.createToken(ts.SyntaxKind.ColonToken),
+          factory.createIdentifier('newCache'),
         ),
       ),
     );

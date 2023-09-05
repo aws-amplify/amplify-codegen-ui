@@ -66,22 +66,7 @@ export default class CollectionRenderer extends ReactComponentRenderer<BaseCompo
   private renderCollectionOpeningElement(itemsVariableName?: string): JsxOpeningElement {
     const propsArray = Object.entries(this.component.properties).reduce((acc: JsxAttribute[], [key, value]) => {
       if (this.renderConfig.apiConfiguration?.dataApi === 'GraphQL') {
-        if (key === 'isPaginated') {
-          return [
-            ...acc,
-            factory.createJsxAttribute(
-              factory.createIdentifier('isPaginated'),
-              factory.createJsxExpression(
-                undefined,
-                factory.createPrefixUnaryExpression(
-                  ts.SyntaxKind.ExclamationToken,
-                  factory.createIdentifier('isApiPagination'),
-                ),
-              ),
-            ),
-          ];
-        }
-        if (key === 'itemsPerPage') {
+        if (key === 'isPaginated' || key === 'itemsPerPage') {
           return acc;
         }
       }
@@ -95,6 +80,20 @@ export default class CollectionRenderer extends ReactComponentRenderer<BaseCompo
         factory.createJsxAttribute(
           factory.createIdentifier('itemsPerPage'),
           factory.createJsxExpression(undefined, factory.createIdentifier('pageSize')),
+        ),
+        factory.createJsxAttribute(
+          factory.createIdentifier('isPaginated'),
+          factory.createJsxExpression(
+            undefined,
+            factory.createBinaryExpression(
+              factory.createPrefixUnaryExpression(
+                ts.SyntaxKind.ExclamationToken,
+                factory.createIdentifier('isApiPagination'),
+              ),
+              factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
+              factory.createIdentifier('isPaginated'),
+            ),
+          ),
         ),
       );
 
@@ -322,7 +321,11 @@ export default class CollectionRenderer extends ReactComponentRenderer<BaseCompo
           factory.createJsxExpression(
             undefined,
             factory.createBinaryExpression(
-              factory.createIdentifier('isApiPagination'),
+              factory.createBinaryExpression(
+                factory.createIdentifier('isApiPagination'),
+                factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
+                factory.createIdentifier('isPaginated'),
+              ),
               factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
               factory.createJsxSelfClosingElement(
                 factory.createIdentifier('Pagination'),
