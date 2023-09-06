@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.15.9](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.8...v2.15.9) (2023-09-06)
+
+### Bug Fixes
+
+- add missing support for GraphQL collections without pagination ([19f3e5f](https://github.com/aws-amplify/amplify-codegen-ui/commit/19f3e5f2e445543c66ef51f9bd4504d871e70229))
+- move graphql collection 'items' property access off of result variable ([143ec64](https://github.com/aws-amplify/amplify-codegen-ui/commit/143ec64e103e84bc5bd663b7e4d7c2ee61868185))
+- use itemesPerPage for graphql collection query limit ([#1092](https://github.com/aws-amplify/amplify-codegen-ui/issues/1092)) ([96e6df6](https://github.com/aws-amplify/amplify-codegen-ui/commit/96e6df681d88cd602b2ce3c2fdc35d06d60d3fd3))
+
 ## [2.15.8](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.15.7...v2.15.8) (2023-08-22)
 
 ### Bug Fixes
