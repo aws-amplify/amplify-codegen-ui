@@ -103,7 +103,14 @@ export const getGraphqlCallExpression = (
   const query = getGraphqlQueryForModel(action, model, byFieldName);
   const graphqlVariables: ObjectLiteralElementLike[] = [];
   const graphqlOptions: ObjectLiteralElementLike[] = [
-    factory.createPropertyAssignment(factory.createIdentifier('query'), factory.createIdentifier(query)),
+    factory.createPropertyAssignment(
+      factory.createIdentifier('query'),
+      factory.createCallExpression(
+        factory.createPropertyAccessExpression(factory.createIdentifier(query), factory.createIdentifier('replaceAll')),
+        undefined,
+        [factory.createStringLiteral('__typename'), factory.createStringLiteral('')],
+      ),
+    ),
   ];
 
   importCollection.addMappedImport(ImportValue.API);

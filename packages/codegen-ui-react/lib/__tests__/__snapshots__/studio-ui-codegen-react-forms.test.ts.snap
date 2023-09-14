@@ -256,7 +256,7 @@ export default function CreateOwnerForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listDogs,
+          query: listDogs.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listDogs?.items;
@@ -326,7 +326,7 @@ export default function CreateOwnerForm(props) {
           };
           const owner = (
             await API.graphql({
-              query: createOwner,
+              query: createOwner.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   ...modelFieldsToSave,
@@ -339,7 +339,7 @@ export default function CreateOwnerForm(props) {
           if (dogToLink) {
             promises.push(
               API.graphql({
-                query: updateDog,
+                query: updateDog.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   input: {
                     id: Dog.id,
@@ -352,7 +352,7 @@ export default function CreateOwnerForm(props) {
             if (ownerToUnlink) {
               promises.push(
                 API.graphql({
-                  query: updateOwner,
+                  query: updateOwner.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       id: ownerToUnlink.id,
@@ -859,7 +859,7 @@ export default function MyPostForm(props) {
               : modelFields.nonModelField,
           };
           await API.graphql({
-            query: createPost,
+            query: createPost.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
                 ...modelFieldsToSave,
@@ -1483,7 +1483,7 @@ export default function MyMemberForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listTeams,
+          query: listTeams.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listTeams?.items;
@@ -1508,7 +1508,7 @@ export default function MyMemberForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listTeams,
+          query: listTeams.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listTeams?.items;
@@ -1580,7 +1580,7 @@ export default function MyMemberForm(props) {
             teamMembersId: modelFields?.Team?.id,
           };
           await API.graphql({
-            query: createMember,
+            query: createMember.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
                 ...modelFieldsToSave,
@@ -2148,7 +2148,7 @@ export default function MovieCreateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listTags,
+          query: listTags.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listTags?.items;
@@ -2223,7 +2223,7 @@ export default function MovieCreateForm(props) {
           };
           const movie = (
             await API.graphql({
-              query: createMovie,
+              query: createMovie.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   ...modelFieldsToSave,
@@ -2236,7 +2236,7 @@ export default function MovieCreateForm(props) {
             ...tags.reduce((promises, tag) => {
               promises.push(
                 API.graphql({
-                  query: createMovieTags,
+                  query: createMovieTags.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       movieMovieKey: movie.movieKey,
@@ -2790,7 +2790,7 @@ export default function SchoolCreateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listStudents,
+          query: listStudents.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listStudents?.items;
@@ -2859,7 +2859,7 @@ export default function SchoolCreateForm(props) {
           };
           const school = (
             await API.graphql({
-              query: createSchool,
+              query: createSchool.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   ...modelFieldsToSave,
@@ -2872,7 +2872,7 @@ export default function SchoolCreateForm(props) {
             ...Students.reduce((promises, original) => {
               promises.push(
                 API.graphql({
-                  query: updateStudent,
+                  query: updateStudent.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       id: original.id,
@@ -3346,7 +3346,7 @@ export default function BookCreateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listAuthors,
+          query: listAuthors.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listAuthors?.items;
@@ -3415,7 +3415,7 @@ export default function BookCreateForm(props) {
             authorId: modelFields?.primaryAuthor?.id,
           };
           await API.graphql({
-            query: createBook,
+            query: createBook.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
                 ...modelFieldsToSave,
@@ -3876,7 +3876,7 @@ export default function CommentCreateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listPosts,
+          query: listPosts.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listPosts?.items;
@@ -3931,7 +3931,7 @@ export default function CommentCreateForm(props) {
             }
           });
           await API.graphql({
-            query: createComment,
+            query: createComment.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
                 ...modelFields,
@@ -4410,7 +4410,7 @@ export default function TagCreateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listPosts,
+          query: listPosts.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listPosts?.items;
@@ -4481,7 +4481,7 @@ export default function TagCreateForm(props) {
           };
           const tag = (
             await API.graphql({
-              query: createTag,
+              query: createTag.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   ...modelFieldsToSave,
@@ -4494,7 +4494,7 @@ export default function TagCreateForm(props) {
             ...Posts.reduce((promises, post) => {
               promises.push(
                 API.graphql({
-                  query: createTagPost,
+                  query: createTagPost.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       tagID: tag.id,
@@ -5053,7 +5053,7 @@ export default function BookCreateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listAuthors,
+          query: listAuthors.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listAuthors?.items;
@@ -5080,7 +5080,7 @@ export default function BookCreateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listTitles,
+          query: listTitles.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listTitles?.items;
@@ -5152,7 +5152,7 @@ export default function BookCreateForm(props) {
             titleId: modelFields?.primaryTitle?.id,
           };
           await API.graphql({
-            query: createBook,
+            query: createBook.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
                 ...modelFieldsToSave,
@@ -5760,7 +5760,7 @@ export default function CreateCPKTeacherForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listCPKStudents,
+          query: listCPKStudents.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listCPKStudents?.items;
@@ -5787,7 +5787,7 @@ export default function CreateCPKTeacherForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listCPKClasses,
+          query: listCPKClasses.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listCPKClasses?.items;
@@ -5814,7 +5814,7 @@ export default function CreateCPKTeacherForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listCPKProjects,
+          query: listCPKProjects.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listCPKProjects?.items;
@@ -5889,7 +5889,7 @@ export default function CreateCPKTeacherForm(props) {
           };
           const cPKTeacher = (
             await API.graphql({
-              query: createCPKTeacher,
+              query: createCPKTeacher.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   ...modelFieldsToSave,
@@ -5902,7 +5902,7 @@ export default function CreateCPKTeacherForm(props) {
             ...CPKClasses.reduce((promises, cpkClass) => {
               promises.push(
                 API.graphql({
-                  query: createCPKTeacherCPKClass,
+                  query: createCPKTeacherCPKClass.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       cPKTeacherSpecialTeacherId: cPKTeacher.specialTeacherId,
@@ -5918,7 +5918,7 @@ export default function CreateCPKTeacherForm(props) {
             ...CPKProjects.reduce((promises, original) => {
               promises.push(
                 API.graphql({
-                  query: updateCPKProject,
+                  query: updateCPKProject.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       specialProjectId: original.specialProjectId,
@@ -6556,7 +6556,7 @@ export default function CreateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listParentTables,
+          query: listParentTables.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listParentTables?.items;
@@ -6629,7 +6629,7 @@ export default function CreateForm(props) {
               : modelFields.nmTest,
           };
           await API.graphql({
-            query: createBasicTable,
+            query: createBasicTable.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
                 ...modelFieldsToSave,
@@ -7081,7 +7081,7 @@ export default function PostUpdateForm(props) {
       const record = idProp
         ? (
             await API.graphql({
-              query: getPost,
+              query: getPost.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: idProp },
             })
           )?.data?.getPost
@@ -7165,7 +7165,7 @@ export default function PostUpdateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listComments,
+          query: listComments.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listComments?.items;
@@ -7258,7 +7258,7 @@ export default function PostUpdateForm(props) {
             }
             promises.push(
               API.graphql({
-                query: updateComment,
+                query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   input: {
                     id: original.id,
@@ -7271,7 +7271,7 @@ export default function PostUpdateForm(props) {
           commentsToLink.forEach((original) => {
             promises.push(
               API.graphql({
-                query: updateComment,
+                query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   input: {
                     id: original.id,
@@ -7288,7 +7288,7 @@ export default function PostUpdateForm(props) {
           };
           promises.push(
             API.graphql({
-              query: updatePost,
+              query: updatePost.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   id: postRecord.id,
@@ -7804,7 +7804,7 @@ export default function MyPostForm(props) {
       const record = idProp
         ? (
             await API.graphql({
-              query: getPost,
+              query: getPost.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: idProp },
             })
           )?.data?.getPost
@@ -7904,7 +7904,7 @@ export default function MyPostForm(props) {
               : modelFields.nonModelField,
           };
           await API.graphql({
-            query: updatePost,
+            query: updatePost.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
                 id: postRecord.id,
@@ -8576,7 +8576,7 @@ export default function MovieUpdateForm(props) {
       const record = idProp
         ? (
             await API.graphql({
-              query: getMovie,
+              query: getMovie.replaceAll(\\"__typename\\", \\"\\"),
               variables: { ...idProp },
             })
           )?.data?.getMovie
@@ -8584,7 +8584,11 @@ export default function MovieUpdateForm(props) {
       const linkedTags = record
         ? (
             await API.graphql({
-              query: movieTagsByMovieMovieKeyAndMovietitleAndMoviegenre,
+              query:
+                movieTagsByMovieMovieKeyAndMovietitleAndMoviegenre.replaceAll(
+                  \\"__typename\\",
+                  \\"\\"
+                ),
               variables: {
                 movieMovieKey: record.movieKey,
                 movietitle: record.title,
@@ -8656,7 +8660,7 @@ export default function MovieUpdateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listTags,
+          query: listTags.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listTags?.items;
@@ -8764,7 +8768,7 @@ export default function MovieUpdateForm(props) {
             const recordKeys = JSON.parse(id);
             const movieTagsRecords = (
               await API.graphql({
-                query: listMovieTags,
+                query: listMovieTags.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   filter: {
                     and: [
@@ -8780,7 +8784,7 @@ export default function MovieUpdateForm(props) {
             for (let i = 0; i < count; i++) {
               promises.push(
                 API.graphql({
-                  query: deleteMovieTags,
+                  query: deleteMovieTags.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       id: movieTagsRecords[i].id,
@@ -8799,7 +8803,7 @@ export default function MovieUpdateForm(props) {
             for (let i = count; i > 0; i--) {
               promises.push(
                 API.graphql({
-                  query: createMovieTags,
+                  query: createMovieTags.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       movieMovieKey: movieRecord.movieKey,
@@ -8820,7 +8824,7 @@ export default function MovieUpdateForm(props) {
           };
           promises.push(
             API.graphql({
-              query: updateMovie,
+              query: updateMovie.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   movieKey: movieRecord.movieKey,
@@ -9346,7 +9350,7 @@ export default function CommentUpdateForm(props) {
       const record = idProp
         ? (
             await API.graphql({
-              query: getComment,
+              query: getComment.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: idProp },
             })
           )?.data?.getComment
@@ -9355,7 +9359,7 @@ export default function CommentUpdateForm(props) {
       const postRecord = postIDRecord
         ? (
             await API.graphql({
-              query: getPost,
+              query: getPost.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: postIDRecord },
             })
           )?.data?.getPost
@@ -9428,7 +9432,7 @@ export default function CommentUpdateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listPosts,
+          query: listPosts.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listPosts?.items;
@@ -9455,7 +9459,7 @@ export default function CommentUpdateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listPosts,
+          query: listPosts.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listPosts?.items;
@@ -9528,7 +9532,7 @@ export default function CommentUpdateForm(props) {
             postCommentsId: modelFields?.Post?.id ?? null,
           };
           await API.graphql({
-            query: updateComment,
+            query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
                 id: commentRecord.id,
@@ -10079,7 +10083,7 @@ export default function CommentUpdateForm(props) {
       const record = idProp
         ? (
             await API.graphql({
-              query: getComment,
+              query: getComment.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: idProp },
             })
           )?.data?.getComment
@@ -10088,7 +10092,7 @@ export default function CommentUpdateForm(props) {
       const postRecord = postIDRecord
         ? (
             await API.graphql({
-              query: getPost,
+              query: getPost.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: postIDRecord },
             })
           )?.data?.getPost
@@ -10161,7 +10165,7 @@ export default function CommentUpdateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listPosts,
+          query: listPosts.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listPosts?.items;
@@ -10188,7 +10192,7 @@ export default function CommentUpdateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listPosts,
+          query: listPosts.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listPosts?.items;
@@ -10261,7 +10265,7 @@ export default function CommentUpdateForm(props) {
             postCommentsId: modelFields?.Post?.id ?? null,
           };
           await API.graphql({
-            query: updateComment,
+            query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
                 id: commentRecord.id,
@@ -10801,7 +10805,7 @@ export default function CommentUpdateForm(props) {
       const record = idProp
         ? (
             await API.graphql({
-              query: getComment,
+              query: getComment.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: idProp },
             })
           )?.data?.getComment
@@ -10810,7 +10814,7 @@ export default function CommentUpdateForm(props) {
       const postRecord = postIDRecord
         ? (
             await API.graphql({
-              query: getPost,
+              query: getPost.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: postIDRecord },
             })
           )?.data?.getPost
@@ -10866,7 +10870,7 @@ export default function CommentUpdateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listPosts,
+          query: listPosts.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listPosts?.items;
@@ -10921,7 +10925,7 @@ export default function CommentUpdateForm(props) {
             }
           });
           await API.graphql({
-            query: updateComment,
+            query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
                 id: commentRecord.id,
@@ -11354,7 +11358,7 @@ export default function ClassUpdateForm(props) {
       const record = idProp
         ? (
             await API.graphql({
-              query: getClass,
+              query: getClass.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: idProp },
             })
           )?.data?.getClass
@@ -11362,7 +11366,7 @@ export default function ClassUpdateForm(props) {
       const linkedStudents = record
         ? (
             await API.graphql({
-              query: studentClassesByClassId,
+              query: studentClassesByClassId.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 classId: record.id,
               },
@@ -11425,7 +11429,7 @@ export default function ClassUpdateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listStudents,
+          query: listStudents.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listStudents?.items;
@@ -11529,7 +11533,7 @@ export default function ClassUpdateForm(props) {
             const recordKeys = JSON.parse(id);
             const studentClassRecords = (
               await API.graphql({
-                query: listStudentClasses,
+                query: listStudentClasses.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   filter: {
                     and: [
@@ -11543,7 +11547,7 @@ export default function ClassUpdateForm(props) {
             for (let i = 0; i < count; i++) {
               promises.push(
                 API.graphql({
-                  query: deleteStudentClass,
+                  query: deleteStudentClass.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       id: studentClassRecords[i].id,
@@ -11562,7 +11566,7 @@ export default function ClassUpdateForm(props) {
             for (let i = count; i > 0; i--) {
               promises.push(
                 API.graphql({
-                  query: createStudentClass,
+                  query: createStudentClass.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       classId: classRecord.id,
@@ -11576,7 +11580,7 @@ export default function ClassUpdateForm(props) {
           const modelFieldsToSave = {};
           promises.push(
             API.graphql({
-              query: updateClass,
+              query: updateClass.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   id: classRecord.id,
@@ -11972,7 +11976,7 @@ export default function UpdateForm(props) {
       const record = idProp
         ? (
             await API.graphql({
-              query: getBasicTable,
+              query: getBasicTable.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: idProp },
             })
           )?.data?.getBasicTable
@@ -12038,7 +12042,7 @@ export default function UpdateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listParentTables,
+          query: listParentTables.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listParentTables?.items;
@@ -12111,7 +12115,7 @@ export default function UpdateForm(props) {
               : modelFields.nmTest,
           };
           await API.graphql({
-            query: updateBasicTable,
+            query: updateBasicTable.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
                 id: basicTableRecord.id,
@@ -12599,7 +12603,7 @@ export default function UpdateCPKTeacherForm(props) {
       const record = specialTeacherIdProp
         ? (
             await API.graphql({
-              query: getCPKTeacher,
+              query: getCPKTeacher.replaceAll(\\"__typename\\", \\"\\"),
               variables: { specialTeacherId: specialTeacherIdProp },
             })
           )?.data?.getCPKTeacher
@@ -12609,7 +12613,11 @@ export default function UpdateCPKTeacherForm(props) {
       const linkedCPKClasses = record
         ? (
             await API.graphql({
-              query: cPKTeacherCPKClassesByCPKTeacherSpecialTeacherId,
+              query:
+                cPKTeacherCPKClassesByCPKTeacherSpecialTeacherId.replaceAll(
+                  \\"__typename\\",
+                  \\"\\"
+                ),
               variables: {
                 cPKTeacherSpecialTeacherId: record.specialTeacherId,
               },
@@ -12710,7 +12718,7 @@ export default function UpdateCPKTeacherForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listCPKStudents,
+          query: listCPKStudents.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listCPKStudents?.items;
@@ -12737,7 +12745,7 @@ export default function UpdateCPKTeacherForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listCPKClasses,
+          query: listCPKClasses.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listCPKClasses?.items;
@@ -12764,7 +12772,7 @@ export default function UpdateCPKTeacherForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listCPKProjects,
+          query: listCPKProjects.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listCPKProjects?.items;
@@ -12873,7 +12881,7 @@ export default function UpdateCPKTeacherForm(props) {
             const recordKeys = JSON.parse(id);
             const cPKTeacherCPKClassRecords = (
               await API.graphql({
-                query: listCPKTeacherCPKClasses,
+                query: listCPKTeacherCPKClasses.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   filter: {
                     and: [
@@ -12895,7 +12903,7 @@ export default function UpdateCPKTeacherForm(props) {
             for (let i = 0; i < count; i++) {
               promises.push(
                 API.graphql({
-                  query: deleteCPKTeacherCPKClass,
+                  query: deleteCPKTeacherCPKClass.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       id: cPKTeacherCPKClassRecords[i].id,
@@ -12914,7 +12922,7 @@ export default function UpdateCPKTeacherForm(props) {
             for (let i = count; i > 0; i--) {
               promises.push(
                 API.graphql({
-                  query: createCPKTeacherCPKClass,
+                  query: createCPKTeacherCPKClass.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       cPKTeacherSpecialTeacherId:
@@ -12954,7 +12962,7 @@ export default function UpdateCPKTeacherForm(props) {
             }
             promises.push(
               API.graphql({
-                query: updateCPKProject,
+                query: updateCPKProject.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   input: {
                     specialProjectId: original.specialProjectId,
@@ -12967,7 +12975,7 @@ export default function UpdateCPKTeacherForm(props) {
           cPKProjectsToLink.forEach((original) => {
             promises.push(
               API.graphql({
-                query: updateCPKProject,
+                query: updateCPKProject.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   input: {
                     specialProjectId: original.specialProjectId,
@@ -12984,7 +12992,7 @@ export default function UpdateCPKTeacherForm(props) {
           };
           promises.push(
             API.graphql({
-              query: updateCPKTeacher,
+              query: updateCPKTeacher.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   specialTeacherId: cPKTeacherRecord.specialTeacherId,
@@ -13659,7 +13667,7 @@ export default function CreateCompositeToyForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listCompositeDogs,
+          query: listCompositeDogs.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listCompositeDogs?.items;
@@ -13688,7 +13696,7 @@ export default function CreateCompositeToyForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listCompositeDogs,
+          query: listCompositeDogs.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listCompositeDogs?.items;
@@ -13750,7 +13758,7 @@ export default function CreateCompositeToyForm(props) {
             }
           });
           await API.graphql({
-            query: createCompositeToy,
+            query: createCompositeToy.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
                 ...modelFields,
@@ -14455,7 +14463,7 @@ export default function CreateCommentForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listPosts,
+          query: listPosts.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listPosts?.items;
@@ -14484,7 +14492,7 @@ export default function CreateCommentForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listUsers,
+          query: listUsers.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listUsers?.items;
@@ -14513,7 +14521,7 @@ export default function CreateCommentForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listOrgs,
+          query: listOrgs.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listOrgs?.items;
@@ -14542,7 +14550,7 @@ export default function CreateCommentForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listPosts,
+          query: listPosts.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listPosts?.items;
@@ -14618,7 +14626,7 @@ export default function CreateCommentForm(props) {
             postCommentsId: modelFields.postCommentsId,
           };
           await API.graphql({
-            query: createComment,
+            query: createComment.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
                 ...modelFieldsToSave,
@@ -15436,7 +15444,7 @@ export default function CreateCompositeDogForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listCompositeBowls,
+          query: listCompositeBowls.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listCompositeBowls?.items;
@@ -15468,7 +15476,7 @@ export default function CreateCompositeDogForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listCompositeOwners,
+          query: listCompositeOwners.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listCompositeOwners?.items;
@@ -15497,7 +15505,7 @@ export default function CreateCompositeDogForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listCompositeToys,
+          query: listCompositeToys.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listCompositeToys?.items;
@@ -15529,7 +15537,7 @@ export default function CreateCompositeDogForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listCompositeVets,
+          query: listCompositeVets.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listCompositeVets?.items;
@@ -15612,7 +15620,7 @@ export default function CreateCompositeDogForm(props) {
           };
           const compositeDog = (
             await API.graphql({
-              query: createCompositeDog,
+              query: createCompositeDog.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   ...modelFieldsToSave,
@@ -15625,7 +15633,7 @@ export default function CreateCompositeDogForm(props) {
           if (compositeOwnerToLink) {
             promises.push(
               API.graphql({
-                query: updateCompositeOwner,
+                query: updateCompositeOwner.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   input: {
                     lastName: CompositeOwner.lastName,
@@ -15642,7 +15650,7 @@ export default function CreateCompositeDogForm(props) {
             if (compositeDogToUnlink) {
               promises.push(
                 API.graphql({
-                  query: updateCompositeDog,
+                  query: updateCompositeDog.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       name: compositeDogToUnlink.name,
@@ -15659,7 +15667,7 @@ export default function CreateCompositeDogForm(props) {
             ...CompositeToys.reduce((promises, original) => {
               promises.push(
                 API.graphql({
-                  query: updateCompositeToy,
+                  query: updateCompositeToy.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       kind: original.kind,
@@ -15678,7 +15686,10 @@ export default function CreateCompositeDogForm(props) {
             ...CompositeVets.reduce((promises, compositeVet) => {
               promises.push(
                 API.graphql({
-                  query: createCompositeDogCompositeVet,
+                  query: createCompositeDogCompositeVet.replaceAll(
+                    \\"__typename\\",
+                    \\"\\"
+                  ),
                   variables: {
                     input: {
                       compositeDogName: compositeDog.name,
@@ -16450,7 +16461,7 @@ export default function CreatePostForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listComments,
+          query: listComments.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listComments?.items;
@@ -16519,7 +16530,7 @@ export default function CreatePostForm(props) {
           };
           const post = (
             await API.graphql({
-              query: createPost,
+              query: createPost.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   ...modelFieldsToSave,
@@ -16532,7 +16543,7 @@ export default function CreatePostForm(props) {
             ...comments.reduce((promises, original) => {
               promises.push(
                 API.graphql({
-                  query: updateComment,
+                  query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       id: original.id,
@@ -16949,7 +16960,7 @@ export default function UpdatePostForm(props) {
       const record = idProp
         ? (
             await API.graphql({
-              query: getPost,
+              query: getPost.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: idProp },
             })
           )?.data?.getPost
@@ -17014,7 +17025,7 @@ export default function UpdatePostForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listComments,
+          query: listComments.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listComments?.items;
@@ -17105,7 +17116,7 @@ export default function UpdatePostForm(props) {
             }
             promises.push(
               API.graphql({
-                query: updateComment,
+                query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   input: {
                     id: original.id,
@@ -17118,7 +17129,7 @@ export default function UpdatePostForm(props) {
           commentsToLink.forEach((original) => {
             promises.push(
               API.graphql({
-                query: updateComment,
+                query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   input: {
                     id: original.id,
@@ -17133,7 +17144,7 @@ export default function UpdatePostForm(props) {
           };
           promises.push(
             API.graphql({
-              query: updatePost,
+              query: updatePost.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   id: postRecord.id,
@@ -17571,7 +17582,7 @@ export default function ChildItemUpdateForm(props) {
       const record = idProp
         ? (
             await API.graphql({
-              query: getChildItem,
+              query: getChildItem.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: idProp },
             })
           )?.data?.getChildItem
@@ -17582,7 +17593,7 @@ export default function ChildItemUpdateForm(props) {
       const customKeyModelRecord = customKeyModelChildrenMycustomkeyRecord
         ? (
             await API.graphql({
-              query: getCustomKeyModel,
+              query: getCustomKeyModel.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: customKeyModelChildrenMycustomkeyRecord },
             })
           )?.data?.getCustomKeyModel
@@ -17654,7 +17665,7 @@ export default function ChildItemUpdateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listCustomKeyModels,
+          query: listCustomKeyModels.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listCustomKeyModels?.items;
@@ -17714,7 +17725,7 @@ export default function ChildItemUpdateForm(props) {
             }
           });
           await API.graphql({
-            query: updateChildItem,
+            query: updateChildItem.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
                 id: childItemRecord.id,
@@ -18175,7 +18186,7 @@ export default function PostUpdateForm(props) {
       const record = idProp
         ? (
             await API.graphql({
-              query: getPost,
+              query: getPost.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: idProp },
             })
           )?.data?.getPost
@@ -18254,7 +18265,7 @@ export default function PostUpdateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listBlogs,
+          query: listBlogs.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listBlogs?.items;
@@ -18283,7 +18294,7 @@ export default function PostUpdateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listComments,
+          query: listComments.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listComments?.items;
@@ -18376,7 +18387,7 @@ export default function PostUpdateForm(props) {
             }
             promises.push(
               API.graphql({
-                query: updateComment,
+                query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   input: {
                     id: original.id,
@@ -18389,7 +18400,7 @@ export default function PostUpdateForm(props) {
           commentsToLink.forEach((original) => {
             promises.push(
               API.graphql({
-                query: updateComment,
+                query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   input: {
                     id: original.id,
@@ -18405,7 +18416,7 @@ export default function PostUpdateForm(props) {
           };
           promises.push(
             API.graphql({
-              query: updatePost,
+              query: updatePost.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   id: postRecord.id,
@@ -18946,7 +18957,7 @@ export default function CreateDogForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listOwners,
+          query: listOwners.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listOwners?.items;
@@ -19016,7 +19027,7 @@ export default function CreateDogForm(props) {
           };
           const dog = (
             await API.graphql({
-              query: createDog,
+              query: createDog.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   ...modelFieldsToSave,
@@ -19029,7 +19040,7 @@ export default function CreateDogForm(props) {
           if (ownerToLink) {
             promises.push(
               API.graphql({
-                query: updateOwner,
+                query: updateOwner.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   input: {
                     id: owner.id,
@@ -19493,7 +19504,7 @@ export default function CreateOwnerForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listDogs,
+          query: listDogs.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listDogs?.items;
@@ -19563,7 +19574,7 @@ export default function CreateOwnerForm(props) {
           };
           const owner = (
             await API.graphql({
-              query: createOwner,
+              query: createOwner.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   ...modelFieldsToSave,
@@ -19576,7 +19587,7 @@ export default function CreateOwnerForm(props) {
           if (dogToLink) {
             promises.push(
               API.graphql({
-                query: updateDog,
+                query: updateDog.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   input: {
                     id: Dog.id,
@@ -19589,7 +19600,7 @@ export default function CreateOwnerForm(props) {
             if (ownerToUnlink) {
               promises.push(
                 API.graphql({
-                  query: updateOwner,
+                  query: updateOwner.replaceAll(\\"__typename\\", \\"\\"),
                   variables: {
                     input: {
                       id: ownerToUnlink.id,
@@ -20003,7 +20014,7 @@ export default function CommentUpdateForm(props) {
       const record = idProp
         ? (
             await API.graphql({
-              query: getComment,
+              query: getComment.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: idProp },
             })
           )?.data?.getComment
@@ -20012,7 +20023,7 @@ export default function CommentUpdateForm(props) {
       const postRecord = postIDRecord
         ? (
             await API.graphql({
-              query: getPost,
+              query: getPost.replaceAll(\\"__typename\\", \\"\\"),
               variables: { id: postIDRecord },
             })
           )?.data?.getPost
@@ -20068,7 +20079,7 @@ export default function CommentUpdateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listPosts,
+          query: listPosts.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listPosts?.items;
@@ -20123,7 +20134,7 @@ export default function CommentUpdateForm(props) {
             }
           });
           await API.graphql({
-            query: updateComment,
+            query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
                 id: commentRecord.id,
@@ -20558,7 +20569,7 @@ export default function UpdateForm(props) {
       const record = mycustomkeyProp
         ? (
             await API.graphql({
-              query: getCustomKeyModel,
+              query: getCustomKeyModel.replaceAll(\\"__typename\\", \\"\\"),
               variables: { mycustomkey: mycustomkeyProp },
             })
           )?.data?.getCustomKeyModel
@@ -20624,7 +20635,7 @@ export default function UpdateForm(props) {
       }
       const result = (
         await API.graphql({
-          query: listChildItems,
+          query: listChildItems.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       )?.data?.listChildItems?.items;
@@ -20716,7 +20727,7 @@ export default function UpdateForm(props) {
             }
             promises.push(
               API.graphql({
-                query: updateChildItem,
+                query: updateChildItem.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   input: {
                     id: original.id,
@@ -20729,7 +20740,7 @@ export default function UpdateForm(props) {
           childrenToLink.forEach((original) => {
             promises.push(
               API.graphql({
-                query: updateChildItem,
+                query: updateChildItem.replaceAll(\\"__typename\\", \\"\\"),
                 variables: {
                   input: {
                     id: original.id,
@@ -20746,7 +20757,7 @@ export default function UpdateForm(props) {
           };
           promises.push(
             API.graphql({
-              query: updateCustomKeyModel,
+              query: updateCustomKeyModel.replaceAll(\\"__typename\\", \\"\\"),
               variables: {
                 input: {
                   mycustomkey: customKeyModelRecord.mycustomkey,

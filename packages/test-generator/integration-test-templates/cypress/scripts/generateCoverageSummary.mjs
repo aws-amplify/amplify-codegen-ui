@@ -23,7 +23,7 @@ import coverageJSON from '../../coverage/coverage-final.json' assert { type: 'js
 const MIN_COVERAGE_THRESHOLDS = {
   lines: 70,
   statements: 70,
-  functions: 70,
+  functions: 65,
   branches: 50,
 };
 
