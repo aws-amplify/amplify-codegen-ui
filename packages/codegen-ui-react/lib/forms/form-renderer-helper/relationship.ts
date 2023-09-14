@@ -1117,7 +1117,17 @@ export const buildGetRelationshipModels = (
                                       [
                                         factory.createPropertyAssignment(
                                           factory.createIdentifier('query'),
-                                          factory.createIdentifier(joinTableIndexedQuery),
+                                          factory.createCallExpression(
+                                            factory.createPropertyAccessExpression(
+                                              factory.createIdentifier(joinTableIndexedQuery),
+                                              factory.createIdentifier('replaceAll'),
+                                            ),
+                                            undefined,
+                                            [
+                                              factory.createStringLiteral('__typename'),
+                                              factory.createStringLiteral(''),
+                                            ],
+                                          ),
                                         ),
                                         factory.createPropertyAssignment(
                                           factory.createIdentifier('variables'),

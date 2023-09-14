@@ -1953,7 +1953,17 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                                         [
                                           factory.createPropertyAssignment(
                                             factory.createIdentifier('query'),
-                                            factory.createIdentifier(relatedFieldQueryName),
+                                            factory.createCallExpression(
+                                              factory.createPropertyAccessExpression(
+                                                factory.createIdentifier(relatedFieldQueryName),
+                                                factory.createIdentifier('replaceAll'),
+                                              ),
+                                              undefined,
+                                              [
+                                                factory.createStringLiteral('__typename'),
+                                                factory.createStringLiteral(''),
+                                              ],
+                                            ),
                                           ),
                                           factory.createPropertyAssignment(
                                             factory.createIdentifier('variables'),
@@ -2104,7 +2114,14 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                                     [
                                       factory.createPropertyAssignment(
                                         factory.createIdentifier('query'),
-                                        factory.createIdentifier(modelQuery),
+                                        factory.createCallExpression(
+                                          factory.createPropertyAccessExpression(
+                                            factory.createIdentifier(modelQuery),
+                                            factory.createIdentifier('replaceAll'),
+                                          ),
+                                          undefined,
+                                          [factory.createStringLiteral('__typename'), factory.createStringLiteral('')],
+                                        ),
                                       ),
                                       factory.createShorthandPropertyAssignment(
                                         factory.createIdentifier('variables'),

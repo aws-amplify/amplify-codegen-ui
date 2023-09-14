@@ -180,7 +180,7 @@ export default function CreateCustomerButton(
   const { overrides, ...rest } = props;
   const createCustomerButtonOnClick = async () => {
     await API.graphql({
-      query: createCustomer,
+      query: createCustomer.replaceAll(\\"__typename\\", \\"\\"),
       variables: {
         input: {
           firstName: \\"Din\\",
@@ -236,7 +236,7 @@ export default function DeleteCustomerButton(
   const { overrides, ...rest } = props;
   const deleteCustomerButtonOnClick = async () => {
     await API.graphql({
-      query: deleteCustomer,
+      query: deleteCustomer.replaceAll(\\"__typename\\", \\"\\"),
       variables: {
         input: {
           id: \\"d9887268-47dd-4899-9568-db5809218751\\",
@@ -291,7 +291,7 @@ export default function UpdateCustomerButton(
   const { overrides, ...rest } = props;
   const updateCustomerButtonOnClick = async () => {
     await API.graphql({
-      query: updateCustomer,
+      query: updateCustomer.replaceAll(\\"__typename\\", \\"\\"),
       variables: {
         input: {
           firstName: \\"Din\\",
@@ -944,7 +944,7 @@ export default function AuthorProfileCollection(
       }
       const result = (
         await API.graphql({
-          query: listAuthors,
+          query: listAuthors.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       ).data.listAuthors;
@@ -1122,7 +1122,7 @@ export default function CollectionOfCustomButtons(
       }
       const result = (
         await API.graphql({
-          query: listUsers,
+          query: listUsers.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       ).data.listUsers;
@@ -1146,7 +1146,7 @@ export default function CollectionOfCustomButtons(
   }, [pageIndex, maxViewed, setMaxViewed]);
   const buttonColorFilterObj = { userID: { eq: \\"user@email.com\\" } };
   const buttonColorDataStore = API.graphql({
-    query: listUserPreferences,
+    query: listUserPreferences.replaceAll(\\"__typename\\", \\"\\"),
     variables: { ...buttonColorFilterObj },
   }).items[0];
   const buttonColor =
@@ -1155,7 +1155,7 @@ export default function CollectionOfCustomButtons(
     and: [{ date: { ge: \\"2022-03-10\\" } }, { date: { le: \\"2023-03-11\\" } }],
   };
   const buttonEnabledDataStore = API.graphql({
-    query: listUserPreferences,
+    query: listUserPreferences.replaceAll(\\"__typename\\", \\"\\"),
     variables: { ...buttonEnabledFilterObj },
   }).items[0];
   const buttonEnabled =
@@ -1291,7 +1291,7 @@ export default function ListingCardCollection(
       }
       const result = (
         await API.graphql({
-          query: listUntitledModels,
+          query: listUntitledModels.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       ).data.listUntitledModels;
@@ -1562,7 +1562,7 @@ export default function AuthorProfileCollection(
       }
       const result = (
         await API.graphql({
-          query: listAuthors,
+          query: listAuthors.replaceAll(\\"__typename\\", \\"\\"),
           variables,
         })
       ).data.listAuthors;

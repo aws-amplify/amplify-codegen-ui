@@ -751,7 +751,7 @@ describe('amplify form renderer tests', () => {
 
       // should call updatePost mutation onSubmit
       expect(componentText).toContain(`await API.graphql`);
-      expect(componentText).toContain(`query: updatePost,`);
+      expect(componentText).toContain(`query: updatePost.replaceAll("__typename", ""),`);
 
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
@@ -864,7 +864,8 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('tagId: tagToLink.id,');
 
       // query for join table records indexed by current model's ids
-      expect(componentText).toContain('query: movieTagsByMovieMovieKeyAndMovietitleAndMoviegenre');
+      const matcher = /query:\s+movieTagsByMovieMovieKeyAndMovietitleAndMoviegenre/;
+      expect(matcher.test(componentText)).toBe(true);
 
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
@@ -883,7 +884,7 @@ describe('amplify form renderer tests', () => {
 
       // hasOne
       expect(componentText).toContain('specialTeacherId: specialTeacherIdProp');
-      expect(componentText).toContain('query: getCPKTeacher,');
+      expect(componentText).toContain('query: getCPKTeacher.replaceAll("__typename", ""),');
       expect(componentText).toContain('Student: (r) => r?.specialStudentId');
       expect(componentText).toContain('JSON.stringify({ specialStudentId: r?.specialStudentId })');
 
