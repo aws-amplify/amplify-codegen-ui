@@ -91,6 +91,7 @@ function unlinkModelRecordExpression({
   associatedFields,
   importCollection,
   dataApi,
+  renderConfigDependencies,
 }: {
   modelName: string;
   primaryKeys: string[];
@@ -99,6 +100,7 @@ function unlinkModelRecordExpression({
   associatedFields: string[];
   importCollection: ImportCollection;
   dataApi?: DataApiKind;
+  renderConfigDependencies?: { [key: string]: string };
 }) {
   if (dataApi === 'GraphQL') {
     const inputs = [
@@ -117,7 +119,16 @@ function unlinkModelRecordExpression({
       factory.createCallExpression(
         factory.createPropertyAccessExpression(factory.createIdentifier('promises'), factory.createIdentifier('push')),
         undefined,
-        [getGraphqlCallExpression(ActionType.UPDATE, modelName, importCollection, { inputs })],
+        [
+          getGraphqlCallExpression(
+            ActionType.UPDATE,
+            modelName,
+            importCollection,
+            { inputs },
+            undefined,
+            renderConfigDependencies,
+          ),
+        ],
       ),
     );
   }
@@ -267,6 +278,7 @@ function linkModelRecordExpression({
   associatedPrimaryKeys,
   associatedFieldsBiDirectionalWith,
   dataApi,
+  renderConfigDependencies,
 }: {
   importedRelatedModelName: string;
   relatedRecordToLink: string;
@@ -278,6 +290,7 @@ function linkModelRecordExpression({
   associatedPrimaryKeys: string[];
   associatedFieldsBiDirectionalWith: string[];
   dataApi?: DataApiKind;
+  renderConfigDependencies?: { [key: string]: string };
 }) {
   if (dataApi === 'GraphQL') {
     const inputs = [
@@ -299,7 +312,16 @@ function linkModelRecordExpression({
       factory.createCallExpression(
         factory.createPropertyAccessExpression(factory.createIdentifier('promises'), factory.createIdentifier('push')),
         undefined,
-        [getGraphqlCallExpression(ActionType.UPDATE, importedRelatedModelName, importCollection, { inputs })],
+        [
+          getGraphqlCallExpression(
+            ActionType.UPDATE,
+            importedRelatedModelName,
+            importCollection,
+            { inputs },
+            undefined,
+            renderConfigDependencies,
+          ),
+        ],
       ),
     );
   }
@@ -374,6 +396,7 @@ export function getBiDirectionalRelationshipStatements({
   savedRecordName,
   thisModelPrimaryKeys,
   dataApi,
+  renderConfigDependencies,
 }: {
   formActionType: 'create' | 'update';
   dataSchema: GenericDataSchema;
@@ -383,6 +406,7 @@ export function getBiDirectionalRelationshipStatements({
   savedRecordName: string;
   thisModelPrimaryKeys: string[];
   dataApi?: DataApiKind;
+  renderConfigDependencies?: { [key: string]: string };
 }) {
   const getFieldBiDirectionalWithReturnValue = getFieldBiDirectionalWith({
     modelName,
@@ -474,6 +498,7 @@ export function getBiDirectionalRelationshipStatements({
                     associatedFields: associatedFieldsBiDirectionalWith,
                     importCollection,
                     dataApi,
+                    renderConfigDependencies,
                   }),
             ],
             true,
@@ -561,6 +586,7 @@ export function getBiDirectionalRelationshipStatements({
               associatedPrimaryKeys: fieldBiDirectionalWithPrimaryKeys,
               associatedFieldsBiDirectionalWith,
               dataApi,
+              renderConfigDependencies,
             }),
             factory.createVariableStatement(
               undefined,
@@ -605,6 +631,7 @@ export function getBiDirectionalRelationshipStatements({
                         associatedFields,
                         importCollection,
                         dataApi,
+                        renderConfigDependencies,
                       }),
                 ],
                 true,
