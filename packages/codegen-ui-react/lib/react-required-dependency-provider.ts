@@ -14,22 +14,28 @@
   limitations under the License.
  */
 import { RequiredDependency, RequiredDependencyProvider } from '@aws-amplify/codegen-ui';
+import { getAmplifyJSVersionToRender } from './helpers/amplify-js-versioning';
+import { AMPLIFY_JS_V5 } from './utils/constants';
 
 type SemVerRequiredDependency = RequiredDependency & {
   supportedSemVerPattern: string;
 };
 
 export class ReactRequiredDependencyProvider extends RequiredDependencyProvider<SemVerRequiredDependency> {
-  getRequiredDependencies(hasStorageManager?: boolean): SemVerRequiredDependency[] {
+  getRequiredDependencies(
+    hasStorageManager?: boolean,
+    config?: { dependencies: { [key: string]: string } },
+  ): SemVerRequiredDependency[] {
+    const amplifyJSVersion = getAmplifyJSVersionToRender(config?.dependencies);
     const dependencies = [
       {
         dependencyName: '@aws-amplify/ui-react',
-        supportedSemVerPattern: '^4.6.0',
+        supportedSemVerPattern: amplifyJSVersion === AMPLIFY_JS_V5 ? '>=4.6.0  <6.0.0' : '^6.0.0',
         reason: 'Required to leverage Amplify UI primitives, and Amplify Studio component helper functions.',
       },
       {
         dependencyName: 'aws-amplify',
-        supportedSemVerPattern: '^5.0.2',
+        supportedSemVerPattern: amplifyJSVersion === AMPLIFY_JS_V5 ? '^5.0.2' : '^6.0.0',
         reason: 'Required to leverage DataStore.',
       },
     ];
@@ -37,7 +43,7 @@ export class ReactRequiredDependencyProvider extends RequiredDependencyProvider<
     if (hasStorageManager) {
       dependencies.push({
         dependencyName: '@aws-amplify/ui-react-storage',
-        supportedSemVerPattern: '^1.1.0',
+        supportedSemVerPattern: amplifyJSVersion === AMPLIFY_JS_V5 ? '^1.1.0' : '^3.0.0',
         reason: 'Required to leverage StorageManager.',
       });
     }
