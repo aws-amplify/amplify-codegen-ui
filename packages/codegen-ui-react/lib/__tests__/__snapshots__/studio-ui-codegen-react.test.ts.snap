@@ -151,6 +151,59 @@ export default function UpdateCustomerButton(
 }
 `;
 
+exports[`amplify render tests actions GraphQL DataStoreCreateItem - amplify js v6 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { generateClient } from \\"aws-amplify/api\\";
+import { createCustomer } from \\"../graphql/mutations\\";
+import { Customer } from \\"../API\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CreateCustomerButtonOverridesProps = {
+  CreateCustomerButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
+export type CreateCustomerButtonProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    overrides?: CreateCustomerButtonOverridesProps | undefined | null;
+  }
+>;
+const client = generateClient();
+export default function CreateCustomerButton(
+  props: CreateCustomerButtonProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const createCustomerButtonOnClick = async () => {
+    await client.graphql({
+      query: createCustomer.replaceAll(\\"__typename\\", \\"\\"),
+      variables: {
+        input: {
+          firstName: \\"Din\\",
+          lastName: \\"Djarin\\",
+        },
+      },
+    });
+  };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      children=\\"Create\\"
+      onClick={() => {
+        createCustomerButtonOnClick();
+      }}
+      {...getOverrideProps(overrides, \\"CreateCustomerButton\\")}
+      {...rest}
+    ></Button>
+  );
+}
+"
+`;
+
 exports[`amplify render tests actions GraphQL DataStoreCreateItem 1`] = `
 Object {
   "componentText": "/* eslint-disable */
@@ -991,6 +1044,208 @@ export default function AuthorProfileCollection(
               key={item.id}
               {...(overrideItems && overrideItems({ item, index }))}
             ></AuthorProfile>
+          );
+        }}
+      </Collection>
+      {isApiPagination && isPaginated && (
+        <Pagination
+          currentPage={pageIndex}
+          totalPages={maxViewed}
+          hasMorePages={hasMorePages}
+          onNext={handleNextPage}
+          onPrevious={handlePreviousPage}
+          onChange={jumpToPage}
+        />
+      )}
+    </div>
+  );
+}
+"
+`;
+
+exports[`amplify render tests collection GraphQL should render collection with data binding - amplify js v6 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { UserPreferences } from \\"../API\\";
+import { listUserPreferences, listUsers } from \\"../graphql/queries\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { generateClient } from \\"aws-amplify/api\\";
+import {
+  Button,
+  ButtonProps,
+  Collection,
+  CollectionProps,
+  Flex,
+  FlexProps,
+  Pagination,
+  Placeholder,
+} from \\"@aws-amplify/ui-react\\";
+import { MyFlexProps } from \\"./MyFlex\\";
+
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CollectionOfCustomButtonsOverridesProps = {
+  CollectionOfCustomButtons?: PrimitiveOverrideProps<CollectionProps>;
+  MyFlex?: PrimitiveOverrideProps<FlexProps>;
+  MyButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
+export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
+  Partial<CollectionProps<any>> & {
+    width?: Number;
+    backgroundColor?: String;
+    buttonColor?: UserPreferences;
+    buttonEnabled?: UserPreferences;
+    items?: any[];
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => MyFlexProps;
+  } & {
+    overrides?: CollectionOfCustomButtonsOverridesProps | undefined | null;
+  }
+>;
+
+const nextToken = {};
+const apiCache = {};
+const client = generateClient();
+export default function CollectionOfCustomButtons(
+  props: CollectionOfCustomButtonsProps
+): React.ReactElement {
+  const {
+    width,
+    backgroundColor,
+    buttonColor: buttonColorProp,
+    buttonEnabled: buttonEnabledProp,
+    items: itemsProp,
+    overrideItems,
+    overrides,
+    ...rest
+  } = props;
+  const [pageIndex, setPageIndex] = React.useState(1);
+  const [hasMorePages, setHasMorePages] = React.useState(true);
+  const [items, setItems] = React.useState([]);
+  const [isApiPagination, setIsApiPagination] = React.useState(false);
+  const [instanceKey, setInstanceKey] = React.useState(\\"newGuid\\");
+  const [loading, setLoading] = React.useState(true);
+  const [maxViewed, setMaxViewed] = React.useState(1);
+  const pageSize = 6;
+  const isPaginated = true;
+  React.useEffect(() => {
+    nextToken[instanceKey] = \\"\\";
+    apiCache[instanceKey] = [];
+  }, [instanceKey]);
+  React.useEffect(() => {
+    setIsApiPagination(!!!itemsProp);
+  }, [itemsProp]);
+  const handlePreviousPage = () => {
+    setPageIndex(pageIndex - 1);
+  };
+  const handleNextPage = () => {
+    setPageIndex(pageIndex + 1);
+  };
+  const jumpToPage = (pageNum?: number) => {
+    setPageIndex(pageNum!);
+  };
+  const loadPage = async (page: number) => {
+    const cacheUntil = page * pageSize + 1;
+    const newCache = apiCache[instanceKey].slice();
+    let newNext = nextToken[instanceKey];
+    while ((newCache.length < cacheUntil || !isPaginated) && newNext != null) {
+      setLoading(true);
+      const variables: any = {
+        limit: pageSize,
+        filter: {
+          and: [
+            { age: { gt: \\"10\\" } },
+            { lastName: { beginsWith: \\"L\\" } },
+            {
+              and: [
+                { date: { ge: \\"2022-03-10\\" } },
+                { date: { le: \\"2023-03-11\\" } },
+              ],
+            },
+          ],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await client.graphql({
+          query: listUsers.replaceAll(\\"__typename\\", \\"\\"),
+          variables,
+        })
+      ).data.listUsers;
+      newCache.push(...result.items);
+      newNext = result.nextToken;
+    }
+    const cacheSlice = isPaginated
+      ? newCache.slice((page - 1) * pageSize, page * pageSize)
+      : newCache;
+    setItems(cacheSlice);
+    setHasMorePages(!!newNext);
+    setLoading(false);
+    apiCache[instanceKey] = newCache;
+    nextToken[instanceKey] = newNext;
+  };
+  React.useEffect(() => {
+    loadPage(pageIndex);
+  }, [pageIndex]);
+  React.useEffect(() => {
+    setMaxViewed(Math.max(maxViewed, pageIndex));
+  }, [pageIndex, maxViewed, setMaxViewed]);
+  const buttonColorFilterObj = { userID: { eq: \\"user@email.com\\" } };
+  const buttonColorDataStore = client.graphql({
+    query: listUserPreferences.replaceAll(\\"__typename\\", \\"\\"),
+    variables: { ...buttonColorFilterObj },
+  }).items[0];
+  const buttonColor =
+    buttonColorProp !== undefined ? buttonColorProp : buttonColorDataStore;
+  const buttonEnabledFilterObj = {
+    and: [{ date: { ge: \\"2022-03-10\\" } }, { date: { le: \\"2023-03-11\\" } }],
+  };
+  const buttonEnabledDataStore = client.graphql({
+    query: listUserPreferences.replaceAll(\\"__typename\\", \\"\\"),
+    variables: { ...buttonEnabledFilterObj },
+  }).items[0];
+  const buttonEnabled =
+    buttonEnabledProp !== undefined
+      ? buttonEnabledProp
+      : buttonEnabledDataStore;
+  return (
+    /* @ts-ignore: TS2322 */
+    <div>
+      <Collection
+        type=\\"list\\"
+        gap=\\"1.5rem\\"
+        backgroundColor={backgroundColor}
+        itemsPerPage={pageSize}
+        isPaginated={!isApiPagination && isPaginated}
+        items={itemsProp || (loading ? new Array(pageSize).fill({}) : items)}
+        {...getOverrideProps(overrides, \\"CollectionOfCustomButtons\\")}
+        {...rest}
+      >
+        {(item, index) => {
+          if (loading) {
+            return <Placeholder key={index} size=\\"large\\" />;
+          }
+          return (
+            <Flex
+              key={item.id}
+              {...(overrideItems && overrideItems({ item, index }))}
+            >
+              <Button
+                labelWidth={width}
+                backgroundColor={buttonColor?.favoriteColor}
+                disabled={isDisabled}
+                children={item.username || \\"hspain@gmail.com\\"}
+                {...(overrideItems && overrideItems({ item, index }))}
+              ></Button>
+            </Flex>
           );
         }}
       </Collection>

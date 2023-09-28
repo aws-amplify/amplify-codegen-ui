@@ -25,12 +25,14 @@ import {
   SyntaxKind,
   factory,
 } from 'typescript';
-import { ImportCollection, ImportValue } from '../imports';
+import { ImportCollection } from '../imports';
 import { capitalizeFirstLetter, getSetNameIdentifier, lowerCaseFirst } from '../helpers';
 import { isBoundProperty, isConcatenatedProperty } from '../react-component-render-helper';
 import { Primitive } from '../primitive';
 import { DataApiKind, DataStoreRenderConfig, GraphqlRenderConfig, NoApiRenderConfig } from '../react-render-config';
 import { isModelDataType } from '../forms/form-renderer-helper/render-checkers';
+import { AMPLIFY_JS_V5 } from './constants';
+import { getAmplifyJSAPIImport, getAmplifyJSVersionToRender } from '../helpers/amplify-js-versioning';
 
 export enum ActionType {
   CREATE = 'create',
@@ -99,6 +101,7 @@ export const getGraphqlCallExpression = (
       }
     | ObjectLiteralElementLike[],
   byFieldName?: string,
+  renderConfigDependencies?: { [key: string]: string },
 ): CallExpression => {
   const query = getGraphqlQueryForModel(action, model, byFieldName);
   const graphqlVariables: ObjectLiteralElementLike[] = [];
@@ -113,7 +116,8 @@ export const getGraphqlCallExpression = (
     ),
   ];
 
-  importCollection.addMappedImport(ImportValue.API);
+  const mappedImport = getAmplifyJSAPIImport(renderConfigDependencies);
+  importCollection.addMappedImport(mappedImport);
 
   if (isGraphqlQueryAction(action)) {
     importCollection.addGraphqlQueryImport(query);
@@ -159,9 +163,12 @@ export const getGraphqlCallExpression = (
   }
 
   importCollection.addModelImport(model);
-
+  const amplifyJSVersion = getAmplifyJSVersionToRender(renderConfigDependencies);
   return factory.createCallExpression(
-    factory.createPropertyAccessExpression(factory.createIdentifier('API'), factory.createIdentifier('graphql')),
+    factory.createPropertyAccessExpression(
+      factory.createIdentifier(amplifyJSVersion === AMPLIFY_JS_V5 ? 'API' : 'client'),
+      factory.createIdentifier('graphql'),
+    ),
     undefined,
     [factory.createObjectLiteralExpression(graphqlOptions, true)],
   );
@@ -199,6 +206,7 @@ export const getGraphQLJoinTableCreateExpression = (
   relatedModelPrimaryKeys: string[],
   joinTableRelatedModelFields: string[],
   importCollection: ImportCollection,
+  renderConfigDependencies?: { [key: string]: string },
 ) => {
   const thisModelAssignments = mapFieldArraysToPropertyAssignments(
     joinTableThisModelFields,
@@ -211,9 +219,16 @@ export const getGraphQLJoinTableCreateExpression = (
     relatedModelRecord,
   );
 
-  return getGraphqlCallExpression(ActionType.CREATE, relatedJoinTableName, importCollection, {
-    inputs: [...thisModelAssignments, ...relatedModelAssignments],
-  });
+  return getGraphqlCallExpression(
+    ActionType.CREATE,
+    relatedJoinTableName,
+    importCollection,
+    {
+      inputs: [...thisModelAssignments, ...relatedModelAssignments],
+    },
+    undefined,
+    renderConfigDependencies,
+  );
 };
 
 const fetchRelatedRecordEffect = (fetchRecordFunctions: string[]) => {
@@ -254,6 +269,7 @@ export const getFetchRelatedRecordsCallbacks = (
   fieldConfigs: Record<string, FieldConfigMetadata>,
   importCollection: ImportCollection,
   dataApi: DataApiKind = 'DataStore',
+  renderConfigDependencies?: { [key: string]: string },
 ) => {
   const initalFetchRecords: string[] = [];
   const fetchRecordsStatements = Object.entries(fieldConfigs).reduce<Statement[]>(
@@ -464,6 +480,8 @@ export const getFetchRelatedRecordsCallbacks = (
                                               undefined,
                                             ),
                                           ],
+                                          undefined,
+                                          renderConfigDependencies,
                                         ),
                                         [
                                           'data',

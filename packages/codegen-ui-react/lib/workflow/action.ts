@@ -120,13 +120,14 @@ export function buildUseActionStatement(
   identifier: string,
   importCollection: ImportCollection,
   apiKind: DataApiKind = 'DataStore',
+  renderConfigDependencies?: { [key: string]: string },
 ): Statement {
   if (isMutationAction(action)) {
     return buildMutationActionStatement(componentMetadata, action, identifier);
   }
 
   if (isDataAction(action) && apiKind === 'GraphQL') {
-    return buildGraphqlCallback(componentMetadata, action, identifier, importCollection);
+    return buildGraphqlCallback(componentMetadata, action, identifier, importCollection, renderConfigDependencies);
   }
 
   const actionHookImportValue = getActionHookImportValue(action.action);
@@ -156,6 +157,7 @@ export function buildGraphqlCallback(
   action: DataAction,
   identifier: string,
   importCollection: ImportCollection,
+  renderConfigDependencies?: { [key: string]: string },
 ) {
   const inputKeys = [];
 
@@ -194,6 +196,8 @@ export function buildGraphqlCallback(
                       action.parameters.model,
                       importCollection,
                       { inputs: inputKeys },
+                      undefined,
+                      renderConfigDependencies,
                     ),
                   ),
                 ),

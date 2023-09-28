@@ -132,6 +132,10 @@ export class ImportCollection {
     this.#collection.delete(packageImport);
   }
 
+  hasPackage(packageName: string) {
+    return this.#collection.has(packageName);
+  }
+
   getMappedAlias(packageName: string, importName: string) {
     return this.importAlias.get(packageName)?.get(importName) || importName;
   }

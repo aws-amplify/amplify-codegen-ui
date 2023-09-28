@@ -54,11 +54,14 @@ import {
   mapFieldArraysToPropertyAssignments,
   wrapInParenthesizedExpression,
 } from '../../utils/graphql';
+import { AMPLIFY_JS_V5 } from '../../utils/constants';
+import { getAmplifyJSVersionToRender } from '../../helpers/amplify-js-versioning';
 
 export const buildRelationshipQuery = (
   relatedModelName: string,
   importCollection: ImportCollection,
   dataApi?: DataApiKind,
+  renderConfigDependencies?: { [key: string]: string },
 ) => {
   const itemsName = getRecordsName(relatedModelName);
 
@@ -73,7 +76,14 @@ export const buildRelationshipQuery = (
             undefined,
             undefined,
             wrapInParenthesizedExpression(
-              getGraphqlCallExpression(ActionType.LIST, relatedModelName, importCollection),
+              getGraphqlCallExpression(
+                ActionType.LIST,
+                relatedModelName,
+                importCollection,
+                undefined,
+                undefined,
+                renderConfigDependencies,
+              ),
               ['data', getGraphqlQueryForModel(ActionType.LIST, relatedModelName), 'items'],
             ),
           ),
@@ -257,6 +267,7 @@ export const buildManyToManyRelationshipStatements = (
   savedModelName: string,
   importCollection: ImportCollection,
   dataApi?: DataApiKind,
+  renderConfigDependencies?: { [key: string]: string },
 ) => {
   let [fieldName] = hasManyFieldConfig;
   const [, fieldConfigMetaData] = hasManyFieldConfig;
@@ -829,6 +840,7 @@ export const buildManyToManyRelationshipStatements = (
                 thisModelRecord,
                 isGraphql,
                 importCollection,
+                renderConfigDependencies,
               ),
             ),
           ],
@@ -1035,6 +1047,7 @@ export const buildManyToManyRelationshipStatements = (
                                     relatedModelPrimaryKeys,
                                     joinTableRelatedModelFields,
                                     importCollection,
+                                    renderConfigDependencies,
                                   )
                                 : getCreateJoinTableExpression(
                                     relatedJoinTableName,
@@ -1043,6 +1056,7 @@ export const buildManyToManyRelationshipStatements = (
                                     joinTableRelatedModelName,
                                     importCollection,
                                     dataApi,
+                                    renderConfigDependencies,
                                   ),
                             ],
                           ),
@@ -1070,8 +1084,10 @@ export const buildGetRelationshipModels = (
   primaryKeys: string[],
   importCollection: ImportCollection,
   dataApi?: DataApiKind,
+  renderConfigDependencies?: { [key: string]: string },
 ) => {
   const recordIdentifier = factory.createIdentifier('record');
+  const amplifyJSVersion = getAmplifyJSVersionToRender(renderConfigDependencies);
 
   if (fieldConfigMetaData.relationship?.type === 'HAS_MANY') {
     const linkedDataName = getLinkedDataName(fieldName);
@@ -1108,7 +1124,7 @@ export const buildGetRelationshipModels = (
                               factory.createAwaitExpression(
                                 factory.createCallExpression(
                                   factory.createPropertyAccessExpression(
-                                    factory.createIdentifier('API'),
+                                    factory.createIdentifier(amplifyJSVersion === AMPLIFY_JS_V5 ? 'API' : 'client'),
                                     factory.createIdentifier('graphql'),
                                   ),
                                   undefined,
@@ -1320,14 +1336,21 @@ export const buildGetRelationshipModels = (
   if (dataApi === 'GraphQL' && fieldConfigMetaData.relationship && !isModelDataType(fieldConfigMetaData)) {
     const relatedModelName = lowerCaseFirst(fieldConfigMetaData.relationship.relatedModelName);
     const queryCall = wrapInParenthesizedExpression(
-      getGraphqlCallExpression(ActionType.GET, fieldConfigMetaData.relationship.relatedModelName, importCollection, {
-        inputs: [
-          factory.createPropertyAssignment(
-            factory.createIdentifier('id'),
-            factory.createIdentifier(`${fieldName}Record`),
-          ),
-        ],
-      }),
+      getGraphqlCallExpression(
+        ActionType.GET,
+        fieldConfigMetaData.relationship.relatedModelName,
+        importCollection,
+        {
+          inputs: [
+            factory.createPropertyAssignment(
+              factory.createIdentifier('id'),
+              factory.createIdentifier(`${fieldName}Record`),
+            ),
+          ],
+        },
+        undefined,
+        renderConfigDependencies,
+      ),
       ['data', getGraphqlQueryForModel(ActionType.GET, fieldConfigMetaData.relationship.relatedModelName)],
     );
 
@@ -1432,6 +1455,7 @@ export const buildHasManyRelationshipStatements = (
   savedModelName: string,
   importCollection: ImportCollection,
   dataApi?: DataApiKind,
+  renderConfigDependencies?: { [key: string]: string },
 ) => {
   let [fieldName] = hasManyFieldConfig;
   const [, fieldConfigMetaData] = hasManyFieldConfig;
@@ -1772,26 +1796,33 @@ export const buildHasManyRelationshipStatements = (
                       undefined,
                       [
                         dataApi === 'GraphQL'
-                          ? getGraphqlCallExpression(ActionType.UPDATE, relatedModelName, importCollection, {
-                              inputs: keys
-                                .map((key) =>
-                                  factory.createPropertyAssignment(
-                                    factory.createIdentifier(key),
-                                    factory.createPropertyAccessExpression(
-                                      factory.createIdentifier('original'),
-                                      factory.createIdentifier(key),
-                                    ),
-                                  ),
-                                )
-                                .concat(
-                                  relatedModelFields.map((key) =>
+                          ? getGraphqlCallExpression(
+                              ActionType.UPDATE,
+                              relatedModelName,
+                              importCollection,
+                              {
+                                inputs: keys
+                                  .map((key) =>
                                     factory.createPropertyAssignment(
                                       factory.createIdentifier(key),
-                                      factory.createNull(),
+                                      factory.createPropertyAccessExpression(
+                                        factory.createIdentifier('original'),
+                                        factory.createIdentifier(key),
+                                      ),
+                                    ),
+                                  )
+                                  .concat(
+                                    relatedModelFields.map((key) =>
+                                      factory.createPropertyAssignment(
+                                        factory.createIdentifier(key),
+                                        factory.createNull(),
+                                      ),
                                     ),
                                   ),
-                                ),
-                            })
+                              },
+                              undefined,
+                              renderConfigDependencies,
+                            )
                           : getUpdateRelatedModelExpression(
                               keys,
                               thisModelRecord,
@@ -1802,6 +1833,7 @@ export const buildHasManyRelationshipStatements = (
                               dataApi,
                               belongsToFieldOnRelatedModel,
                               true,
+                              renderConfigDependencies,
                             ),
                       ],
                     ),
@@ -1849,28 +1881,35 @@ export const buildHasManyRelationshipStatements = (
                       undefined,
                       [
                         dataApi === 'GraphQL'
-                          ? getGraphqlCallExpression(ActionType.UPDATE, relatedModelName, importCollection, {
-                              inputs: [
-                                ...keys.map((key) =>
-                                  factory.createPropertyAssignment(
-                                    factory.createIdentifier(key),
-                                    factory.createPropertyAccessExpression(
-                                      factory.createIdentifier('original'),
+                          ? getGraphqlCallExpression(
+                              ActionType.UPDATE,
+                              relatedModelName,
+                              importCollection,
+                              {
+                                inputs: [
+                                  ...keys.map((key) =>
+                                    factory.createPropertyAssignment(
                                       factory.createIdentifier(key),
+                                      factory.createPropertyAccessExpression(
+                                        factory.createIdentifier('original'),
+                                        factory.createIdentifier(key),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                ...relatedModelFields.map((relatedModelField) =>
-                                  factory.createPropertyAssignment(
-                                    factory.createIdentifier(relatedModelField),
-                                    factory.createPropertyAccessExpression(
-                                      factory.createIdentifier(thisModelRecord),
-                                      factory.createIdentifier(thisModelPrimaryKeys[0]),
+                                  ...relatedModelFields.map((relatedModelField) =>
+                                    factory.createPropertyAssignment(
+                                      factory.createIdentifier(relatedModelField),
+                                      factory.createPropertyAccessExpression(
+                                        factory.createIdentifier(thisModelRecord),
+                                        factory.createIdentifier(thisModelPrimaryKeys[0]),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            })
+                                ],
+                              },
+                              undefined,
+                              renderConfigDependencies,
+                            )
                           : getUpdateRelatedModelExpression(
                               keys,
                               thisModelRecord,
@@ -1880,6 +1919,8 @@ export const buildHasManyRelationshipStatements = (
                               importCollection,
                               dataApi,
                               belongsToFieldOnRelatedModel,
+                              undefined,
+                              renderConfigDependencies,
                             ),
                       ],
                     ),
@@ -1903,6 +1944,8 @@ export const buildHasManyRelationshipStatements = (
     importCollection,
     dataApi,
     belongsToFieldOnRelatedModel,
+    undefined,
+    renderConfigDependencies,
   );
   return [
     factory.createExpressionStatement(
@@ -2034,6 +2077,7 @@ const getUpdateRelatedModelExpression = (
   dataApi?: DataApiKind,
   belongsToFieldOnRelatedModel?: string,
   setToNull?: boolean,
+  renderConfigDependencies?: { [key: string]: string },
 ) => {
   /* istanbul ignore next */
   if (dataApi === 'GraphQL') {
@@ -2076,9 +2120,16 @@ const getUpdateRelatedModelExpression = (
       ...statements,
     ];
 
-    return getGraphqlCallExpression(ActionType.UPDATE, capitalizeFirstLetter(relatedModelName), importCollection, {
-      inputs,
-    });
+    return getGraphqlCallExpression(
+      ActionType.UPDATE,
+      capitalizeFirstLetter(relatedModelName),
+      importCollection,
+      {
+        inputs,
+      },
+      undefined,
+      renderConfigDependencies,
+    );
   }
 
   /**
@@ -2137,6 +2188,7 @@ const getCreateJoinTableExpression = (
   joinTableRelatedModelName: string,
   importCollection: ImportCollection,
   dataApi?: DataApiKind,
+  renderConfigDependencies?: { [key: string]: string },
 ): CallExpression => {
   /* istanbul ignore next */
   if (dataApi === 'GraphQL') {
@@ -2150,7 +2202,14 @@ const getCreateJoinTableExpression = (
       factory.createShorthandPropertyAssignment(factory.createIdentifier(joinTableRelatedModelName), undefined),
     ];
 
-    return getGraphqlCallExpression(ActionType.CREATE, relatedJoinTableName, importCollection, { inputs });
+    return getGraphqlCallExpression(
+      ActionType.CREATE,
+      relatedJoinTableName,
+      importCollection,
+      { inputs },
+      undefined,
+      renderConfigDependencies,
+    );
   }
 
   return factory.createCallExpression(
@@ -2233,6 +2292,7 @@ function buildUnlinkForEachBlock(
   thisModelRecord: string,
   isGraphql: boolean,
   importCollection: ImportCollection,
+  renderConfigDependencies?: { [key: string]: string },
 ) {
   const recordKeysString = 'recordKeys';
   const joinTableFilterExpressions: ObjectLiteralExpression[] = [];
@@ -2317,7 +2377,14 @@ function buildUnlinkForEachBlock(
               undefined,
               wrapInParenthesizedExpression(
                 isGraphql
-                  ? getGraphqlCallExpression(ActionType.LIST, relatedJoinTableName, importCollection, { filters })
+                  ? getGraphqlCallExpression(
+                      ActionType.LIST,
+                      relatedJoinTableName,
+                      importCollection,
+                      { filters },
+                      undefined,
+                      renderConfigDependencies,
+                    )
                   : factory.createCallExpression(
                       factory.createPropertyAccessExpression(
                         factory.createIdentifier('DataStore'),
@@ -2399,20 +2466,27 @@ function buildUnlinkForEachBlock(
                 undefined,
                 [
                   isGraphql
-                    ? getGraphqlCallExpression(ActionType.DELETE, relatedJoinTableName, importCollection, {
-                        inputs: [
-                          factory.createPropertyAssignment(
-                            factory.createIdentifier('id'),
-                            factory.createPropertyAccessExpression(
-                              factory.createElementAccessExpression(
-                                factory.createIdentifier(getRecordsName(relatedJoinTableName)),
-                                factory.createIdentifier('i'),
-                              ),
+                    ? getGraphqlCallExpression(
+                        ActionType.DELETE,
+                        relatedJoinTableName,
+                        importCollection,
+                        {
+                          inputs: [
+                            factory.createPropertyAssignment(
                               factory.createIdentifier('id'),
+                              factory.createPropertyAccessExpression(
+                                factory.createElementAccessExpression(
+                                  factory.createIdentifier(getRecordsName(relatedJoinTableName)),
+                                  factory.createIdentifier('i'),
+                                ),
+                                factory.createIdentifier('id'),
+                              ),
                             ),
-                          ),
-                        ],
-                      })
+                          ],
+                        },
+                        undefined,
+                        renderConfigDependencies,
+                      )
                     : factory.createCallExpression(
                         factory.createPropertyAccessExpression(
                           factory.createIdentifier('DataStore'),

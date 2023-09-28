@@ -314,3 +314,21 @@ export const createHookStatement = (variableName: string, methodName: string, pr
     ),
   );
 };
+
+// const client = generateClient();
+export const getAmplifyJSClientGenerator = () => {
+  return factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier('client'),
+          undefined,
+          undefined,
+          factory.createCallExpression(factory.createIdentifier('generateClient'), undefined, []),
+        ),
+      ],
+      ts.NodeFlags.Const,
+    ),
+  );
+};

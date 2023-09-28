@@ -48,16 +48,25 @@ const getRecordCreateCallExpression = ({
   importedModelName,
   importCollection,
   dataApi,
+  renderConfigDependencies,
 }: {
   savedObjectName: string;
   importedModelName: string;
   importCollection: ImportCollection;
   dataApi?: DataApiKind;
+  renderConfigDependencies?: { [key: string]: string };
 }) => {
   if (dataApi === 'GraphQL') {
     const inputs = [factory.createSpreadAssignment(factory.createIdentifier(savedObjectName))];
 
-    return getGraphqlCallExpression(ActionType.CREATE, importedModelName, importCollection, { inputs });
+    return getGraphqlCallExpression(
+      ActionType.CREATE,
+      importedModelName,
+      importCollection,
+      { inputs },
+      undefined,
+      renderConfigDependencies,
+    );
   }
 
   return factory.createCallExpression(
@@ -80,6 +89,7 @@ const getRecordUpdateDataStoreCallExpression = ({
   fieldConfigs,
   importCollection,
   dataApi,
+  renderConfigDependencies,
 }: {
   savedObjectName: string;
   savedRecordName: string;
@@ -89,6 +99,7 @@ const getRecordUpdateDataStoreCallExpression = ({
   fieldConfigs: Record<string, FieldConfigMetadata>;
   importCollection: ImportCollection;
   dataApi?: DataApiKind;
+  renderConfigDependencies?: { [key: string]: string };
 }) => {
   const updatedObjectName = 'updated';
   // TODO: remove after DataStore addresses issue: https://github.com/aws-amplify/amplify-js/issues/10750
@@ -110,7 +121,14 @@ const getRecordUpdateDataStoreCallExpression = ({
       factory.createSpreadAssignment(factory.createIdentifier(savedObjectName)),
     ];
 
-    return getGraphqlCallExpression(ActionType.UPDATE, importedModelName, importCollection, { inputs });
+    return getGraphqlCallExpression(
+      ActionType.UPDATE,
+      importedModelName,
+      importCollection,
+      { inputs },
+      undefined,
+      renderConfigDependencies,
+    );
   }
 
   return factory.createCallExpression(
@@ -251,6 +269,7 @@ export const buildExpression = (
   dataSchema: GenericDataSchema,
   importCollection: ImportCollection,
   dataApi?: DataApiKind,
+  renderConfigDependencies?: { [key: string]: string },
 ): Statement[] => {
   const modelFieldsObjectName = 'modelFields';
   const modelFieldsObjectToSaveName = 'modelFieldsToSave';
@@ -273,6 +292,7 @@ export const buildExpression = (
         savedRecordName,
         thisModelPrimaryKeys,
         dataApi,
+        renderConfigDependencies,
       }),
     );
     if (fieldConfigMetaData.relationship?.type === 'HAS_MANY') {
@@ -288,6 +308,7 @@ export const buildExpression = (
             savedRecordName,
             importCollection,
             dataApi,
+            renderConfigDependencies,
           ),
         );
       } else {
@@ -300,6 +321,7 @@ export const buildExpression = (
             savedRecordName,
             importCollection,
             dataApi,
+            renderConfigDependencies,
           ),
         );
       }
@@ -376,6 +398,7 @@ export const buildExpression = (
       fieldConfigs,
       importCollection,
       dataApi,
+      renderConfigDependencies,
     });
 
     const genericUpdateStatement = relationshipsPromisesAccessStatements.length
@@ -402,6 +425,7 @@ export const buildExpression = (
     importedModelName,
     importCollection,
     dataApi,
+    renderConfigDependencies,
   });
   const genericCreateStatement = relationshipsPromisesAccessStatements.length
     ? [
@@ -689,6 +713,7 @@ export const buildUpdateDatastoreQuery = (
   importCollection: ImportCollection,
   primaryKeys: string[],
   dataApi?: DataApiKind,
+  renderConfigDependencies?: { [key: string]: string },
 ) => {
   // if there are multiple primaryKeys, it's a composite key and we're using 'id' for a composite key prop
   const pkPropIdentifier = factory.createIdentifier(primaryKeyPropName);
@@ -696,13 +721,20 @@ export const buildUpdateDatastoreQuery = (
   const queryCall =
     dataApi === 'GraphQL'
       ? wrapInParenthesizedExpression(
-          getGraphqlCallExpression(ActionType.GET, importedModelName, importCollection, {
-            inputs: [
-              primaryKeys.length > 1
-                ? factory.createSpreadAssignment(pkPropIdentifier)
-                : factory.createPropertyAssignment(factory.createIdentifier(primaryKeys[0]), pkPropIdentifier),
-            ],
-          }),
+          getGraphqlCallExpression(
+            ActionType.GET,
+            importedModelName,
+            importCollection,
+            {
+              inputs: [
+                primaryKeys.length > 1
+                  ? factory.createSpreadAssignment(pkPropIdentifier)
+                  : factory.createPropertyAssignment(factory.createIdentifier(primaryKeys[0]), pkPropIdentifier),
+              ],
+            },
+            undefined,
+            renderConfigDependencies,
+          ),
           ['data', getGraphqlQueryForModel(ActionType.GET, importedModelName)],
         )
       : factory.createAwaitExpression(

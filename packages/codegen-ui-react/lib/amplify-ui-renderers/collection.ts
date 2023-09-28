@@ -36,6 +36,7 @@ import { buildOpeningElementProperties } from '../react-component-render-helper'
 import { ImportCollection, ImportValue } from '../imports';
 import { DataApiKind, ReactRenderConfig } from '../react-render-config';
 import { defaultRenderConfig } from '../react-studio-template-renderer-helper';
+import { getAmplifyJSAPIImport } from '../helpers/amplify-js-versioning';
 
 export default class CollectionRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -57,7 +58,9 @@ export default class CollectionRenderer extends ReactComponentRenderer<BaseCompo
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
 
     if (this.renderConfig.apiConfiguration?.dataApi === 'GraphQL') {
-      this.importCollection.addMappedImport(ImportValue.API, ImportValue.PAGINATION, ImportValue.PLACEHOLDER);
+      const mappedImport = getAmplifyJSAPIImport(this.renderConfig.dependencies);
+      this.importCollection.addMappedImport(mappedImport);
+      this.importCollection.addMappedImport(ImportValue.PAGINATION, ImportValue.PLACEHOLDER);
     }
 
     return element;

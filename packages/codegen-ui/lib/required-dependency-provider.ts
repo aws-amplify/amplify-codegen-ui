@@ -19,5 +19,8 @@ export type RequiredDependency = {
 };
 
 export abstract class RequiredDependencyProvider<DependencyType extends RequiredDependency> {
-  abstract getRequiredDependencies(hasStorageManager?: boolean): DependencyType[];
+  abstract getRequiredDependencies(
+    hasStorageManager?: boolean,
+    config?: { dependencies: { [key: string]: string } },
+  ): DependencyType[];
 }
