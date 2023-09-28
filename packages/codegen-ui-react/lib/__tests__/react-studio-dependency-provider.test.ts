@@ -19,6 +19,9 @@ import { ReactRequiredDependencyProvider } from '..';
 describe('ReactStudioDependencyProvider', () => {
   const requiredDependencies = new ReactRequiredDependencyProvider().getRequiredDependencies(false);
   const requiredDependenciesWithStorageManager = new ReactRequiredDependencyProvider().getRequiredDependencies(true);
+  const requiredDependenciesWithAmplifyJSV6 = new ReactRequiredDependencyProvider().getRequiredDependencies(true, {
+    dependencies: { 'aws-amplify': '^6.0.0' },
+  });
 
   describe('getRequiredDependencies', () => {
     it('has required dependencies', () => {
@@ -48,6 +51,14 @@ describe('ReactStudioDependencyProvider', () => {
     it('includes ui-react-storage if user is using StorageManager', () => {
       expect(
         requiredDependenciesWithStorageManager.filter((dep) => dep.dependencyName === '@aws-amplify/ui-react-storage'),
+      ).toBeTruthy();
+    });
+
+    it('includes amplify js v6 semver range', () => {
+      expect(
+        requiredDependenciesWithAmplifyJSV6.filter(
+          (dep) => dep.supportedSemVerPattern === '>=6.0.0 <7.0.0' && dep.dependencyName === '@aws-amplify/ui-react',
+        ),
       ).toBeTruthy();
     });
   });

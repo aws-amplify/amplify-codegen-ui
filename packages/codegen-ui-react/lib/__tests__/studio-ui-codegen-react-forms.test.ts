@@ -733,6 +733,24 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should generate a create form - amplify js v6', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/post-datastore-create',
+        'datastore/post',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL, dependencies: { 'aws-amplify': '^6.0.0' } },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      expect(componentText).not.toContain('import { API } from "aws-amplify";');
+      expect(componentText).not.toContain(`await API.graphql`);
+      expect(componentText).toContain('import { generateClient } from "aws-amplify/api";');
+      expect(componentText).toContain(`const client = generateClient();`);
+      expect(componentText).toContain(`await client.graphql`);
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should generate a update form without relationships', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/post-datastore-update',
@@ -751,6 +769,34 @@ describe('amplify form renderer tests', () => {
 
       // should call updatePost mutation onSubmit
       expect(componentText).toContain(`await API.graphql`);
+      expect(componentText).toContain(`query: updatePost.replaceAll("__typename", ""),`);
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate a update form without relationships - amplify js v6', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/post-datastore-update',
+        'datastore/post',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL, dependencies: { 'aws-amplify': '^6.0.0' } },
+        { isNonModelSupported: true, isRelationshipSupported: false },
+      );
+
+      // check import for graphql operations
+      expect(componentText).not.toContain('import { API } from "aws-amplify";');
+      expect(componentText).not.toContain(`await API.graphql`);
+
+      expect(componentText).toContain('import { generateClient } from "aws-amplify/api";');
+      expect(componentText).toContain(`const client = generateClient();`);
+      expect(componentText).toContain('import { getPost } from "../graphql/queries";');
+      expect(componentText).toContain('import { updatePost } from "../graphql/mutations";');
+
+      // should not have DataStore.save call
+      expect(componentText).not.toContain('await DataStore.save(');
+
+      // should call updatePost mutation onSubmit
+      expect(componentText).toContain(`await client.graphql`);
       expect(componentText).toContain(`query: updatePost.replaceAll("__typename", ""),`);
 
       expect(componentText).toMatchSnapshot();
@@ -802,6 +848,28 @@ describe('amplify form renderer tests', () => {
       expect(componentText).not.toContain('DataStore');
 
       expect(componentText).toContain('await API.graphql({');
+      expect(componentText).toContain('query: updateComment');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate an update form with hasMany relationship without types file - amplify js v6', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/relationships/update-comment',
+        'datastore/relationships/has-many-comment',
+        { ...defaultCLIRenderConfig, ...noTypesFileConfig, dependencies: { 'aws-amplify': '^6.0.0' } },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+      expect(componentText).not.toContain('import { API } from "aws-amplify";');
+      expect(componentText).not.toContain(`await API.graphql`);
+
+      expect(componentText).toContain('import { generateClient } from "aws-amplify/api";');
+      expect(componentText).toContain(`const client = generateClient();`);
+      expect(componentText).toContain('await client.graphql({');
       expect(componentText).toContain('query: updateComment');
 
       expect(componentText).toMatchSnapshot();
@@ -1119,6 +1187,25 @@ describe('amplify form renderer tests', () => {
 
       expect(componentText).not.toContain('cannot be unlinked because');
       expect(componentText).not.toContain('cannot be linked to ');
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should 1:1 relationships without types file path - Create amplify js v6', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/owner-dog-create',
+        'datastore/dog-owner-required',
+        { ...defaultCLIRenderConfig, ...noTypesFileConfig, dependencies: { 'aws-amplify': '^6.0.0' } },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      expect(componentText).not.toContain('import { API } from "aws-amplify";');
+      expect(componentText).not.toContain(`await API.graphql`);
+      expect(componentText).not.toContain('cannot be unlinked because');
+      expect(componentText).not.toContain('cannot be linked to ');
+      expect(componentText).toContain('import { generateClient } from "aws-amplify/api";');
+      expect(componentText).toContain(`const client = generateClient();`);
+      expect(componentText).toContain('await client.graphql({');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });

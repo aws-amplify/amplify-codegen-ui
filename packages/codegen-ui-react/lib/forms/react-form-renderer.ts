@@ -55,7 +55,7 @@ import {
   getModelNameProp,
   lowerCaseFirst,
 } from '../helpers';
-import { ImportCollection, ImportValue } from '../imports';
+import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { PrimitiveTypeParameter, Primitive, primitiveOverrideProp } from '../primitive';
 import { getComponentPropName } from '../react-component-render-helper';
 import { ReactOutputManager } from '../react-output-manager';
@@ -63,6 +63,7 @@ import { ReactRenderConfig, scriptKindToFileExtension } from '../react-render-co
 import {
   buildPrinter,
   defaultRenderConfig,
+  getAmplifyJSClientGenerator,
   getDeclarationFilename,
   transpile,
 } from '../react-studio-template-renderer-helper';
@@ -102,8 +103,9 @@ import {
   validationResponseType,
 } from './form-renderer-helper/type-helper';
 import { buildSelectedRecordsIdSet } from './form-renderer-helper/model-values';
-import { COMPOSITE_PRIMARY_KEY_PROP_NAME } from '../utils/constants';
+import { AMPLIFY_JS_V6, COMPOSITE_PRIMARY_KEY_PROP_NAME } from '../utils/constants';
 import { getFetchRelatedRecordsCallbacks, isGraphqlConfig } from '../utils/graphql';
+import { getAmplifyJSVersionToRender } from '../helpers/amplify-js-versioning';
 
 type RenderComponentOnlyResponse = {
   compText: string;
@@ -238,6 +240,17 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       const propsPrinted = printer.printNode(EmitHint.Unspecified, typeNode, file);
       componentText += propsPrinted;
     });
+
+    // Amplify JS V6 api
+    // const client = generateClient();
+    if (
+      isGraphqlConfig(this.renderConfig.apiConfiguration) &&
+      this.importCollection.hasPackage(ImportSource.AMPLIFY_API) &&
+      getAmplifyJSVersionToRender(this.renderConfig.dependencies) === AMPLIFY_JS_V6
+    ) {
+      const result = printer.printNode(EmitHint.Unspecified, getAmplifyJSClientGenerator(), file);
+      componentText += result + EOL;
+    }
 
     if (this.shouldRenderArrayField) {
       const arrayFieldComponent = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
@@ -532,6 +545,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
               this.primaryKeys!,
               this.importCollection,
               dataApi,
+              this.renderConfig.dependencies,
             ),
           );
         }
@@ -552,6 +566,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
               this.importCollection,
               this.primaryKeys,
               dataApi,
+              this.renderConfig.dependencies,
             ),
             [primaryKeyPropName, getModelNameProp(lowerCaseDataTypeName)],
           ),
@@ -654,7 +669,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
         statements.push(
           ...[...relatedModelNames].map((relatedModelName) =>
-            buildRelationshipQuery(relatedModelName, this.importCollection, dataApi),
+            buildRelationshipQuery(relatedModelName, this.importCollection, dataApi, this.renderConfig.dependencies),
           ),
         );
       }
@@ -692,6 +707,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
           formMetadata.fieldConfigs,
           this.importCollection,
           this.renderConfig.apiConfiguration?.dataApi,
+          this.renderConfig.dependencies,
         ),
       );
     }

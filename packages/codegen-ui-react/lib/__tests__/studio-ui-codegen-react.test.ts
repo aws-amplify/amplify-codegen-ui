@@ -198,6 +198,19 @@ describe('amplify render tests', () => {
         expect(generatedCode.componentText).toMatchSnapshot();
       });
 
+      it('should render collection with data binding - amplify js v6', () => {
+        const { componentText } = generateWithAmplifyRenderer('collectionWithBinding', {
+          ...rendererConfigWithGraphQL,
+          dependencies: { 'aws-amplify': '^6.0.0' },
+        });
+        expect(componentText).not.toContain('import { API } from "aws-amplify";');
+        expect(componentText).not.toContain(`await API.graphql`);
+        expect(componentText).toContain('import { generateClient } from "aws-amplify/api";');
+        expect(componentText).toContain(`await client.graphql`);
+
+        expect(componentText).toMatchSnapshot();
+      });
+
       it('should render collection without data binding', () => {
         const generatedCode = generateWithAmplifyRenderer('collectionWithoutBinding', rendererConfigWithGraphQL);
         expect(generatedCode.componentText).toMatchSnapshot();
@@ -448,6 +461,18 @@ describe('amplify render tests', () => {
         expect(
           generateWithAmplifyRenderer('workflow/dataStoreCreateItem', rendererConfigWithGraphQL),
         ).toMatchSnapshot();
+      });
+
+      it('DataStoreCreateItem - amplify js v6', () => {
+        const { componentText } = generateWithAmplifyRenderer('workflow/dataStoreCreateItem', {
+          ...rendererConfigWithGraphQL,
+          dependencies: { 'aws-amplify': '^6.0.0' },
+        });
+        expect(componentText).toMatchSnapshot();
+        expect(componentText).not.toContain('import { API } from "aws-amplify";');
+        expect(componentText).not.toContain(`await API.graphql`);
+        expect(componentText).toContain('import { generateClient } from "aws-amplify/api";');
+        expect(componentText).toContain(`await client.graphql`);
       });
 
       it('DataStoreUpdateItem', () => {

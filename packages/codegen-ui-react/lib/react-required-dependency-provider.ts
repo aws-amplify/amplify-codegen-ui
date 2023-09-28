@@ -14,17 +14,23 @@
   limitations under the License.
  */
 import { RequiredDependency, RequiredDependencyProvider } from '@aws-amplify/codegen-ui';
+import { getAmplifyJSVersionToRender } from './helpers/amplify-js-versioning';
+import { AMPLIFY_JS_V5 } from './utils/constants';
 
 type SemVerRequiredDependency = RequiredDependency & {
   supportedSemVerPattern: string;
 };
 
 export class ReactRequiredDependencyProvider extends RequiredDependencyProvider<SemVerRequiredDependency> {
-  getRequiredDependencies(hasStorageManager?: boolean): SemVerRequiredDependency[] {
+  getRequiredDependencies(
+    hasStorageManager?: boolean,
+    config?: { dependencies: { [key: string]: string } },
+  ): SemVerRequiredDependency[] {
+    const amplifyJSVersion = getAmplifyJSVersionToRender(config?.dependencies);
     const dependencies = [
       {
         dependencyName: '@aws-amplify/ui-react',
-        supportedSemVerPattern: '^4.6.0',
+        supportedSemVerPattern: amplifyJSVersion === AMPLIFY_JS_V5 ? '>=4.6.0  <6.0.0' : '>=6.0.0 <7.0.0',
         reason: 'Required to leverage Amplify UI primitives, and Amplify Studio component helper functions.',
       },
       {
