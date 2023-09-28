@@ -19,6 +19,9 @@ import { ReactRequiredDependencyProvider } from '..';
 describe('ReactStudioDependencyProvider', () => {
   const requiredDependencies = new ReactRequiredDependencyProvider().getRequiredDependencies(false);
   const requiredDependenciesWithStorageManager = new ReactRequiredDependencyProvider().getRequiredDependencies(true);
+  const requiredDependenciesWithAmplifyJSV6 = new ReactRequiredDependencyProvider().getRequiredDependencies(true, {
+    dependencies: { 'aws-amplify': '^6.0.0' },
+  });
 
   describe('getRequiredDependencies', () => {
     it('has required dependencies', () => {
@@ -49,6 +52,26 @@ describe('ReactStudioDependencyProvider', () => {
       expect(
         requiredDependenciesWithStorageManager.filter((dep) => dep.dependencyName === '@aws-amplify/ui-react-storage'),
       ).toBeTruthy();
+    });
+
+    it('includes amplify js v6 semver range', () => {
+      expect(requiredDependenciesWithAmplifyJSV6).toMatchObject([
+        {
+          dependencyName: '@aws-amplify/ui-react',
+          supportedSemVerPattern: '^6.0.0',
+          reason: 'Required to leverage Amplify UI primitives, and Amplify Studio component helper functions.',
+        },
+        {
+          dependencyName: 'aws-amplify',
+          supportedSemVerPattern: '^6.0.0',
+          reason: 'Required to leverage DataStore.',
+        },
+        {
+          dependencyName: '@aws-amplify/ui-react-storage',
+          supportedSemVerPattern: '^3.0.0',
+          reason: 'Required to leverage StorageManager.',
+        },
+      ]);
     });
   });
 });

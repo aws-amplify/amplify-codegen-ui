@@ -18,3 +18,7 @@ export const COMPOSITE_PRIMARY_KEY_PROP_NAME = 'id';
 export const STORAGE_FILE_KEY = 'key';
 
 export const STORAGE_FILE_ALGO_TYPE = 'SHA-1';
+
+export const AMPLIFY_JS_V5 = '5.0.0';
+
+export const AMPLIFY_JS_V6 = '6.0.0';

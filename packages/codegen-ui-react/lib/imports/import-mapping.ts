@@ -23,6 +23,7 @@ export enum ImportSource {
   LOCAL_SCHEMA = '../models/schema',
   UTILS = './utils',
   AMPLIFY = 'aws-amplify',
+  AMPLIFY_API = 'aws-amplify/api',
 }
 
 export enum ImportValue {
@@ -55,6 +56,7 @@ export enum ImportValue {
   API = 'API',
   PAGINATION = 'Pagination',
   PLACEHOLDER = 'Placeholder',
+  GENERATE_CLIENT = 'generateClient',
 }
 
 export const ImportMapping: Record<ImportValue, ImportSource> = {
@@ -86,4 +88,5 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.API]: ImportSource.AMPLIFY,
   [ImportValue.PAGINATION]: ImportSource.UI_REACT,
   [ImportValue.PLACEHOLDER]: ImportSource.UI_REACT,
+  [ImportValue.GENERATE_CLIENT]: ImportSource.AMPLIFY_API,
 };
