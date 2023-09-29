@@ -92,6 +92,7 @@ import {
   buildBaseCollectionVariableStatement,
   createHookStatement,
   buildSortFunction,
+  getAmplifyJSClientGenerator,
 } from './react-studio-template-renderer-helper';
 import {
   Primitive,
@@ -122,6 +123,8 @@ import {
 } from './helpers';
 import { addUseEffectWrapper } from './utils/generate-react-hooks';
 import { ActionType, getGraphqlCallExpression, getGraphqlQueryForModel, isGraphqlConfig } from './utils/graphql';
+import { AMPLIFY_JS_V5, AMPLIFY_JS_V6 } from './utils/constants';
+import { getAmplifyJSVersionToRender } from './helpers/amplify-js-versioning';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -287,6 +290,17 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         const result = printer.printNode(EmitHint.Unspecified, variableDeclaration, file);
         componentText += result + EOL;
       });
+    }
+
+    // Amplify JS V6 api
+    // const client = generateClient();
+    if (
+      isGraphqlConfig(this.renderConfig.apiConfiguration) &&
+      this.importCollection.hasPackage(ImportSource.AMPLIFY_API) &&
+      getAmplifyJSVersionToRender(this.renderConfig.dependencies) === AMPLIFY_JS_V6
+    ) {
+      const result = printer.printNode(EmitHint.Unspecified, getAmplifyJSClientGenerator(), file);
+      componentText += result + EOL;
     }
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
@@ -1349,13 +1363,20 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                       factory.createElementAccessExpression(
                         factory.createPropertyAccessExpression(
                           this.renderConfig.apiConfiguration?.dataApi === 'GraphQL'
-                            ? getGraphqlCallExpression(ActionType.LIST, modelName, this.importCollection, {
-                                inputs: [
-                                  factory.createSpreadAssignment(
-                                    factory.createIdentifier(this.getFilterObjName(propName)),
-                                  ),
-                                ],
-                              })
+                            ? getGraphqlCallExpression(
+                                ActionType.LIST,
+                                modelName,
+                                this.importCollection,
+                                {
+                                  inputs: [
+                                    factory.createSpreadAssignment(
+                                      factory.createIdentifier(this.getFilterObjName(propName)),
+                                    ),
+                                  ],
+                                },
+                                undefined,
+                                this.renderConfig.dependencies,
+                              )
                             : this.buildUseDataStoreBindingCall('collection', modelName, this.getFilterName(propName)),
                           factory.createIdentifier('items'),
                         ),
@@ -1601,6 +1622,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           identifier,
           this.importCollection,
           this.renderConfig.apiConfiguration?.dataApi,
+          this.renderConfig.dependencies,
         ),
       );
     }
@@ -1903,6 +1925,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       const loadedFields: ShorthandPropertyAssignment[] = [];
       const loadedFieldNames: string[] = [];
       const loadedFieldStatements: Statement[] = [];
+      const amplifyJSVersion = getAmplifyJSVersionToRender(this.renderConfig.dependencies);
 
       Object.entries(component.collectionProperties).forEach((collectionProp) => {
         const [, { model: modelName, predicate }] = collectionProp;
@@ -1944,7 +1967,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                                 factory.createAwaitExpression(
                                   factory.createCallExpression(
                                     factory.createPropertyAccessExpression(
-                                      factory.createIdentifier('API'),
+                                      factory.createIdentifier(amplifyJSVersion === AMPLIFY_JS_V5 ? 'API' : 'client'),
                                       factory.createIdentifier('graphql'),
                                     ),
                                     undefined,
@@ -2105,7 +2128,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                             factory.createAwaitExpression(
                               factory.createCallExpression(
                                 factory.createPropertyAccessExpression(
-                                  factory.createIdentifier('API'),
+                                  factory.createIdentifier(amplifyJSVersion === AMPLIFY_JS_V5 ? 'API' : 'client'),
                                   factory.createIdentifier('graphql'),
                                 ),
                                 undefined,

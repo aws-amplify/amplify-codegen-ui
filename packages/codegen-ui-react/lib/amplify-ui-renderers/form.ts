@@ -34,7 +34,7 @@ import {
 } from 'typescript';
 import { ReactComponentRenderer } from '../react-component-renderer';
 import { buildFormLayoutProperties, buildOpeningElementProperties } from '../react-component-render-helper';
-import { ImportCollection, ImportSource, ImportValue } from '../imports';
+import { ImportCollection, ImportSource } from '../imports';
 import { buildExpression } from '../forms';
 import { onSubmitValidationRun, buildModelFieldObject } from '../forms/form-renderer-helper';
 import { hasTokenReference } from '../utils/forms/layout-helpers';
@@ -43,6 +43,7 @@ import { isModelDataType } from '../forms/form-renderer-helper/render-checkers';
 import { replaceEmptyStringStatement } from '../forms/form-renderer-helper/cta-props';
 import { ReactRenderConfig } from '../react-render-config';
 import { defaultRenderConfig } from '../react-studio-template-renderer-helper';
+import { getAmplifyJSAPIImport } from '../helpers/amplify-js-versioning';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -71,7 +72,8 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
 
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
     if (this.form.dataType.dataSourceType === 'DataStore' && this.isRenderingGraphQL()) {
-      this.importCollection.addMappedImport(ImportValue.API);
+      const mappedImport = getAmplifyJSAPIImport();
+      this.importCollection.addMappedImport(mappedImport);
     } else if (this.form.dataType.dataSourceType === 'DataStore') {
       this.importCollection.addImport('aws-amplify', 'DataStore');
     }
@@ -166,6 +168,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                 dataSchemaMetadata,
                 this.importCollection,
                 'apiConfiguration' in this.renderConfig ? this.renderConfig.apiConfiguration?.dataApi : undefined,
+                this.renderConfig.dependencies,
               ),
               // call onSuccess hook if it exists
               factory.createIfStatement(
