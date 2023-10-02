@@ -911,6 +911,32 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should generate an update form with many to many relationship - amplify js v6', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/relationships/update-class',
+        'datastore/relationships/many-to-many-class',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL, dependencies: { 'aws-amplify': '^6.0.0' } },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      // v6 api
+      expect(componentText).toContain('import { generateClient } from "aws-amplify/api";');
+      expect(componentText).toContain(`const client = generateClient();`);
+      expect(componentText).toContain('await client.graphql({');
+
+      expect(componentText).not.toContain('DataStore');
+      expect(componentText).not.toContain('import { API } from "aws-amplify";');
+      expect(componentText).not.toContain(`API.graphql`);
+
+      expect(componentText).toContain('createStudentClass');
+      expect(componentText).toContain('deleteStudentClass');
+      expect(componentText).toContain('updateClass');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should generate an update form with composite primary key', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/relationships/update-movie',
@@ -934,6 +960,30 @@ describe('amplify form renderer tests', () => {
       // query for join table records indexed by current model's ids
       const matcher = /query:\s+movieTagsByMovieMovieKeyAndMovietitleAndMoviegenre/;
       expect(matcher.test(componentText)).toBe(true);
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate an update form with composite primary key - amplify js v6', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/relationships/update-movie',
+        'models/composite-key-movie',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL, dependencies: { 'aws-amplify': '^6.0.0' } },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // no datastore reference
+      expect(componentText).not.toContain('DataStore');
+
+      // no v5 api references
+      expect(componentText).not.toContain('import { API } from "aws-amplify";');
+      expect(componentText).not.toContain(`API.graphql`);
+
+      // v6 api
+      expect(componentText).toContain('import { generateClient } from "aws-amplify/api";');
+      expect(componentText).toContain(`const client = generateClient();`);
+      expect(componentText).toContain('await client.graphql({');
 
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
@@ -971,6 +1021,29 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should generate an upgrade form with multiple relationship & cpk - amplify js v6', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/cpk-teacher-datastore-update',
+        'datastore/cpk-relationships',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL, dependencies: { 'aws-amplify': '^6.0.0' } },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+      // no v5 api references
+      expect(componentText).not.toContain('import { API } from "aws-amplify";');
+      expect(componentText).not.toContain(`API.graphql`);
+
+      // v6 api
+      expect(componentText).toContain('import { generateClient } from "aws-amplify/api";');
+      expect(componentText).toContain(`const client = generateClient();`);
+      expect(componentText).toContain('await client.graphql({');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should generate a create form with multiple hasOne relationships', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/book-datastore-relationship-multiple',
@@ -999,6 +1072,26 @@ describe('amplify form renderer tests', () => {
 
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate a create form with belongsTo relationship - amplify js v6', () => {
+      const { componentText } = generateWithAmplifyFormRenderer(
+        'forms/member-datastore-create',
+        'datastore/project-team-model',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL, dependencies: { 'aws-amplify': '^6.0.0' } },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+      // no v5 api references
+      expect(componentText).not.toContain('import { API } from "aws-amplify";');
+      expect(componentText).not.toContain(`API.graphql`);
+
+      // v6 api
+      expect(componentText).toContain('import { generateClient } from "aws-amplify/api";');
+      expect(componentText).toContain(`const client = generateClient();`);
+      expect(componentText).toContain('await client.graphql({');
     });
 
     it('should generate a create form with nonModel field', () => {
@@ -1106,6 +1199,24 @@ describe('amplify form renderer tests', () => {
 
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
+    });
+
+    it('should render a create form for child of 1:m relationship - amplify js v6', () => {
+      const { componentText } = generateWithAmplifyFormRenderer(
+        'forms/composite-toy-datastore-create',
+        'datastore/composite-relationships',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL, dependencies: { 'aws-amplify': '^6.0.0' } },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // no v5 api references
+      expect(componentText).not.toContain('import { API } from "aws-amplify";');
+      expect(componentText).not.toContain(`API.graphql`);
+
+      // v6 api
+      expect(componentText).toContain('import { generateClient } from "aws-amplify/api";');
+      expect(componentText).toContain(`const client = generateClient();`);
+      expect(componentText).toContain('await client.graphql({');
     });
 
     it('should render a create form for child of 1:m-belongsTo relationship', () => {
@@ -1247,6 +1358,27 @@ describe('amplify form renderer tests', () => {
 
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate a create form with multiple relationship & cpk - amplify js v6', () => {
+      const { componentText } = generateWithAmplifyFormRenderer(
+        'forms/cpk-teacher-datastore-create',
+        'datastore/cpk-relationships',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL, dependencies: { 'aws-amplify': '^6.0.0' } },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // no datastore reference
+      expect(componentText).not.toContain('DataStore');
+
+      // no v5 api references
+      expect(componentText).not.toContain('import { API } from "aws-amplify";');
+      expect(componentText).not.toContain(`API.graphql`);
+
+      // v6 api
+      expect(componentText).toContain('import { generateClient } from "aws-amplify/api";');
+      expect(componentText).toContain(`const client = generateClient();`);
+      expect(componentText).toContain('await client.graphql({');
     });
 
     it('should generate an update form with id field instead of belongsTo', () => {
