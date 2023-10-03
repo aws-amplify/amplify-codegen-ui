@@ -937,6 +937,7 @@ export const buildManyToManyRelationshipStatements = (
                                     relatedModelPrimaryKeys,
                                     joinTableRelatedModelFields,
                                     importCollection,
+                                    renderConfigDependencies,
                                   )
                                 : factory.createCallExpression(
                                     factory.createPropertyAccessExpression(
