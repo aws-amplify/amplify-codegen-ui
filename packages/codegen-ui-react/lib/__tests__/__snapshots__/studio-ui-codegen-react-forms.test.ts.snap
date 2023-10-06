@@ -16,8 +16,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listDogs } from \\"../graphql/queries\\";
 import { createOwner, updateDog, updateOwner } from \\"../graphql/mutations\\";
@@ -516,7 +515,7 @@ export default function CreateOwnerForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should 1:1 relationships without types file path - Create 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -566,8 +565,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { generateClient } from \\"aws-amplify/api\\";
 import { listDogs } from \\"../graphql/queries\\";
 import { createOwner, updateDog, updateOwner } from \\"../graphql/mutations\\";
@@ -1067,7 +1065,7 @@ export default function CreateOwnerForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should 1:1 relationships without types file path - Create amplify js v6 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -1117,8 +1115,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { generateClient } from \\"aws-amplify/api\\";
 import { createPost } from \\"../graphql/mutations\\";
 const client = generateClient();
@@ -1714,7 +1711,7 @@ export default function MyPostForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate a create form - amplify js v6 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -1780,8 +1777,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { createPost } from \\"../graphql/mutations\\";
 function ArrayField({
@@ -2376,7 +2372,7 @@ export default function MyPostForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate a create form 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -2442,8 +2438,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listTeams } from \\"../graphql/queries\\";
 import { createMember } from \\"../graphql/mutations\\";
@@ -3054,7 +3049,7 @@ export default function MyMemberForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate a create form with belongsTo relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Team } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -3109,9 +3104,8 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Tag } from \\"../API\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listTags } from \\"../graphql/queries\\";
 import { createMovie, createMovieTags } from \\"../graphql/mutations\\";
@@ -3704,7 +3698,7 @@ export default function MovieCreateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate a create form with composite primary key 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Tag } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -3764,8 +3758,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listStudents } from \\"../graphql/queries\\";
 import { createSchool, updateStudent } from \\"../graphql/mutations\\";
@@ -4262,7 +4255,7 @@ export default function SchoolCreateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate a create form with hasMany relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Student } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -4314,8 +4307,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listAuthors } from \\"../graphql/queries\\";
 import { createBook } from \\"../graphql/mutations\\";
@@ -4805,7 +4797,7 @@ export default function BookCreateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate a create form with hasOne relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Author } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -4857,8 +4849,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listPosts } from \\"../graphql/queries\\";
 import { createComment } from \\"../graphql/mutations\\";
@@ -5318,7 +5309,7 @@ export default function CommentCreateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate a create form with id field instead of belongsTo 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -5369,9 +5360,8 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Post } from \\"../API\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listPosts } from \\"../graphql/queries\\";
 import { createTag, createTagPost } from \\"../graphql/mutations\\";
@@ -5946,7 +5936,7 @@ export default function TagCreateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate a create form with manyToMany relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Post } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -6001,8 +5991,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listAuthors, listTitles } from \\"../graphql/queries\\";
 import { createBook } from \\"../graphql/mutations\\";
@@ -6625,7 +6614,7 @@ export default function BookCreateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate a create form with multiple hasOne relationships 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Author, Title } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -6680,9 +6669,8 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { CPKClass } from \\"../API\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import {
   listCPKClasses,
@@ -7465,7 +7453,7 @@ export default function CreateCPKTeacherForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate a create form with multiple relationship & cpk 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { CPKClass, CPKProject, CPKStudent } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -7523,8 +7511,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listParentTables } from \\"../graphql/queries\\";
 import { createBasicTable } from \\"../graphql/mutations\\";
@@ -8033,7 +8020,7 @@ export default function CreateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate a create form with nonModel field 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { ParentTable } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -8087,8 +8074,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { getPost, listComments } from \\"../graphql/queries\\";
 import { updateComment, updatePost } from \\"../graphql/mutations\\";
@@ -8726,7 +8712,7 @@ export default function PostUpdateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate a relationship update form with autocomplete 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Comment, Post } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -8784,8 +8770,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { generateClient } from \\"aws-amplify/api\\";
 import { getPost } from \\"../graphql/queries\\";
 import { updatePost } from \\"../graphql/mutations\\";
@@ -9502,7 +9487,7 @@ export default function MyPostForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate a update form without relationships - amplify js v6 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Post } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -9573,8 +9558,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { getPost } from \\"../graphql/queries\\";
 import { updatePost } from \\"../graphql/mutations\\";
@@ -10290,7 +10274,7 @@ export default function MyPostForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate a update form without relationships 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Post } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -10361,8 +10345,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import {
   getMovie,
   listMovieTags,
@@ -11080,7 +11063,7 @@ export default function MovieUpdateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate an update form with composite primary key - amplify js v6 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Movie, Tag } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -11145,8 +11128,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import {
   getMovie,
   listMovieTags,
@@ -11863,7 +11845,7 @@ export default function MovieUpdateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate an update form with composite primary key 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Movie, Tag } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -11928,8 +11910,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { getComment, getPost, listPosts } from \\"../graphql/queries\\";
 import { updateComment } from \\"../graphql/mutations\\";
@@ -12603,7 +12584,7 @@ export default function CommentUpdateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate an update form with hasMany relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Comment, Post } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -12661,8 +12642,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { generateClient } from \\"aws-amplify/api\\";
 import { getComment, getPost, listPosts } from \\"../graphql/queries\\";
 import { updateComment } from \\"../graphql/mutations\\";
@@ -13337,7 +13317,7 @@ export default function CommentUpdateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate an update form with hasMany relationship without types file - amplify js v6 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -13394,8 +13374,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { getComment, getPost, listPosts } from \\"../graphql/queries\\";
 import { updateComment } from \\"../graphql/mutations\\";
@@ -14069,7 +14048,7 @@ export default function CommentUpdateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate an update form with hasMany relationship without types file 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -14126,8 +14105,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { getComment, getPost, listPosts } from \\"../graphql/queries\\";
 import { updateComment } from \\"../graphql/mutations\\";
@@ -14621,7 +14599,7 @@ export default function CommentUpdateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate an update form with id field instead of belongsTo 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Comment } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -14672,8 +14650,7 @@ import {
   Text,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import {
   getClass,
   listStudentClasses,
@@ -15239,7 +15216,7 @@ export default function ClassUpdateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate an update form with many to many relationship - amplify js v6 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Class, Student } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -15287,8 +15264,7 @@ import {
   Text,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import {
   getClass,
   listStudentClasses,
@@ -15853,7 +15829,7 @@ export default function ClassUpdateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate an update form with many to many relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Class, Student } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -15903,8 +15879,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { getBasicTable, listParentTables } from \\"../graphql/queries\\";
 import { updateBasicTable } from \\"../graphql/mutations\\";
@@ -16444,7 +16419,7 @@ export default function UpdateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate an update form with nonModel field 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { BasicTable, ParentTable } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -16499,8 +16474,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import {
   cPKTeacherCPKClassesByCPKTeacherSpecialTeacherId,
   getCPKTeacher,
@@ -17460,7 +17434,7 @@ export default function UpdateCPKTeacherForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate an upgrade form with multiple relationship & cpk - amplify js v6 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { CPKClass, CPKProject, CPKStudent, CPKTeacher } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -17518,8 +17492,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import {
   cPKTeacherCPKClassesByCPKTeacherSpecialTeacherId,
   getCPKTeacher,
@@ -18478,7 +18451,7 @@ export default function UpdateCPKTeacherForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should generate an upgrade form with multiple relationship & cpk 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { CPKClass, CPKProject, CPKStudent, CPKTeacher } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -18536,8 +18509,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listCompositeDogs } from \\"../graphql/queries\\";
 import { createCompositeToy } from \\"../graphql/mutations\\";
@@ -19262,7 +19234,7 @@ export default function CreateCompositeToyForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should render a create form for child of 1:m relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -19318,8 +19290,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listOrgs, listPosts, listUsers } from \\"../graphql/queries\\";
 import { createComment } from \\"../graphql/mutations\\";
@@ -20200,7 +20171,7 @@ export default function CreateCommentForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should render a create form for child of 1:m-belongsTo relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Org, Post, User } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -20260,9 +20231,8 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { CompositeVet } from \\"../API\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import {
   listCompositeBowls,
@@ -21311,7 +21281,7 @@ export default function CreateCompositeDogForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should render a create form for model with composite keys 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { CompositeBowl, CompositeOwner, CompositeToy, CompositeVet } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -21374,8 +21344,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listComments } from \\"../graphql/queries\\";
 import { createPost, updateComment } from \\"../graphql/mutations\\";
@@ -21863,7 +21832,7 @@ export default function CreatePostForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should render a create form for parent of 1:m-belongsTo relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Comment } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -21914,8 +21883,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { getPost, listComments } from \\"../graphql/queries\\";
 import { updateComment, updatePost } from \\"../graphql/mutations\\";
@@ -22462,7 +22430,7 @@ export default function UpdatePostForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should render a update form for parent of 1:m-belongsTo relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Comment, Post } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -22514,8 +22482,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import {
   getChildItem,
@@ -23081,7 +23048,7 @@ export default function ChildItemUpdateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should render an update form with child field 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { ChildItem } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -23133,8 +23100,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { getPost, listBlogs, listComments } from \\"../graphql/queries\\";
 import { updateComment, updatePost } from \\"../graphql/mutations\\";
@@ -23816,7 +23782,7 @@ export default function PostUpdateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should render an update form with id field instead of belongsTo 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Blog, Comment, Post } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -23871,8 +23837,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listOwners } from \\"../graphql/queries\\";
 import { createDog, updateOwner } from \\"../graphql/mutations\\";
@@ -24367,7 +24332,7 @@ export default function CreateDogForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should render thrown error for required parent field 1:1 relationships - Create 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Owner } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -24418,8 +24383,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listDogs } from \\"../graphql/queries\\";
 import { createOwner, updateDog, updateOwner } from \\"../graphql/mutations\\";
@@ -24918,7 +24882,7 @@ export default function CreateOwnerForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should render thrown error for required related field 1:1 relationships - Create 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Dog } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -24969,8 +24933,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { getComment, getPost, listPosts } from \\"../graphql/queries\\";
 import { updateComment } from \\"../graphql/mutations\\";
@@ -25464,7 +25427,7 @@ export default function CommentUpdateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should treat relationship as bidirectional without belongsTo 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Comment } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -25516,8 +25479,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { getCustomKeyModel, listChildItems } from \\"../graphql/queries\\";
 import { updateChildItem, updateCustomKeyModel } from \\"../graphql/mutations\\";
@@ -26105,7 +26067,7 @@ export default function UpdateForm(props) {
 exports[`amplify form renderer tests GraphQL form tests should use custom primary key on fetch query for update form 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { ChildItem, CustomKeyModel } from \\"../API\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -26160,8 +26122,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 function ArrayField({
   items = [],
   onChange,
@@ -26626,7 +26587,7 @@ export default function CustomDataForm(props) {
 exports[`amplify form renderer tests NoApi form tests should render custom data form successfully with no configured API 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -26680,12 +26641,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { CompositeToy, CompositeDog } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -27278,7 +27236,7 @@ export default function CreateCompositeToyForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render a create form for child of 1:m relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -27334,12 +27292,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Comment, Post, User as User0, Org as Org0 } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -28067,7 +28022,7 @@ export default function CreateCommentForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render a create form for child of 1:m-belongsTo relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Post, User as User0, Org as Org0 } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -28127,10 +28082,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import {
   CompositeDog,
   CompositeBowl as CompositeBowl0,
@@ -28139,7 +28091,7 @@ import {
   CompositeVet,
   CompositeDogCompositeVet,
 } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -29019,7 +28971,7 @@ export default function CreateCompositeDogForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render a create form for model with composite keys 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { CompositeBowl as CompositeBowl0, CompositeOwner as CompositeOwner0, CompositeToy, CompositeVet } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -29079,8 +29031,7 @@ import {
   StepperField,
   TextField,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
@@ -29417,7 +29368,7 @@ export default function CustomDataForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render a custom backed create form 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, RadioGroupFieldProps, SelectFieldProps, StepperFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -29475,8 +29426,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
@@ -29814,7 +29764,7 @@ export default function CustomDataForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render a custom backed create form with styled gaps 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, RadioGroupFieldProps, SelectFieldProps, StepperFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -29874,8 +29824,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 function ArrayField({
   items = [],
   onChange,
@@ -30340,7 +30289,7 @@ export default function CustomDataForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render a custom backed form with an array field 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -30392,8 +30341,7 @@ import {
   TextAreaField,
   TextField,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 export default function CustomDataForm(props) {
   const {
     initialData,
@@ -30753,7 +30701,7 @@ export default function CustomDataForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render a custom backed update form 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, RadioGroupFieldProps, SelectFieldProps, StepperFieldProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -30814,9 +30762,8 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Post } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -31486,7 +31433,7 @@ export default function MyPostForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render a datastore backed form with a custom array field 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -31556,12 +31503,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Org, Comment } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -32057,7 +32001,7 @@ export default function UpdateOrgForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render a update form for parent of 1:m-belongsTo relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Org, Comment } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -32109,10 +32053,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import {
   CompositeDog,
   CompositeBowl as CompositeBowl0,
@@ -32121,7 +32062,7 @@ import {
   CompositeVet,
   CompositeDogCompositeVet,
 } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -33182,7 +33123,7 @@ export default function UpdateCompositeDogForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render an update form for model with composite keys 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { CompositeDog, CompositeBowl as CompositeBowl0, CompositeOwner as CompositeOwner0, CompositeToy, CompositeVet } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -33249,10 +33190,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import {
   CPKTeacher,
   CPKStudent as CPKStudent0,
@@ -33260,7 +33198,7 @@ import {
   CPKProject,
   CPKTeacherCPKClass,
 } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -34077,7 +34015,7 @@ export default function UpdateCPKTeacherForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render an update form for model with cpk 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { CPKTeacher, CPKStudent as CPKStudent0, CPKClass, CPKProject } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -34136,8 +34074,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 function ArrayField({
   items = [],
   onChange,
@@ -34649,7 +34586,7 @@ export default function HappyPathJSONCreate(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render happy path nested json fields for create form 2`] = `
 "import * as React from \\"react\\";
 import { DividerProps, GridProps, HeadingProps, SwitchFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -34723,8 +34660,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 function ArrayField({
   items = [],
   onChange,
@@ -35249,7 +35185,7 @@ export default function HappyPathJSONUpdate(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render happy path nested json fields for update form 2`] = `
 "import * as React from \\"react\\";
 import { DividerProps, GridProps, HeadingProps, SwitchFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -35324,8 +35260,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 function ArrayField({
   items = [],
   onChange,
@@ -35971,7 +35906,7 @@ export default function NestedJson(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render nested json fields for create form 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, HeadingProps, SwitchFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -36050,8 +35985,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 function ArrayField({
   items = [],
   onChange,
@@ -36496,7 +36430,7 @@ export default function NestedJson(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render nested json fields for update form 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, HeadingProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -36558,10 +36492,7 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import {
   CompositeDog,
   CompositeOwner as CompositeOwner0,
@@ -36570,7 +36501,7 @@ import {
   CompositeDogCompositeVet,
   CompositeBowl,
 } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -37634,7 +37565,7 @@ export default function UpdateCompositeDogForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render scalar relationship fields if overrides 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { CompositeDog, CompositeOwner as CompositeOwner0, CompositeToy, CompositeVet } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -37697,8 +37628,7 @@ import {
   Text,
   TextField,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 export default function CustomWithSectionalElements(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
@@ -37844,7 +37774,7 @@ export default function CustomWithSectionalElements(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render sectional elements 2`] = `
 "import * as React from \\"react\\";
 import { DividerProps, GridProps, HeadingProps, TextFieldProps, TextProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -37892,12 +37822,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Dog, Owner } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -38339,7 +38266,7 @@ export default function CreateDogForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render thrown error for required parent field 1:1 relationships - Create 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Owner } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -38390,12 +38317,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Dog, Owner } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -38874,7 +38798,7 @@ export default function UpdateDogForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render thrown error for required parent field 1:1 relationships - Update 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Dog, Owner } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -38926,12 +38850,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Owner, Dog as Dog0 } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -39374,7 +39295,7 @@ export default function CreateOwnerForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render thrown error for required related field 1:1 relationships - Create 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Dog as Dog0 } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -39425,12 +39346,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Owner, Dog as Dog0 } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -39911,7 +39829,7 @@ export default function UpdateOwnerForm(props) {
 exports[`amplify form renderer tests datastore form tests custom form tests should render thrown error for required related field 1:1 relationships - Update 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Owner, Dog as Dog0 } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -39963,9 +39881,8 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Post } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -40551,7 +40468,7 @@ export default function MyPostForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a create form 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -40618,12 +40535,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Tag, Post, TagPost } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -41154,7 +41068,7 @@ export default function TagCreateForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a create form with array of Enums 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Post } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -41209,12 +41123,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Member, Team as Team0 } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -41736,7 +41647,7 @@ export default function MyMemberForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a create form with belongsTo relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Team as Team0 } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -41791,12 +41702,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { School, Student } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -42246,7 +42154,7 @@ export default function SchoolCreateForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a create form with hasMany relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Student } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -42298,12 +42206,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Book, Author } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -42746,7 +42651,7 @@ export default function BookCreateForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a create form with hasOne relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Author } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -42799,12 +42704,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Tag, Post, TagPost } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -43335,7 +43237,7 @@ export default function TagCreateForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a create form with manyToMany relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Post } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -43390,12 +43292,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Book, Author, Title } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -43944,7 +43843,7 @@ export default function BookCreateForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a create form with multiple hasOne relationships 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Author, Title } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -43999,9 +43898,8 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Post } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -44705,7 +44603,7 @@ export default function MyPostForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a update form 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Post } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -44776,12 +44674,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { School, Student } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -45286,7 +45181,7 @@ export default function SchoolUpdateForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a update form with hasMany relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { School, Student } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -45339,12 +45234,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { School, Student as Student0 } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -45896,7 +45788,7 @@ export default function SchoolUpdateForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a update form with hasMany relationship with model name collision 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { School, Student as Student0 } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -45952,12 +45844,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Member, Team as Team0 } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -46508,7 +46397,7 @@ export default function MyMemberForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate an update form with belongsTo relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Member, Team as Team0 } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -46565,12 +46454,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Tag, Post, TagPost } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -47184,7 +47070,7 @@ export default function TagUpdateForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate an update form with manyToMany relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Tag, Post } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -47239,9 +47125,8 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Flex as Flex0 } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -47770,7 +47655,7 @@ export default function MyFlexCreateForm(props) {
 exports[`amplify form renderer tests datastore form tests should render a create form with colliding model name 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -47831,9 +47716,8 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Blog } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -48327,7 +48211,7 @@ export default function BlogCreateForm(props) {
 exports[`amplify form renderer tests datastore form tests should render a form with a javascript reserved word as the field name 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, SwitchFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -48390,9 +48274,8 @@ import {
   ToggleButton,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { InputGallery } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -49298,7 +49181,7 @@ export default function InputGalleryCreateForm(props) {
 exports[`amplify form renderer tests datastore form tests should render a form with multiple date types on create form 2`] = `
 "import * as React from \\"react\\";
 import { CheckboxFieldProps, GridProps, RadioGroupFieldProps, TextAreaFieldProps, TextFieldProps, ToggleButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -49380,9 +49263,8 @@ import {
   ToggleButton,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { InputGallery } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -50209,7 +50091,7 @@ export default function InputGalleryUpdateForm(props) {
 exports[`amplify form renderer tests datastore form tests should render a form with multiple date types on update form 2`] = `
 "import * as React from \\"react\\";
 import { CheckboxFieldProps, GridProps, RadioGroupFieldProps, TextAreaFieldProps, TextFieldProps, ToggleButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { InputGallery } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -50288,9 +50170,8 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Flex as Flex0 } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -50897,7 +50778,7 @@ export default function MyFlexUpdateForm(props) {
 exports[`amplify form renderer tests datastore form tests should render a update form with colliding model name 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Flex as Flex0 } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -50964,9 +50845,8 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Post } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -51611,7 +51491,7 @@ export default function PostCreateFormRow(props) {
 exports[`amplify form renderer tests datastore form tests should render form with a two inputs in row 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, SelectFieldProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -51681,12 +51561,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Member, Team as Team0 } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -52208,7 +52085,7 @@ export default function MyMemberForm(props) {
 exports[`amplify form renderer tests datastore form tests should use proper field overrides for belongsTo relationship 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Team as Team0 } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -52252,9 +52129,14 @@ exports[`amplify form renderer tests forms with StorageField tests should render
 import * as React from \\"react\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { StorageManager } from \\"@aws-amplify/ui-react-storage\\";
-import { Field, getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  fetchByPath,
+  getOverrideProps,
+  processFile,
+  validateField,
+} from \\"./utils\\";
 import { Product } from \\"../models\\";
-import { fetchByPath, processFile, validateField } from \\"./utils\\";
+import { Field } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function CreateProductForm(props) {
   const {
@@ -52464,9 +52346,14 @@ exports[`amplify form renderer tests forms with StorageField tests should render
 import * as React from \\"react\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { StorageManager } from \\"@aws-amplify/ui-react-storage\\";
-import { Field, getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  fetchByPath,
+  getOverrideProps,
+  processFile,
+  validateField,
+} from \\"./utils\\";
 import { Product } from \\"../models\\";
-import { fetchByPath, processFile, validateField } from \\"./utils\\";
+import { Field } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function UpdateProductForm(props) {
   const {
@@ -52696,7 +52583,7 @@ exports[`amplify form renderer tests forms with StorageField tests should render
 "import * as React from \\"react\\";
 import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 import { StorageManagerProps } from \\"@aws-amplify/ui-react-storage\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Product } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -52737,9 +52624,14 @@ exports[`amplify form renderer tests forms with StorageField tests should render
 import * as React from \\"react\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { StorageManager } from \\"@aws-amplify/ui-react-storage\\";
-import { Field, getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  fetchByPath,
+  getOverrideProps,
+  processFile,
+  validateField,
+} from \\"./utils\\";
 import { Product } from \\"../models\\";
-import { fetchByPath, processFile, validateField } from \\"./utils\\";
+import { Field } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function UpdateProductForm(props) {
   const {
@@ -52986,12 +52878,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Car, Dealership } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -53440,7 +53329,7 @@ export default function UpdateCarForm(props) {
 exports[`amplify form renderer tests should render form for child of bidirectional 1:m when field defined on parent 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Car, Dealership } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -53492,12 +53381,9 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { Dealership, Car } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
@@ -53989,7 +53875,7 @@ export default function UpdateDealershipForm(props) {
 exports[`amplify form renderer tests should render form for parent of bidirectional 1:m when field defined on parent 2`] = `
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 import { Dealership, Car } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;

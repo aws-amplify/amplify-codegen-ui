@@ -16,7 +16,7 @@
 import { EOL } from 'os';
 import ts, { EmitHint } from 'typescript';
 import { StudioTemplateRenderer } from '@aws-amplify/codegen-ui';
-import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
+import { ReactRenderConfig, scriptKindToFileExtension } from './react-render-config';
 import { ImportCollection } from './imports';
 import { ReactOutputManager } from './react-output-manager';
 import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
@@ -24,6 +24,13 @@ import { generateValidationFunction } from './utils/forms/validation';
 import { getFetchByPathNodeFunction } from './utils/json-path-fetch';
 import { generateFormatUtil } from './utils/string-formatter';
 import { buildStorageManagerProcessFileVariableStatement } from './utils/forms/storage-field-component';
+import {
+  buildEscapeHatchAndVariantTypes,
+  buildFindChildOverrides,
+  buildGetOverrideProps,
+  buildGetOverridesFromVariants,
+  buildMergeVariantsAndOverrides,
+} from './overrides';
 
 export type UtilTemplateType = 'validation' | 'formatter' | 'fetchByPath' | 'processFile';
 
@@ -55,12 +62,18 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
       ...renderConfig,
       renderTypeDeclarations: false, // Never render type declarations for index.js|ts file.
     };
-    this.fileName = `utils.${scriptKindToFileExtensionNonReact(this.renderConfig.script)}`;
+    this.fileName = `utils.${scriptKindToFileExtension(this.renderConfig.script)}`;
   }
 
   renderComponentInternal() {
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
-    const utilsStatements: (ts.VariableStatement | ts.TypeAliasDeclaration | ts.FunctionDeclaration)[] = [];
+    const utilsStatements: (ts.VariableStatement | ts.TypeAliasDeclaration | ts.FunctionDeclaration)[] = [
+      ...buildEscapeHatchAndVariantTypes(),
+      ...buildFindChildOverrides(),
+      ...buildGetOverrideProps(),
+      ...buildGetOverridesFromVariants(),
+      ...buildMergeVariantsAndOverrides(),
+    ];
     const skipReactImport = true;
 
     const utilsSet = new Set(this.utils);
