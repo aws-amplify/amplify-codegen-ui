@@ -218,7 +218,8 @@ export default function MyPostTable(props) {
 
 exports[`amplify view renderer tests should call util file if rendered 2`] = `
 "import * as React from \\"react\\";
-import { EscapeHatchProps, createDataStorePredicate } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
+import { createDataStorePredicate } from \\"@aws-amplify/ui-react/internal\\";
 export declare type MyPostTableProps = React.PropsWithChildren<{
     overrides?: EscapeHatchProps | undefined | null;
     predicateOverride?: ReturnType<typeof createDataStorePredicate> | undefined | null;
@@ -286,7 +287,8 @@ export default function CustomTable(props) {
 
 exports[`amplify view renderer tests should render view with custom datastore 2`] = `
 "import * as React from \\"react\\";
-import { EscapeHatchProps, createDataStorePredicate } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
+import { createDataStorePredicate } from \\"@aws-amplify/ui-react/internal\\";
 export declare type CustomTableProps = React.PropsWithChildren<{
     overrides?: EscapeHatchProps | undefined | null;
     predicateOverride?: ReturnType<typeof createDataStorePredicate> | undefined | null;
@@ -398,7 +400,8 @@ export default function MyPostTable(props) {
 
 exports[`amplify view renderer tests should render view with passed in predicate and sort 2`] = `
 "import * as React from \\"react\\";
-import { EscapeHatchProps, createDataStorePredicate } from \\"@aws-amplify/ui-react/internal\\";
+import { createDataStorePredicate } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps } from \\"./utils\\";
 export declare type MyPostTableProps = React.PropsWithChildren<{
     overrides?: EscapeHatchProps | undefined | null;
     predicateOverride?: ReturnType<typeof createDataStorePredicate> | undefined | null;
