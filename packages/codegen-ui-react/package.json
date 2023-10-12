@@ -64,8 +64,8 @@
     "testEnvironment": "jsdom",
     "testRegex": [
       "(lib/__tests__/.*.test.ts)$",
-      "(lib/utils-file-functions/hooks/__tests__/.*.test.tsx)$",
-      "(lib/utils-file-functions/hooks/__tests__/.*.test.ts)$"
+      "(lib/utils-file-functions/.*/__tests__/.*.test.tsx)$",
+      "(lib/utils-file-functions/.*/__tests__/.*.test.ts)$"
     ],
     "testPathIgnorePatterns": [
       "<rootDir>/lib/__tests__/__utils__/"

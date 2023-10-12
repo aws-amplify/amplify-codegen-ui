@@ -28,7 +28,6 @@ export enum ImportSource {
 
 export enum ImportValue {
   GET_OVERRIDE_PROPS = 'getOverrideProps',
-  ESCAPE_HATCH_PROPS = 'EscapeHatchProps',
   USE_AUTH = 'useAuth',
   GET_OVERRIDES_FROM_VARIANTS = 'getOverridesFromVariants',
   USE_BREAKPOINT_VALUE = 'useBreakpointValue',
@@ -79,7 +78,6 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.USE_DATA_STORE_UPDATE_ACTION]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.USE_DATA_STORE_DELETE_ACTION]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.USE_AUTH_SIGN_OUT_ACTION]: ImportSource.UI_REACT_INTERNAL,
-  [ImportValue.ESCAPE_HATCH_PROPS]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.USE_STATE_MUTATION_ACTION]: ImportSource.UTILS,
   [ImportValue.GET_OVERRIDE_PROPS]: ImportSource.UTILS,
   [ImportValue.MERGE_VARIANTS_OVERRIDES]: ImportSource.UTILS,

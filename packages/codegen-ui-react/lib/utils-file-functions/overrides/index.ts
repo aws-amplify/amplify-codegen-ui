@@ -13,9 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export type { EscapeHatchProps, Variant } from './types';
-export { buildEscapeHatchAndVariantTypes } from './types';
-export { findChildOverrides, buildFindChildOverrides } from './findChildOverrides';
-export { getOverridesFromVariants, buildGetOverridesFromVariants } from './getOverridesFromVariants';
-export { getOverrideProps, buildGetOverrideProps } from './getOverrideProps';
-export { mergeVariantsAndOverrides, buildMergeVariantsAndOverrides } from './mergeVariantsAndOverrides';
+export * from './findChildOverrides';
+export * from './getOverrideProps';
+export * from './getOverridesFromVariants';
+export * from './mergeVariantsAndOverrides';
+export * from './override-types';

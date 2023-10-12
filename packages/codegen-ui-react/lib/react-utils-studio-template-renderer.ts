@@ -14,29 +14,26 @@
   limitations under the License.
  */
 import { EOL } from 'os';
-import ts, { EmitHint } from 'typescript';
+import { EmitHint } from 'typescript';
 import { StudioTemplateRenderer } from '@aws-amplify/codegen-ui';
 import { ReactRenderConfig, scriptKindToFileExtension } from './react-render-config';
 import { ImportCollection, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
 import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
-import { generateValidationFunction } from './utils/forms/validation';
-import { getFetchByPathNodeFunction } from './utils/json-path-fetch';
-import { generateFormatUtil } from './utils/string-formatter';
-import { buildStorageManagerProcessFileVariableStatement } from './utils/forms/storage-field-component';
 import {
   constantsString,
   amplifySymbolString,
   useNavigateActionString,
   useStateMutationActionString,
+  getOverridePropsString,
+  getOverridesFromVariantsString,
+  mergeVariantsAndOverridesString,
+  formatterString,
+  fetchByPathString,
+  processFileString,
+  validationString,
+  findChildOverridesString,
 } from './utils-file-functions';
-import {
-  buildEscapeHatchAndVariantTypes,
-  buildFindChildOverrides,
-  buildGetOverrideProps,
-  buildGetOverridesFromVariants,
-  buildMergeVariantsAndOverrides,
-} from './overrides';
 
 export type UtilTemplateType = 'validation' | 'formatter' | 'fetchByPath' | 'processFile';
 
@@ -73,37 +70,35 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
 
   renderComponentInternal() {
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
-    const utilsStatements: (ts.VariableStatement | ts.TypeAliasDeclaration | ts.FunctionDeclaration)[] = [
-      ...buildEscapeHatchAndVariantTypes(),
-      ...buildFindChildOverrides(),
-      ...buildGetOverrideProps(),
-      ...buildGetOverridesFromVariants(),
-      ...buildMergeVariantsAndOverrides(),
-    ];
+    this.importCollection.addMappedImport(ImportValue.HUB);
+
     const parsedUtils: string[] = [
       constantsString,
       amplifySymbolString,
       useStateMutationActionString,
       useNavigateActionString,
+      findChildOverridesString,
+      getOverridePropsString,
+      getOverridesFromVariantsString,
+      mergeVariantsAndOverridesString,
     ];
-    this.importCollection.addMappedImport(ImportValue.HUB);
 
     const utilsSet = new Set(this.utils);
 
     if (utilsSet.has('validation')) {
-      utilsStatements.push(...generateValidationFunction());
+      parsedUtils.push(validationString);
     }
 
     if (utilsSet.has('formatter')) {
-      utilsStatements.push(...generateFormatUtil());
+      parsedUtils.push(formatterString);
     }
 
     if (utilsSet.has('fetchByPath')) {
-      utilsStatements.push(getFetchByPathNodeFunction());
+      parsedUtils.push(fetchByPathString);
     }
 
     if (utilsSet.has('processFile')) {
-      utilsStatements.push(buildStorageManagerProcessFileVariableStatement());
+      parsedUtils.push(processFileString);
     }
 
     let componentText = `/* eslint-disable */${EOL}`;
@@ -115,13 +110,6 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
     componentText += EOL;
 
     componentText += parsedUtils.join(EOL) + EOL;
-
-    utilsStatements.forEach((util) => {
-      const result = printer.printNode(EmitHint.Unspecified, util, file);
-      componentText += result + EOL;
-    });
-
-    componentText += EOL;
 
     const { componentText: transpliedText } = transpile(componentText, this.renderConfig);
 
