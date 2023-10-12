@@ -264,9 +264,7 @@ export abstract class TestGenerator {
 
     generateIndexFile(testCases);
 
-    if (utilsFunctions.size) {
-      generateUtilsFile([...utilsFunctions]);
-    }
+    generateUtilsFile([...utilsFunctions]);
 
     // only test with 4 components for performance
     generateSnippet(testCases.filter((testCase) => testCase.testType === 'Component').slice(0, 4));

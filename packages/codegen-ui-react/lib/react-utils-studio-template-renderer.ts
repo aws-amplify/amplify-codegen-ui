@@ -17,13 +17,19 @@ import { EOL } from 'os';
 import ts, { EmitHint } from 'typescript';
 import { StudioTemplateRenderer } from '@aws-amplify/codegen-ui';
 import { ReactRenderConfig, scriptKindToFileExtension } from './react-render-config';
-import { ImportCollection } from './imports';
+import { ImportCollection, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
 import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
 import { generateValidationFunction } from './utils/forms/validation';
 import { getFetchByPathNodeFunction } from './utils/json-path-fetch';
 import { generateFormatUtil } from './utils/string-formatter';
 import { buildStorageManagerProcessFileVariableStatement } from './utils/forms/storage-field-component';
+import {
+  constantsString,
+  amplifySymbolString,
+  useNavigateActionString,
+  useStateMutationActionString,
+} from './utils-file-functions';
 import {
   buildEscapeHatchAndVariantTypes,
   buildFindChildOverrides,
@@ -74,7 +80,13 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
       ...buildGetOverridesFromVariants(),
       ...buildMergeVariantsAndOverrides(),
     ];
-    const skipReactImport = true;
+    const parsedUtils: string[] = [
+      constantsString,
+      amplifySymbolString,
+      useStateMutationActionString,
+      useNavigateActionString,
+    ];
+    this.importCollection.addMappedImport(ImportValue.HUB);
 
     const utilsSet = new Set(this.utils);
 
@@ -95,12 +107,14 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
     }
 
     let componentText = `/* eslint-disable */${EOL}`;
-    const imports = this.importCollection.buildImportStatements(skipReactImport);
+    const imports = this.importCollection.buildImportStatements(false);
     imports.forEach((importStatement) => {
       const result = printer.printNode(EmitHint.Unspecified, importStatement, file);
       componentText += result + EOL;
     });
     componentText += EOL;
+
+    componentText += parsedUtils.join(EOL) + EOL;
 
     utilsStatements.forEach((util) => {
       const result = printer.printNode(EmitHint.Unspecified, util, file);

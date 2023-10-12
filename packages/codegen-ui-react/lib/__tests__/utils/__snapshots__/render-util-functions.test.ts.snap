@@ -2,6 +2,125 @@
 
 exports[`render utils file render all 1`] = `
 "/* eslint-disable */
+import * as React from \\"react\\";
+import { Hub } from \\"aws-amplify\\";
+export const UI_CHANNEL = \\"ui\\";
+export const UI_EVENT_TYPE_ACTIONS = \\"actions\\";
+export const CATEGORY_AUTH = \\"auth\\";
+export const CATEGORY_DATASTORE = \\"datastore\\";
+export const CATEGORY_CORE = \\"core\\";
+export const ACTION_AUTH_SIGNOUT = \\"signout\\";
+export const ACTION_NAVIGATE = \\"navigate\\";
+export const ACTION_DATASTORE_CREATE = \\"create\\";
+export const ACTION_DATASTORE_DELETE = \\"delete\\";
+export const ACTION_DATASTORE_UPDATE = \\"update\\";
+export const ACTION_STATE_MUTATION = \\"statemutation\\";
+export const STATUS_STARTED = \\"started\\";
+export const STATUS_FINISHED = \\"finished\\";
+export const EVENT_ACTION_AUTH = \`\${UI_EVENT_TYPE_ACTIONS}:\${CATEGORY_AUTH}\`;
+export const EVENT_ACTION_AUTH_SIGNOUT = \`\${EVENT_ACTION_AUTH}:\${ACTION_AUTH_SIGNOUT}\`;
+export const ACTION_AUTH_SIGNOUT_STARTED = \`\${EVENT_ACTION_AUTH_SIGNOUT}:\${STATUS_STARTED}\`;
+export const ACTION_AUTH_SIGNOUT_FINISHED = \`\${EVENT_ACTION_AUTH_SIGNOUT}:\${STATUS_FINISHED}\`;
+export const EVENT_ACTION_CORE = \`\${UI_EVENT_TYPE_ACTIONS}:\${CATEGORY_CORE}\`;
+export const EVENT_ACTION_CORE_STATE_MUTATION = \`\${EVENT_ACTION_CORE}:\${ACTION_STATE_MUTATION}\`;
+export const ACTION_STATE_MUTATION_STARTED = \`\${EVENT_ACTION_CORE_STATE_MUTATION}:\${STATUS_STARTED}\`;
+export const ACTION_STATE_MUTATION_FINISHED = \`\${EVENT_ACTION_CORE_STATE_MUTATION}:\${STATUS_FINISHED}\`;
+export const EVENT_ACTION_CORE_NAVIGATE = \`\${EVENT_ACTION_CORE}:\${ACTION_NAVIGATE}\`;
+export const ACTION_NAVIGATE_STARTED = \`\${EVENT_ACTION_CORE_NAVIGATE}:\${STATUS_STARTED}\`;
+export const ACTION_NAVIGATE_FINISHED = \`\${EVENT_ACTION_CORE_NAVIGATE}:\${STATUS_FINISHED}\`;
+export const EVENT_ACTION_DATASTORE = \`\${UI_EVENT_TYPE_ACTIONS}:\${CATEGORY_DATASTORE}\`;
+export const EVENT_ACTION_DATASTORE_CREATE = \`\${EVENT_ACTION_DATASTORE}:\${ACTION_DATASTORE_CREATE}\`;
+export const ACTION_DATASTORE_CREATE_STARTED = \`\${EVENT_ACTION_DATASTORE_CREATE}:\${STATUS_STARTED}\`;
+export const ACTION_DATASTORE_CREATE_FINISHED = \`\${EVENT_ACTION_DATASTORE_CREATE}:\${STATUS_FINISHED}\`;
+export const EVENT_ACTION_DATASTORE_DELETE = \`\${EVENT_ACTION_DATASTORE}:\${ACTION_DATASTORE_DELETE}\`;
+export const ACTION_DATASTORE_DELETE_STARTED = \`\${EVENT_ACTION_DATASTORE_DELETE}:\${STATUS_STARTED}\`;
+export const ACTION_DATASTORE_DELETE_FINISHED = \`\${EVENT_ACTION_DATASTORE_DELETE}:\${STATUS_FINISHED}\`;
+export const EVENT_ACTION_DATASTORE_UPDATE = \`\${EVENT_ACTION_DATASTORE}:\${ACTION_DATASTORE_UPDATE}\`;
+export const ACTION_DATASTORE_UPDATE_STARTED = \`\${EVENT_ACTION_DATASTORE_UPDATE}:\${STATUS_STARTED}\`;
+export const ACTION_DATASTORE_UPDATE_FINISHED = \`\${EVENT_ACTION_DATASTORE_UPDATE}:\${STATUS_FINISHED}\`;
+export const DATASTORE_QUERY_BY_ID_ERROR =
+  \\"Error querying datastore item by id\\";
+export const AMPLIFY_SYMBOL =
+  typeof Symbol !== \\"undefined\\" && typeof Symbol.for === \\"function\\"
+    ? Symbol.for(\\"amplify_default\\")
+    : \\"@@amplify_default\\";
+export const useStateMutationAction = (initialState) => {
+  const [state, setState] = React.useState(initialState);
+  const setNewState = React.useCallback(
+    (newState) => {
+      const prevState = state;
+      Hub.dispatch(
+        UI_CHANNEL,
+        {
+          event: ACTION_STATE_MUTATION_STARTED,
+          data: { prevState, newState },
+        },
+        EVENT_ACTION_CORE_STATE_MUTATION,
+        AMPLIFY_SYMBOL
+      );
+      setState(newState);
+      Hub.dispatch(
+        UI_CHANNEL,
+        {
+          event: ACTION_STATE_MUTATION_FINISHED,
+          data: { prevState, newState },
+        },
+        EVENT_ACTION_CORE_STATE_MUTATION,
+        AMPLIFY_SYMBOL
+      );
+    },
+    [state]
+  );
+  return [state, setNewState];
+};
+export const useNavigateAction = (options) => {
+  const { type, url, anchor, target } = options;
+  const run = React.useMemo(() => {
+    switch (type) {
+      case \\"url\\":
+        return () => {
+          window.open(url, target || \\"_self\\", \\"noopener noreferrer\\");
+        };
+      case \\"anchor\\":
+        return () => {
+          window.location.hash = anchor ?? \\"\\";
+        };
+      case \\"reload\\":
+        return () => {
+          window.location.reload();
+        };
+      default:
+        return () => {
+          // eslint-disable-next-line no-console
+          console.warn(
+            'Please provide a valid navigate type. Available types are \\"url\\", \\"anchor\\" and \\"reload\\".'
+          );
+        };
+    }
+  }, [anchor, target, type, url]);
+  const navigateAction = () => {
+    Hub.dispatch(
+      UI_CHANNEL,
+      {
+        event: ACTION_NAVIGATE_STARTED,
+        data: options,
+      },
+      EVENT_ACTION_CORE_NAVIGATE,
+      AMPLIFY_SYMBOL
+    );
+    run();
+    Hub.dispatch(
+      UI_CHANNEL,
+      {
+        event: ACTION_NAVIGATE_FINISHED,
+        data: options,
+      },
+      EVENT_ACTION_CORE_NAVIGATE,
+      AMPLIFY_SYMBOL
+    );
+  };
+  return navigateAction;
+};
 export const findChildOverrides = (overrides, elementHierarchy) => {
   if (!overrides) {
     return null;
