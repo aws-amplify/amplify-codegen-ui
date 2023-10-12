@@ -24,11 +24,14 @@
     "@aws-amplify/datastore": "^4.0.0",
     "@aws-amplify/ui-react": "^4.6.0",
     "@aws-amplify/ui-react-storage": "^1.1.0",
+    "@testing-library/react-hooks": "^8.0.1",
     "@types/node": "^16.3.3",
     "@types/pluralize": "^0.0.29",
     "@types/react": "^17.0.4",
     "@types/semver": "^7.3.9",
-    "pascalcase": "1.0.0"
+    "aws-amplify": "^5.3.11",
+    "pascalcase": "1.0.0",
+    "react": "^17.0.0"
   },
   "dependencies": {
     "@aws-amplify/codegen-ui": "2.17.0",
@@ -52,12 +55,18 @@
     },
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "lib/**/*.ts"
+      "lib/**/*.ts",
+      "lib/**/*.tsx"
     ],
     "coveragePathIgnorePatterns": [
       "<rootDir>/lib/__tests__/__utils__/"
     ],
-    "testRegex": "(lib/__tests__/.*.test.ts)$",
+    "testEnvironment": "jsdom",
+    "testRegex": [
+      "(lib/__tests__/.*.test.ts)$",
+      "(lib/utils-file-functions/hooks/__tests__/.*.test.tsx)$",
+      "(lib/utils-file-functions/hooks/__tests__/.*.test.ts)$"
+    ],
     "testPathIgnorePatterns": [
       "<rootDir>/lib/__tests__/__utils__/"
     ],
@@ -68,7 +77,8 @@
     },
     "moduleFileExtensions": [
       "ts",
-      "js"
+      "js",
+      "tsx"
     ]
   },
   "resolutions": {
