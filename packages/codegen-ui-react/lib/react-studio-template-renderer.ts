@@ -125,6 +125,7 @@ import { addUseEffectWrapper } from './utils/generate-react-hooks';
 import { ActionType, getGraphqlCallExpression, getGraphqlQueryForModel, isGraphqlConfig } from './utils/graphql';
 import { AMPLIFY_JS_V5, AMPLIFY_JS_V6 } from './utils/constants';
 import { getAmplifyJSVersionToRender } from './helpers/amplify-js-versioning';
+import { overrideTypesString } from './utils-file-functions';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -244,6 +245,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     });
 
     componentText += EOL;
+
+    componentText += overrideTypesString + EOL;
 
     propsDeclarations.forEach((propsDeclaration) => {
       const propsPrinted = printer.printNode(EmitHint.Unspecified, propsDeclaration, file);
@@ -420,7 +423,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const componentPropType = getComponentPropName(component.name);
     const propsTypeParameter = PrimitiveTypeParameter[Primitive[component.componentType as Primitive]];
 
-    this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS);
     const overridesProps = factory.createTypeAliasDeclaration(
       undefined,
       [factory.createModifier(ts.SyntaxKind.ExportKeyword), factory.createModifier(ts.SyntaxKind.DeclareKeyword)],

@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import type { Variant } from '../types';
+import type { Variant } from '../override-types';
 import { getOverridesFromVariants } from '../getOverridesFromVariants';
 
 describe('getOverridesFromVariants', () => {

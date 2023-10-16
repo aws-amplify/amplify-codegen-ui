@@ -66,6 +66,7 @@ import {
   getPredicateName,
   needsFormatter,
 } from '../react-table-renderer-helper';
+import { overrideTypesString } from '../utils-file-functions';
 
 export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -176,6 +177,8 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
     });
 
     componentText += EOL;
+
+    componentText += overrideTypesString + EOL;
 
     propsDeclaration.forEach((typeNode) => {
       const propsPrinted = printer.printNode(EmitHint.Unspecified, typeNode, file);
@@ -475,7 +478,7 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
     ]);
     const formPropType = getComponentPropName(this.component.name);
 
-    this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS, ImportValue.CREATE_DATA_STORE_PREDICATE);
+    this.importCollection.addMappedImport(ImportValue.CREATE_DATA_STORE_PREDICATE);
 
     return [
       factory.createTypeAliasDeclaration(

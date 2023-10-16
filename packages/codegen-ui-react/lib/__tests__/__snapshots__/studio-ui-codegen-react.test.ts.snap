@@ -4,15 +4,21 @@ exports[`amplify render tests actions DataStore DataStoreCreateItem 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
-import {
-  EscapeHatchProps,
-  useDataStoreCreateAction,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { useDataStoreCreateAction } from \\"@aws-amplify/ui-react/internal\\";
 import { Customer } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CreateCustomerButtonOverridesProps = {
@@ -54,15 +60,21 @@ exports[`amplify render tests actions DataStore DataStoreDeleteItem 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
-import {
-  EscapeHatchProps,
-  useDataStoreDeleteAction,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { useDataStoreDeleteAction } from \\"@aws-amplify/ui-react/internal\\";
 import { Customer } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type DeleteCustomerButtonOverridesProps = {
@@ -104,15 +116,21 @@ exports[`amplify render tests actions DataStore DataStoreUpdateItem 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
-import {
-  EscapeHatchProps,
-  useDataStoreUpdateAction,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { useDataStoreUpdateAction } from \\"@aws-amplify/ui-react/internal\\";
 import { Customer } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type UpdateCustomerButtonOverridesProps = {
@@ -159,8 +177,16 @@ import { createCustomer } from \\"../graphql/mutations\\";
 import { Customer } from \\"../API\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CreateCustomerButtonOverridesProps = {
@@ -211,8 +237,16 @@ import { createCustomer } from \\"../graphql/mutations\\";
 import { Customer } from \\"../API\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CreateCustomerButtonOverridesProps = {
@@ -265,8 +299,16 @@ import { deleteCustomer } from \\"../graphql/mutations\\";
 import { Customer } from \\"../API\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type DeleteCustomerButtonOverridesProps = {
@@ -318,8 +360,16 @@ import { updateCustomer } from \\"../graphql/mutations\\";
 import { Customer } from \\"../API\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type UpdateCustomerButtonOverridesProps = {
@@ -368,13 +418,19 @@ exports[`amplify render tests actions auth signs out 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
-import {
-  EscapeHatchProps,
-  useAuthSignOutAction,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { useAuthSignOutAction } from \\"@aws-amplify/ui-react/internal\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type SignOutButtonOverridesProps = {
@@ -414,8 +470,16 @@ Object {
 import * as React from \\"react\\";
 import { getOverrideProps, useNavigateAction } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type NavigateButtonOverridesProps = {
@@ -458,8 +522,16 @@ Object {
 import * as React from \\"react\\";
 import { getOverrideProps, useNavigateAction } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type NavigateButtonOverridesProps = {
@@ -502,8 +574,16 @@ Object {
 import * as React from \\"react\\";
 import { getOverrideProps, useNavigateAction } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type NavigateButtonOverridesProps = {
@@ -547,8 +627,16 @@ Object {
 import * as React from \\"react\\";
 import { getOverrideProps, useNavigateAction } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ReloadButtonOverridesProps = {
@@ -588,7 +676,6 @@ Object {
 import * as React from \\"react\\";
 import { User } from \\"../models\\";
 import {
-  EscapeHatchProps,
   createDataStorePredicate,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
@@ -602,6 +689,15 @@ import {
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ConditionalInMutationOverridesProps = {
@@ -667,8 +763,16 @@ exports[`amplify render tests basic component tests should generate a simple but
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CustomButtonOverridesProps = {
@@ -702,8 +806,16 @@ exports[`amplify render tests basic component tests should generate a simple tex
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CustomTextOverridesProps = {
@@ -735,8 +847,16 @@ exports[`amplify render tests basic component tests should generate a simple vie
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type TestOverridesProps = {
@@ -766,7 +886,6 @@ exports[`amplify render tests bindings auth supports auth bindings in actions 1`
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
-  EscapeHatchProps,
   useAuth,
   useDataStoreCreateAction,
 } from \\"@aws-amplify/ui-react/internal\\";
@@ -775,6 +894,15 @@ import { schema } from \\"../models/schema\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ComponentWithAuthEventBindingOverridesProps = {
@@ -819,8 +947,16 @@ import * as React from \\"react\\";
 import { Class } from \\"../models\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type DataBindingNamedClassOverridesProps = {
@@ -855,8 +991,16 @@ import * as React from \\"react\\";
 import { Flex as Flex0 } from \\"../models\\";
 import { getOverrideProps } from \\"./utils\\";
 import { FlexProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type DataBindingNamedClassOverridesProps = {
@@ -899,8 +1043,16 @@ import {
   Placeholder,
 } from \\"@aws-amplify/ui-react\\";
 import { API } from \\"aws-amplify\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type AuthorProfileCollectionOverridesProps = {
@@ -1035,10 +1187,7 @@ exports[`amplify render tests collection GraphQL should render collection with d
 import * as React from \\"react\\";
 import { UserPreferences } from \\"../API\\";
 import { listUserPreferences, listUsers } from \\"../graphql/queries\\";
-import {
-  EscapeHatchProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { generateClient } from \\"aws-amplify/api\\";
 import {
   Button,
@@ -1053,6 +1202,15 @@ import {
 import { getOverrideProps } from \\"./utils\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CollectionOfCustomButtonsOverridesProps = {
@@ -1237,10 +1395,7 @@ exports[`amplify render tests collection GraphQL should render collection with d
 import * as React from \\"react\\";
 import { UserPreferences } from \\"../API\\";
 import { listUserPreferences, listUsers } from \\"../graphql/queries\\";
-import {
-  EscapeHatchProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import { API } from \\"aws-amplify\\";
 import {
   Button,
@@ -1255,6 +1410,15 @@ import {
 import { getOverrideProps } from \\"./utils\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CollectionOfCustomButtonsOverridesProps = {
@@ -1446,8 +1610,16 @@ import {
   Placeholder,
 } from \\"@aws-amplify/ui-react\\";
 import { API } from \\"aws-amplify\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ListingCardCollectionOverridesProps = {
@@ -1591,8 +1763,16 @@ import {
   Placeholder,
 } from \\"@aws-amplify/ui-react\\";
 import { API } from \\"aws-amplify\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ListingCardCollectionOverridesProps = {
@@ -1713,8 +1893,16 @@ import {
   Placeholder,
 } from \\"@aws-amplify/ui-react\\";
 import { API } from \\"aws-amplify\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type AuthorProfileCollectionOverridesProps = {
@@ -1848,14 +2036,20 @@ exports[`amplify render tests collection should not render nested query if the d
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { Author } from \\"../models\\";
-import {
-  EscapeHatchProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import AuthorProfile, { AuthorProfileProps } from \\"./AuthorProfile\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type AuthorProfileCollectionOverridesProps = {
@@ -1920,7 +2114,6 @@ exports[`amplify render tests collection should render collection with data bind
 import * as React from \\"react\\";
 import { UserPreferences, User } from \\"../models\\";
 import {
-  EscapeHatchProps,
   createDataStorePredicate,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
@@ -1935,6 +2128,15 @@ import {
 import { getOverrideProps } from \\"./utils\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CollectionOfCustomButtonsOverridesProps = {
@@ -2065,7 +2267,6 @@ Object {
 import * as React from \\"react\\";
 import { UserPreferences, User } from \\"../models\\";
 import {
-  EscapeHatchProps,
   createDataStorePredicate,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
@@ -2081,6 +2282,15 @@ import {
 import { getOverrideProps } from \\"./utils\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CollectionOfCustomButtonsOverridesProps = {
@@ -2192,7 +2402,6 @@ exports[`amplify render tests collection should render collection with data bind
 import * as React from \\"react\\";
 import { UserPreferences, User } from \\"../models\\";
 import {
-  EscapeHatchProps,
   createDataStorePredicate,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
@@ -2207,6 +2416,15 @@ import {
 import { getOverrideProps } from \\"./utils\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CollectionOfCustomButtonsOverridesProps = {
@@ -2309,14 +2527,20 @@ exports[`amplify render tests collection should render collection with data bind
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { UntitledModel } from \\"../models\\";
-import {
-  EscapeHatchProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import ListingCard, { ListingCardProps } from \\"./ListingCard\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ListingCardCollectionOverridesProps = {
@@ -2384,8 +2608,16 @@ import * as React from \\"react\\";
 import ListingCard, { ListingCardProps } from \\"./ListingCard\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ListingCardCollectionOverridesProps = {
@@ -2432,16 +2664,22 @@ exports[`amplify render tests collection should render concatenated keys if mode
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { CompositePerson } from \\"../models\\";
-import {
-  EscapeHatchProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import CompositePersonProfile, {
   CompositePersonProfileProps,
 } from \\"./CompositePersonProfile\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CompositePersonProfileCollectionOverridesProps = {
@@ -2509,7 +2747,6 @@ exports[`amplify render tests collection should render if model name collides wi
 import * as React from \\"react\\";
 import { Flex as Flex0, FlexModel, Button as Button0 } from \\"../models\\";
 import {
-  EscapeHatchProps,
   createDataStorePredicate,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
@@ -2525,6 +2762,15 @@ import {
 import { getOverrideProps } from \\"./utils\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CollectionWithModelNameCollisionsOverridesProps = {
@@ -2644,14 +2890,20 @@ exports[`amplify render tests collection should render nested query if model has
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { Author } from \\"../models\\";
-import {
-  EscapeHatchProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import AuthorProfile, { AuthorProfileProps } from \\"./AuthorProfile\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type AuthorProfileCollectionOverridesProps = {
@@ -2726,8 +2978,16 @@ exports[`amplify render tests complex component tests should generate a button w
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ViewWithButtonOverridesProps = {
@@ -2763,8 +3023,16 @@ import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import CustomButton, { CustomButtonProps } from \\"./CustomButton\\";
 import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ViewWithCustomButtonOverridesProps = {
@@ -2799,8 +3067,16 @@ import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import CustomButton, { CustomButtonProps } from \\"./CustomButton\\";
 import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ViewWithCustomButtonOverridesProps = {
@@ -2835,8 +3111,16 @@ exports[`amplify render tests complex component tests should generate a componen
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ViewWithButtonOverridesProps = {
@@ -2871,8 +3155,16 @@ exports[`amplify render tests complex examples should render complex sample 1 1`
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Flex, FlexProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ComplexTest1OverridesProps = {
@@ -2926,8 +3218,16 @@ exports[`amplify render tests complex examples should render complex sample 2 1`
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Flex, FlexProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ComplexTest2OverridesProps = {
@@ -3009,8 +3309,16 @@ import {
   ViewProps,
 } from \\"@aws-amplify/ui-react\\";
 import ReneButton, { ReneButtonProps } from \\"./ReneButton\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ComplexTest3OverridesProps = {
@@ -3101,8 +3409,16 @@ import {
   mergeVariantsAndOverrides,
 } from \\"./utils\\";
 import { Flex, FlexProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ComplexTest4OverridesProps = {
@@ -3222,8 +3538,16 @@ exports[`amplify render tests complex examples should render complex sample 5 1`
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Flex, FlexProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ComplexTest5OverridesProps = {
@@ -3281,8 +3605,16 @@ exports[`amplify render tests complex examples should render complex sample 6 1`
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Flex, FlexProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ComplexTest6OverridesProps = {
@@ -3372,8 +3704,16 @@ import {
   View,
   ViewProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ComplexTest7OverridesProps = {
@@ -3452,8 +3792,16 @@ exports[`amplify render tests complex examples should render complex sample 8 1`
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Flex, FlexProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ComplexTest8OverridesProps = {
@@ -3537,8 +3885,16 @@ import {
   Text,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ComplexTest9OverridesProps = {
@@ -3946,8 +4302,16 @@ import {
   Text,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ComplexTest10OverridesProps = {
@@ -4907,8 +5271,16 @@ import {
   View,
   ViewProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ComplexTest11OverridesProps = {
@@ -5872,8 +6244,16 @@ exports[`amplify render tests component with binding should render build propert
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type TextWithDataBindingOverridesProps = {
@@ -5915,8 +6295,16 @@ import {
   View,
   ViewProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ComponentWithSlotBindingOverridesProps = {
@@ -5957,8 +6345,16 @@ import * as React from \\"react\\";
 import { User } from \\"../API\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ComponentWithDataBindingOverridesProps = {
@@ -5999,8 +6395,16 @@ import * as React from \\"react\\";
 import { User } from \\"../models\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ComponentWithDataBindingOverridesProps = {
@@ -6041,8 +6445,16 @@ import * as React from \\"react\\";
 import { UntitledModel } from \\"../models\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Flex, FlexProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type SectionHeadingOverridesProps = {
@@ -6107,8 +6519,16 @@ exports[`amplify render tests component with data binding should render with dat
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ChildComponentWithDataBindingOverridesProps = {
@@ -6153,8 +6573,16 @@ import {
   mergeVariantsAndOverrides,
 } from \\"./utils\\";
 import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ViewPrimitiveOverridesProps = {
@@ -6209,8 +6637,16 @@ import {
   mergeVariantsAndOverrides,
 } from \\"./utils\\";
 import { Icon, IconProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type IconVariantsOverridesProps = {
@@ -6285,8 +6721,16 @@ import {
   mergeVariantsAndOverrides,
 } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CustomButtonOverridesProps = {
@@ -6344,8 +6788,16 @@ import {
   mergeVariantsAndOverrides,
 } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CustomButtonOverridesProps = {
@@ -6408,8 +6860,16 @@ exports[`amplify render tests concat and conditional transform should render chi
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ChildComponentWithDataBoundConcatenationOverridesProps = {
@@ -6457,8 +6917,16 @@ exports[`amplify render tests concat and conditional transform should render chi
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ChildComponentWithStaticConcatenationOverridesProps = {
@@ -6500,8 +6968,16 @@ import * as React from \\"react\\";
 import { User } from \\"../models\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CustomButtonOverridesProps = {
@@ -6541,8 +7017,16 @@ import * as React from \\"react\\";
 import { User } from \\"../models\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CustomButtonOverridesProps = {
@@ -6600,8 +7084,16 @@ import {
   Text,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ConditionalComponentWithDataBindingOverridesProps = {
@@ -6655,8 +7147,16 @@ exports[`amplify render tests concat and conditional transform should render com
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CustomButtonOverridesProps = {
@@ -6690,7 +7190,16 @@ exports[`amplify render tests custom components alias parent should render decla
 import { GridProps } from \\"./Grid\\";
 import { ButtonProps } from \\"@aws-amplify/ui-react\\";
 import { ViewTestProps } from \\"./ViewTest\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type AliasParentOverridesProps = {
     AliasParent?: ViewTestProps;
@@ -6711,8 +7220,16 @@ import { getOverrideProps } from \\"./utils\\";
 import { Grid as GridCustom, GridProps } from \\"./Grid\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 import ViewTest, { ViewTestProps } from \\"./ViewTest\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type AliasParentOverridesProps = {
@@ -6746,8 +7263,16 @@ import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import CustomButton, { CustomButtonProps } from \\"./CustomButton\\";
 import MyView, { MyViewProps } from \\"./MyView\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CustomChildrenOverridesProps = {
@@ -6832,7 +7357,16 @@ exports[`amplify render tests custom components custom children should render de
 "import * as React from \\"react\\";
 import { CustomButtonProps } from \\"./CustomButton\\";
 import { MyViewProps } from \\"./MyView\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomChildrenOverridesProps = {
     CustomChildren?: MyViewProps;
@@ -6851,8 +7385,16 @@ import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import CustomButton, { CustomButtonProps } from \\"./CustomButton\\";
 import ViewTest, { ViewTestProps } from \\"./ViewTest\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CustomParentAndChildrenOverridesProps = {
@@ -6940,7 +7482,16 @@ exports[`amplify render tests custom components custom parent and children shoul
 "import * as React from \\"react\\";
 import { CustomButtonProps } from \\"./CustomButton\\";
 import { ViewTestProps } from \\"./ViewTest\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomParentAndChildrenOverridesProps = {
     CustomParentAndChildren?: ViewTestProps;
@@ -6959,8 +7510,16 @@ import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 import MyView, { MyViewProps } from \\"./MyView\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CustomParentOverridesProps = {
@@ -7043,7 +7602,16 @@ exports[`amplify render tests custom components custom parent should render decl
 "import * as React from \\"react\\";
 import { ButtonProps } from \\"@aws-amplify/ui-react\\";
 import { MyViewProps } from \\"./MyView\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomParentOverridesProps = {
     CustomParent?: MyViewProps;
@@ -7235,8 +7803,17 @@ exports.default = ViewWithButton;
 
 exports[`amplify render tests declarations should render declarations 1`] = `
 "import * as React from \\"react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { ButtonProps, FlexProps, ImageProps } from \\"@aws-amplify/ui-react\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type ProfileOverridesProps = {
     Profile?: PrimitiveOverrideProps<FlexProps>;
@@ -7257,8 +7834,16 @@ Object {
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type BoundDefaultValueOverridesProps = {
@@ -7295,10 +7880,7 @@ Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
 import { User } from \\"../models\\";
-import {
-  EscapeHatchProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
 import {
   Collection,
   CollectionProps,
@@ -7308,6 +7890,15 @@ import {
 import { getOverrideProps } from \\"./utils\\";
 import { MyTextProps } from \\"./MyText\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CollectionDefaultValueOverridesProps = {
@@ -7370,8 +7961,16 @@ Object {
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type SimpleAndBoundDefaultValueOverridesProps = {
@@ -7409,8 +8008,16 @@ Object {
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type SimplePropertyBindingDefaultValueOverridesProps = {
@@ -7459,8 +8066,16 @@ import {
   Text,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type SocialAOverridesProps = {
@@ -7788,8 +8403,16 @@ import {
   TextField,
   TextFieldProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type InputMutationOnClickOverridesProps = {
@@ -7841,10 +8464,7 @@ Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
 import { getOverrideProps, useStateMutationAction } from \\"./utils\\";
-import {
-  EscapeHatchProps,
-  useDataStoreUpdateAction,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { useDataStoreUpdateAction } from \\"@aws-amplify/ui-react/internal\\";
 import { Customer } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
 import {
@@ -7856,6 +8476,15 @@ import {
   TextFieldProps,
 } from \\"@aws-amplify/ui-react\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type MyFormOverridesProps = {
@@ -7911,8 +8540,16 @@ Object {
 import * as React from \\"react\\";
 import { getOverrideProps, useStateMutationAction } from \\"./utils\\";
 import { Button, ButtonProps, Flex, FlexProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ColorChangeOnClickOverridesProps = {
@@ -7970,8 +8607,16 @@ import {
   TextFieldProps,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type TwoWayBindingsOverridesProps = {
@@ -8032,8 +8677,16 @@ import {
   Text,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CheckboxControlledElementOverridesProps = {
@@ -8090,8 +8743,16 @@ import {
   Text,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type StepperControlledElementOverridesProps = {
@@ -8151,8 +8812,16 @@ import {
   Text,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type SwitchControlledElementOverridesProps = {
@@ -8197,7 +8866,6 @@ Object {
 import * as React from \\"react\\";
 import { User } from \\"../models\\";
 import {
-  EscapeHatchProps,
   createDataStorePredicate,
   useAuth,
   useDataStoreBinding,
@@ -8217,6 +8885,15 @@ import {
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type InitialValueBindingsOverridesProps = {
@@ -8545,8 +9222,16 @@ import {
   Text,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CardAOverridesProps = {
@@ -8807,8 +9492,16 @@ import {
   Text,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ButtonsToggleStateOverridesProps = {
@@ -8877,8 +9570,16 @@ import {
   Text,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type MutationWithSyntheticPropOverridesProps = {
@@ -8939,8 +9640,16 @@ import {
   Text,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type UpdateVisibilityOverridesProps = {
@@ -9010,8 +9719,16 @@ import {
   Text,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type SetStateWithoutInitialValueOverridesProps = {
@@ -9077,8 +9794,16 @@ Object {
 import * as React from \\"react\\";
 import { getOverrideProps, useNavigateAction } from \\"./utils\\";
 import { Flex, FlexProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type InvalidNameForMethodOverridesProps = {
@@ -9130,8 +9855,16 @@ import {
   Text,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type NestedMutationOverridesProps = {
@@ -9223,8 +9956,16 @@ import {
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
 import option, { optionProps } from \\"./option\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type TwoWayBindingsOverridesProps = {
@@ -9749,8 +10490,16 @@ exports[`amplify render tests primitives CheckboxField 1`] = `
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { CheckboxField, CheckboxFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CheckBoxFieldPrimitiveOverridesProps = {
@@ -9789,8 +10538,16 @@ import {
   ExpanderItemProps,
   ExpanderProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ExpanderPrimitiveOverridesProps = {
@@ -9838,8 +10595,16 @@ exports[`amplify render tests primitives ExpanderItem 1`] = `
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { ExpanderItem, ExpanderItemProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type MyExpanderItemOverridesProps = {
@@ -9873,8 +10638,16 @@ exports[`amplify render tests primitives Icon 1`] = `
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Icon, IconProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type IconPrimitiveOverridesProps = {
@@ -9913,8 +10686,16 @@ exports[`amplify render tests primitives Icon with lower-cased type \`object\` f
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Icon, IconProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type IconPrimitiveWithLowerCasedTypeOverridesProps = {
@@ -9961,8 +10742,16 @@ import {
   MenuItemProps,
   MenuProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type MenuPrimitiveOverridesProps = {
@@ -10000,8 +10789,16 @@ import {
   MenuButton,
   MenuButtonProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type MenuButtonPrimitiveOverridesProps = {
@@ -10033,8 +10830,16 @@ exports[`amplify render tests primitives SliderField 1`] = `
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { SliderField, SliderFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type SliderFieldPrimitiveOverridesProps = {
@@ -10084,8 +10889,16 @@ import {
   TableRow,
   TableRowProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type TablePrimitiveOverridesProps = {
@@ -10226,8 +11039,16 @@ exports[`amplify render tests primitives TextAreaField 1`] = `
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { TextAreaField, TextAreaFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type TextAreaFieldPrimitiveOverridesProps = {
@@ -10261,8 +11082,16 @@ exports[`amplify render tests primitives TextField 1`] = `
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { TextField, TextFieldProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type TextFieldPrimitiveOverridesProps = {
@@ -10297,8 +11126,16 @@ exports[`amplify render tests renderer configurations with NoApi should render c
 import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type CustomButtonOverridesProps = {
@@ -10330,7 +11167,16 @@ export default function CustomButton(
 exports[`amplify render tests renderer configurations with NoApi should render component without graphql types 1`] = `
 "import * as React from \\"react\\";
 import { ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type ComponentWithDataBindingOverridesProps = {
     ComponentWithDataBinding?: PrimitiveOverrideProps<ButtonProps>;
@@ -10353,8 +11199,16 @@ import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import CustomButton, { CustomButtonProps } from \\"./CustomButton\\";
 import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ViewWithButtonOverridesProps = {
@@ -10402,9 +11256,17 @@ import {
   TextFieldProps,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { SyntheticEvent } from \\"react\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type EventsOverridesProps = {
@@ -10574,8 +11436,16 @@ import * as React from \\"react\\";
 import { getOverrideProps } from \\"./utils\\";
 import Input, { InputProps } from \\"./Input\\";
 import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ParsedFixedValuesOverridesProps = {
@@ -10732,14 +11602,14 @@ export default function Profile(props) {
     )
   );
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kdWxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibW9kdWxlLnRzeCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLG9CQUFvQjtBQUNwQixPQUFPLEtBQUssS0FBSyxNQUFNLE9BQU8sQ0FBQztBQUMvQixPQUFPLEVBQW9CLE9BQU8sRUFBRSxNQUFNLGdDQUFnQyxDQUFDO0FBQzNFLE9BQU8sRUFBRSxnQkFBZ0IsRUFBRSxNQUFNLFNBQVMsQ0FBQztBQUMzQyxPQUFPLEVBQUUsTUFBTSxFQUFlLElBQUksRUFBYSxLQUFLLEVBQWMsTUFBTSx1QkFBdUIsQ0FBQztBQVVoRyxNQUFNLENBQUMsT0FBTyxVQUFVLE9BQU8sQ0FBQyxLQUFtQjs7SUFDL0MsTUFBTSxFQUFFLFNBQVMsS0FBYyxLQUFLLEVBQWQsSUFBSSxVQUFLLEtBQUssRUFBOUIsYUFBc0IsQ0FBUSxDQUFDO0lBQ3JDLE1BQU0sY0FBYyxHQUFHLE1BQUEsTUFBQSxPQUFPLEVBQUUsQ0FBQyxJQUFJLDBDQUFFLFVBQVUsbUNBQUksRUFBRSxDQUFDO0lBQ3hELE9BQU8sQ0FBQyxvQkFBQyxJQUFJLG9CQUFLLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxTQUFTLENBQUMsRUFBTSxJQUFJO1FBQUUsb0JBQUMsS0FBSyxrQkFBQyxHQUFHLEVBQUUsY0FBYyxDQUFDLFVBQVUsQ0FBQyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxRQUFRLENBQUMsRUFBVTtRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLGNBQWMsQ0FBQyxTQUFTLENBQUMsSUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsUUFBUSxDQUFDLEVBQVc7UUFBQSxvQkFBQyxNQUFNLGtCQUFDLFFBQVEsRUFBRSxjQUFjLENBQUMsMEJBQTBCLENBQUMsSUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsUUFBUSxDQUFDLEVBQVcsQ0FBTyxDQUFDLENBQUM7QUFDL1gsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qIGVzbGludC1kaXNhYmxlICovXG5pbXBvcnQgKiBhcyBSZWFjdCBmcm9tIFwicmVhY3RcIjtcbmltcG9ydCB7IEVzY2FwZUhhdGNoUHJvcHMsIHVzZUF1dGggfSBmcm9tIFwiQGF3cy1hbXBsaWZ5L3VpLXJlYWN0L2ludGVybmFsXCI7XG5pbXBvcnQgeyBnZXRPdmVycmlkZVByb3BzIH0gZnJvbSBcIi4vdXRpbHNcIjtcbmltcG9ydCB7IEJ1dHRvbiwgQnV0dG9uUHJvcHMsIEZsZXgsIEZsZXhQcm9wcywgSW1hZ2UsIEltYWdlUHJvcHMgfSBmcm9tIFwiQGF3cy1hbXBsaWZ5L3VpLXJlYWN0XCI7XG5cbmV4cG9ydCBkZWNsYXJlIHR5cGUgUHJpbWl0aXZlT3ZlcnJpZGVQcm9wczxUPiA9IFBhcnRpYWw8VD4gJiBSZWFjdC5ET01BdHRyaWJ1dGVzPEhUTUxEaXZFbGVtZW50PjtleHBvcnQgZGVjbGFyZSB0eXBlIFByb2ZpbGVPdmVycmlkZXNQcm9wcyA9IHtcbiAgICBQcm9maWxlPzogUHJpbWl0aXZlT3ZlcnJpZGVQcm9wczxGbGV4UHJvcHM+O1xuICAgIGNoaWxkMT86IFByaW1pdGl2ZU92ZXJyaWRlUHJvcHM8SW1hZ2VQcm9wcz47XG4gICAgY2hpbGQyPzogUHJpbWl0aXZlT3ZlcnJpZGVQcm9wczxCdXR0b25Qcm9wcz47XG4gICAgY2hpbGQzPzogUHJpbWl0aXZlT3ZlcnJpZGVQcm9wczxCdXR0b25Qcm9wcz47XG59ICYgRXNjYXBlSGF0Y2hQcm9wcztleHBvcnQgdHlwZSBQcm9maWxlUHJvcHMgPSBSZWFjdC5Qcm9wc1dpdGhDaGlsZHJlbjxQYXJ0aWFsPEZsZXhQcm9wcz4gJiB7XG4gICAgb3ZlcnJpZGVzPzogUHJvZmlsZU92ZXJyaWRlc1Byb3BzIHwgdW5kZWZpbmVkIHwgbnVsbDtcbn0+O1xuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gUHJvZmlsZShwcm9wczogUHJvZmlsZVByb3BzKTogUmVhY3QuUmVhY3RFbGVtZW50IHtcbiAgICBjb25zdCB7IG92ZXJyaWRlcywgLi4ucmVzdCB9ID0gcHJvcHM7XG4gICAgY29uc3QgYXV0aEF0dHJpYnV0ZXMgPSB1c2VBdXRoKCkudXNlcj8uYXR0cmlidXRlcyA/PyB7fTtcbiAgICByZXR1cm4gKDxGbGV4IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJQcm9maWxlXCIpfSB7Li4ucmVzdH0+PEltYWdlIHNyYz17YXV0aEF0dHJpYnV0ZXNbXCJ1c2VybmFtZVwiXX0gey4uLmdldE92ZXJyaWRlUHJvcHMob3ZlcnJpZGVzLCBcImNoaWxkMVwiKX0+PC9JbWFnZT48QnV0dG9uIGNoaWxkcmVuPXthdXRoQXR0cmlidXRlc1tcInBpY3R1cmVcIl19IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJjaGlsZDJcIil9PjwvQnV0dG9uPjxCdXR0b24gY2hpbGRyZW49e2F1dGhBdHRyaWJ1dGVzW1wiY3VzdG9tOmZhdm9yaXRlX2ljZWNyZWFtXCJdfSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiY2hpbGQzXCIpfT48L0J1dHRvbj48L0ZsZXg+KTtcbn0iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kdWxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibW9kdWxlLnRzeCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLG9CQUFvQjtBQUNwQixPQUFPLEtBQUssS0FBSyxNQUFNLE9BQU8sQ0FBQztBQUMvQixPQUFPLEVBQUUsT0FBTyxFQUFFLE1BQU0sZ0NBQWdDLENBQUM7QUFDekQsT0FBTyxFQUFFLGdCQUFnQixFQUFFLE1BQU0sU0FBUyxDQUFDO0FBQzNDLE9BQU8sRUFBRSxNQUFNLEVBQWUsSUFBSSxFQUFhLEtBQUssRUFBYyxNQUFNLHVCQUF1QixDQUFDO0FBbUJoRyxNQUFNLENBQUMsT0FBTyxVQUFVLE9BQU8sQ0FBQyxLQUFtQjs7SUFDL0MsTUFBTSxFQUFFLFNBQVMsS0FBYyxLQUFLLEVBQWQsSUFBSSxVQUFLLEtBQUssRUFBOUIsYUFBc0IsQ0FBUSxDQUFDO0lBQ3JDLE1BQU0sY0FBYyxHQUFHLE1BQUEsTUFBQSxPQUFPLEVBQUUsQ0FBQyxJQUFJLDBDQUFFLFVBQVUsbUNBQUksRUFBRSxDQUFDO0lBQ3hELE9BQU8sQ0FBQyxvQkFBQyxJQUFJLG9CQUFLLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxTQUFTLENBQUMsRUFBTSxJQUFJO1FBQUUsb0JBQUMsS0FBSyxrQkFBQyxHQUFHLEVBQUUsY0FBYyxDQUFDLFVBQVUsQ0FBQyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxRQUFRLENBQUMsRUFBVTtRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLGNBQWMsQ0FBQyxTQUFTLENBQUMsSUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsUUFBUSxDQUFDLEVBQVc7UUFBQSxvQkFBQyxNQUFNLGtCQUFDLFFBQVEsRUFBRSxjQUFjLENBQUMsMEJBQTBCLENBQUMsSUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsUUFBUSxDQUFDLEVBQVcsQ0FBTyxDQUFDLENBQUM7QUFDL1gsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qIGVzbGludC1kaXNhYmxlICovXG5pbXBvcnQgKiBhcyBSZWFjdCBmcm9tIFwicmVhY3RcIjtcbmltcG9ydCB7IHVzZUF1dGggfSBmcm9tIFwiQGF3cy1hbXBsaWZ5L3VpLXJlYWN0L2ludGVybmFsXCI7XG5pbXBvcnQgeyBnZXRPdmVycmlkZVByb3BzIH0gZnJvbSBcIi4vdXRpbHNcIjtcbmltcG9ydCB7IEJ1dHRvbiwgQnV0dG9uUHJvcHMsIEZsZXgsIEZsZXhQcm9wcywgSW1hZ2UsIEltYWdlUHJvcHMgfSBmcm9tIFwiQGF3cy1hbXBsaWZ5L3VpLXJlYWN0XCI7XG5cbmV4cG9ydCB0eXBlIEVzY2FwZUhhdGNoUHJvcHMgPSB7XG4gIFtlbGVtZW50SGllcmFyY2h5OiBzdHJpbmddOiBSZWNvcmQ8c3RyaW5nLCB1bmtub3duPjtcbn0gfCBudWxsO1xuXG5leHBvcnQgdHlwZSBWYXJpYW50VmFsdWVzID0geyBba2V5OiBzdHJpbmddOiBzdHJpbmcgfTtcbmV4cG9ydCB0eXBlIFZhcmlhbnQgPSB7XG4gIHZhcmlhbnRWYWx1ZXM6IFZhcmlhbnRWYWx1ZXM7XG4gIG92ZXJyaWRlczogRXNjYXBlSGF0Y2hQcm9wcztcbn07XG5leHBvcnQgZGVjbGFyZSB0eXBlIFByaW1pdGl2ZU92ZXJyaWRlUHJvcHM8VD4gPSBQYXJ0aWFsPFQ+ICYgUmVhY3QuRE9NQXR0cmlidXRlczxIVE1MRGl2RWxlbWVudD47ZXhwb3J0IGRlY2xhcmUgdHlwZSBQcm9maWxlT3ZlcnJpZGVzUHJvcHMgPSB7XG4gICAgUHJvZmlsZT86IFByaW1pdGl2ZU92ZXJyaWRlUHJvcHM8RmxleFByb3BzPjtcbiAgICBjaGlsZDE/OiBQcmltaXRpdmVPdmVycmlkZVByb3BzPEltYWdlUHJvcHM+O1xuICAgIGNoaWxkMj86IFByaW1pdGl2ZU92ZXJyaWRlUHJvcHM8QnV0dG9uUHJvcHM+O1xuICAgIGNoaWxkMz86IFByaW1pdGl2ZU92ZXJyaWRlUHJvcHM8QnV0dG9uUHJvcHM+O1xufSAmIEVzY2FwZUhhdGNoUHJvcHM7ZXhwb3J0IHR5cGUgUHJvZmlsZVByb3BzID0gUmVhY3QuUHJvcHNXaXRoQ2hpbGRyZW48UGFydGlhbDxGbGV4UHJvcHM+ICYge1xuICAgIG92ZXJyaWRlcz86IFByb2ZpbGVPdmVycmlkZXNQcm9wcyB8IHVuZGVmaW5lZCB8IG51bGw7XG59PjtcbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIFByb2ZpbGUocHJvcHM6IFByb2ZpbGVQcm9wcyk6IFJlYWN0LlJlYWN0RWxlbWVudCB7XG4gICAgY29uc3QgeyBvdmVycmlkZXMsIC4uLnJlc3QgfSA9IHByb3BzO1xuICAgIGNvbnN0IGF1dGhBdHRyaWJ1dGVzID0gdXNlQXV0aCgpLnVzZXI/LmF0dHJpYnV0ZXMgPz8ge307XG4gICAgcmV0dXJuICg8RmxleCB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiUHJvZmlsZVwiKX0gey4uLnJlc3R9PjxJbWFnZSBzcmM9e2F1dGhBdHRyaWJ1dGVzW1widXNlcm5hbWVcIl19IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJjaGlsZDFcIil9PjwvSW1hZ2U+PEJ1dHRvbiBjaGlsZHJlbj17YXV0aEF0dHJpYnV0ZXNbXCJwaWN0dXJlXCJdfSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiY2hpbGQyXCIpfT48L0J1dHRvbj48QnV0dG9uIGNoaWxkcmVuPXthdXRoQXR0cmlidXRlc1tcImN1c3RvbTpmYXZvcml0ZV9pY2VjcmVhbVwiXX0gey4uLmdldE92ZXJyaWRlUHJvcHMob3ZlcnJpZGVzLCBcImNoaWxkM1wiKX0+PC9CdXR0b24+PC9GbGV4Pik7XG59Il19
 "
 `;
 
 exports[`amplify render tests user specific attributes should render user specific attributes 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import { EscapeHatchProps, useAuth } from \\"@aws-amplify/ui-react/internal\\";
+import { useAuth } from \\"@aws-amplify/ui-react/internal\\";
 import { getOverrideProps } from \\"./utils\\";
 import {
   Button,
@@ -10750,6 +11620,15 @@ import {
   ImageProps,
 } from \\"@aws-amplify/ui-react\\";
 
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type ProfileOverridesProps = {

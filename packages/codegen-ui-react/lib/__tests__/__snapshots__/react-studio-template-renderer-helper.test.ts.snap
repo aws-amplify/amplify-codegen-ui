@@ -16,7 +16,16 @@ exports[`react-studio-template-renderer-helper transpile successfully transpiles
 "import * as React from \\"react\\";
 import { CustomButtonProps } from \\"./CustomButton\\";
 import { ViewTestProps } from \\"./ViewTest\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomParentAndChildrenOverridesProps = {
     CustomParentAndChildren?: ViewTestProps;
@@ -33,7 +42,16 @@ exports[`react-studio-template-renderer-helper transpile successfully transpiles
 "import * as React from \\"react\\";
 import { CustomButtonProps } from \\"./CustomButton\\";
 import { ViewTestProps } from \\"./ViewTest\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomParentAndChildrenOverridesProps = {
     CustomParentAndChildren?: ViewTestProps;
@@ -50,7 +68,16 @@ exports[`react-studio-template-renderer-helper transpile successfully transpiles
 "import * as React from \\"react\\";
 import { CustomButtonProps } from \\"./CustomButton\\";
 import { ViewTestProps } from \\"./ViewTest\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomParentAndChildrenOverridesProps = {
     CustomParentAndChildren?: ViewTestProps;
@@ -67,7 +94,16 @@ exports[`react-studio-template-renderer-helper transpile successfully transpiles
 "import * as React from \\"react\\";
 import { CustomButtonProps } from \\"./CustomButton\\";
 import { ViewTestProps } from \\"./ViewTest\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomParentAndChildrenOverridesProps = {
     CustomParentAndChildren?: ViewTestProps;
@@ -84,7 +120,16 @@ exports[`react-studio-template-renderer-helper transpile successfully transpiles
 "import * as React from \\"react\\";
 import { CustomButtonProps } from \\"./CustomButton\\";
 import { ViewTestProps } from \\"./ViewTest\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomParentAndChildrenOverridesProps = {
     CustomParentAndChildren?: ViewTestProps;
@@ -101,7 +146,16 @@ exports[`react-studio-template-renderer-helper transpile successfully transpiles
 "import * as React from \\"react\\";
 import { CustomButtonProps } from \\"./CustomButton\\";
 import { ViewTestProps } from \\"./ViewTest\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomParentAndChildrenOverridesProps = {
     CustomParentAndChildren?: ViewTestProps;
@@ -118,7 +172,16 @@ exports[`react-studio-template-renderer-helper transpile successfully transpiles
 "import * as React from \\"react\\";
 import { CustomButtonProps } from \\"./CustomButton\\";
 import { ViewTestProps } from \\"./ViewTest\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomParentAndChildrenOverridesProps = {
     CustomParentAndChildren?: ViewTestProps;
@@ -135,7 +198,16 @@ exports[`react-studio-template-renderer-helper transpile successfully transpiles
 "import * as React from \\"react\\";
 import { CustomButtonProps } from \\"./CustomButton\\";
 import { ViewTestProps } from \\"./ViewTest\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomParentAndChildrenOverridesProps = {
     CustomParentAndChildren?: ViewTestProps;
@@ -152,7 +224,16 @@ exports[`react-studio-template-renderer-helper transpile successfully transpiles
 "import * as React from \\"react\\";
 import { CustomButtonProps } from \\"./CustomButton\\";
 import { ViewTestProps } from \\"./ViewTest\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomParentAndChildrenOverridesProps = {
     CustomParentAndChildren?: ViewTestProps;

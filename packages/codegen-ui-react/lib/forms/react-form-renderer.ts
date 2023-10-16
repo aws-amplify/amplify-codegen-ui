@@ -106,6 +106,7 @@ import { buildSelectedRecordsIdSet } from './form-renderer-helper/model-values';
 import { AMPLIFY_JS_V6, COMPOSITE_PRIMARY_KEY_PROP_NAME } from '../utils/constants';
 import { getFetchRelatedRecordsCallbacks, isGraphqlConfig } from '../utils/graphql';
 import { getAmplifyJSVersionToRender } from '../helpers/amplify-js-versioning';
+import { overrideTypesString } from '../utils-file-functions';
 
 type RenderComponentOnlyResponse = {
   compText: string;
@@ -236,6 +237,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     componentText += EOL;
 
+    componentText += overrideTypesString + EOL;
+
     propsDeclaration.forEach((typeNode) => {
       const propsPrinted = printer.printNode(EmitHint.Unspecified, typeNode, file);
       componentText += propsPrinted;
@@ -352,8 +355,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       ),
     ]);
     const formPropType = getComponentPropName(formName);
-
-    this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS);
 
     let modelName = dataTypeName;
 

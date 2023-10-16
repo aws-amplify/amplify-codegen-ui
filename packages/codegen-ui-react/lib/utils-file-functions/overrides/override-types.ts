@@ -13,12 +13,23 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './overrides';
-export * from './hooks/constants';
-export * from './amplify-symbol';
-export * from './hooks/useNavigateAction';
-export * from './hooks/useStateMutationAction';
-export * from './validation';
-export * from './json-path-fetch';
-export * from './storage-manager';
-export * from './string-formatter';
+
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
+
+export const overrideTypesString = `export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};`;

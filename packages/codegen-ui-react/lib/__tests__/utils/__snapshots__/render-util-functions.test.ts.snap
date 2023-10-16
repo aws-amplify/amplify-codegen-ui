@@ -232,14 +232,14 @@ const checkValidation = (value, validation) => {
           hasError: !(value.length <= validation.numValues[0]),
           errorMessage:
             validation.validationMessage ||
-            \`The value must be shorter than \${validation.numValues[0]}\`,
+            \`The value must be shorter than \${validation.numValues[0]} characters\`,
         };
       case \\"GreaterThanChar\\":
         return {
           hasError: !(value.length > validation.numValues[0]),
           errorMessage:
             validation.validationMessage ||
-            \`The value must be longer than \${validation.numValues[0]}\`,
+            \`The value must be longer than \${validation.numValues[0]} characters\`,
         };
       case \\"LessThanNum\\":
         return {
@@ -319,7 +319,7 @@ const checkValidation = (value, validation) => {
   switch (validation.type) {
     case \\"Email\\":
       const EMAIL_ADDRESS_REGEX =
-        /^[-!#$%&'*+\\\\/0-9=?A-Z^_a-z\`{|}~](\\\\.?[-!#$%&'*+\\\\/0-9=?A-Z^_a-z\`{|}~])*@[a-zA-Z0-9](-*\\\\.?[a-zA-Z0-9])*\\\\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+        /^[-!#$%&'*+/0-9=?A-Z^_a-z\`{|}~](.?[-!#$%&'*+/0-9=?A-Z^_a-z\`{|}~])*@[a-zA-Z0-9](-*.?[a-zA-Z0-9])*.[a-zA-Z](-?[a-zA-Z0-9])+$/;
       return {
         hasError: !EMAIL_ADDRESS_REGEX.test(value),
         errorMessage:
@@ -451,7 +451,7 @@ export function formatDateTime(dateTimeStr, dateTimeFormat) {
   if (dateTimeStr === undefined || dateTimeStr === null) {
     return dateTimeStr;
   }
-  const dateTime = /^d+$/.test(dateTimeStr)
+  const dateTime = /^\\\\d+$/.test(dateTimeStr)
     ? new Date(Number.parseInt(dateTimeStr, 10))
     : new Date(Date.parse(dateTimeStr));
   if (dateTime.toString() === invalidDateStr) {
@@ -477,7 +477,7 @@ export function formatter(value, formatterInput) {
       return value;
   }
 }
-export const fetchByPath = (input, path = \\"\\", accumlator = []) => {
+export const fetchByPath = (input, path, accumlator = []) => {
   const currentPath = path.split(\\".\\");
   const head = currentPath.shift();
   if (input && head && input[head] !== undefined) {
