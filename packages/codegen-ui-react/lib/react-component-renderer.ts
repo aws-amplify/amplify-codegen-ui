@@ -29,6 +29,7 @@ import {
   JsxSelfClosingElement,
   SyntaxKind,
   JsxChild,
+  JsxAttributes,
 } from 'typescript';
 import {
   addBindingPropertiesImports,
@@ -123,6 +124,53 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
     }
 
     return element;
+  }
+
+  // this function is being used for those primitives whose mappers are not written yet. 
+  // Will remove this function when mappers for all meridian primitives will be added.
+  renderMeridianElement(
+    renderChildren: ((children: StudioComponentChild[]) => JsxChild[]) | undefined = undefined,
+  ): JsxElement | JsxSelfClosingElement {
+    const children = this.component.children ?? [];
+
+    this.importCollection.addImport(
+      ImportSource.MERIDIAN + this.component.componentType.toLowerCase(),
+      this.component.componentType,
+    );
+
+    const element = factory.createJsxElement(
+      factory.createJsxOpeningElement(
+        factory.createIdentifier(this.component.componentType),
+        undefined,
+        this.getProps(),
+      ),
+      renderChildren && !hasChildrenProp(this.component.properties) ? renderChildren(children) : [],
+      factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
+    );
+
+    return element;
+  }
+
+  //Will remove this function. Will fetch properties from component.properties, and not from inputProps
+  protected getProps(): JsxAttributes {
+    const props = Object.entries(this.inputProps).map(([key, value]) => {
+      let propertyAttribute: string = JSON.parse(JSON.stringify(value)).value;
+      if (key !== 'label' && key != 'children') {
+        propertyAttribute = propertyAttribute.toLowerCase();
+      }
+
+      // Generating props (key = "val
+      return factory.createJsxAttribute(factory.createIdentifier(key), factory.createStringLiteral(propertyAttribute));
+    });
+    return factory.createJsxAttributes([...props]);
+
+    // key = Propsmap.key
+    // whiltelistMap.ispresent(key){
+    //   map["children"]=  "{" + "props." + key + PropValue["children"]// 3 + "}"
+    //   PropValue["children"]++
+    //   propsMap.remove("isProp")
+    //   //
+    //   }
   }
 
   protected renderOpeningElement(): JsxOpeningElement {

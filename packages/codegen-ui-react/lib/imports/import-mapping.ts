@@ -23,6 +23,8 @@ export enum ImportSource {
   LOCAL_SCHEMA = '../models/schema',
   UTILS = './utils',
   AMPLIFY = 'aws-amplify',
+  AMPLIFY_API = 'aws-amplify/api',
+  MERIDIAN = '@amzn/meridian/',
 }
 
 export enum ImportValue {

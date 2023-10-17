@@ -84,6 +84,8 @@ export type StudioComponent = {
   };
 
   events?: StudioComponentEvents;
+
+  designSystem?: string;
 };
 
 /**
@@ -117,6 +119,8 @@ export type StudioComponentChild = {
    * The id if the component in its source system (Figma, Sketch, etc.)
    */
   sourceId?: string;
+
+  designSystem?: string;
 };
 
 /**
