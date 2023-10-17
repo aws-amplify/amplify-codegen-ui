@@ -15,8 +15,9 @@
  */
 import { factory, JsxTagNamePropertyAccess, NodeFlags, SyntaxKind } from 'typescript';
 import { addUseEffectWrapper } from '../generate-react-hooks';
+import { buildCMSModuleFormProps } from '../../forms/form-renderer-helper/build-cms-module-props';
 
-export const generateArrayFieldComponent = () => {
+export const generateArrayFieldComponent = (isCMSModule?: boolean) => {
   const errorMessagePropName = 'errorMessage';
   const errorStylesVariableName = 'errorStyles';
 
@@ -1177,6 +1178,7 @@ export const generateArrayFieldComponent = () => {
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('getBadgeText'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('runValidationTasks'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier(errorMessagePropName), undefined),
+          ...(isCMSModule ? buildCMSModuleFormProps() : []),
         ]),
         undefined,
         undefined,

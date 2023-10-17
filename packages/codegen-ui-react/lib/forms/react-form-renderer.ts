@@ -107,6 +107,7 @@ import { AMPLIFY_JS_V6, COMPOSITE_PRIMARY_KEY_PROP_NAME } from '../utils/constan
 import { getFetchRelatedRecordsCallbacks, isGraphqlConfig } from '../utils/graphql';
 import { getAmplifyJSVersionToRender } from '../helpers/amplify-js-versioning';
 import { overrideTypesString } from '../utils-file-functions';
+import { buildCMSModuleFormProps } from './form-renderer-helper/build-cms-module-props';
 
 type RenderComponentOnlyResponse = {
   compText: string;
@@ -183,8 +184,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   }
 
   @handleCodegenErrors
-  renderComponentOnly(): RenderComponentOnlyResponse {
-    const variableStatements = this.buildVariableStatements();
+  renderComponentOnly(isCMSModule?: boolean): RenderComponentOnlyResponse {
+    const variableStatements = this.buildVariableStatements(isCMSModule);
     const jsx = this.renderJsx(this.formComponent);
 
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
@@ -202,7 +203,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     let result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
 
     if (this.shouldRenderArrayField) {
-      const arrayFieldText = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
+      const arrayFieldText = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(isCMSModule), file);
       result = arrayFieldText + EOL + result;
     }
     // do not produce declaration becuase it is not used
@@ -405,7 +406,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
    *  - datastore operation (conditional if form is backed by datastore)
    *  - this is the datastore mutation function which will be used by the helpers
    */
-  private buildVariableStatements() {
+  private buildVariableStatements(isCMSModule?: boolean) {
     const statements: Statement[] = [];
     const { formMetadata } = this.componentMetadata;
     const {
@@ -442,6 +443,9 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('onChange'), undefined),
       // overrides
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('overrides'), undefined),
+      ...(isCMSModule
+        ? buildCMSModuleFormProps(this.componentMetadata.componentNameToTypeMap, dataApi === 'GraphQL')
+        : []),
       // get rest of props to pass to top level component
       factory.createBindingElement(
         factory.createToken(SyntaxKind.DotDotDotToken),

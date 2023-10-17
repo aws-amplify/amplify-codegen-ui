@@ -16,7 +16,7 @@
 /* eslint-disable no-template-curly-in-string */
 import { NoApiError } from '@aws-amplify/codegen-ui';
 import { ImportSource } from '../imports';
-import { ReactRenderConfig } from '../react-render-config';
+import { ReactRenderConfig, ScriptKind, ScriptTarget } from '../react-render-config';
 import {
   defaultCLIRenderConfig,
   generateComponentOnlyWithAmplifyFormRenderer,
@@ -1479,5 +1479,21 @@ describe('amplify form renderer tests', () => {
     expect(componentText).not.toContain('updated.dealership = dealershipRecord.id');
     expect(componentText).toMatchSnapshot();
     expect(declaration).toMatchSnapshot();
+  });
+
+  describe('CMS module rendered form tests', () => {
+    it('should add AmplifyUI components and React in props', () => {
+      const { compText } = generateComponentOnlyWithAmplifyFormRenderer(
+        'forms/relationships/create-movie',
+        'models/composite-key-movie',
+        {
+          script: ScriptKind.JS,
+          target: ScriptTarget.ES2020,
+        },
+        true,
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+      expect(compText).toMatchSnapshot();
+    });
   });
 });
