@@ -62,6 +62,7 @@ export enum Primitive {
   TableRow = 'TableRow',
   Tabs = 'Tabs',
   TabItem = 'TabItem',
+  Tag = 'Tag',
   Text = 'Text',
   TextAreaField = 'TextAreaField',
   TextField = 'TextField',
@@ -99,6 +100,7 @@ export const PrimitiveChildrenPropMapping: Partial<Record<Primitive, string>> = 
   [Primitive.MenuItem]: 'label',
   [Primitive.Radio]: 'label',
   [Primitive.TableCell]: 'label',
+  [Primitive.Tag]: 'label',
   [Primitive.Text]: 'label',
   [Primitive.ToggleButton]: 'label',
 };

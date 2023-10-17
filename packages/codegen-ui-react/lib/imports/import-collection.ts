@@ -246,4 +246,55 @@ export class ImportCollection {
 
     return importDeclarations;
   }
+
+  buildMeridianImportStatements(): ImportDeclaration[] {
+    const importDeclarations = ([] as ImportDeclaration[])
+      .concat(
+        [
+          factory.createImportDeclaration(
+            undefined,
+            undefined,
+            factory.createImportClause(
+              false,
+              undefined,
+              factory.createNamespaceImport(factory.createIdentifier('React')),
+            ),
+            factory.createStringLiteral('react'),
+          ),
+          factory.createImportDeclaration(
+            undefined,
+            undefined,
+            factory.createImportClause(
+              false,
+              undefined,
+              factory.createNamedImports([
+                factory.createImportSpecifier(undefined, factory.createIdentifier('css'))
+              ])
+            ),
+            factory.createStringLiteral('@emotion/css'),
+          ),
+        ]
+      )
+      .concat(
+        Array.from(this.#collection).map(([moduleName, imports]) => {
+          const defaultImport = [...imports][0];
+          const namedImports = [...imports].slice(1);
+          return factory.createImportDeclaration(
+            undefined,
+            undefined,
+            factory.createImportClause(
+              false,
+              factory.createIdentifier(defaultImport),
+              factory.createNamedImports(
+                namedImports.map((item) => {
+                  return factory.createImportSpecifier(undefined, factory.createIdentifier(item));
+                })
+              )
+            ),
+            factory.createStringLiteral(moduleName)
+          )
+        })
+      )
+    return importDeclarations;
+  }
 }

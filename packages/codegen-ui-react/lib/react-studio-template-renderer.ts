@@ -68,6 +68,7 @@ import ts, {
   Expression,
   ParameterDeclaration,
   ShorthandPropertyAssignment,
+  VariableDeclaration,
 } from 'typescript';
 import pluralize from 'pluralize';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
@@ -134,6 +135,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 > {
   protected importCollection: ImportCollection;
 
+  protected propTypes: Set<string>;
+
   protected renderConfig: ReactRenderConfig & typeof defaultRenderConfig;
 
   protected componentMetadata: ComponentMetadata;
@@ -155,6 +158,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     this.mapSyntheticProps();
     this.importCollection = new ImportCollection({ rendererConfig: renderConfig });
     this.importCollection.ingestComponentMetadata(this.componentMetadata);
+    this.propTypes = new Set();
     addBindingPropertiesImports(this.component, this.importCollection);
 
     // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
@@ -184,12 +188,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   renderComponentOnly() {
     // buildVariableStatements must be called before renderJsx
     // so that some properties can be removed from opening element
-    const variableStatements = this.buildVariableStatements(this.component);
+    const variableStatements = this.component.designSystem === "MERIDIAN" ? [] : this.buildVariableStatements(this.component);
     const jsx = this.renderJsx(this.component);
 
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
 
-    const imports = this.importCollection.buildImportStatements();
+    const imports = this.component.designSystem === "MERIDIAN" ? this.importCollection.buildMeridianImportStatements() : this.importCollection.buildImportStatements();
 
     let importsText = '';
 
@@ -225,13 +229,15 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     // buildVariableStatements must be called before renderJsx
     // so that some properties can be removed from opening element
-    const variableStatements = this.buildVariableStatements(this.component);
+    const variableStatements = this.component.designSystem === "MERIDIAN" ? [] : this.buildVariableStatements(this.component);
     const jsx = this.renderJsx(this.component);
 
     const wrappedFunction = this.renderFunctionWrapper(this.component.name, variableStatements, jsx, true);
-    const propsDeclarations = this.renderBindingPropsType(this.component);
+    const propsDeclarations = this.component.designSystem === "MERIDIAN" ? [] : this.renderBindingPropsType(this.component);
 
-    const imports = this.importCollection.buildImportStatements();
+    const propTypesDeclaration = this.renderPropTypes();
+
+    const imports = this.component.designSystem === "MERIDIAN" ? this.importCollection.buildMeridianImportStatements() : this.importCollection.buildImportStatements();
 
     let componentText = `/* eslint-disable */${EOL}`;
 
@@ -292,6 +298,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
     componentText += result;
 
+    if(this.component.designSystem === "MERIDIAN") {
+      componentText += EOL;
+      componentText += printer.printNode(EmitHint.Unspecified, propTypesDeclaration, file);
+    }
+
     const { componentText: transpiledComponentText, declaration } = transpile(componentText, this.renderConfig);
 
     return {
@@ -304,6 +315,23 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         }
       },
     };
+  }
+
+  renderPropTypes(): VariableDeclaration {
+    let objectProperties: PropertyAssignment[] = [];
+
+    this.propTypes.forEach((value) => {
+        objectProperties.push(
+          factory.createPropertyAssignment(value, factory.createIdentifier('PropTypes.string')),
+        );
+    });
+
+    return factory.createVariableDeclaration(
+      this.component.name + '.propTypes',
+      undefined,
+      undefined,
+      factory.createObjectLiteralExpression(objectProperties, true),
+    );
   }
 
   renderFunctionWrapper(
