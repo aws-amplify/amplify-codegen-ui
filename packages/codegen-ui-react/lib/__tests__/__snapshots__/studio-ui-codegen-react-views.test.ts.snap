@@ -114,12 +114,12 @@ exports[`amplify table renderer tests should generate a table element 1`] = `
 exports[`amplify view renderer tests should call util file if rendered 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import { formatter } from \\"./utils\\";
-import { Post } from \\"../models\\";
 import {
   createDataStorePredicate,
+  formatter,
   useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+} from \\"./utils\\";
+import { Post } from \\"../models\\";
 import { SortDirection } from \\"@aws-amplify/datastore\\";
 import {
   Table,
@@ -218,7 +218,7 @@ export default function MyPostTable(props) {
 
 exports[`amplify view renderer tests should call util file if rendered 2`] = `
 "import * as React from \\"react\\";
-import { createDataStorePredicate } from \\"@aws-amplify/ui-react/internal\\";
+import { createDataStorePredicate } from \\"./utils\\";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -296,7 +296,7 @@ export default function CustomTable(props) {
 
 exports[`amplify view renderer tests should render view with custom datastore 2`] = `
 "import * as React from \\"react\\";
-import { createDataStorePredicate } from \\"@aws-amplify/ui-react/internal\\";
+import { createDataStorePredicate } from \\"./utils\\";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -319,10 +319,7 @@ exports[`amplify view renderer tests should render view with passed in predicate
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { Post } from \\"../models\\";
-import {
-  createDataStorePredicate,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { createDataStorePredicate, useDataStoreBinding } from \\"./utils\\";
 import { SortDirection } from \\"@aws-amplify/datastore\\";
 import {
   Table,
@@ -418,7 +415,7 @@ export default function MyPostTable(props) {
 
 exports[`amplify view renderer tests should render view with passed in predicate and sort 2`] = `
 "import * as React from \\"react\\";
-import { createDataStorePredicate } from \\"@aws-amplify/ui-react/internal\\";
+import { createDataStorePredicate } from \\"./utils\\";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;

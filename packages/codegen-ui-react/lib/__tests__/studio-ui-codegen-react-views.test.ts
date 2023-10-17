@@ -69,7 +69,7 @@ describe('amplify view renderer tests', () => {
       'views/post-table-custom-format',
       'datastore/post-ds',
     );
-    expect(componentText.replace(/\\/g, '')).toContain(`import { formatter } from "./utils"`);
+    expect(componentText.replace(/\\/g, '')).toContain('formatter');
     expect(componentText).toMatchSnapshot();
     expect(declaration).toMatchSnapshot();
   });

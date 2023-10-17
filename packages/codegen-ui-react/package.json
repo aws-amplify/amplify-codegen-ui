@@ -21,17 +21,19 @@
   },
   "devDependencies": {
     "@aws-amplify/appsync-modelgen-plugin": "^2.3.3",
+    "@aws-amplify/auth": "^5.6.5",
     "@aws-amplify/datastore": "^4.0.0",
     "@aws-amplify/ui-react": "^4.6.0",
     "@aws-amplify/ui-react-storage": "^1.1.0",
-    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/react-hooks": "^7.0.1",
     "@types/node": "^16.3.3",
     "@types/pluralize": "^0.0.29",
     "@types/react": "^17.0.4",
     "@types/semver": "^7.3.9",
     "aws-amplify": "^5.3.11",
     "pascalcase": "1.0.0",
-    "react": "^17.0.0"
+    "react": "^17.0.0",
+    "react-test-renderer": "^17.0.2"
   },
   "dependencies": {
     "@aws-amplify/codegen-ui": "2.17.0",

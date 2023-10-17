@@ -17,7 +17,7 @@ import { useState, useEffect } from 'react';
 import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider } from '@aws-amplify/ui-react';
 import { DataStore } from '@aws-amplify/datastore';
-import { useDataStoreBinding } from '@aws-amplify/ui-react/internal';
+import { useDataStoreBinding } from './ui-components/utils'; // eslint-disable-line import/extensions
 import { User, Listing } from './models';
 // eslint-disable-next-line import/extensions
 import { MutationActionBindings, DataStoreActionBindings, InitialValueBindings } from './ui-components';
@@ -42,10 +42,12 @@ export default function ActionBindingTests() {
   // Pulling this binding out here, since currently there's a bug in observeQuery, that doesn't let
   // us define a component which gets observable updates if a criteria is defined
   // https://github.com/aws-amplify/amplify-js/issues/9573
-  const listing = useDataStoreBinding({
-    type: 'collection',
-    model: Listing,
-  }).items[0];
+  const listing = (
+    useDataStoreBinding({
+      type: 'collection',
+      model: Listing,
+    }) as any
+  ).items[0];
 
   if (!isInitialized) {
     return null;

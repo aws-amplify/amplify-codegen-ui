@@ -15,8 +15,8 @@
  */
 import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider, View, Heading } from '@aws-amplify/ui-react';
-import { createDataStorePredicate } from '@aws-amplify/ui-react/internal';
 import { useState, useRef, useEffect } from 'react';
+import { createDataStorePredicate } from './ui-components/utils'; // eslint-disable-line import/extensions
 import { ListingExpanderWithComponentSlot, MyTheme } from './ui-components'; // eslint-disable-line import/extensions
 import { initializeListingTestData } from './mock-utils';
 
