@@ -8,6 +8,7 @@ type FieldValidationConfiguration = {
   validationMessage?: string;
 };
 
+/* istanbul ignore next */
 export const validateField = (value: any, validations: FieldValidationConfiguration[]): ValidationResponse => {
   for (const validation of validations) {
     if (value === undefined || value === '' || value === null) {
@@ -32,11 +33,13 @@ export const validateField = (value: any, validations: FieldValidationConfigurat
   return { hasError: false };
 };
 
+/* istanbul ignore next */
 export const parseDateValidator = (dateValidator: string) => {
   const isTimestamp = `${parseInt(dateValidator)}`.length === dateValidator.length;
   return isTimestamp ? parseInt(dateValidator) : dateValidator;
 };
 
+/* istanbul ignore next */
 const checkValidation = (value: any, validation: FieldValidationConfiguration) => {
   if (validation.numValues?.length) {
     switch (validation.type) {

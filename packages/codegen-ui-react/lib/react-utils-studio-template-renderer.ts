@@ -33,6 +33,14 @@ import {
   processFileString,
   validationString,
   findChildOverridesString,
+  getErrorMessageString,
+  useAuthSignOutActionString,
+  useTypeCastFieldsString,
+  useDataStoreCreateActionString,
+  useDataStoreUpdateActionString,
+  useDataStoreDeleteActionString,
+  createDataStorePredicateString,
+  useDataStoreBindingString,
 } from './utils-file-functions';
 
 export type UtilTemplateType = 'validation' | 'formatter' | 'fetchByPath' | 'processFile';
@@ -70,7 +78,7 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
 
   renderComponentInternal() {
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
-    this.importCollection.addMappedImport(ImportValue.HUB);
+    this.importCollection.addMappedImport(ImportValue.HUB, ImportValue.DATASTORE);
 
     const parsedUtils: string[] = [
       constantsString,
@@ -81,6 +89,14 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
       getOverridePropsString,
       getOverridesFromVariantsString,
       mergeVariantsAndOverridesString,
+      getErrorMessageString,
+      useAuthSignOutActionString,
+      useTypeCastFieldsString,
+      useDataStoreCreateActionString,
+      useDataStoreUpdateActionString,
+      useDataStoreDeleteActionString,
+      createDataStorePredicateString,
+      useDataStoreBindingString,
     ];
 
     const utilsSet = new Set(this.utils);
@@ -111,7 +127,7 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
 
     componentText += parsedUtils.join(EOL) + EOL;
 
-    const { componentText: transpliedText } = transpile(componentText, this.renderConfig);
+    const { componentText: transpliedText } = transpile(componentText, this.renderConfig, true);
 
     return {
       componentText: transpliedText,

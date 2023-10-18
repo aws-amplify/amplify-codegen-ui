@@ -3,7 +3,7 @@
 exports[`render utils file render all 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import { Hub } from \\"aws-amplify\\";
+import { DataStore, Hub } from \\"aws-amplify\\";
 export const UI_CHANNEL = \\"ui\\";
 export const UI_EVENT_TYPE_ACTIONS = \\"actions\\";
 export const CATEGORY_AUTH = \\"auth\\";
@@ -198,6 +198,306 @@ export const mergeVariantsAndOverrides = (variants, overrides) => {
     ...merged,
   };
 };
+export const isErrorWithMessage = (error) => {
+  return (
+    typeof error === \\"object\\" &&
+    error !== null &&
+    \\"message\\" in error &&
+    typeof error.message === \\"string\\"
+  );
+};
+export const toErrorWithMessage = (maybeError) => {
+  if (isErrorWithMessage(maybeError)) return maybeError;
+  try {
+    return new Error(JSON.stringify(maybeError));
+  } catch {
+    return new Error(String(maybeError));
+  }
+};
+export const getErrorMessage = (error) => {
+  return toErrorWithMessage(error).message;
+};
+export const useAuthSignOutAction = (options) => async () => {
+  try {
+    Hub.dispatch(
+      UI_CHANNEL,
+      {
+        event: ACTION_AUTH_SIGNOUT_STARTED,
+        data: { options },
+      },
+      EVENT_ACTION_AUTH_SIGNOUT,
+      AMPLIFY_SYMBOL
+    );
+    await Auth.signOut(options);
+    Hub.dispatch(
+      UI_CHANNEL,
+      {
+        event: ACTION_AUTH_SIGNOUT_FINISHED,
+        data: { options },
+      },
+      EVENT_ACTION_AUTH_SIGNOUT,
+      AMPLIFY_SYMBOL
+    );
+  } catch (error) {
+    Hub.dispatch(
+      UI_CHANNEL,
+      {
+        event: ACTION_AUTH_SIGNOUT_FINISHED,
+        data: { options, errorMessage: getErrorMessage(error) },
+      },
+      EVENT_ACTION_AUTH_SIGNOUT,
+      AMPLIFY_SYMBOL
+    );
+  }
+};
+export const useTypeCastFields = ({ fields, modelName, schema }) => {
+  return React.useMemo(() => {
+    if (!schema) {
+      return fields;
+    }
+    const castFields = {};
+    Object.keys(fields).forEach((fieldName) => {
+      const field = fields[fieldName];
+      switch (schema?.models[modelName]?.fields?.[fieldName]?.type) {
+        case \\"AWSTimestamp\\":
+          castFields[fieldName] = Number(field);
+          break;
+        case \\"Boolean\\":
+          castFields[fieldName] = Boolean(field);
+          break;
+        case \\"Int\\":
+          castFields[fieldName] =
+            typeof field === \\"string\\" ||
+            (typeof field === \\"object\\" &&
+              Object.prototype.toString.call(field) === \\"[object String]\\")
+              ? parseInt(field)
+              : field;
+          break;
+        case \\"Float\\":
+          castFields[fieldName] = Number(field);
+          break;
+        default:
+          castFields[fieldName] = field;
+          break;
+      }
+    });
+    return castFields;
+  }, [fields, schema, modelName]);
+};
+export const useDataStoreCreateAction = ({
+  model,
+  fields: initialFields,
+  schema,
+}) => {
+  const fields = useTypeCastFields({
+    fields: initialFields,
+    modelName: model.name,
+    schema,
+  });
+  return async () => {
+    try {
+      Hub.dispatch(
+        UI_CHANNEL,
+        {
+          event: ACTION_DATASTORE_CREATE_STARTED,
+          data: { fields },
+        },
+        EVENT_ACTION_DATASTORE_CREATE,
+        AMPLIFY_SYMBOL
+      );
+      const item = await DataStore.save(new model(fields));
+      Hub.dispatch(
+        UI_CHANNEL,
+        {
+          event: ACTION_DATASTORE_CREATE_FINISHED,
+          data: { fields, item },
+        },
+        EVENT_ACTION_DATASTORE_CREATE,
+        AMPLIFY_SYMBOL
+      );
+    } catch (error) {
+      Hub.dispatch(
+        UI_CHANNEL,
+        {
+          event: ACTION_DATASTORE_CREATE_FINISHED,
+          data: {
+            fields,
+            errorMessage: getErrorMessage(error),
+          },
+        },
+        EVENT_ACTION_DATASTORE_CREATE,
+        AMPLIFY_SYMBOL
+      );
+    }
+  };
+};
+export const useDataStoreUpdateAction = ({
+  fields: initialFields,
+  id,
+  model,
+  schema,
+}) => {
+  const fields = useTypeCastFields({
+    fields: initialFields,
+    modelName: model.name,
+    schema,
+  });
+  return async () => {
+    try {
+      Hub.dispatch(
+        UI_CHANNEL,
+        {
+          event: ACTION_DATASTORE_UPDATE_STARTED,
+          data: { fields, id },
+        },
+        EVENT_ACTION_DATASTORE_UPDATE,
+        AMPLIFY_SYMBOL
+      );
+      const original = await DataStore.query(model, id);
+      if (!original) {
+        throw new Error(\`\${DATASTORE_QUERY_BY_ID_ERROR}: \${id}\`);
+      }
+      const item = await DataStore.save(
+        model.copyOf(original, (updated) => {
+          Object.assign(updated, fields);
+        })
+      );
+      Hub.dispatch(
+        UI_CHANNEL,
+        {
+          event: ACTION_DATASTORE_UPDATE_FINISHED,
+          data: { fields, id, item },
+        },
+        EVENT_ACTION_DATASTORE_UPDATE,
+        AMPLIFY_SYMBOL
+      );
+    } catch (error) {
+      Hub.dispatch(
+        UI_CHANNEL,
+        {
+          event: ACTION_DATASTORE_UPDATE_FINISHED,
+          data: {
+            fields,
+            id,
+            errorMessage: getErrorMessage(error),
+          },
+        },
+        EVENT_ACTION_DATASTORE_UPDATE,
+        AMPLIFY_SYMBOL
+      );
+    }
+  };
+};
+export const useDataStoreDeleteAction =
+  ({ model, id }) =>
+  async () => {
+    try {
+      Hub.dispatch(
+        UI_CHANNEL,
+        {
+          event: ACTION_DATASTORE_DELETE_STARTED,
+          data: { id },
+        },
+        EVENT_ACTION_DATASTORE_DELETE,
+        AMPLIFY_SYMBOL
+      );
+      await DataStore.delete(model, id);
+      Hub.dispatch(
+        UI_CHANNEL,
+        {
+          event: ACTION_DATASTORE_DELETE_FINISHED,
+          data: { id },
+        },
+        EVENT_ACTION_DATASTORE_DELETE,
+        AMPLIFY_SYMBOL
+      );
+    } catch (error) {
+      Hub.dispatch(
+        UI_CHANNEL,
+        {
+          event: ACTION_DATASTORE_DELETE_FINISHED,
+          data: { id, errorMessage: getErrorMessage(error) },
+        },
+        EVENT_ACTION_DATASTORE_DELETE,
+        AMPLIFY_SYMBOL
+      );
+    }
+  };
+export const createDataStorePredicate = (predicateObject) => {
+  const {
+    and: groupAnd,
+    or: groupOr,
+    field,
+    operator,
+    operand,
+  } = predicateObject;
+  if (Array.isArray(groupAnd)) {
+    const predicates = groupAnd.map((condition) =>
+      createDataStorePredicate(condition)
+    );
+    return (p) =>
+      p.and((model) => predicates.map((predicate) => predicate(model)));
+  }
+  if (Array.isArray(groupOr)) {
+    const predicates = groupOr.map((condition) =>
+      createDataStorePredicate(condition)
+    );
+    return (p) =>
+      p.or((model) => predicates.map((predicate) => predicate(model)));
+  }
+  return (p) => {
+    if (!!field && !!operator && p?.[field]?.[operator]) {
+      return p[field][operator](operand);
+    }
+    return p;
+  };
+};
+export const useDataStoreCollection = ({ model, criteria, pagination }) => {
+  const [result, setResult] = React.useState({
+    items: [],
+    isLoading: false,
+    error: undefined,
+  });
+  const fetch = () => {
+    setResult({ isLoading: true, items: [] });
+    const subscription = DataStore.observeQuery(
+      model,
+      criteria,
+      pagination
+    ).subscribe(
+      (snapshot) => setResult({ items: snapshot.items, isLoading: false }),
+      (error) => setResult({ items: [], error, isLoading: false })
+    );
+    if (subscription) {
+      return () => subscription.unsubscribe();
+    }
+  };
+  React.useEffect(fetch, []);
+  return result;
+};
+export const useDataStoreItem = ({ model, id }) => {
+  const [item, setItem] = React.useState();
+  const [isLoading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState();
+  const fetch = () => {
+    setLoading(true);
+    DataStore.query(model, id)
+      .then(setItem)
+      .catch(setError)
+      .finally(() => setLoading(false));
+  };
+  React.useEffect(fetch, []);
+  return {
+    error,
+    item,
+    isLoading,
+  };
+};
+export function useDataStoreBinding(props) {
+  return props.type === \\"record\\"
+    ? useDataStoreItem(props)
+    : useDataStoreCollection(props);
+}
 export const validateField = (value, validations) => {
   for (const validation of validations) {
     if (value === undefined || value === \\"\\" || value === null) {

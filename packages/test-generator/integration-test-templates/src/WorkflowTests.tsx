@@ -18,7 +18,7 @@ import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider, View, Heading, Divider, Button } from '@aws-amplify/ui-react';
 import { Hub } from 'aws-amplify';
 import { DataStore } from '@aws-amplify/datastore';
-import { useDataStoreBinding } from '@aws-amplify/ui-react/internal';
+import { useDataStoreBinding } from './ui-components/utils'; // eslint-disable-line import/extensions
 import { ComplexModel, User } from './models';
 import {
   AuthSignOutActions,
@@ -115,7 +115,7 @@ export default function ComplexTests() {
   const complexModels = useDataStoreBinding({
     type: 'collection',
     model: ComplexModel,
-  });
+  }) as any;
 
   if (!isInitialized) {
     return null;

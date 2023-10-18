@@ -17,6 +17,7 @@
 import { StorageManagerProps } from '@aws-amplify/ui-react-storage';
 import { STORAGE_FILE_ALGO_TYPE } from '../utils/constants';
 
+/* istanbul ignore next */
 export const processFile = async ({ file }: Parameters<NonNullable<StorageManagerProps['processFile']>>[0]) => {
   const fileExtension = file.name.split('.').pop();
   return file

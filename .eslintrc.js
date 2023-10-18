@@ -24,6 +24,7 @@ module.exports = {
   },
   rules: {
     'max-len': ['error', 120, 2],
+    'max-classes-per-file': 'off',
     'react/prop-types': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/no-explicit-any': 'off',

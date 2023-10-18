@@ -4,10 +4,9 @@ exports[`amplify render tests actions DataStore DataStoreCreateItem 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
-import { useDataStoreCreateAction } from \\"@aws-amplify/ui-react/internal\\";
+import { getOverrideProps, useDataStoreCreateAction } from \\"./utils\\";
 import { Customer } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
-import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type EscapeHatchProps = {
@@ -60,10 +59,9 @@ exports[`amplify render tests actions DataStore DataStoreDeleteItem 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
-import { useDataStoreDeleteAction } from \\"@aws-amplify/ui-react/internal\\";
+import { getOverrideProps, useDataStoreDeleteAction } from \\"./utils\\";
 import { Customer } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
-import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type EscapeHatchProps = {
@@ -116,10 +114,9 @@ exports[`amplify render tests actions DataStore DataStoreUpdateItem 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
-import { useDataStoreUpdateAction } from \\"@aws-amplify/ui-react/internal\\";
+import { getOverrideProps, useDataStoreUpdateAction } from \\"./utils\\";
 import { Customer } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
-import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type EscapeHatchProps = {
@@ -418,8 +415,7 @@ exports[`amplify render tests actions auth signs out 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
-import { useAuthSignOutAction } from \\"@aws-amplify/ui-react/internal\\";
-import { getOverrideProps } from \\"./utils\\";
+import { getOverrideProps, useAuthSignOutAction } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type EscapeHatchProps = {
@@ -677,9 +673,10 @@ import * as React from \\"react\\";
 import { User } from \\"../models\\";
 import {
   createDataStorePredicate,
+  getOverrideProps,
   useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { getOverrideProps, useStateMutationAction } from \\"./utils\\";
+  useStateMutationAction,
+} from \\"./utils\\";
 import {
   Button,
   ButtonProps,
@@ -885,13 +882,10 @@ export default function Test(props: TestProps): React.ReactElement {
 exports[`amplify render tests bindings auth supports auth bindings in actions 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import {
-  useAuth,
-  useDataStoreCreateAction,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { useAuth } from \\"@aws-amplify/ui-react/internal\\";
+import { getOverrideProps, useDataStoreCreateAction } from \\"./utils\\";
 import { Customer } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
-import { getOverrideProps } from \\"./utils\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type EscapeHatchProps = {
@@ -1187,7 +1181,7 @@ exports[`amplify render tests collection GraphQL should render collection with d
 import * as React from \\"react\\";
 import { UserPreferences } from \\"../API\\";
 import { listUserPreferences, listUsers } from \\"../graphql/queries\\";
-import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
+import { getOverrideProps, useDataStoreBinding } from \\"./utils\\";
 import { generateClient } from \\"aws-amplify/api\\";
 import {
   Button,
@@ -1199,7 +1193,6 @@ import {
   Pagination,
   Placeholder,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"./utils\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
 export type EscapeHatchProps = {
@@ -1395,7 +1388,7 @@ exports[`amplify render tests collection GraphQL should render collection with d
 import * as React from \\"react\\";
 import { UserPreferences } from \\"../API\\";
 import { listUserPreferences, listUsers } from \\"../graphql/queries\\";
-import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
+import { getOverrideProps, useDataStoreBinding } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import {
   Button,
@@ -1407,7 +1400,6 @@ import {
   Pagination,
   Placeholder,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"./utils\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
 export type EscapeHatchProps = {
@@ -2036,9 +2028,8 @@ exports[`amplify render tests collection should not render nested query if the d
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { Author } from \\"../models\\";
-import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
+import { getOverrideProps, useDataStoreBinding } from \\"./utils\\";
 import AuthorProfile, { AuthorProfileProps } from \\"./AuthorProfile\\";
-import { getOverrideProps } from \\"./utils\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 
 export type EscapeHatchProps = {
@@ -2115,8 +2106,9 @@ import * as React from \\"react\\";
 import { UserPreferences, User } from \\"../models\\";
 import {
   createDataStorePredicate,
+  getOverrideProps,
   useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+} from \\"./utils\\";
 import {
   Button,
   ButtonProps,
@@ -2125,7 +2117,6 @@ import {
   Flex,
   FlexProps,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"./utils\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
 export type EscapeHatchProps = {
@@ -2268,8 +2259,9 @@ import * as React from \\"react\\";
 import { UserPreferences, User } from \\"../models\\";
 import {
   createDataStorePredicate,
+  getOverrideProps,
   useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+} from \\"./utils\\";
 import { SortDirection, SortPredicate } from \\"@aws-amplify/datastore\\";
 import {
   Button,
@@ -2279,7 +2271,6 @@ import {
   Flex,
   FlexProps,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"./utils\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
 export type EscapeHatchProps = {
@@ -2403,8 +2394,9 @@ import * as React from \\"react\\";
 import { UserPreferences, User } from \\"../models\\";
 import {
   createDataStorePredicate,
+  getOverrideProps,
   useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+} from \\"./utils\\";
 import {
   Button,
   ButtonProps,
@@ -2413,7 +2405,6 @@ import {
   Flex,
   FlexProps,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"./utils\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
 export type EscapeHatchProps = {
@@ -2527,9 +2518,8 @@ exports[`amplify render tests collection should render collection with data bind
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { UntitledModel } from \\"../models\\";
-import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
+import { getOverrideProps, useDataStoreBinding } from \\"./utils\\";
 import ListingCard, { ListingCardProps } from \\"./ListingCard\\";
-import { getOverrideProps } from \\"./utils\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 
 export type EscapeHatchProps = {
@@ -2664,11 +2654,10 @@ exports[`amplify render tests collection should render concatenated keys if mode
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { CompositePerson } from \\"../models\\";
-import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
+import { getOverrideProps, useDataStoreBinding } from \\"./utils\\";
 import CompositePersonProfile, {
   CompositePersonProfileProps,
 } from \\"./CompositePersonProfile\\";
-import { getOverrideProps } from \\"./utils\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 
 export type EscapeHatchProps = {
@@ -2748,8 +2737,9 @@ import * as React from \\"react\\";
 import { Flex as Flex0, FlexModel, Button as Button0 } from \\"../models\\";
 import {
   createDataStorePredicate,
+  getOverrideProps,
   useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
+} from \\"./utils\\";
 import { SortDirection, SortPredicate } from \\"@aws-amplify/datastore\\";
 import {
   Button,
@@ -2759,7 +2749,6 @@ import {
   Flex,
   FlexProps,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"./utils\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
 export type EscapeHatchProps = {
@@ -2890,9 +2879,8 @@ exports[`amplify render tests collection should render nested query if model has
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { Author } from \\"../models\\";
-import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
+import { getOverrideProps, useDataStoreBinding } from \\"./utils\\";
 import AuthorProfile, { AuthorProfileProps } from \\"./AuthorProfile\\";
-import { getOverrideProps } from \\"./utils\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 
 export type EscapeHatchProps = {
@@ -7880,14 +7868,13 @@ Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
 import { User } from \\"../models\\";
-import { useDataStoreBinding } from \\"@aws-amplify/ui-react/internal\\";
+import { getOverrideProps, useDataStoreBinding } from \\"./utils\\";
 import {
   Collection,
   CollectionProps,
   Text,
   TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import { getOverrideProps } from \\"./utils\\";
 import { MyTextProps } from \\"./MyText\\";
 
 export type EscapeHatchProps = {
@@ -8463,8 +8450,11 @@ exports[`amplify render tests mutations form 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
-import { getOverrideProps, useStateMutationAction } from \\"./utils\\";
-import { useDataStoreUpdateAction } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  getOverrideProps,
+  useDataStoreUpdateAction,
+  useStateMutationAction,
+} from \\"./utils\\";
 import { Customer } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
 import {
@@ -8865,12 +8855,13 @@ Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
 import { User } from \\"../models\\";
+import { useAuth } from \\"@aws-amplify/ui-react/internal\\";
 import {
   createDataStorePredicate,
-  useAuth,
+  getOverrideProps,
   useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { getOverrideProps, useStateMutationAction } from \\"./utils\\";
+  useStateMutationAction,
+} from \\"./utils\\";
 import { useEffect } from \\"react\\";
 import {
   Button,
