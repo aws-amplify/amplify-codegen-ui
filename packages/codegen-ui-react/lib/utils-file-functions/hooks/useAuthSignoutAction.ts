@@ -13,7 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { SignOutOpts } from '@aws-amplify/auth/lib-esm/types/Auth';
 import { Hub, Auth } from 'aws-amplify';
 import { AMPLIFY_SYMBOL } from '../amplify-symbol';
 import { getErrorMessage } from '../get-error-message';
@@ -24,8 +23,10 @@ import {
   ACTION_AUTH_SIGNOUT_FINISHED,
 } from './constants';
 
+export type SignOutOptions = Parameters<typeof Auth['signOut']>[0];
+
 export interface UseAuthSignOutAction {
-  (options?: SignOutOpts): () => Promise<void>;
+  (options?: SignOutOptions): () => Promise<void>;
 }
 
 export const useAuthSignOutAction: UseAuthSignOutAction = (options) => async () => {
