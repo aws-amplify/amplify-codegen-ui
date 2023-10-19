@@ -30,12 +30,12 @@
     "@types/pluralize": "^0.0.29",
     "@types/react": "^17.0.4",
     "@types/semver": "^7.3.9",
-    "aws-amplify": "^5.3.11",
     "pascalcase": "1.0.0",
     "react": "^17.0.0",
     "react-test-renderer": "^17.0.2"
   },
   "dependencies": {
+    "aws-amplify": "^5.3.11",
     "@aws-amplify/codegen-ui": "2.18.0",
     "@typescript/vfs": "~1.3.5",
     "pluralize": "^8.0.0",
