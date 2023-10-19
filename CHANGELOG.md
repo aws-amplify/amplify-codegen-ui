@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.19.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.17.0...v2.19.0) (2023-10-19)
+
+### Bug Fixes
+
+- move aws-amplify to deps ([#1113](https://github.com/aws-amplify/amplify-codegen-ui/issues/1113)) ([6b2206a](https://github.com/aws-amplify/amplify-codegen-ui/commit/6b2206ac2e19dae941b5b8cf720dba69013a14b2))
+- move datastore to dependency ([#1115](https://github.com/aws-amplify/amplify-codegen-ui/issues/1115)) ([381e0a5](https://github.com/aws-amplify/amplify-codegen-ui/commit/381e0a570997bb9e24bcffd894687e8c9a1d46ed))
+
+### Features
+
+- add navigation and state mutation actions ([#1105](https://github.com/aws-amplify/amplify-codegen-ui/issues/1105)) ([4fb3cb7](https://github.com/aws-amplify/amplify-codegen-ui/commit/4fb3cb74a7aa9dc85063ccf46bed317a1bf403f6))
+- add override and variant exports from ui-react to utils ([#1104](https://github.com/aws-amplify/amplify-codegen-ui/issues/1104)) ([85ecd5e](https://github.com/aws-amplify/amplify-codegen-ui/commit/85ecd5e05eb50abf13608cfa40ee7a008f7b3203))
+- export get declaration filename helper ([#1109](https://github.com/aws-amplify/amplify-codegen-ui/issues/1109)) ([de1039c](https://github.com/aws-amplify/amplify-codegen-ui/commit/de1039cbeb8671972a67b28d30dcb5d7c0a87796))
+- migrate auth and datastore hooks ([#1107](https://github.com/aws-amplify/amplify-codegen-ui/issues/1107)) ([f731222](https://github.com/aws-amplify/amplify-codegen-ui/commit/f731222512486ceb6fb4786d426be82c7f5f77c0))
+- refactor override and utils to strings ([#1106](https://github.com/aws-amplify/amplify-codegen-ui/issues/1106)) ([1e2b41a](https://github.com/aws-amplify/amplify-codegen-ui/commit/1e2b41abe0d24c80890ead9e01925a86a4694658))
+
 # [2.18.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.17.0...v2.18.0) (2023-10-18)
 
 ### Features
