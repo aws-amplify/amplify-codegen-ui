@@ -27,7 +27,11 @@ export type ReactRenderConfig = FrameworkRenderConfig & {
   renderTypeDeclarations?: boolean;
   inlineSourceMap?: boolean;
   apiConfiguration?: GraphqlRenderConfig | DataStoreRenderConfig | NoApiRenderConfig;
+<<<<<<< Updated upstream
   dependencies?: { [key: string]: string };
+=======
+  includeUseClientDirective?: boolean;
+>>>>>>> Stashed changes
 };
 
 export type GraphqlRenderConfig = {

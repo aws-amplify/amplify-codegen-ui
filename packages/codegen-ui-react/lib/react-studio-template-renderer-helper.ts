@@ -50,6 +50,7 @@ export const defaultRenderConfig = {
   script: ScriptKind.TSX,
   target: ScriptTarget.ES2015,
   module: ModuleKind.ESNext,
+  includeUseClientDirective: false,
 };
 
 const supportedTranspilationTargets = [

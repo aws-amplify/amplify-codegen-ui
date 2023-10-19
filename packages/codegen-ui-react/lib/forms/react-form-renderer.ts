@@ -230,6 +230,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     let componentText = `/* eslint-disable */${EOL}`;
 
+    if (this.renderConfig.includeUseClientDirective) {
+      componentText += `'use client';${EOL}`;
+    }
+
     imports.forEach((importStatement) => {
       const result = printer.printNode(EmitHint.Unspecified, importStatement, file);
       componentText += result + EOL;
