@@ -20,8 +20,8 @@
     "build:watch": "npm run build -- --watch"
   },
   "devDependencies": {
-    "@aws-amplify/appsync-modelgen-plugin": "^2.3.3",
     "@aws-amplify/datastore": "^4.7.5",
+    "@aws-amplify/appsync-modelgen-plugin": "^2.3.3",
     "@aws-amplify/ui-react": "^4.6.0",
     "@aws-amplify/ui-react-storage": "^1.1.0",
     "@testing-library/react-hooks": "^7.0.1",
@@ -29,7 +29,6 @@
     "@types/pluralize": "^0.0.29",
     "@types/react": "^17.0.4",
     "@types/semver": "^7.3.9",
-    "aws-amplify": "^5.3.11",
     "pascalcase": "1.0.0",
     "react": "^17.0.0",
     "react-test-renderer": "^17.0.2"
@@ -42,18 +41,8 @@
     "typescript": "<=4.5.0"
   },
   "peerDependencies": {
-    "@aws-amplify/datastore": "^4.7.5",
-    "aws-amplify": "^5.3.11",
     "react": "^16.8 || ^17.0 || ^18.0",
     "react-dom": "^16.8 || ^17.0 || ^18.0"
-  },
-  "peerDependenciesMeta": {
-    "@aws-amplify/datastore": {
-      "optional": true
-    },
-    "aws-amplify": {
-      "optional": true
-    }
   },
   "optionalDependencies": {
     "prettier": "2.3.2"
