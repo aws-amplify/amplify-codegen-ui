@@ -3149,7 +3149,6 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { Tag } from \\"../API\\";
 import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listTags } from \\"../graphql/queries\\";
@@ -3495,7 +3494,7 @@ export default function MovieCreateForm(props) {
                       movieMovieKey: movie.movieKey,
                       movietitle: movie.title,
                       moviegenre: movie.genre,
-                      tagId: Tag.id,
+                      tagId: tag.id,
                     },
                   },
                 })
@@ -5441,7 +5440,6 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { Post } from \\"../API\\";
 import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listPosts } from \\"../graphql/queries\\";
@@ -5783,7 +5781,7 @@ export default function TagCreateForm(props) {
                   variables: {
                     input: {
                       tagID: tag.id,
-                      postID: Post.id,
+                      postID: post.id,
                     },
                   },
                 })
@@ -6768,7 +6766,6 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { CPKClass } from \\"../API\\";
 import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import {
@@ -7207,7 +7204,7 @@ export default function CreateCPKTeacherForm(props) {
                   variables: {
                     input: {
                       cPKTeacherSpecialTeacherId: cPKTeacher.specialTeacherId,
-                      cPKClassSpecialClassId: CPKClass.specialClassId,
+                      cPKClassSpecialClassId: cpkClass.specialClassId,
                     },
                   },
                 })
@@ -20492,7 +20489,6 @@ import {
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import { CompositeVet } from \\"../API\\";
 import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import {
@@ -21079,8 +21075,8 @@ export default function CreateCompositeDogForm(props) {
                     input: {
                       compositeDogName: compositeDog.name,
                       compositeDogdescription: compositeDog.description,
-                      compositeVetSpecialty: CompositeVet.specialty,
-                      compositeVetcity: CompositeVet.city,
+                      compositeVetSpecialty: compositeVet.specialty,
+                      compositeVetcity: compositeVet.city,
                     },
                   },
                 })
