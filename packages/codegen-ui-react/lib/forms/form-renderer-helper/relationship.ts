@@ -1044,7 +1044,7 @@ export const buildManyToManyRelationshipStatements = (
                                     savedModelName,
                                     thisModelPrimaryKeys,
                                     joinTableThisModelFields,
-                                    relatedModelName,
+                                    joinTableRelatedModelName,
                                     relatedModelPrimaryKeys,
                                     joinTableRelatedModelFields,
                                     importCollection,
