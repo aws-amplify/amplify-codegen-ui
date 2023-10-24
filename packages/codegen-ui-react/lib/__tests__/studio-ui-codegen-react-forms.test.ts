@@ -1480,4 +1480,13 @@ describe('amplify form renderer tests', () => {
     expect(componentText).toMatchSnapshot();
     expect(declaration).toMatchSnapshot();
   });
+  it("should render 'use client'; when includeUseClientDirective passed", () => {
+    const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/post-custom-create', undefined, {
+      includeUseClientDirective: true,
+    });
+
+    expect(componentText).not.toContain("'use client';");
+    expect(componentText).toMatchSnapshot();
+    expect(declaration).toMatchSnapshot();
+  });
 });
