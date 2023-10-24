@@ -13,56 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { SignOutOpts } from '@aws-amplify/auth/lib-esm/types/Auth';
-import { Hub, Auth } from 'aws-amplify';
-import { AMPLIFY_SYMBOL } from '../amplify-symbol';
-import { getErrorMessage } from '../get-error-message';
-import {
-  UI_CHANNEL,
-  ACTION_AUTH_SIGNOUT_STARTED,
-  EVENT_ACTION_AUTH_SIGNOUT,
-  ACTION_AUTH_SIGNOUT_FINISHED,
-} from './constants';
-
-export interface UseAuthSignOutAction {
-  (options?: SignOutOpts): () => Promise<void>;
-}
-
-export const useAuthSignOutAction: UseAuthSignOutAction = (options) => async () => {
-  try {
-    Hub.dispatch(
-      UI_CHANNEL,
-      {
-        event: ACTION_AUTH_SIGNOUT_STARTED,
-        data: { options },
-      },
-      EVENT_ACTION_AUTH_SIGNOUT,
-      AMPLIFY_SYMBOL,
-    );
-
-    await Auth.signOut(options);
-    Hub.dispatch(
-      UI_CHANNEL,
-      {
-        event: ACTION_AUTH_SIGNOUT_FINISHED,
-        data: { options },
-      },
-      EVENT_ACTION_AUTH_SIGNOUT,
-      AMPLIFY_SYMBOL,
-    );
-  } catch (error) {
-    Hub.dispatch(
-      UI_CHANNEL,
-      {
-        event: ACTION_AUTH_SIGNOUT_FINISHED,
-        data: { options, errorMessage: getErrorMessage(error) },
-      },
-      EVENT_ACTION_AUTH_SIGNOUT,
-      AMPLIFY_SYMBOL,
-    );
-  }
-};
-
 export const useAuthSignOutActionString = `export const useAuthSignOutAction: UseAuthSignOutAction =
   (options) => async () => {
     try {

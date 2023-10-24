@@ -13,63 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-
-import * as React from 'react';
-import { ModelInit, PersistentModel, PersistentModelMetaData, Schema } from '@aws-amplify/datastore';
-
-interface UseTypeCastFieldsProps {
-  fields: any;
-  modelName: string;
-  schema?: Schema;
-}
-
-type UseTypeCastFieldsReturn<Model extends PersistentModel> = ModelInit<Model, PersistentModelMetaData<Model>>;
-
-/**
- * Optimistically casts field string values to types required by
- * datastore based on the schema type
- * @see: See https://docs.aws.amazon.com/appsync/latest/devguide/scalars.html
- */
-export const useTypeCastFields = <Model extends PersistentModel>({
-  fields,
-  modelName,
-  schema,
-}: UseTypeCastFieldsProps): UseTypeCastFieldsReturn<Model> => {
-  return React.useMemo(() => {
-    if (!schema) {
-      return fields;
-    }
-
-    const castFields: any = {};
-    Object.keys(fields).forEach((fieldName: string) => {
-      const field = fields[fieldName];
-      switch (schema?.models[modelName]?.fields?.[fieldName]?.type) {
-        case 'AWSTimestamp':
-          castFields[fieldName] = Number(field);
-          break;
-        case 'Boolean':
-          castFields[fieldName] = Boolean(field);
-          break;
-        case 'Int':
-          castFields[fieldName] =
-            typeof field === 'string' ||
-            (typeof field === 'object' && Object.prototype.toString.call(field) === '[object String]')
-              ? parseInt(field, 10)
-              : field;
-          break;
-        case 'Float':
-          castFields[fieldName] = Number(field);
-          break;
-        default:
-          castFields[fieldName] = field;
-          break;
-      }
-    });
-
-    return castFields;
-  }, [fields, schema, modelName]);
-};
-
 export const useTypeCastFieldsString = `export const useTypeCastFields = <Model extends PersistentModel>({
   fields,
   modelName,
