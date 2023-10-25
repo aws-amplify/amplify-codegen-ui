@@ -53666,6 +53666,420 @@ export default function UpdateProductForm(props) {
 "
 `;
 
+exports[`amplify form renderer tests should render 'use client'; when includeUseClientDirective passed 1`] = `
+"/* eslint-disable */
+\\"use client\\";
+import * as React from \\"react\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  GridProps,
+  Radio,
+  RadioGroupField,
+  RadioGroupFieldProps,
+  SelectField,
+  SelectFieldProps,
+  StepperField,
+  StepperFieldProps,
+  TextField,
+  TextFieldProps,
+  option,
+} from \\"@aws-amplify/ui-react\\";
+import { fetchByPath, getOverrideProps, validateField } from \\"./utils\\";
+
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
+export declare type ValidationResponse = {
+  hasError: boolean;
+  errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (
+  value: T,
+  validationResponse: ValidationResponse
+) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CustomDataFormInputValues = {
+  name?: string;
+  email?: string;
+  city?: string;
+  category?: string;
+  pages?: number;
+  phone?: string;
+};
+export declare type CustomDataFormValidationValues = {
+  name?: ValidationFunction<string>;
+  email?: ValidationFunction<string>;
+  city?: ValidationFunction<string>;
+  category?: ValidationFunction<string>;
+  pages?: ValidationFunction<number>;
+  phone?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CustomDataFormOverridesProps = {
+  CustomDataFormGrid?: PrimitiveOverrideProps<GridProps>;
+  name?: PrimitiveOverrideProps<TextFieldProps>;
+  email?: PrimitiveOverrideProps<TextFieldProps>;
+  city?: PrimitiveOverrideProps<SelectFieldProps>;
+  category?: PrimitiveOverrideProps<RadioGroupFieldProps>;
+  pages?: PrimitiveOverrideProps<StepperFieldProps>;
+  phone?: PrimitiveOverrideProps<TextFieldProps>;
+} & EscapeHatchProps;
+export type CustomDataFormProps = React.PropsWithChildren<
+  {
+    overrides?: CustomDataFormOverridesProps | undefined | null;
+  } & {
+    onSubmit: (fields: CustomDataFormInputValues) => void;
+    onCancel?: () => void;
+    onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
+    onValidate?: CustomDataFormValidationValues;
+  } & React.CSSProperties
+>;
+export default function CustomDataForm(
+  props: CustomDataFormProps
+): React.ReactElement {
+  const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
+    props;
+  const initialValues = {
+    name: \\"John Doe\\",
+    email: \\"johndoe@amplify.com\\",
+    city: \\"\\",
+    category: undefined,
+    pages: 0,
+    phone: \\"+1-401-152-6995\\",
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [email, setEmail] = React.useState(initialValues.email);
+  const [city, setCity] = React.useState(initialValues.city);
+  const [category, setCategory] = React.useState(initialValues.category);
+  const [pages, setPages] = React.useState(initialValues.pages);
+  const [phone, setPhone] = React.useState(initialValues.phone);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setName(initialValues.name);
+    setEmail(initialValues.email);
+    setCity(initialValues.city);
+    setCategory(initialValues.category);
+    setPages(initialValues.pages);
+    setPhone(initialValues.phone);
+    setErrors({});
+  };
+  const validations = {
+    name: [{ type: \\"Required\\" }],
+    email: [{ type: \\"Required\\" }],
+    city: [],
+    category: [],
+    pages: [],
+    phone: [{ type: \\"Required\\" }, { type: \\"Phone\\" }],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event: SyntheticEvent) => {
+        event.preventDefault();
+        const modelFields = {
+          name,
+          email,
+          city,
+          category,
+          pages,
+          phone,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        await onSubmit(modelFields);
+      }}
+      {...getOverrideProps(overrides, \\"CustomDataForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"name\\"
+        isRequired={true}
+        value={name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              email,
+              city,
+              category,
+              pages,
+              phone,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <TextField
+        label=\\"E-mail\\"
+        isRequired={true}
+        value={email}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email: value,
+              city,
+              category,
+              pages,
+              phone,
+            };
+            const result = onChange(modelFields);
+            value = result?.email ?? value;
+          }
+          if (errors.email?.hasError) {
+            runValidationTasks(\\"email\\", value);
+          }
+          setEmail(value);
+        }}
+        onBlur={() => runValidationTasks(\\"email\\", email)}
+        errorMessage={errors.email?.errorMessage}
+        hasError={errors.email?.hasError}
+        {...getOverrideProps(overrides, \\"email\\")}
+      ></TextField>
+      <SelectField
+        label=\\"Label\\"
+        placeholder=\\"Please select an option\\"
+        value={city}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              city: value,
+              category,
+              pages,
+              phone,
+            };
+            const result = onChange(modelFields);
+            value = result?.city ?? value;
+          }
+          if (errors.city?.hasError) {
+            runValidationTasks(\\"city\\", value);
+          }
+          setCity(value);
+        }}
+        onBlur={() => runValidationTasks(\\"city\\", city)}
+        errorMessage={errors.city?.errorMessage}
+        hasError={errors.city?.hasError}
+        {...getOverrideProps(overrides, \\"city\\")}
+      >
+        <option
+          children=\\"Los Angeles\\"
+          value=\\"Los Angeles\\"
+          {...getOverrideProps(overrides, \\"cityoption0\\")}
+        ></option>
+        <option
+          children=\\"Houston\\"
+          value=\\"Houston\\"
+          {...getOverrideProps(overrides, \\"cityoption1\\")}
+        ></option>
+        <option
+          children=\\"New York\\"
+          value=\\"New York\\"
+          selected={true}
+          {...getOverrideProps(overrides, \\"cityoption2\\")}
+        ></option>
+      </SelectField>
+      <RadioGroupField
+        label=\\"Label\\"
+        name=\\"fieldName\\"
+        defaultValue=\\"Hobbies\\"
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              city,
+              category: value,
+              pages,
+              phone,
+            };
+            const result = onChange(modelFields);
+            value = result?.category ?? value;
+          }
+          if (errors.category?.hasError) {
+            runValidationTasks(\\"category\\", value);
+          }
+          setCategory(value);
+        }}
+        onBlur={() => runValidationTasks(\\"category\\", category)}
+        errorMessage={errors.category?.errorMessage}
+        hasError={errors.category?.hasError}
+        {...getOverrideProps(overrides, \\"category\\")}
+      >
+        <Radio
+          children=\\"Hobbies\\"
+          value=\\"Hobbies\\"
+          {...getOverrideProps(overrides, \\"categoryRadio0\\")}
+        ></Radio>
+        <Radio
+          children=\\"Travel\\"
+          value=\\"Travel\\"
+          {...getOverrideProps(overrides, \\"categoryRadio1\\")}
+        ></Radio>
+        <Radio
+          children=\\"Health\\"
+          value=\\"Health\\"
+          {...getOverrideProps(overrides, \\"categoryRadio2\\")}
+        ></Radio>
+      </RadioGroupField>
+      <StepperField
+        label=\\"Label\\"
+        value={pages}
+        onStepChange={(e) => {
+          let value = e;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              city,
+              category,
+              pages: value,
+              phone,
+            };
+            const result = onChange(modelFields);
+            value = result?.pages ?? value;
+          }
+          if (errors.pages?.hasError) {
+            runValidationTasks(\\"pages\\", value);
+          }
+          setPages(value);
+        }}
+        onBlur={() => runValidationTasks(\\"pages\\", pages)}
+        errorMessage={errors.pages?.errorMessage}
+        hasError={errors.pages?.hasError}
+        {...getOverrideProps(overrides, \\"pages\\")}
+      ></StepperField>
+      <TextField
+        label=\\"Phone Number\\"
+        isRequired={true}
+        type=\\"tel\\"
+        value={phone}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              city,
+              category,
+              pages,
+              phone: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.phone ?? value;
+          }
+          if (errors.phone?.hasError) {
+            runValidationTasks(\\"phone\\", value);
+          }
+          setPhone(value);
+        }}
+        onBlur={() => runValidationTasks(\\"phone\\", phone)}
+        errorMessage={errors.phone?.errorMessage}
+        hasError={errors.phone?.hasError}
+        {...getOverrideProps(overrides, \\"phone\\")}
+      ></TextField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"empty\\"
+          type=\\"reset\\"
+          onClick={(event: SyntheticEvent) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"go back\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"create\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests should render 'use client'; when includeUseClientDirective passed 2`] = `undefined`;
+
 exports[`amplify form renderer tests should render form for child of bidirectional 1:m when field defined on parent 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
