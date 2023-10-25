@@ -16,7 +16,7 @@
 import { EOL } from 'os';
 import { EmitHint } from 'typescript';
 import { StudioTemplateRenderer } from '@aws-amplify/codegen-ui';
-import { ReactRenderConfig, scriptKindToFileExtension } from './react-render-config';
+import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
 import { ImportCollection, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
 import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
@@ -73,7 +73,7 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
       ...renderConfig,
       renderTypeDeclarations: false, // Never render type declarations for index.js|ts file.
     };
-    this.fileName = `utils.${scriptKindToFileExtension(this.renderConfig.script)}`;
+    this.fileName = `utils.${scriptKindToFileExtensionNonReact(this.renderConfig.script)}`;
   }
 
   renderComponentInternal() {
