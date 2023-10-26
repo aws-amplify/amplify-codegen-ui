@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.19.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.19.0...v2.19.2) (2023-10-26)
+
+### Bug Fixes
+
+- add use client directive option to form renderer ([#1112](https://github.com/aws-amplify/amplify-codegen-ui/issues/1112)) ([0cfef0f](https://github.com/aws-amplify/amplify-codegen-ui/commit/0cfef0f2299dbbff8b79aacf0e4debb9bcf871a6))
+
 ## [2.19.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.19.0...v2.19.1) (2023-10-23)
 
 **Note:** Version bump only for package @aws-amplify/codegen-ui-golden-files
