@@ -374,6 +374,7 @@ examples:
     );
     setCurrentPrimaryAuthorDisplayValue(label);
   }}
+  // For autocomplete field only
  */
 export function buildOnSelect({
   sanitizedFieldName,
@@ -407,7 +408,9 @@ export function buildOnSelect({
     nextCurrentDisplayValue = factory.createIdentifier(labelString);
 
     nextCurrentValue = getMatchEveryModelFieldCallExpression({
-      recordsArrayName: dataApi === 'GraphQL' ? `${fieldName}Records` : getRecordsName(model),
+      // Autocomplete is special and needs a ref to the model for DataStore because the
+      // fieldName will not be the same as when the reference was created.
+      recordsArrayName: getRecordsName(dataApi === 'GraphQL' ? fieldName : model),
       JSONName: idString,
     });
   }

@@ -60,11 +60,10 @@ import { getAmplifyJSVersionToRender } from '../../helpers/amplify-js-versioning
 export const buildRelationshipQuery = (
   relatedModelName: string,
   importCollection: ImportCollection,
+  fieldName: string,
   dataApi?: DataApiKind,
   renderConfigDependencies?: { [key: string]: string },
 ) => {
-  const itemsName = getRecordsName(relatedModelName);
-
   /* istanbul ignore next */
   if (dataApi === 'GraphQL') {
     return factory.createVariableStatement(
@@ -72,7 +71,7 @@ export const buildRelationshipQuery = (
       factory.createVariableDeclarationList(
         [
           factory.createVariableDeclaration(
-            factory.createIdentifier(itemsName),
+            factory.createIdentifier(getRecordsName(fieldName)),
             undefined,
             undefined,
             wrapInParenthesizedExpression(
@@ -101,7 +100,7 @@ export const buildRelationshipQuery = (
     ),
   ];
   return buildBaseCollectionVariableStatement(
-    itemsName,
+    getRecordsName(relatedModelName),
     factory.createCallExpression(factory.createIdentifier('useDataStoreBinding'), undefined, [
       factory.createObjectLiteralExpression(objectProperties, true),
     ]),
@@ -891,7 +890,9 @@ export const buildManyToManyRelationshipStatements = (
                           undefined,
                           undefined,
                           getMatchEveryModelFieldCallExpression({
-                            recordsArrayName: getRecordsName(relatedModelName),
+                            // Special and needs a ref to the model for DataStore because the
+                            // fieldName will not be the same as when the reference was created.
+                            recordsArrayName: getRecordsName(dataApi === 'GraphQL' ? fieldName : relatedModelName),
                             JSONName: 'id',
                           }),
                         ),
