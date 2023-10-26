@@ -24,11 +24,16 @@ export enum ImportSource {
   UTILS = './utils',
   AMPLIFY = 'aws-amplify',
   AMPLIFY_API = 'aws-amplify/api',
+  AMPLIFY_AUTH = 'aws-amplify/auth',
+  AMPLIFY_UTILS = 'aws-amplify/utils',
+  AMPLIFY_DATASTORE_V6 = 'aws-amplify/datastore',
 }
 
 export enum ImportValue {
   GET_OVERRIDE_PROPS = 'getOverrideProps',
   USE_AUTH = 'useAuth',
+  AUTH = 'Auth',
+  SIGN_OUT = 'signOut',
   GET_OVERRIDES_FROM_VARIANTS = 'getOverridesFromVariants',
   USE_BREAKPOINT_VALUE = 'useBreakpointValue',
   VARIANT = 'Variant',
@@ -62,6 +67,8 @@ export enum ImportValue {
 
 export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.API]: ImportSource.AMPLIFY,
+  [ImportValue.AUTH]: ImportSource.AMPLIFY,
+  [ImportValue.SIGN_OUT]: ImportSource.AMPLIFY_AUTH,
   [ImportValue.HUB]: ImportSource.AMPLIFY,
   [ImportValue.DATASTORE]: ImportSource.AMPLIFY,
   [ImportValue.GENERATE_CLIENT]: ImportSource.AMPLIFY_API,

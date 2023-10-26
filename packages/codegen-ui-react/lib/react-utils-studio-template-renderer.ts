@@ -17,7 +17,7 @@ import { EOL } from 'os';
 import { EmitHint } from 'typescript';
 import { StudioTemplateRenderer } from '@aws-amplify/codegen-ui';
 import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
-import { ImportCollection, ImportValue } from './imports';
+import { ImportCollection, ImportSource, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
 import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
 import {
@@ -41,7 +41,10 @@ import {
   useDataStoreDeleteActionString,
   createDataStorePredicateString,
   useDataStoreBindingString,
+  useAuthSignOutActionStringV6,
 } from './utils-file-functions';
+import { getAmplifyJSVersionToRender } from './helpers/amplify-js-versioning';
+import { AMPLIFY_JS_V6 } from './utils/constants';
 
 export type UtilTemplateType = 'validation' | 'formatter' | 'fetchByPath' | 'processFile';
 
@@ -78,8 +81,6 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
 
   renderComponentInternal() {
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
-    this.importCollection.addMappedImport(ImportValue.HUB, ImportValue.DATASTORE);
-
     const parsedUtils: string[] = [
       constantsString,
       amplifySymbolString,
@@ -90,7 +91,6 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
       getOverridesFromVariantsString,
       mergeVariantsAndOverridesString,
       getErrorMessageString,
-      useAuthSignOutActionString,
       useTypeCastFieldsString,
       useDataStoreCreateActionString,
       useDataStoreUpdateActionString,
@@ -98,6 +98,16 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
       createDataStorePredicateString,
       useDataStoreBindingString,
     ];
+
+    if (getAmplifyJSVersionToRender(this.renderConfig.dependencies) === AMPLIFY_JS_V6) {
+      this.importCollection.addImport(ImportSource.AMPLIFY_AUTH, ImportValue.SIGN_OUT);
+      this.importCollection.addImport(ImportSource.AMPLIFY_DATASTORE_V6, ImportValue.DATASTORE);
+      this.importCollection.addImport(ImportSource.AMPLIFY_UTILS, ImportValue.HUB);
+      parsedUtils.push(useAuthSignOutActionStringV6);
+    } else {
+      this.importCollection.addMappedImport(ImportValue.HUB, ImportValue.DATASTORE, ImportValue.AUTH);
+      parsedUtils.push(useAuthSignOutActionString);
+    }
 
     const utilsSet = new Set(this.utils);
 

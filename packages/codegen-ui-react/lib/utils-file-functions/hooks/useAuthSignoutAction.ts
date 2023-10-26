@@ -48,3 +48,39 @@ export const useAuthSignOutActionString = `export const useAuthSignOutAction: Us
       );
     }
   };`;
+
+export const useAuthSignOutActionStringV6 = `export const useAuthSignOutAction: UseAuthSignOutAction =
+  (options) => async () => {
+    try {
+      Hub.dispatch(
+        UI_CHANNEL,
+        {
+          event: ACTION_AUTH_SIGNOUT_STARTED,
+          data: { options },
+        },
+        EVENT_ACTION_AUTH_SIGNOUT,
+        AMPLIFY_SYMBOL
+      );
+
+      await signOut(options);
+      Hub.dispatch(
+        UI_CHANNEL,
+        {
+          event: ACTION_AUTH_SIGNOUT_FINISHED,
+          data: { options },
+        },
+        EVENT_ACTION_AUTH_SIGNOUT,
+        AMPLIFY_SYMBOL
+      );
+    } catch (error) {
+      Hub.dispatch(
+        UI_CHANNEL,
+        {
+          event: ACTION_AUTH_SIGNOUT_FINISHED,
+          data: { options, errorMessage: getErrorMessage(error) },
+        },
+        EVENT_ACTION_AUTH_SIGNOUT,
+        AMPLIFY_SYMBOL
+      );
+    }
+  };`;

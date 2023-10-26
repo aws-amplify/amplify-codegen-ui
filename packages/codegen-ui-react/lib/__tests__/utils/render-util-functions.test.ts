@@ -28,4 +28,20 @@ describe('render utils file', () => {
 
     expect(componentText).toMatchSnapshot();
   });
+  test('render all utils - amplify v6', () => {
+    const utilsSet: UtilTemplateType[] = ['validation', 'formatter', 'fetchByPath', 'processFile'];
+    const { componentText } = new ReactUtilsStudioTemplateRenderer(utilsSet, {
+      module: ModuleKind.ES2020,
+      target: ScriptTarget.ES2020,
+      script: ScriptKind.JSX,
+      renderTypeDeclarations: false,
+      dependencies: { 'aws-amplify': '^6.0.0' },
+    }).renderComponentInternal();
+
+    expect(componentText).toMatchSnapshot();
+    expect(componentText).toContain('await signOut(options)');
+    expect(componentText).toContain('aws-amplify/utils');
+    expect(componentText).toContain('aws-amplify/auth');
+    expect(componentText).toContain('aws-amplify/datastore');
+  });
 });
