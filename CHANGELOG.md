@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.19.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.19.0...v2.19.2) (2023-10-26)
+
+### Bug Fixes
+
+- add new imports for aws-amplify ([#1127](https://github.com/aws-amplify/amplify-codegen-ui/issues/1127)) ([f6a1bca](https://github.com/aws-amplify/amplify-codegen-ui/commit/f6a1bca7f0f03c08d734397bf25540f587e50ef5))
+- add use client directive option to form renderer ([#1112](https://github.com/aws-amplify/amplify-codegen-ui/issues/1112)) ([0cfef0f](https://github.com/aws-amplify/amplify-codegen-ui/commit/0cfef0f2299dbbff8b79aacf0e4debb9bcf871a6))
+- change utils file to js ([#1126](https://github.com/aws-amplify/amplify-codegen-ui/issues/1126)) ([4507dde](https://github.com/aws-amplify/amplify-codegen-ui/commit/4507ddefdf66ac61a474446369c4b080fb06e825))
+- join table related model name using incorrect casing in reduce callback ([#1124](https://github.com/aws-amplify/amplify-codegen-ui/issues/1124)) ([b047400](https://github.com/aws-amplify/amplify-codegen-ui/commit/b0474005d2f20b5b6e68f9b953ec47362e4cf3ed))
+- remove aws-amplify dependency ([#1123](https://github.com/aws-amplify/amplify-codegen-ui/issues/1123)) ([dd7a773](https://github.com/aws-amplify/amplify-codegen-ui/commit/dd7a7730fd5e32563d5da9457d730db980be142f))
+
 ## [2.19.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.19.0...v2.19.1) (2023-10-23)
 
 ### Bug Fixes
