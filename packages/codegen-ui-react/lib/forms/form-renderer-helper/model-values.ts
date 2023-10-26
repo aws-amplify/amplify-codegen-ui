@@ -92,7 +92,7 @@ export function getDisplayValueScalar(fieldName: string, model: string, key: str
           ? factory.createBinaryExpression(
               factory.createCallExpression(
                 factory.createPropertyAccessExpression(
-                  factory.createIdentifier(getRecordsName(model)),
+                  factory.createIdentifier(getRecordsName(fieldName)),
                   factory.createIdentifier('find'),
                 ),
                 undefined,
@@ -161,6 +161,8 @@ export function getDisplayValueScalar(fieldName: string, model: string, key: str
             )
           : factory.createCallExpression(
               factory.createPropertyAccessExpression(
+                // DataStore needs a value to the model instead of the field
+                // because the value of field may be different where this variable was defined.
                 factory.createIdentifier(getRecordsName(model)),
                 factory.createIdentifier('find'),
               ),
@@ -210,8 +212,13 @@ export function getDisplayValueScalar(fieldName: string, model: string, key: str
     id: r?.id,
     label: getDisplayValue['fieldName']?.(r),
   }))
+  // For use in AutoComplete options prop only
  */
-function getSuggestionsForRelationshipScalar(modelName: string, key: string, fieldName: string): CallExpression {
+function getSuggestionsForRelationshipScalar(
+  valueRefForBuildingSuggestions: string,
+  key: string,
+  fieldName: string,
+): CallExpression {
   const recordString = 'r';
 
   const labelExpression = getDisplayValueCallChain({ fieldName, recordString });
@@ -220,7 +227,7 @@ function getSuggestionsForRelationshipScalar(modelName: string, key: string, fie
     factory.createPropertyAccessExpression(
       factory.createCallExpression(
         factory.createPropertyAccessExpression(
-          factory.createIdentifier(getRecordsName(modelName)),
+          factory.createIdentifier(getRecordsName(valueRefForBuildingSuggestions)),
           factory.createIdentifier('filter'),
         ),
         undefined,
@@ -340,6 +347,7 @@ function getSuggestionsForRelationshipScalar(modelName: string, key: string, fie
     id: getIDValue['primaryAuthor]?.(r),
     label: getDisplayValue['primaryAuthor']?.(r),
   }))
+  For AutoComplete field only
  */
 function getModelTypeSuggestions({
   modelName,
@@ -354,7 +362,9 @@ function getModelTypeSuggestions({
 }): CallExpression {
   const recordString = 'r';
   const labelExpression = getDisplayValueCallChain({ fieldName, recordString });
-  const optionsRecords = dataApi === 'GraphQL' ? `${fieldName}Records` : getRecordsName(modelName);
+  // Autocomplete is special and needs a ref to the model for DataStore because the
+  // fieldName will not be the same as when the reference was created.
+  const optionsRecords = getRecordsName(dataApi === 'GraphQL' ? fieldName : modelName);
 
   const mappingFunction = factory.createArrowFunction(
     undefined,

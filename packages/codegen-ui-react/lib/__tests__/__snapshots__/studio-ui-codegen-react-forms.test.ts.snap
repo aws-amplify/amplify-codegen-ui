@@ -193,7 +193,7 @@ export default function CreateOwnerForm(props) {
   const [name, setName] = React.useState(initialValues.name);
   const [Dog, setDog] = React.useState(initialValues.Dog);
   const [DogLoading, setDogLoading] = React.useState(false);
-  const [DogRecords, setDogRecords] = React.useState([]);
+  const [dogRecords, setDogRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -442,16 +442,16 @@ export default function CreateOwnerForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Dog\\"
           value={currentDogDisplayValue}
-          options={DogRecords.filter(
-            (r) => !DogIdSet.has(getIDValue.Dog?.(r))
-          ).map((r) => ({
-            id: getIDValue.Dog?.(r),
-            label: getDisplayValue.Dog?.(r),
-          }))}
+          options={dogRecords
+            .filter((r) => !DogIdSet.has(getIDValue.Dog?.(r)))
+            .map((r) => ({
+              id: getIDValue.Dog?.(r),
+              label: getDisplayValue.Dog?.(r),
+            }))}
           isLoading={DogLoading}
           onSelect={({ id, label }) => {
             setCurrentDogValue(
-              DogRecords.find((r) =>
+              dogRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -752,7 +752,7 @@ export default function CreateOwnerForm(props) {
   const [name, setName] = React.useState(initialValues.name);
   const [Dog, setDog] = React.useState(initialValues.Dog);
   const [DogLoading, setDogLoading] = React.useState(false);
-  const [DogRecords, setDogRecords] = React.useState([]);
+  const [dogRecords, setDogRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -1001,16 +1001,16 @@ export default function CreateOwnerForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Dog\\"
           value={currentDogDisplayValue}
-          options={DogRecords.filter(
-            (r) => !DogIdSet.has(getIDValue.Dog?.(r))
-          ).map((r) => ({
-            id: getIDValue.Dog?.(r),
-            label: getDisplayValue.Dog?.(r),
-          }))}
+          options={dogRecords
+            .filter((r) => !DogIdSet.has(getIDValue.Dog?.(r)))
+            .map((r) => ({
+              id: getIDValue.Dog?.(r),
+              label: getDisplayValue.Dog?.(r),
+            }))}
           isLoading={DogLoading}
           onSelect={({ id, label }) => {
             setCurrentDogValue(
-              DogRecords.find((r) =>
+              dogRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -2657,7 +2657,7 @@ export default function MyMemberForm(props) {
   const [selectedTeamIDRecords, setSelectedTeamIDRecords] = React.useState([]);
   const [Team, setTeam] = React.useState(initialValues.Team);
   const [TeamLoading, setTeamLoading] = React.useState(false);
-  const [TeamRecords, setTeamRecords] = React.useState([]);
+  const [teamRecords, setTeamRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -3038,16 +3038,16 @@ export default function MyMemberForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Team\\"
           value={currentTeamDisplayValue}
-          options={TeamRecords.filter(
-            (r) => !TeamIdSet.has(getIDValue.Team?.(r))
-          ).map((r) => ({
-            id: getIDValue.Team?.(r),
-            label: getDisplayValue.Team?.(r),
-          }))}
+          options={teamRecords
+            .filter((r) => !TeamIdSet.has(getIDValue.Team?.(r)))
+            .map((r) => ({
+              id: getIDValue.Team?.(r),
+              label: getDisplayValue.Team?.(r),
+            }))}
           isLoading={TeamLoading}
           onSelect={({ id, label }) => {
             setCurrentTeamValue(
-              TeamRecords.find((r) =>
+              teamRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -3989,7 +3989,7 @@ export default function SchoolCreateForm(props) {
   const [name, setName] = React.useState(initialValues.name);
   const [Students, setStudents] = React.useState(initialValues.Students);
   const [StudentsLoading, setStudentsLoading] = React.useState(false);
-  const [StudentsRecords, setStudentsRecords] = React.useState([]);
+  const [studentsRecords, setStudentsRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -4225,16 +4225,16 @@ export default function SchoolCreateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Student\\"
           value={currentStudentsDisplayValue}
-          options={StudentsRecords.filter(
-            (r) => !StudentsIdSet.has(getIDValue.Students?.(r))
-          ).map((r) => ({
-            id: getIDValue.Students?.(r),
-            label: getDisplayValue.Students?.(r),
-          }))}
+          options={studentsRecords
+            .filter((r) => !StudentsIdSet.has(getIDValue.Students?.(r)))
+            .map((r) => ({
+              id: getIDValue.Students?.(r),
+              label: getDisplayValue.Students?.(r),
+            }))}
           isLoading={StudentsLoading}
           onSelect={({ id, label }) => {
             setCurrentStudentsValue(
-              StudentsRecords.find((r) =>
+              studentsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -5619,7 +5619,7 @@ export default function TagCreateForm(props) {
   const [label, setLabel] = React.useState(initialValues.label);
   const [Posts, setPosts] = React.useState(initialValues.Posts);
   const [PostsLoading, setPostsLoading] = React.useState(false);
-  const [PostsRecords, setPostsRecords] = React.useState([]);
+  const [postsRecords, setPostsRecords] = React.useState([]);
   const [statuses, setStatuses] = React.useState(initialValues.statuses);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
@@ -5872,14 +5872,14 @@ export default function TagCreateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Post\\"
           value={currentPostsDisplayValue}
-          options={PostsRecords.map((r) => ({
+          options={postsRecords.map((r) => ({
             id: getIDValue.Posts?.(r),
             label: getDisplayValue.Posts?.(r),
           }))}
           isLoading={PostsLoading}
           onSelect={({ id, label }) => {
             setCurrentPostsValue(
-              PostsRecords.find((r) =>
+              postsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -6955,15 +6955,15 @@ export default function CreateCPKTeacherForm(props) {
   );
   const [CPKStudent, setCPKStudent] = React.useState(initialValues.CPKStudent);
   const [CPKStudentLoading, setCPKStudentLoading] = React.useState(false);
-  const [CPKStudentRecords, setCPKStudentRecords] = React.useState([]);
+  const [cPKStudentRecords, setCPKStudentRecords] = React.useState([]);
   const [CPKClasses, setCPKClasses] = React.useState(initialValues.CPKClasses);
   const [CPKClassesLoading, setCPKClassesLoading] = React.useState(false);
-  const [CPKClassesRecords, setCPKClassesRecords] = React.useState([]);
+  const [cPKClassesRecords, setCPKClassesRecords] = React.useState([]);
   const [CPKProjects, setCPKProjects] = React.useState(
     initialValues.CPKProjects
   );
   const [CPKProjectsLoading, setCPKProjectsLoading] = React.useState(false);
-  const [CPKProjectsRecords, setCPKProjectsRecords] = React.useState([]);
+  const [cPKProjectsRecords, setCPKProjectsRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -7314,16 +7314,16 @@ export default function CreateCPKTeacherForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CPKStudent\\"
           value={currentCPKStudentDisplayValue}
-          options={CPKStudentRecords.filter(
-            (r) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(r))
-          ).map((r) => ({
-            id: getIDValue.CPKStudent?.(r),
-            label: getDisplayValue.CPKStudent?.(r),
-          }))}
+          options={cPKStudentRecords
+            .filter((r) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(r)))
+            .map((r) => ({
+              id: getIDValue.CPKStudent?.(r),
+              label: getDisplayValue.CPKStudent?.(r),
+            }))}
           isLoading={CPKStudentLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKStudentValue(
-              CPKStudentRecords.find((r) =>
+              cPKStudentRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -7395,14 +7395,14 @@ export default function CreateCPKTeacherForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CPKClass\\"
           value={currentCPKClassesDisplayValue}
-          options={CPKClassesRecords.map((r) => ({
+          options={cPKClassesRecords.map((r) => ({
             id: getIDValue.CPKClasses?.(r),
             label: getDisplayValue.CPKClasses?.(r),
           }))}
           isLoading={CPKClassesLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKClassesValue(
-              CPKClassesRecords.find((r) =>
+              cPKClassesRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -7474,16 +7474,16 @@ export default function CreateCPKTeacherForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CPKProject\\"
           value={currentCPKProjectsDisplayValue}
-          options={CPKProjectsRecords.filter(
-            (r) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(r))
-          ).map((r) => ({
-            id: getIDValue.CPKProjects?.(r),
-            label: getDisplayValue.CPKProjects?.(r),
-          }))}
+          options={cPKProjectsRecords
+            .filter((r) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(r)))
+            .map((r) => ({
+              id: getIDValue.CPKProjects?.(r),
+              label: getDisplayValue.CPKProjects?.(r),
+            }))}
           isLoading={CPKProjectsLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKProjectsValue(
-              CPKProjectsRecords.find((r) =>
+              cPKProjectsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -8372,7 +8372,7 @@ export default function PostUpdateForm(props) {
   );
   const [Comments, setComments] = React.useState(initialValues.Comments);
   const [CommentsLoading, setCommentsLoading] = React.useState(false);
-  const [CommentsRecords, setCommentsRecords] = React.useState([]);
+  const [commentsRecords, setCommentsRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -8749,14 +8749,14 @@ export default function PostUpdateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Comment\\"
           value={currentCommentsDisplayValue}
-          options={CommentsRecords.map((r) => ({
+          options={commentsRecords.map((r) => ({
             id: getIDValue.Comments?.(r),
             label: getDisplayValue.Comments?.(r),
           }))}
           isLoading={CommentsLoading}
           onSelect={({ id, label }) => {
             setCurrentCommentsValue(
-              CommentsRecords.find((r) =>
+              commentsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -10923,7 +10923,7 @@ export default function MovieUpdateForm(props) {
             }
           });
           tagsToLinkMap.forEach((count, id) => {
-            const tagToLink = tagRecords.find((r) =>
+            const tagToLink = tagsRecords.find((r) =>
               Object.entries(JSON.parse(id)).every(
                 ([key, value]) => r[key] === value
               )
@@ -11714,7 +11714,7 @@ export default function MovieUpdateForm(props) {
             }
           });
           tagsToLinkMap.forEach((count, id) => {
-            const tagToLink = tagRecords.find((r) =>
+            const tagToLink = tagsRecords.find((r) =>
               Object.entries(JSON.parse(id)).every(
                 ([key, value]) => r[key] === value
               )
@@ -12253,7 +12253,7 @@ export default function CommentUpdateForm(props) {
   const [selectedPostIDRecords, setSelectedPostIDRecords] = React.useState([]);
   const [Post, setPost] = React.useState(initialValues.Post);
   const [PostLoading, setPostLoading] = React.useState(false);
-  const [PostRecords, setPostRecords] = React.useState([]);
+  const [postRecords, setPostRecords] = React.useState([]);
   const [post1, setPost1] = React.useState(initialValues.post);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
@@ -12640,16 +12640,16 @@ export default function CommentUpdateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Post\\"
           value={currentPostDisplayValue}
-          options={PostRecords.filter(
-            (r) => !PostIdSet.has(getIDValue.Post?.(r))
-          ).map((r) => ({
-            id: getIDValue.Post?.(r),
-            label: getDisplayValue.Post?.(r),
-          }))}
+          options={postRecords
+            .filter((r) => !PostIdSet.has(getIDValue.Post?.(r)))
+            .map((r) => ({
+              id: getIDValue.Post?.(r),
+              label: getDisplayValue.Post?.(r),
+            }))}
           isLoading={PostLoading}
           onSelect={({ id, label }) => {
             setCurrentPostValue(
-              PostRecords.find((r) =>
+              postRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -12995,7 +12995,7 @@ export default function CommentUpdateForm(props) {
   const [selectedPostIDRecords, setSelectedPostIDRecords] = React.useState([]);
   const [Post, setPost] = React.useState(initialValues.Post);
   const [PostLoading, setPostLoading] = React.useState(false);
-  const [PostRecords, setPostRecords] = React.useState([]);
+  const [postRecords, setPostRecords] = React.useState([]);
   const [post1, setPost1] = React.useState(initialValues.post);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
@@ -13382,16 +13382,16 @@ export default function CommentUpdateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Post\\"
           value={currentPostDisplayValue}
-          options={PostRecords.filter(
-            (r) => !PostIdSet.has(getIDValue.Post?.(r))
-          ).map((r) => ({
-            id: getIDValue.Post?.(r),
-            label: getDisplayValue.Post?.(r),
-          }))}
+          options={postRecords
+            .filter((r) => !PostIdSet.has(getIDValue.Post?.(r)))
+            .map((r) => ({
+              id: getIDValue.Post?.(r),
+              label: getDisplayValue.Post?.(r),
+            }))}
           isLoading={PostLoading}
           onSelect={({ id, label }) => {
             setCurrentPostValue(
-              PostRecords.find((r) =>
+              postRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -13735,7 +13735,7 @@ export default function CommentUpdateForm(props) {
   const [selectedPostIDRecords, setSelectedPostIDRecords] = React.useState([]);
   const [Post, setPost] = React.useState(initialValues.Post);
   const [PostLoading, setPostLoading] = React.useState(false);
-  const [PostRecords, setPostRecords] = React.useState([]);
+  const [postRecords, setPostRecords] = React.useState([]);
   const [post1, setPost1] = React.useState(initialValues.post);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
@@ -14122,16 +14122,16 @@ export default function CommentUpdateForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Post\\"
           value={currentPostDisplayValue}
-          options={PostRecords.filter(
-            (r) => !PostIdSet.has(getIDValue.Post?.(r))
-          ).map((r) => ({
-            id: getIDValue.Post?.(r),
-            label: getDisplayValue.Post?.(r),
-          }))}
+          options={postRecords
+            .filter((r) => !PostIdSet.has(getIDValue.Post?.(r)))
+            .map((r) => ({
+              id: getIDValue.Post?.(r),
+              label: getDisplayValue.Post?.(r),
+            }))}
           isLoading={PostLoading}
           onSelect={({ id, label }) => {
             setCurrentPostValue(
-              PostRecords.find((r) =>
+              postRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -15251,7 +15251,7 @@ export default function ClassUpdateForm(props) {
             }
           });
           studentsToLinkMap.forEach((count, id) => {
-            const studentToLink = studentRecords.find((r) =>
+            const studentToLink = studentsRecords.find((r) =>
               Object.entries(JSON.parse(id)).every(
                 ([key, value]) => r[key] === value
               )
@@ -15873,7 +15873,7 @@ export default function ClassUpdateForm(props) {
             }
           });
           studentsToLinkMap.forEach((count, id) => {
-            const studentToLink = studentRecords.find((r) =>
+            const studentToLink = studentsRecords.find((r) =>
               Object.entries(JSON.parse(id)).every(
                 ([key, value]) => r[key] === value
               )
@@ -16891,15 +16891,15 @@ export default function UpdateCPKTeacherForm(props) {
   );
   const [CPKStudent, setCPKStudent] = React.useState(initialValues.CPKStudent);
   const [CPKStudentLoading, setCPKStudentLoading] = React.useState(false);
-  const [CPKStudentRecords, setCPKStudentRecords] = React.useState([]);
+  const [cPKStudentRecords, setCPKStudentRecords] = React.useState([]);
   const [CPKClasses, setCPKClasses] = React.useState(initialValues.CPKClasses);
   const [CPKClassesLoading, setCPKClassesLoading] = React.useState(false);
-  const [CPKClassesRecords, setCPKClassesRecords] = React.useState([]);
+  const [cPKClassesRecords, setCPKClassesRecords] = React.useState([]);
   const [CPKProjects, setCPKProjects] = React.useState(
     initialValues.CPKProjects
   );
   const [CPKProjectsLoading, setCPKProjectsLoading] = React.useState(false);
-  const [CPKProjectsRecords, setCPKProjectsRecords] = React.useState([]);
+  const [cPKProjectsRecords, setCPKProjectsRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -17246,7 +17246,7 @@ export default function UpdateCPKTeacherForm(props) {
             }
           });
           cPKClassesToLinkMap.forEach((count, id) => {
-            const cPKClassToLink = cPKClassRecords.find((r) =>
+            const cPKClassToLink = cPKClassesRecords.find((r) =>
               Object.entries(JSON.parse(id)).every(
                 ([key, value]) => r[key] === value
               )
@@ -17416,16 +17416,16 @@ export default function UpdateCPKTeacherForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CPKStudent\\"
           value={currentCPKStudentDisplayValue}
-          options={CPKStudentRecords.filter(
-            (r) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(r))
-          ).map((r) => ({
-            id: getIDValue.CPKStudent?.(r),
-            label: getDisplayValue.CPKStudent?.(r),
-          }))}
+          options={cPKStudentRecords
+            .filter((r) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(r)))
+            .map((r) => ({
+              id: getIDValue.CPKStudent?.(r),
+              label: getDisplayValue.CPKStudent?.(r),
+            }))}
           isLoading={CPKStudentLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKStudentValue(
-              CPKStudentRecords.find((r) =>
+              cPKStudentRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -17498,14 +17498,14 @@ export default function UpdateCPKTeacherForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CPKClass\\"
           value={currentCPKClassesDisplayValue}
-          options={CPKClassesRecords.map((r) => ({
+          options={cPKClassesRecords.map((r) => ({
             id: getIDValue.CPKClasses?.(r),
             label: getDisplayValue.CPKClasses?.(r),
           }))}
           isLoading={CPKClassesLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKClassesValue(
-              CPKClassesRecords.find((r) =>
+              cPKClassesRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -17577,16 +17577,16 @@ export default function UpdateCPKTeacherForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CPKProject\\"
           value={currentCPKProjectsDisplayValue}
-          options={CPKProjectsRecords.filter(
-            (r) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(r))
-          ).map((r) => ({
-            id: getIDValue.CPKProjects?.(r),
-            label: getDisplayValue.CPKProjects?.(r),
-          }))}
+          options={cPKProjectsRecords
+            .filter((r) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(r)))
+            .map((r) => ({
+              id: getIDValue.CPKProjects?.(r),
+              label: getDisplayValue.CPKProjects?.(r),
+            }))}
           isLoading={CPKProjectsLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKProjectsValue(
-              CPKProjectsRecords.find((r) =>
+              cPKProjectsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -17917,15 +17917,15 @@ export default function UpdateCPKTeacherForm(props) {
   );
   const [CPKStudent, setCPKStudent] = React.useState(initialValues.CPKStudent);
   const [CPKStudentLoading, setCPKStudentLoading] = React.useState(false);
-  const [CPKStudentRecords, setCPKStudentRecords] = React.useState([]);
+  const [cPKStudentRecords, setCPKStudentRecords] = React.useState([]);
   const [CPKClasses, setCPKClasses] = React.useState(initialValues.CPKClasses);
   const [CPKClassesLoading, setCPKClassesLoading] = React.useState(false);
-  const [CPKClassesRecords, setCPKClassesRecords] = React.useState([]);
+  const [cPKClassesRecords, setCPKClassesRecords] = React.useState([]);
   const [CPKProjects, setCPKProjects] = React.useState(
     initialValues.CPKProjects
   );
   const [CPKProjectsLoading, setCPKProjectsLoading] = React.useState(false);
-  const [CPKProjectsRecords, setCPKProjectsRecords] = React.useState([]);
+  const [cPKProjectsRecords, setCPKProjectsRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -18272,7 +18272,7 @@ export default function UpdateCPKTeacherForm(props) {
             }
           });
           cPKClassesToLinkMap.forEach((count, id) => {
-            const cPKClassToLink = cPKClassRecords.find((r) =>
+            const cPKClassToLink = cPKClassesRecords.find((r) =>
               Object.entries(JSON.parse(id)).every(
                 ([key, value]) => r[key] === value
               )
@@ -18442,16 +18442,16 @@ export default function UpdateCPKTeacherForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CPKStudent\\"
           value={currentCPKStudentDisplayValue}
-          options={CPKStudentRecords.filter(
-            (r) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(r))
-          ).map((r) => ({
-            id: getIDValue.CPKStudent?.(r),
-            label: getDisplayValue.CPKStudent?.(r),
-          }))}
+          options={cPKStudentRecords
+            .filter((r) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(r)))
+            .map((r) => ({
+              id: getIDValue.CPKStudent?.(r),
+              label: getDisplayValue.CPKStudent?.(r),
+            }))}
           isLoading={CPKStudentLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKStudentValue(
-              CPKStudentRecords.find((r) =>
+              cPKStudentRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -18524,14 +18524,14 @@ export default function UpdateCPKTeacherForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CPKClass\\"
           value={currentCPKClassesDisplayValue}
-          options={CPKClassesRecords.map((r) => ({
+          options={cPKClassesRecords.map((r) => ({
             id: getIDValue.CPKClasses?.(r),
             label: getDisplayValue.CPKClasses?.(r),
           }))}
           isLoading={CPKClassesLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKClassesValue(
-              CPKClassesRecords.find((r) =>
+              cPKClassesRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -18603,16 +18603,16 @@ export default function UpdateCPKTeacherForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CPKProject\\"
           value={currentCPKProjectsDisplayValue}
-          options={CPKProjectsRecords.filter(
-            (r) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(r))
-          ).map((r) => ({
-            id: getIDValue.CPKProjects?.(r),
-            label: getDisplayValue.CPKProjects?.(r),
-          }))}
+          options={cPKProjectsRecords
+            .filter((r) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(r)))
+            .map((r) => ({
+              id: getIDValue.CPKProjects?.(r),
+              label: getDisplayValue.CPKProjects?.(r),
+            }))}
           isLoading={CPKProjectsLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKProjectsValue(
-              CPKProjectsRecords.find((r) =>
+              cPKProjectsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -19722,10 +19722,10 @@ export default function CreateCommentForm(props) {
   const [postRecords, setPostRecords] = React.useState([]);
   const [User, setUser] = React.useState(initialValues.User);
   const [UserLoading, setUserLoading] = React.useState(false);
-  const [UserRecords, setUserRecords] = React.useState([]);
+  const [userRecords, setUserRecords] = React.useState([]);
   const [Org, setOrg] = React.useState(initialValues.Org);
   const [OrgLoading, setOrgLoading] = React.useState(false);
-  const [OrgRecords, setOrgRecords] = React.useState([]);
+  const [orgRecords, setOrgRecords] = React.useState([]);
   const [postCommentsId, setPostCommentsId] = React.useState(
     initialValues.postCommentsId
   );
@@ -20171,16 +20171,16 @@ export default function CreateCommentForm(props) {
           isReadOnly={false}
           placeholder=\\"Search User\\"
           value={currentUserDisplayValue}
-          options={UserRecords.filter(
-            (r) => !UserIdSet.has(getIDValue.User?.(r))
-          ).map((r) => ({
-            id: getIDValue.User?.(r),
-            label: getDisplayValue.User?.(r),
-          }))}
+          options={userRecords
+            .filter((r) => !UserIdSet.has(getIDValue.User?.(r)))
+            .map((r) => ({
+              id: getIDValue.User?.(r),
+              label: getDisplayValue.User?.(r),
+            }))}
           isLoading={UserLoading}
           onSelect={({ id, label }) => {
             setCurrentUserValue(
-              UserRecords.find((r) =>
+              userRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -20250,16 +20250,16 @@ export default function CreateCommentForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Org\\"
           value={currentOrgDisplayValue}
-          options={OrgRecords.filter(
-            (r) => !OrgIdSet.has(getIDValue.Org?.(r))
-          ).map((r) => ({
-            id: getIDValue.Org?.(r),
-            label: getDisplayValue.Org?.(r),
-          }))}
+          options={orgRecords
+            .filter((r) => !OrgIdSet.has(getIDValue.Org?.(r)))
+            .map((r) => ({
+              id: getIDValue.Org?.(r),
+              label: getDisplayValue.Org?.(r),
+            }))}
           isLoading={OrgLoading}
           onSelect={({ id, label }) => {
             setCurrentOrgValue(
-              OrgRecords.find((r) =>
+              orgRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -20686,23 +20686,23 @@ export default function CreateCompositeDogForm(props) {
     initialValues.CompositeBowl
   );
   const [CompositeBowlLoading, setCompositeBowlLoading] = React.useState(false);
-  const [CompositeBowlRecords, setCompositeBowlRecords] = React.useState([]);
+  const [compositeBowlRecords, setCompositeBowlRecords] = React.useState([]);
   const [CompositeOwner, setCompositeOwner] = React.useState(
     initialValues.CompositeOwner
   );
   const [CompositeOwnerLoading, setCompositeOwnerLoading] =
     React.useState(false);
-  const [CompositeOwnerRecords, setCompositeOwnerRecords] = React.useState([]);
+  const [compositeOwnerRecords, setCompositeOwnerRecords] = React.useState([]);
   const [CompositeToys, setCompositeToys] = React.useState(
     initialValues.CompositeToys
   );
   const [CompositeToysLoading, setCompositeToysLoading] = React.useState(false);
-  const [CompositeToysRecords, setCompositeToysRecords] = React.useState([]);
+  const [compositeToysRecords, setCompositeToysRecords] = React.useState([]);
   const [CompositeVets, setCompositeVets] = React.useState(
     initialValues.CompositeVets
   );
   const [CompositeVetsLoading, setCompositeVetsLoading] = React.useState(false);
-  const [CompositeVetsRecords, setCompositeVetsRecords] = React.useState([]);
+  const [compositeVetsRecords, setCompositeVetsRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -21203,16 +21203,18 @@ export default function CreateCompositeDogForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeBowl\\"
           value={currentCompositeBowlDisplayValue}
-          options={CompositeBowlRecords.filter(
-            (r) => !CompositeBowlIdSet.has(getIDValue.CompositeBowl?.(r))
-          ).map((r) => ({
-            id: getIDValue.CompositeBowl?.(r),
-            label: getDisplayValue.CompositeBowl?.(r),
-          }))}
+          options={compositeBowlRecords
+            .filter(
+              (r) => !CompositeBowlIdSet.has(getIDValue.CompositeBowl?.(r))
+            )
+            .map((r) => ({
+              id: getIDValue.CompositeBowl?.(r),
+              label: getDisplayValue.CompositeBowl?.(r),
+            }))}
           isLoading={CompositeBowlLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeBowlValue(
-              CompositeBowlRecords.find((r) =>
+              compositeBowlRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -21290,16 +21292,18 @@ export default function CreateCompositeDogForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeOwner\\"
           value={currentCompositeOwnerDisplayValue}
-          options={CompositeOwnerRecords.filter(
-            (r) => !CompositeOwnerIdSet.has(getIDValue.CompositeOwner?.(r))
-          ).map((r) => ({
-            id: getIDValue.CompositeOwner?.(r),
-            label: getDisplayValue.CompositeOwner?.(r),
-          }))}
+          options={compositeOwnerRecords
+            .filter(
+              (r) => !CompositeOwnerIdSet.has(getIDValue.CompositeOwner?.(r))
+            )
+            .map((r) => ({
+              id: getIDValue.CompositeOwner?.(r),
+              label: getDisplayValue.CompositeOwner?.(r),
+            }))}
           isLoading={CompositeOwnerLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeOwnerValue(
-              CompositeOwnerRecords.find((r) =>
+              compositeOwnerRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -21376,16 +21380,18 @@ export default function CreateCompositeDogForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeToy\\"
           value={currentCompositeToysDisplayValue}
-          options={CompositeToysRecords.filter(
-            (r) => !CompositeToysIdSet.has(getIDValue.CompositeToys?.(r))
-          ).map((r) => ({
-            id: getIDValue.CompositeToys?.(r),
-            label: getDisplayValue.CompositeToys?.(r),
-          }))}
+          options={compositeToysRecords
+            .filter(
+              (r) => !CompositeToysIdSet.has(getIDValue.CompositeToys?.(r))
+            )
+            .map((r) => ({
+              id: getIDValue.CompositeToys?.(r),
+              label: getDisplayValue.CompositeToys?.(r),
+            }))}
           isLoading={CompositeToysLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeToysValue(
-              CompositeToysRecords.find((r) =>
+              compositeToysRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -21462,14 +21468,14 @@ export default function CreateCompositeDogForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeVet\\"
           value={currentCompositeVetsDisplayValue}
-          options={CompositeVetsRecords.map((r) => ({
+          options={compositeVetsRecords.map((r) => ({
             id: getIDValue.CompositeVets?.(r),
             label: getDisplayValue.CompositeVets?.(r),
           }))}
           isLoading={CompositeVetsLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeVetsValue(
-              CompositeVetsRecords.find((r) =>
+              compositeVetsRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
@@ -24871,7 +24877,7 @@ export default function CreateOwnerForm(props) {
   const [name, setName] = React.useState(initialValues.name);
   const [Dog, setDog] = React.useState(initialValues.Dog);
   const [DogLoading, setDogLoading] = React.useState(false);
-  const [DogRecords, setDogRecords] = React.useState([]);
+  const [dogRecords, setDogRecords] = React.useState([]);
   const autocompleteLength = 10;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -25120,16 +25126,16 @@ export default function CreateOwnerForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Dog\\"
           value={currentDogDisplayValue}
-          options={DogRecords.filter(
-            (r) => !DogIdSet.has(getIDValue.Dog?.(r))
-          ).map((r) => ({
-            id: getIDValue.Dog?.(r),
-            label: getDisplayValue.Dog?.(r),
-          }))}
+          options={dogRecords
+            .filter((r) => !DogIdSet.has(getIDValue.Dog?.(r)))
+            .map((r) => ({
+              id: getIDValue.Dog?.(r),
+              label: getDisplayValue.Dog?.(r),
+            }))}
           isLoading={DogLoading}
           onSelect={({ id, label }) => {
             setCurrentDogValue(
-              DogRecords.find((r) =>
+              dogRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )

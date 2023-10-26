@@ -591,12 +591,12 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     // Add value state and ref array type fields in ArrayField wrapper
 
-    const relatedModelNames: Set<string> = new Set();
+    const relatedModelNames: Map<string, { relatedModelName: string; fieldName: string }> = new Map();
 
     Object.entries(formMetadata.fieldConfigs).forEach(([field, fieldConfig]) => {
       const { sanitizedFieldName, componentType, dataType, relationship } = fieldConfig;
+      const renderedName = sanitizedFieldName || field;
       if (shouldWrapInArrayField(fieldConfig)) {
-        const renderedName = sanitizedFieldName || field;
         if (fieldConfig.relationship) {
           statements.push(
             buildUseStateExpression(
@@ -636,7 +636,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       }
 
       if (relationship && !relatedModelNames.has(relationship.relatedModelName)) {
-        relatedModelNames.add(relationship.relatedModelName);
+        relatedModelNames.set(relationship.relatedModelName, {
+          relatedModelName: relationship.relatedModelName,
+          fieldName: renderedName,
+        });
       }
     });
 
@@ -673,8 +676,14 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
 
         statements.push(
-          ...[...relatedModelNames].map((relatedModelName) =>
-            buildRelationshipQuery(relatedModelName, this.importCollection, dataApi, this.renderConfig.dependencies),
+          ...[...relatedModelNames].map(([, { relatedModelName, fieldName }]) =>
+            buildRelationshipQuery(
+              relatedModelName,
+              this.importCollection,
+              fieldName,
+              dataApi,
+              this.renderConfig.dependencies,
+            ),
           ),
         );
       }

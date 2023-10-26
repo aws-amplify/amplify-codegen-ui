@@ -264,9 +264,7 @@ export const renderArrayFieldComponent = (
       ],
       undefined,
       factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-      dataApi === 'GraphQL' && !isModelDataType(fieldConfig)
-        ? getDisplayValueScalar(fieldName, fieldName, scalarKey, dataApi)
-        : getDisplayValueScalar(fieldName, scalarModel, scalarKey, dataApi),
+      getDisplayValueScalar(fieldName, scalarModel, scalarKey, dataApi),
     );
   }
 
@@ -451,9 +449,7 @@ export const renderArrayFieldComponent = (
                 [
                   factory.createExpressionStatement(
                     factory.createCallExpression(setFieldValueIdentifier, undefined, [
-                      dataApi === 'GraphQL'
-                        ? getDisplayValueScalar(fieldName, fieldName, scalarKey, dataApi)
-                        : getDisplayValueScalar(fieldName, scalarModel, scalarKey, dataApi),
+                      getDisplayValueScalar(fieldName, scalarModel, scalarKey, dataApi),
                     ]),
                   ),
                   ...setStateStatements,
