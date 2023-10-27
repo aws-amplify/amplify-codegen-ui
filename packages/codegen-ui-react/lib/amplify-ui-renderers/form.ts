@@ -34,7 +34,7 @@ import {
 } from 'typescript';
 import { ReactComponentRenderer } from '../react-component-renderer';
 import { buildFormLayoutProperties, buildOpeningElementProperties } from '../react-component-render-helper';
-import { ImportCollection, ImportSource } from '../imports';
+import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { buildExpression } from '../forms';
 import { onSubmitValidationRun, buildModelFieldObject } from '../forms/form-renderer-helper';
 import { hasTokenReference } from '../utils/forms/layout-helpers';
@@ -43,7 +43,8 @@ import { isModelDataType } from '../forms/form-renderer-helper/render-checkers';
 import { replaceEmptyStringStatement } from '../forms/form-renderer-helper/cta-props';
 import { ReactRenderConfig } from '../react-render-config';
 import { defaultRenderConfig } from '../react-studio-template-renderer-helper';
-import { getAmplifyJSAPIImport } from '../helpers/amplify-js-versioning';
+import { getAmplifyJSAPIImport, getAmplifyJSVersionToRender } from '../helpers/amplify-js-versioning';
+import { AMPLIFY_JS_V6 } from '../utils/constants';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -75,7 +76,11 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
       const mappedImport = getAmplifyJSAPIImport();
       this.importCollection.addMappedImport(mappedImport);
     } else if (this.form.dataType.dataSourceType === 'DataStore') {
-      this.importCollection.addImport('aws-amplify', 'DataStore');
+      if (getAmplifyJSVersionToRender(this.renderConfig.dependencies) === AMPLIFY_JS_V6) {
+        this.importCollection.addImport(ImportSource.AMPLIFY_DATASTORE_V6, ImportValue.DATASTORE);
+      } else {
+        this.importCollection.addImport(ImportSource.AMPLIFY, ImportValue.DATASTORE);
+      }
     }
 
     if (hasTokenReference(this.componentMetadata)) {
