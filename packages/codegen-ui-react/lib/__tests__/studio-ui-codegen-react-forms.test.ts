@@ -383,6 +383,19 @@ describe('amplify form renderer tests', () => {
       expect(importCollection).toBeDefined();
     });
 
+    it('should 1:1 relationships without types file path - Create amplify js v6', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/owner-dog-create',
+        'datastore/dog-owner-required',
+        { ...defaultCLIRenderConfig, dependencies: { 'aws-amplify': '^6.0.0' } },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      expect(componentText).toContain('import { DataStore } from "aws-amplify/datastore";');
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     describe('custom form tests', () => {
       it('should render a custom backed create form', () => {
         const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/post-custom-create', undefined);

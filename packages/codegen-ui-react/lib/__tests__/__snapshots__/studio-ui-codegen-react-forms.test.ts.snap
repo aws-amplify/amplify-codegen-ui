@@ -40445,6 +40445,515 @@ export default function UpdateOwnerForm(props: UpdateOwnerFormProps): React.Reac
 "
 `;
 
+exports[`amplify form renderer tests datastore form tests should 1:1 relationships without types file path - Create amplify js v6 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { Owner, Dog as Dog0 } from \\"../models\\";
+import {
+  fetchByPath,
+  getOverrideProps,
+  useDataStoreBinding,
+  validateField,
+} from \\"./utils\\";
+import { DataStore } from \\"aws-amplify/datastore\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  runValidationTasks,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    const { hasError } = runValidationTasks();
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button size=\\"small\\" variation=\\"link\\" onClick={addItem}>
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function CreateOwnerForm(props) {
+  const {
+    clearOnSuccess = true,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    name: \\"\\",
+    Dog: undefined,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [Dog, setDog] = React.useState(initialValues.Dog);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setName(initialValues.name);
+    setDog(initialValues.Dog);
+    setCurrentDogValue(undefined);
+    setCurrentDogDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [currentDogDisplayValue, setCurrentDogDisplayValue] =
+    React.useState(\\"\\");
+  const [currentDogValue, setCurrentDogValue] = React.useState(undefined);
+  const DogRef = React.createRef();
+  const getIDValue = {
+    Dog: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const DogIdSet = new Set(
+    Array.isArray(Dog)
+      ? Dog.map((r) => getIDValue.Dog?.(r))
+      : getIDValue.Dog?.(Dog)
+  );
+  const dogRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: Dog0,
+  }).items;
+  const getDisplayValue = {
+    Dog: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+  };
+  const validations = {
+    name: [{ type: \\"Required\\" }],
+    Dog: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          name,
+          Dog,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value === \\"\\") {
+              modelFields[key] = null;
+            }
+          });
+          const owner = await DataStore.save(new Owner(modelFields));
+          const promises = [];
+          const dogToLink = modelFields.Dog;
+          if (dogToLink) {
+            promises.push(
+              DataStore.save(
+                Dog0.copyOf(dogToLink, (updated) => {
+                  updated.owner = owner;
+                })
+              )
+            );
+            const ownerToUnlink = await dogToLink.owner;
+            if (ownerToUnlink) {
+              promises.push(
+                DataStore.save(
+                  Owner.copyOf(ownerToUnlink, (updated) => {
+                    updated.Dog = undefined;
+                    updated.ownerDogId = undefined;
+                  })
+                )
+              );
+            }
+          }
+          await Promise.all(promises);
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"CreateOwnerForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Name\\"
+        isRequired={true}
+        isReadOnly={false}
+        value={name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              Dog,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              Dog: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.Dog ?? value;
+          }
+          setDog(value);
+          setCurrentDogValue(undefined);
+          setCurrentDogDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentDogValue}
+        label={\\"Dog\\"}
+        items={Dog ? [Dog] : []}
+        hasError={errors?.Dog?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(\\"Dog\\", currentDogValue)
+        }
+        errorMessage={errors?.Dog?.errorMessage}
+        getBadgeText={getDisplayValue.Dog}
+        setFieldValue={(model) => {
+          setCurrentDogDisplayValue(model ? getDisplayValue.Dog(model) : \\"\\");
+          setCurrentDogValue(model);
+        }}
+        inputFieldRef={DogRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Dog\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search Dog\\"
+          value={currentDogDisplayValue}
+          options={dogRecords
+            .filter((r) => !DogIdSet.has(getIDValue.Dog?.(r)))
+            .map((r) => ({
+              id: getIDValue.Dog?.(r),
+              label: getDisplayValue.Dog?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentDogValue(
+              dogRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentDogDisplayValue(label);
+            runValidationTasks(\\"Dog\\", label);
+          }}
+          onClear={() => {
+            setCurrentDogDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Dog?.hasError) {
+              runValidationTasks(\\"Dog\\", value);
+            }
+            setCurrentDogDisplayValue(value);
+            setCurrentDogValue(undefined);
+          }}
+          onBlur={() => runValidationTasks(\\"Dog\\", currentDogDisplayValue)}
+          errorMessage={errors.Dog?.errorMessage}
+          hasError={errors.Dog?.hasError}
+          ref={DogRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"Dog\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should 1:1 relationships without types file path - Create amplify js v6 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { Dog as Dog0 } from \\"../models\\";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CreateOwnerFormInputValues = {
+    name?: string;
+    Dog?: Dog0;
+};
+export declare type CreateOwnerFormValidationValues = {
+    name?: ValidationFunction<string>;
+    Dog?: ValidationFunction<Dog0>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CreateOwnerFormOverridesProps = {
+    CreateOwnerFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    Dog?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type CreateOwnerFormProps = React.PropsWithChildren<{
+    overrides?: CreateOwnerFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
+    onSuccess?: (fields: CreateOwnerFormInputValues) => void;
+    onError?: (fields: CreateOwnerFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
+    onValidate?: CreateOwnerFormValidationValues;
+} & React.CSSProperties>;
+export default function CreateOwnerForm(props: CreateOwnerFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests datastore form tests should generate a create form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
