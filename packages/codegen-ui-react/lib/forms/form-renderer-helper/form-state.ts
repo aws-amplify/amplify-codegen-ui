@@ -72,8 +72,8 @@ export const getCurrentValueName = (fieldName: string) => {
 export const getCurrentDisplayValueName = (fieldName: string) =>
   `current${capitalizeFirstLetter(fieldName)}DisplayValue`;
 
-export const getRecordsName = (modelName: string, capitalized = false) =>
-  `${(capitalized ? capitalizeFirstLetter : lowerCaseFirst)(modelName)}Records`;
+export const getRecordsName = (name: string, capitalized = false) =>
+  `${(capitalized ? capitalizeFirstLetter : lowerCaseFirst)(name)}Records`;
 
 export const getRecordName = (modelName: string, capitalized = false) =>
   `${(capitalized ? capitalizeFirstLetter : lowerCaseFirst)(modelName)}Record`;
@@ -271,7 +271,9 @@ export const getUseStateHooks = (
 
     if (dataApi === 'GraphQL' && relationship) {
       acc.push(buildUseStateExpression(`${renderedFieldName}Loading`, factory.createFalse()));
-      acc.push(buildUseStateExpression(`${renderedFieldName}Records`, factory.createArrayLiteralExpression([], false)));
+      acc.push(
+        buildUseStateExpression(getRecordsName(renderedFieldName), factory.createArrayLiteralExpression([], false)),
+      );
       if (hasAutoComplete && !isModelDataType(fieldConfig[1])) {
         acc.push(
           buildUseStateExpression(
