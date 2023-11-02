@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.19.4](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.19.3...v2.19.4) (2023-11-02)
+
+### Bug Fixes
+
+- undefined reference errors in ToLinkMap callback ([#1130](https://github.com/aws-amplify/amplify-codegen-ui/issues/1130)) ([#1133](https://github.com/aws-amplify/amplify-codegen-ui/issues/1133)) ([ac1904c](https://github.com/aws-amplify/amplify-codegen-ui/commit/ac1904cf143afcdf76081653f571d02c8c522385))
+
 ## [2.19.3](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.19.0...v2.19.3) (2023-10-27)
 
 ### Bug Fixes
