@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.19.4](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.19.3...v2.19.4) (2023-11-02)
+
+**Note:** Version bump only for package @aws-amplify/codegen-ui-test-generator
+
 ## [2.19.3](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.19.0...v2.19.3) (2023-10-27)
 
 ### Bug Fixes
