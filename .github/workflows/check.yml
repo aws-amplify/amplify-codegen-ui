@@ -59,7 +59,7 @@ jobs:
       - name: Install test app dependencies
         working-directory: e2e-test-app
         run: |
-          npm i aws-amplify@^5.0.0 @aws-amplify/ui-react^5.0.0
+          npm i aws-amplify@^5.0.0 @aws-amplify/ui-react@^5.0.0
           npm i --save-dev cypress
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -152,7 +152,7 @@ jobs:
       - name: Install test app dependencies
         working-directory: e2e-test-app
         run: |
-          npm i aws-amplify@^6.0.0 @aws-amplify/ui-react^6.0.0
+          npm i aws-amplify@^6.0.0 @aws-amplify/ui-react@^6.0.0
           npm i --save-dev cypress
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
