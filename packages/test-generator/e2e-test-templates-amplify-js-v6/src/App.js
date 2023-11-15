@@ -38,7 +38,7 @@ function App() {
       return;
     }
     initialized.current = true;
-    signIn(process.env.REACT_APP_USER_EMAIL, process.env.REACT_APP_USER_PASSWORD).then(() => {
+    signIn({ username: process.env.REACT_APP_USER_EMAIL, password: process.env.REACT_APP_USER_PASSWORD }).then(() => {
       setIsLoggedIn(true);
     });
   }, []);
