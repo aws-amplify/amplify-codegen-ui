@@ -17,7 +17,7 @@ import { Amplify } from 'aws-amplify';
 import { signIn } from 'aws-amplify/auth';
 import { DataStore, AuthModeStrategyType } from 'aws-amplify/datastore';
 import '@aws-amplify/ui-react/styles.css';
-import { AmplifyProvider } from '@aws-amplify/ui-react';
+import { ThemeProvider } from '@aws-amplify/ui-react';
 import { useEffect, useRef, useState } from 'react';
 import amplifyconfig from './amplifyconfiguration.json';
 import { BlogPosts } from './ui-components';
@@ -45,9 +45,9 @@ function App() {
 
   if (isLoggedIn) {
     return (
-      <AmplifyProvider>
+      <ThemeProvider>
         <BlogPosts id="blogPosts" />
-      </AmplifyProvider>
+      </ThemeProvider>
     );
   }
 
