@@ -17,9 +17,9 @@ npm run integ:templates
 # install
 lerna bootstrap
 lerna add --scope integration-test typescript@4.4.4
-lerna add --scope integration-test aws-amplify
-lerna add --scope integration-test @aws-amplify/ui-react
-lerna add --scope integration-test @aws-amplify/datastore
+lerna add --scope integration-test aws-amplify@^5.0.0
+lerna add --scope integration-test @aws-amplify/ui-react@^5.0.0
+lerna add --scope integration-test @aws-amplify/datastore@^4.0.0
 lerna add --scope integration-test @aws-amplify/codegen-ui
 lerna add --scope integration-test @aws-amplify/codegen-ui-react
 lerna add --scope integration-test @aws-amplify/codegen-ui-test-generator

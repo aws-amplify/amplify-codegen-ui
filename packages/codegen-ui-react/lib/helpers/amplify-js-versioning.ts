@@ -20,7 +20,7 @@ import { AMPLIFY_JS_V5, AMPLIFY_JS_V6 } from '../utils/constants';
 import { ImportValue } from '../imports';
 
 export function isAmplifyJSV6RenderingEnabled(): boolean {
-  return false;
+  return true;
 }
 
 export function getLatestAmplifyJSV6RenderingEnabled(

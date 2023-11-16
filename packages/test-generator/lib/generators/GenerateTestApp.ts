@@ -16,6 +16,12 @@
 import { ModuleKind, ScriptTarget, ScriptKind } from '@aws-amplify/codegen-ui-react/dist/lib/react-render-config';
 import { NodeTestGenerator } from './NodeTestGenerator';
 
+const { DEPENDENCIES } = process.env;
+
+if (!DEPENDENCIES) {
+  throw new Error('DEPENDENCIES env var not found');
+}
+
 const GOLDEN_COMPONENTS = [
   'GoldenBasicComponent',
   'GoldenCollectionWithDataBindingAndPagination',
@@ -68,6 +74,7 @@ const jsxGenerator = new NodeTestGenerator({
     target: ScriptTarget.ES2020,
     script: ScriptKind.JSX,
     renderTypeDeclarations: true,
+    dependencies: JSON.parse(DEPENDENCIES),
   },
   outputConfigOverride: {
     outputPathDir: INTEG_TEST_PATH,

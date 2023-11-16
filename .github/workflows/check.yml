@@ -12,7 +12,7 @@ permissions:
   contents: read # This is required for actions/checkout
 
 jobs:
-  amplify-cli-tests:
+  amplify-cli-tests-v5:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Studio Codegen
@@ -59,7 +59,7 @@ jobs:
       - name: Install test app dependencies
         working-directory: e2e-test-app
         run: |
-          npm i aws-amplify @aws-amplify/ui-react
+          npm i aws-amplify@^5.0.0 @aws-amplify/ui-react@^5.0.0
           npm i --save-dev cypress
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -104,6 +104,99 @@ jobs:
         with:
           name: cypress-videos
           path: /home/runner/work/amplify-codegen-ui/amplify-codegen-ui/e2e-test-app/cypress/videos
+
+  amplify-cli-tests-v6:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Studio Codegen
+        uses: actions/checkout@v2
+        with:
+          path: amplify-codegen-ui
+          repository: aws-amplify/amplify-codegen-ui
+      - name: Checkout Amplify CLI
+        uses: actions/checkout@v2
+        with:
+          path: amplify-cli
+          repository: aws-amplify/amplify-cli
+      - name: Setup Node.js LTS/gallium
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts/gallium
+      - name: Build amplify-codegen-ui
+        working-directory: amplify-codegen-ui
+        run: |
+          npm ci
+          npx lerna bootstrap
+          npm run build
+      - name: Package amplify-codegen-ui
+        working-directory: amplify-codegen-ui
+        run: npx lerna exec npm pack
+      - name: Build amplify-cli
+        working-directory: amplify-cli
+        run: |
+          yarn install
+          yarn setup-dev
+      - name: Install updated codegen libraries
+        working-directory: amplify-cli/packages/amplify-util-uibuilder
+        run: |
+          yarn add ../../../amplify-codegen-ui/packages/codegen-ui/aws-amplify-codegen-ui-*.tgz
+          yarn add ../../../amplify-codegen-ui/packages/codegen-ui-react/aws-amplify-codegen-ui-react-*.tgz
+      - name: Build amplify-cli with updated codegen libraries
+        working-directory: amplify-cli
+        run: |
+          yarn install
+          yarn build
+          echo "$HOME/work/amplify-codegen-ui/amplify-codegen-ui/amplify-cli/.bin" >> $GITHUB_PATH
+      - name: Create a test react app
+        run: npx create-react-app e2e-test-app
+      - name: Install test app dependencies
+        working-directory: e2e-test-app
+        run: |
+          npm i aws-amplify@^6.0.0 @aws-amplify/ui-react@^6.0.0
+          npm i --save-dev cypress
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.E2E_TEST_ROLE_ARN }}
+          aws-region: us-west-2
+      - name: Create temp AWS credentials file
+        working-directory: e2e-test-app
+        run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID && \
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY && \
+          aws configure set aws_session_token $AWS_SESSION_TOKEN && \
+          aws configure set default.region $AWS_REGION
+      - name: Run CLI Pull in test app
+        working-directory: e2e-test-app
+        run: |
+          FORCE_RENDER=1 amplify-dev pull --appId ${{ secrets.E2E_TEST_APP_ID }} --envName staging -y --providers "{\
+            \"awscloudformation\":{\
+              \"configLevel\":\"project\",\
+              \"useProfile\":true,\
+              \"profileName\":\"default\",\
+            }\
+          }"
+      - name: Write test files
+        working-directory: e2e-test-app
+        run: cp -r ../amplify-codegen-ui/packages/test-generator/e2e-test-templates-amplify-js-v6/. .
+      - name: Cypress run
+        uses: cypress-io/github-action@v5
+        with:
+          working-directory: e2e-test-app
+          install: false
+          start: npm start
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+          config-file: cypress.config.js
+        env:
+          REACT_APP_USER_EMAIL: ${{ secrets.E2E_TEST_USER_EMAIL }}
+          REACT_APP_USER_PASSWORD: ${{ secrets.E2E_TEST_USER_PASSWORD }}
+      - name: Upload Cypress videos
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-videos
+          path: /home/runner/work/amplify-codegen-ui/amplify-codegen-ui/e2e-test-app-v6/cypress/videos
 
   functional-tests:
     runs-on: ubuntu-latest
