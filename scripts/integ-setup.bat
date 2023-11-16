@@ -14,7 +14,7 @@ call npm run integ:templates
 call lerna bootstrap
 call lerna add --scope integration-test aws-amplify@^5.0.0
 call lerna add --scope integration-test @aws-amplify/ui-react@^5.0.0
-call lerna add --scope integration-test @aws-amplify/datastore@^5.0.0
+call lerna add --scope integration-test @aws-amplify/datastore@^4.0.0
 call lerna add --scope integration-test @aws-amplify/codegen-ui
 call lerna add --scope integration-test @aws-amplify/codegen-ui-react
 call lerna add --scope integration-test @aws-amplify/codegen-ui-test-generator
