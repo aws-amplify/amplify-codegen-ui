@@ -11,7 +11,7 @@ permissions:
   contents: read # This is required for actions/checkout
 
 jobs:
-  beta-canary:
+  beta-canary-v5:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Studio Codegen
@@ -68,9 +68,9 @@ jobs:
         env:
           REACT_APP_USER_EMAIL: ${{ secrets.E2E_TEST_USER_EMAIL }}
           REACT_APP_USER_PASSWORD: ${{ secrets.E2E_TEST_USER_PASSWORD }}
-  write-beta-canary-failure-metric:
+  write-beta-canary-v5-failure-metric:
     runs-on: ubuntu-latest
-    needs: beta-canary
+    needs: beta-canary-v5
     if: ${{ failure() }}
     steps:
       - name: Configure AWS credentials
@@ -80,9 +80,9 @@ jobs:
           aws-region: us-west-2
       - run: aws cloudwatch put-metric-data --metric-name BetaSuccessRate --namespace CodegenUiCanaries --value 0
 
-  write-beta-canary-success-metric:
+  write-beta-canary-v5-success-metric:
     runs-on: ubuntu-latest
-    needs: beta-canary
+    needs: beta-canary-v5
     if: ${{ success() }}
     steps:
       - name: Configure AWS credentials
@@ -92,7 +92,88 @@ jobs:
           aws-region: us-west-2
       - run: aws cloudwatch put-metric-data --metric-name BetaSuccessRate --namespace CodegenUiCanaries --value 1
 
-  release-canary:
+  beta-canary-v6:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Studio Codegen
+        uses: actions/checkout@v2
+        with:
+          path: amplify-codegen-ui
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts/*
+      - name: Install Beta Amplfy CLI
+        run: npm i -g @aws-amplify/cli@beta
+      - name: Create a test react app
+        run: npx create-react-app e2e-test-app
+      - name: Install test app dependencies
+        working-directory: e2e-test-app
+        run: |
+          npm i aws-amplify@^6.0.0 @aws-amplify/ui-react@^6.0.0
+          npm i --save-dev cypress
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.E2E_TEST_ROLE_ARN }}
+          aws-region: us-west-2
+      - name: Create temp AWS credentials file
+        working-directory: e2e-test-app
+        run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID && \
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY && \
+          aws configure set aws_session_token $AWS_SESSION_TOKEN && \
+          aws configure set default.region $AWS_REGION
+      - name: Run CLI Pull in test app
+        working-directory: e2e-test-app
+        run: |
+          FORCE_RENDER=1 amplify pull --appId ${{ secrets.E2E_TEST_APP_ID }} --envName staging -y --providers "{\
+            \"awscloudformation\":{\
+              \"configLevel\":\"project\",\
+              \"useProfile\":true,\
+              \"profileName\":\"default\",\
+            }\
+          }"
+      - name: Write test files
+        working-directory: e2e-test-app
+        run: cp -r ../amplify-codegen-ui/packages/test-generator/e2e-test-templates-amplify-js-v6/. .
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: e2e-test-app
+          install: false
+          start: npm start
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+          config-file: cypress.config.js
+        env:
+          REACT_APP_USER_EMAIL: ${{ secrets.E2E_TEST_USER_EMAIL }}
+          REACT_APP_USER_PASSWORD: ${{ secrets.E2E_TEST_USER_PASSWORD }}
+  write-beta-canary-v6-failure-metric:
+    runs-on: ubuntu-latest
+    needs: beta-canary-v6
+    if: ${{ failure() }}
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.CANARY_METRIC_ROLE_ARN }}
+          aws-region: us-west-2
+      - run: aws cloudwatch put-metric-data --metric-name BetaSuccessRate --namespace CodegenUiCanaries --value 0
+
+  write-beta-canary-v6-success-metric:
+    runs-on: ubuntu-latest
+    needs: beta-canary-v6
+    if: ${{ success() }}
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.CANARY_METRIC_ROLE_ARN }}
+          aws-region: us-west-2
+      - run: aws cloudwatch put-metric-data --metric-name BetaSuccessRate --namespace CodegenUiCanaries --value 1
+
+  release-canary-v5:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Studio Codegen
@@ -150,9 +231,9 @@ jobs:
           REACT_APP_USER_EMAIL: ${{ secrets.E2E_TEST_USER_EMAIL }}
           REACT_APP_USER_PASSWORD: ${{ secrets.E2E_TEST_USER_PASSWORD }}
 
-  write-release-canary-failure-metric:
+  write-release-canary-v5-failure-metric:
     runs-on: ubuntu-latest
-    needs: release-canary
+    needs: release-canary-v5
     if: ${{ failure() }}
     steps:
       - name: Configure AWS credentials
@@ -162,9 +243,91 @@ jobs:
           aws-region: us-west-2
       - run: aws cloudwatch put-metric-data --metric-name ReleaseSuccessRate --namespace CodegenUiCanaries --value 0
 
-  write-release-canary-success-metric:
+  write-release-canary-v5-success-metric:
     runs-on: ubuntu-latest
-    needs: release-canary
+    needs: release-canary-v5
+    if: ${{ success() }}
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.CANARY_METRIC_ROLE_ARN }}
+          aws-region: us-west-2
+      - run: aws cloudwatch put-metric-data --metric-name ReleaseSuccessRate --namespace CodegenUiCanaries --value 1
+
+  release-canary-v6:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Studio Codegen
+        uses: actions/checkout@v2
+        with:
+          path: amplify-codegen-ui
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts/*
+      - name: Install Latest Amplfy CLI
+        run: npm i -g @aws-amplify/cli@latest
+      - name: Create a test react app
+        run: npx create-react-app e2e-test-app
+      - name: Install test app dependencies
+        working-directory: e2e-test-app
+        run: |
+          npm i aws-amplify@^5.0.0 @aws-amplify/ui-react@^5.0.0
+          npm i --save-dev cypress
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.E2E_TEST_ROLE_ARN }}
+          aws-region: us-west-2
+      - name: Create temp AWS credentials file
+        working-directory: e2e-test-app
+        run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID && \
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY && \
+          aws configure set aws_session_token $AWS_SESSION_TOKEN && \
+          aws configure set default.region $AWS_REGION
+      - name: Run CLI Pull in test app
+        working-directory: e2e-test-app
+        run: |
+          FORCE_RENDER=1 amplify pull --appId ${{ secrets.E2E_TEST_APP_ID }} --envName staging -y --providers "{\
+            \"awscloudformation\":{\
+              \"configLevel\":\"project\",\
+              \"useProfile\":true,\
+              \"profileName\":\"default\",\
+            }\
+          }"
+      - name: Write test files
+        working-directory: e2e-test-app
+        run: cp -r ../amplify-codegen-ui/packages/test-generator/e2e-test-templates-amplify-js-v6/. .
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: e2e-test-app
+          install: false
+          start: npm start
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+          config-file: cypress.config.js
+        env:
+          REACT_APP_USER_EMAIL: ${{ secrets.E2E_TEST_USER_EMAIL }}
+          REACT_APP_USER_PASSWORD: ${{ secrets.E2E_TEST_USER_PASSWORD }}
+
+  write-release-canary-v6-failure-metric:
+    runs-on: ubuntu-latest
+    needs: release-canary-v6
+    if: ${{ failure() }}
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.CANARY_METRIC_ROLE_ARN }}
+          aws-region: us-west-2
+      - run: aws cloudwatch put-metric-data --metric-name ReleaseSuccessRate --namespace CodegenUiCanaries --value 0
+
+  write-release-canary-v6-success-metric:
+    runs-on: ubuntu-latest
+    needs: release-canary-v6
     if: ${{ success() }}
     steps:
       - name: Configure AWS credentials
