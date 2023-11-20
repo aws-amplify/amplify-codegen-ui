@@ -13,7 +13,20 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './components';
-export * from './generators';
-export * from './themes';
-export * from './forms';
+
+import { AsyncCollection, AsyncItem } from '@aws-amplify/datastore';
+
+export async function getModelsFromJoinTableRecords<Record, RelatedModel, JoinTable>(
+  record: Record,
+  fieldName: keyof Record,
+  dataField: keyof JoinTable,
+): Promise<RelatedModel[]> {
+  const joinTableRecords = await (record[fieldName] as unknown as AsyncCollection<JoinTable>)?.toArray();
+
+  return Promise.all(
+    joinTableRecords.reduce((promises: AsyncItem<RelatedModel>[], joinTableRecord) => {
+      promises.push(joinTableRecord[dataField] as unknown as AsyncItem<RelatedModel>);
+      return promises;
+    }, []),
+  );
+}

@@ -13,7 +13,20 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './components';
-export * from './generators';
-export * from './themes';
-export * from './forms';
+module.exports = function override(config) {
+  return {
+    ...config,
+    resolve: {
+      ...config.resolve,
+      fallback: {
+        ...config.resolve.fallback,
+        os: require.resolve('os-browserify/browser'),
+        path: require.resolve('path-browserify'),
+        fs: false,
+        perf_hooks: false,
+      },
+    },
+    // Avoid 'Critical dependency: the request of a dependency is an expression' warning from typescript
+    ignoreWarnings: [{ module: /node_modules/ }],
+  };
+};
