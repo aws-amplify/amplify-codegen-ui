@@ -42,6 +42,7 @@ import {
   createDataStorePredicateString,
   useDataStoreBindingString,
   useAuthSignOutActionStringV6,
+  useAuthString,
 } from './utils-file-functions';
 import { getAmplifyJSVersionToRender } from './helpers/amplify-js-versioning';
 import { AMPLIFY_JS_V6 } from './utils/constants';
@@ -101,9 +102,11 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
 
     if (getAmplifyJSVersionToRender(this.renderConfig.dependencies) === AMPLIFY_JS_V6) {
       this.importCollection.addImport(ImportSource.AMPLIFY_AUTH, ImportValue.SIGN_OUT);
+      this.importCollection.addImport(ImportSource.AMPLIFY_AUTH, ImportValue.FETCH_USER_ATTRIBUTES);
       this.importCollection.addImport(ImportSource.AMPLIFY_DATASTORE_V6, ImportValue.DATASTORE);
       this.importCollection.addImport(ImportSource.AMPLIFY_UTILS, ImportValue.HUB);
       parsedUtils.push(useAuthSignOutActionStringV6);
+      parsedUtils.push(useAuthString);
     } else {
       this.importCollection.addMappedImport(ImportValue.HUB, ImportValue.DATASTORE, ImportValue.AUTH);
       parsedUtils.push(useAuthSignOutActionString);
