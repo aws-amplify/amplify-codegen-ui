@@ -27,7 +27,6 @@ export const useAuthString = `export const useAuth = () => {
       const attributes = await fetchUserAttributes();
       setResult({ user: {attributes}, isLoading: false });
     } catch (error) {
-      console.log({error});
       setResult({ error, isLoading: false });
     }
   }, []);
