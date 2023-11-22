@@ -879,6 +879,61 @@ export default function Test(props: TestProps): React.ReactElement {
 "
 `;
 
+exports[`amplify render tests bindings auth supports auth bindings in actions - amplify js v6 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { getOverrideProps, useAuth, useDataStoreCreateAction } from \\"./utils\\";
+import { Customer } from \\"../models\\";
+import { schema } from \\"../models/schema\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComponentWithAuthEventBindingOverridesProps = {
+  ComponentWithAuthEventBinding?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
+export type ComponentWithAuthEventBindingProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    overrides?: ComponentWithAuthEventBindingOverridesProps | undefined | null;
+  }
+>;
+export default function ComponentWithAuthEventBinding(
+  props: ComponentWithAuthEventBindingProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const authAttributes = useAuth().user?.attributes ?? {};
+  const componentWithAuthEventBindingOnClick = useDataStoreCreateAction({
+    model: Customer,
+    fields: {
+      userName: authAttributes[\\"username\\"],
+      favoriteIceCream: authAttributes[\\"custom:favorite_icecream\\"],
+    },
+    schema: schema,
+  });
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      children=\\"Create\\"
+      onClick={() => {
+        componentWithAuthEventBindingOnClick();
+      }}
+      {...getOverrideProps(overrides, \\"ComponentWithAuthEventBinding\\")}
+      {...rest}
+    ></Button>
+  );
+}
+"
+`;
+
 exports[`amplify render tests bindings auth supports auth bindings in actions 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";

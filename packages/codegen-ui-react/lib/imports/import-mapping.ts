@@ -34,6 +34,7 @@ export enum ImportValue {
   USE_AUTH = 'useAuth',
   AUTH = 'Auth',
   SIGN_OUT = 'signOut',
+  FETCH_USER_ATTRIBUTES = 'fetchUserAttributes',
   GET_OVERRIDES_FROM_VARIANTS = 'getOverridesFromVariants',
   USE_BREAKPOINT_VALUE = 'useBreakpointValue',
   VARIANT = 'Variant',
@@ -98,4 +99,5 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.PROCESS_FILE]: ImportSource.UTILS,
   [ImportValue.USE_EFFECT]: ImportSource.REACT,
   [ImportValue.USE_STATE]: ImportSource.REACT,
+  [ImportValue.FETCH_USER_ATTRIBUTES]: ImportSource.AMPLIFY_AUTH,
 };

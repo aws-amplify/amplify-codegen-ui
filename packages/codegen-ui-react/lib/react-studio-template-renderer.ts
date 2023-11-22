@@ -777,7 +777,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const authStatement = this.buildUseAuthenticatedUserStatement();
     if (authStatement !== undefined) {
-      this.importCollection.addMappedImport(ImportValue.USE_AUTH);
+      if (getAmplifyJSVersionToRender(this.renderConfig.dependencies) === AMPLIFY_JS_V5) {
+        this.importCollection.addMappedImport(ImportValue.USE_AUTH);
+      } else {
+        // V6 useAuth is in the utils file
+        this.importCollection.addImport(ImportSource.UTILS, ImportValue.USE_AUTH);
+      }
       statements.push(authStatement);
     }
 

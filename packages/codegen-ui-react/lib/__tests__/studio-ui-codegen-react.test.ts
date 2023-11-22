@@ -744,6 +744,13 @@ describe('amplify render tests', () => {
           generateWithAmplifyRenderer('bindings/auth/componentWithAuthActionBinding').componentText,
         ).toMatchSnapshot();
       });
+      it('supports auth bindings in actions - amplify js v6', () => {
+        expect(
+          generateWithAmplifyRenderer('bindings/auth/componentWithAuthActionBinding', {
+            dependencies: { 'aws-amplify': '^6.0.0' },
+          }).componentText,
+        ).toMatchSnapshot();
+      });
     });
 
     describe('data', () => {

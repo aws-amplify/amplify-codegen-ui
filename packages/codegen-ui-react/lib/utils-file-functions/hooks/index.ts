@@ -20,6 +20,7 @@ export * from './useTypeCastFields';
 export * from './useDataStoreCreateAction';
 export * from './useDataStoreUpdateAction';
 export * from './useDataStoreDeleteAction';
+export * from './useAuth';
 export * from './createDataStorePredicate';
 export * from './useDataStoreBinding';
 export * from './constants';
