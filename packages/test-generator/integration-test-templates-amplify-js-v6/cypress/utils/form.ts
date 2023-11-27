@@ -56,3 +56,29 @@ export const typeInAutocomplete = (content: string) => {
       cy.get('input').type(content);
     });
 };
+
+export const setupAuthAttributeIntercept = () => {
+  cy.intercept(`https://cognito-idp.us-west-2.amazonaws.com`, {
+    body: {
+      UserAttributes: [
+        {
+          Name: 'email',
+          Value: 'Auth Value',
+        },
+        {
+          Name: 'username',
+          Value: 'TestUser',
+        },
+        {
+          Name: 'picture',
+          Value: 'http://media.corporate-ir.net/media_files/IROL/17/176060/Oct18/AWS.png',
+        },
+        {
+          Name: 'custom:favorite_icecream',
+          Value: 'Mint Chip',
+        },
+      ],
+      Username: '1231234',
+    },
+  });
+};

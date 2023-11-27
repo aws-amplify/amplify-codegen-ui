@@ -361,7 +361,7 @@ export default function ComponentTests() {
           ]}
         />
         <PaginatedCollection id="paginatedCollection" />
-        <SearchableCollection id="searchableCollection" />
+        <SearchableCollection id="searchableCollection" searchPlaceholder="Type to search" />
         <CollectionWithBinding
           id="collectionWithOverrideItems"
           items={[

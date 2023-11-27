@@ -15,6 +15,7 @@
  */
 import { Amplify } from 'aws-amplify';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { TokenProvider, decodeJWT } from 'aws-amplify/auth';
 import ComponentTests from './ComponentTests';
 import GenerateTests from './GenerateTests';
 import PrimitivesTests from './PrimitivesTests';
@@ -26,19 +27,41 @@ import ActionBindingTests from './ActionBindingTests';
 import FormTests from './FormTests';
 import { DATA_STORE_MOCK_EXPORTS, AUTH_MOCK_EXPORTS } from './mock-utils';
 
+const myTokenProvider: TokenProvider = {
+  async getTokens({ forceRefresh } = {}) {
+    if (forceRefresh) {
+      // try to obtain new tokens if possible
+    }
+
+    const accessTokenString = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZW1haWwiOiJBdXRoIFZhbHVlIn0.GkEIOCsx5S6RJ4CGTdnzQ2rfQNmxWgg4-gHz2PS8iGw`;
+    const idTokenString = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZW1haWwiOiJBdXRoIFZhbHVlIn0.GkEIOCsx5S6RJ4CGTdnzQ2rfQNmxWgg4-gHz2PS8iGw`;
+    return {
+      accessToken: decodeJWT(accessTokenString),
+      idToken: decodeJWT(idTokenString),
+    };
+  },
+};
+
 // use fake endpoint so useDataStoreBinding does not fail
-Amplify.configure({
-  Auth: {
-    Cognito: {
-      ...AUTH_MOCK_EXPORTS,
+Amplify.configure(
+  {
+    Auth: {
+      Cognito: {
+        ...AUTH_MOCK_EXPORTS,
+      },
+    },
+    API: {
+      GraphQL: {
+        ...DATA_STORE_MOCK_EXPORTS,
+      },
     },
   },
-  API: {
-    GraphQL: {
-      ...DATA_STORE_MOCK_EXPORTS,
+  {
+    Auth: {
+      tokenProvider: myTokenProvider,
     },
   },
-});
+);
 
 const HomePage = () => {
   return (

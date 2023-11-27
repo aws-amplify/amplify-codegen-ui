@@ -26,7 +26,7 @@ module.exports = {
     // extraFileExtensions: ['.css']
   },
   rules: {
-    'max-len': ['error', 120, 2],
+    'max-len': ['error', 120, { ignoreTemplateLiterals: true }],
     'max-classes-per-file': 'off',
     'react/prop-types': 'off',
     '@typescript-eslint/no-use-before-define': 'off',

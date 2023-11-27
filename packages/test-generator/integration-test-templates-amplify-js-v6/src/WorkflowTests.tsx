@@ -38,6 +38,20 @@ import {
 
 type AuthState = 'LoggedIn' | 'LoggedOutLocally' | 'LoggedOutGlobally' | 'Error';
 
+// Call configure again to remove the tokenProvider for signOut tests to pass
+Amplify.configure({
+  Auth: {
+    Cognito: {
+      ...AUTH_MOCK_EXPORTS,
+    },
+  },
+  API: {
+    GraphQL: {
+      ...DATA_STORE_MOCK_EXPORTS,
+    },
+  },
+});
+
 export default function ComplexTests() {
   const [clicked, click] = useState('');
   const [doubleclicked, doubleclick] = useState('');

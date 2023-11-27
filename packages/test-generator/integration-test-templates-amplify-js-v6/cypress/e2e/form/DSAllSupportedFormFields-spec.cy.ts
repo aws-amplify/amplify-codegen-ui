@@ -61,7 +61,7 @@ describe('FormTests - DSAllSupportedFormFields', () => {
       getInputByLabel('Aws email').type('myemail@yahoo.com');
       getInputByLabel('Aws url').type('https://amazon.com');
       getInputByLabel('Aws ip address').type('192.0.2.146');
-      cy.get('.amplify-switch-track').click();
+      cy.get('.amplify-switch__track').click();
       getTextAreaByLabel('Aws json').type(JSON.stringify({ myKey: 'myValue' }), { parseSpecialCharSequences: false });
       getTextAreaByLabel('Non model field').type(JSON.stringify({ StringVal: 'myValue' }), {
         parseSpecialCharSequences: false,
@@ -78,46 +78,32 @@ describe('FormTests - DSAllSupportedFormFields', () => {
 
       // HasOne Autocomplete
       getArrayFieldButtonByLabel('Has one user').click();
-      cy.get(`.amplify-autocomplete`).within(() => {
-        cy.get('input').type(`John Lennon{downArrow}{enter}`);
-      });
+      cy.focused().type(`John Lennon{downArrow}{enter}`);
       clickAddToArray();
 
       // HasMany Autocomplete
       getArrayFieldButtonByLabel('Has many students').click();
-      cy.get(`.amplify-autocomplete`).within(() => {
-        cy.get('input').type(`{downArrow}{enter}`);
-      });
+      cy.focused().type(`{downArrow}{enter}`);
       clickAddToArray();
 
       getArrayFieldButtonByLabel('Has many students').click();
-      cy.get(`.amplify-autocomplete`).within(() => {
-        cy.get('input').type(`Sa{downArrow}{enter}`);
-      });
+      cy.focused().type(`Sa{downArrow}{enter}`);
       clickAddToArray();
 
       // BelongsTo Autocomplete
       getArrayFieldButtonByLabel('Belongs to owner').click();
-      cy.get(`.amplify-autocomplete`).within(() => {
-        cy.get('input').type(`John{downArrow}{enter}`);
-      });
+      cy.focused().type(`John{downArrow}{enter}`);
       clickAddToArray();
 
       // ManyToMany Autocomplete
       getArrayFieldButtonByLabel('Many to many tags').click();
-      cy.get(`.amplify-autocomplete`).within(() => {
-        cy.get('input').type(`Red{downArrow}{enter}`);
-      });
+      cy.focused().type(`Red{downArrow}{enter}`);
       clickAddToArray();
       getArrayFieldButtonByLabel('Many to many tags').click();
-      cy.get(`.amplify-autocomplete`).within(() => {
-        cy.get('input').type(`B{downArrow}{enter}`);
-      });
+      cy.focused().type(`B{downArrow}{enter}`);
       clickAddToArray();
       getArrayFieldButtonByLabel('Many to many tags').click();
-      cy.get(`.amplify-autocomplete`).within(() => {
-        cy.get('input').type(`Gr{downArrow}{enter}`);
-      });
+      cy.focused().type(`Gr{downArrow}{enter}`);
       clickAddToArray();
 
       cy.contains('Submit').click();
@@ -262,9 +248,10 @@ describe('FormTests - DSAllSupportedFormFields', () => {
         awsIPAddressField.should('have.value', '123.12.34.78');
 
         // Boolean
-        cy.contains('Boolean').children('[data-checked="true"]').should('exist');
+        cy.contains('Boolean');
+        cy.get('[data-checked="true"]').should('exist');
         cy.contains('Boolean').click();
-        cy.contains('Boolean').children('[data-checked="false"]').should('exist');
+        cy.get('[data-checked="false"]').should('exist');
 
         const awsJsonField = getTextAreaByLabel('Aws json');
         awsJsonField.should('have.value', JSON.stringify({ myKey: 'myValue' }));

@@ -170,19 +170,19 @@ describe('Two way binding', () => {
   describe('SwitchField', () => {
     it('updates on ui interaction', () => {
       cy.get('#switch-field-section').within(() => {
-        cy.get('.amplify-switch-thumb').invoke('attr', 'data-checked').should('eq', 'false');
+        cy.get('.amplify-switch__thumb').invoke('attr', 'data-checked').should('eq', 'false');
         cy.contains('Subscribe').click();
-        cy.get('.amplify-switch-thumb').invoke('attr', 'data-checked').should('eq', 'true');
+        cy.get('.amplify-switch__thumb').invoke('attr', 'data-checked').should('eq', 'true');
         cy.contains('Subscribe').click();
-        cy.get('.amplify-switch-thumb').invoke('attr', 'data-checked').should('eq', 'false');
+        cy.get('.amplify-switch__thumb').invoke('attr', 'data-checked').should('eq', 'false');
       });
     });
 
     it('updates on state mutation', () => {
       cy.get('#switch-field-section').within(() => {
-        cy.get('.amplify-switch-thumb').invoke('attr', 'data-checked').should('eq', 'false');
+        cy.get('.amplify-switch__thumb').invoke('attr', 'data-checked').should('eq', 'false');
         cy.contains('Set SwitchFieldValue').click();
-        cy.get('.amplify-switch-thumb').invoke('attr', 'data-checked').should('eq', 'true');
+        cy.get('.amplify-switch__thumb').invoke('attr', 'data-checked').should('eq', 'true');
       });
     });
   });

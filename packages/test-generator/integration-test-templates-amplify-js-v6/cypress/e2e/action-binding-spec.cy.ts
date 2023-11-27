@@ -13,10 +13,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { setupAuthAttributeIntercept } from '../utils/form';
 
 describe('Action Bindings', () => {
   describe('Mutation Bindings', () => {
     beforeEach(() => {
+      setupAuthAttributeIntercept();
       cy.visit('http://localhost:3000/action-binding-tests');
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(3000);
@@ -62,6 +64,7 @@ describe('Action Bindings', () => {
 
   describe('DataStore Bindings', () => {
     beforeEach(() => {
+      setupAuthAttributeIntercept();
       cy.visit('http://localhost:3000/action-binding-tests');
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(3000);
@@ -106,6 +109,7 @@ describe('Action Bindings', () => {
 
   describe('Initial Value Bindings', () => {
     beforeEach(() => {
+      setupAuthAttributeIntercept();
       cy.visit('http://localhost:3000/action-binding-tests');
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(1000);

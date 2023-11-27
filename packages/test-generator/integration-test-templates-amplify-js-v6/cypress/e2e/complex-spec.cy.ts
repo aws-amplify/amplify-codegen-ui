@@ -203,7 +203,6 @@ describe('Complex Components', () => {
               });
             });
           cy.get('.amplify-button')
-            .should('have.attr', 'data-fullwidth', 'false')
             .should('have.attr', 'type', 'button')
             .then((el) => {
               const style = el.attr('style');
