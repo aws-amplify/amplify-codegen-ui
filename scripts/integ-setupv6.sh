@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 npm run integ:clean
 npm run build
@@ -16,13 +17,13 @@ npm run integ:templatesv6
 
 # install
 lerna bootstrap
-lerna add --scope integration-test typescript@4.4.4
-lerna add --scope integration-test aws-amplify@^6.0.0
-lerna add --scope integration-test @aws-amplify/ui-react@^6.0.0
-lerna add --scope integration-test @aws-amplify/datastore
-lerna add --scope integration-test @aws-amplify/codegen-ui
-lerna add --scope integration-test @aws-amplify/codegen-ui-react
-lerna add --scope integration-test @aws-amplify/codegen-ui-test-generator
+lerna add --no-ci --scope integration-test typescript@4.4.4
+lerna add --no-ci --scope integration-test aws-amplify@^6.0.0
+lerna add --no-ci --scope integration-test @aws-amplify/ui-react@^6.0.0
+lerna add --no-ci --scope integration-test @aws-amplify/datastore
+lerna add --no-ci --scope integration-test @aws-amplify/codegen-ui
+lerna add --no-ci --scope integration-test @aws-amplify/codegen-ui-react
+lerna add --no-ci --scope integration-test @aws-amplify/codegen-ui-test-generator
 lerna add --no-ci --scope integration-test react-router-dom
 lerna add --no-ci --scope integration-test @types/react-router-dom
 lerna add --no-ci --dev --scope integration-test cypress@12.14.0
