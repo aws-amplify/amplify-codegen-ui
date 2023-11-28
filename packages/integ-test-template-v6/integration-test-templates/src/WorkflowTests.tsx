@@ -13,6 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { Amplify } from 'aws-amplify';
 import { useState, SyntheticEvent, useEffect, useRef } from 'react';
 import '@aws-amplify/ui-react/styles.css';
 import { ThemeProvider, View, Heading, Divider, Button } from '@aws-amplify/ui-react';
