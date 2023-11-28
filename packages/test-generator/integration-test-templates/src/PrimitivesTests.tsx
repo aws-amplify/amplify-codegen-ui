@@ -25,7 +25,6 @@ import {
   CheckboxFieldPrimitive,
   CollectionPrimitive,
   DividerPrimitive,
-  ExpanderPrimitive,
   FlexPrimitive,
   GridPrimitive,
   HeadingPrimitive,
@@ -48,7 +47,6 @@ import {
   SliderFieldPrimitive,
   StepperFieldPrimitive,
   SwitchFieldPrimitive,
-  TabsPrimitive,
   TablePrimitive,
   TextPrimitive,
   TextAreaFieldPrimitive,
@@ -125,10 +123,6 @@ export default function PrimitivesTests() {
       <View id="divider">
         <Heading>Divider</Heading>
         <DividerPrimitive />
-      </View>
-      <View id="expander">
-        <Heading>Expander</Heading>
-        <ExpanderPrimitive />
       </View>
       <View id="flex">
         <Heading>Flex</Heading>
@@ -217,10 +211,6 @@ export default function PrimitivesTests() {
       <View id="switch-field">
         <Heading>Switch Field</Heading>
         <SwitchFieldPrimitive />
-      </View>
-      <View id="tabs">
-        <Heading>Tabs</Heading>
-        <TabsPrimitive />
       </View>
       <View id="table">
         <Heading>Table</Heading>

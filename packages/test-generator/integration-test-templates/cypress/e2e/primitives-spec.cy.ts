@@ -80,29 +80,6 @@ describe('Primitives', () => {
     });
   });
 
-  describe('Expander', () => {
-    it('Basic', () => {
-      cy.get('#expander')
-        .find('.amplify-expander')
-        .within(() => {
-          cy.get('.amplify-expander__item')
-            .eq(0)
-            .within(() => {
-              cy.get('.amplify-expander__trigger').should('have.text', 'title1');
-              cy.get('.amplify-expander__trigger').click();
-              cy.get('.amplify-expander__content__text').should('have.text', 'ExpanderItem1Content');
-            });
-          cy.get('.amplify-expander__item')
-            .eq(1)
-            .within(() => {
-              cy.get('.amplify-expander__trigger').should('have.text', 'title2');
-              cy.get('.amplify-expander__trigger').click();
-              cy.get('.amplify-expander__content__text').should('have.text', 'ExpanderItem2Content');
-            });
-        });
-    });
-  });
-
   describe('Flex', () => {
     it('Basic', () => {
       cy.get('#flex').within(() => {
@@ -297,20 +274,6 @@ describe('Primitives', () => {
         .within(() => {
           cy.get('.amplify-switch-label').should('have.text', 'This is a switch');
           cy.get('.amplify-switch-track');
-        });
-    });
-  });
-
-  describe('Tabs', () => {
-    it('Basic', () => {
-      cy.get('#tabs')
-        .find('div')
-        .first()
-        .within(() => {
-          cy.get('.amplify-tabs').within(() => {
-            cy.get('button').eq(0).should('have.text', 'Tab 1');
-            cy.get('button').eq(1).should('have.text', 'Tab 2');
-          });
         });
     });
   });

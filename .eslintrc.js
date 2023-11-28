@@ -22,8 +22,6 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
     ecmaVersion: 6,
-    //for the css file in test-generator/integration-test-templates/src/GenerateTests.css.
-    // extraFileExtensions: ['.css']
   },
   rules: {
     'max-len': ['error', 120, { ignoreTemplateLiterals: true }],

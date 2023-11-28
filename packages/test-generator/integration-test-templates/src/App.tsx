@@ -19,7 +19,6 @@ import ComponentTests from './ComponentTests';
 import GenerateTests from './GenerateTests';
 import PrimitivesTests from './PrimitivesTests';
 import ComplexTests from './ComplexTests';
-import ViewTests from './ViewTests';
 import SnippetTests from './SnippetTests'; // eslint-disable-line import/extensions
 import WorkflowTests from './WorkflowTests';
 import TwoWayBindingTests from './TwoWayBindingTests';
@@ -57,9 +56,6 @@ const HomePage = () => {
           <a href="/workflow-tests">Workflow Tests</a>
         </li>
         <li>
-          <a href="/view-tests">View Tests</a>
-        </li>
-        <li>
           <a href="/two-way-binding-tests">Two Way Binding Tests</a>
         </li>
         <li>
@@ -83,7 +79,6 @@ export default function App() {
         <Route path="/complex-tests" element={<ComplexTests />} />
         <Route path="/snippet-tests" element={<SnippetTests />} />
         <Route path="/workflow-tests" element={<WorkflowTests />} />
-        <Route path="/view-tests" element={<ViewTests />} />
         <Route path="/two-way-binding-tests" element={<TwoWayBindingTests />} />
         <Route path="/action-binding-tests" element={<ActionBindingTests />} />
         <Route path="/form-tests/:subject?" element={<FormTests />} />
