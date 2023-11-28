@@ -36,6 +36,7 @@ import {
   ConditionalInMutation,
   CreateModelWithComplexTypes,
 } from './ui-components'; // eslint-disable-line import/extensions
+import { DATA_STORE_MOCK_EXPORTS, AUTH_MOCK_EXPORTS } from './mock-utils';
 
 type AuthState = 'LoggedIn' | 'LoggedOutLocally' | 'LoggedOutGlobally' | 'Error';
 
