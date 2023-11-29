@@ -13,7 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './components';
-export * from './generators';
-export * from './themes';
-export * from './forms';
+import { Schema } from '@aws-amplify/datastore';
+
+export declare const schema: Schema;

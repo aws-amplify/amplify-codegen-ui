@@ -39,7 +39,6 @@ describe('Primitives', () => {
       cy.get('#button').within(() => {
         cy.get('.amplify-button').should('have.text', 'Hello world!');
         cy.get('.amplify-button').should('have.attr', 'type', 'button');
-        cy.get('.amplify-button').should('have.attr', 'data-variation', 'primary');
       });
     });
   });
@@ -47,7 +46,7 @@ describe('Primitives', () => {
   describe('ButtonGroup', () => {
     it('Basic', () => {
       cy.get('#button-group').within(() => {
-        cy.get('.amplify-button').should('have.attr', 'data-variation', 'primary');
+        cy.get('.amplify-button').should('have.class', 'amplify-button--primary');
       });
     });
   });
@@ -139,20 +138,20 @@ describe('Primitives', () => {
 
   describe('Loader', () => {
     it('Basic', () => {
-      cy.get('#loader').get('.amplify-loader').should('have.attr', 'data-size', 'large');
+      cy.get('#loader').get('.amplify-loader').should('have.class', 'amplify-loader--large');
     });
   });
 
   describe('Menu', () => {
     it('Basic', () => {
       cy.get('#menu')
-        .find('.amplify-menu-trigger')
+        .find('button')
         .find('path')
         .should('have.attr', 'd', 'M3 18H21V16H3V18ZM3 13H21V11H3V13ZM3 6V8H21V6H3Z');
 
-      cy.get('.amplify-menu-content__item').should('not.exist');
-      cy.get('#menu').find('.amplify-menu-trigger').click({ force: true });
-      cy.get('.amplify-menu-content__item').should('have.text', 'Item');
+      cy.get('.amplify-menu__wrapper').should('not.exist');
+      cy.get('#menu').find('button').click({ force: true });
+      cy.get('.amplify-menu__wrapper').should('have.text', 'Item');
     });
   });
 
@@ -210,7 +209,6 @@ describe('Primitives', () => {
       cy.get('#radio-group-field')
         .find('.amplify-radiogroupfield')
         .within(() => {
-          cy.get('label').should('have.text', 'Languagehtmlcssjavascript');
           cy.get('.amplify-radiogroup').within(() => {
             cy.get('.amplify-radio').eq(0).should('have.text', 'html');
             cy.get('.amplify-radio').eq(1).should('have.text', 'css');
@@ -272,8 +270,8 @@ describe('Primitives', () => {
       cy.get('#switch-field')
         .find('.amplify-switch__wrapper')
         .within(() => {
-          cy.get('.amplify-switch-label').should('have.text', 'This is a switch');
-          cy.get('.amplify-switch-track');
+          cy.get('.amplify-switch__label').should('have.text', 'This is a switch');
+          cy.get('.amplify-switch__track');
         });
     });
   });

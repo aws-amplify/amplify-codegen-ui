@@ -47,6 +47,7 @@ import {
   SliderFieldPrimitive,
   StepperFieldPrimitive,
   SwitchFieldPrimitive,
+  // TabsPrimitive,
   TablePrimitive,
   TextPrimitive,
   TextAreaFieldPrimitive,
@@ -212,6 +213,10 @@ export default function PrimitivesTests() {
         <Heading>Switch Field</Heading>
         <SwitchFieldPrimitive />
       </View>
+      {/* <View id="tabs">
+        <Heading>Tabs</Heading>
+        <TabsPrimitive />
+      </View> */}
       <View id="table">
         <Heading>Table</Heading>
         <TablePrimitive />

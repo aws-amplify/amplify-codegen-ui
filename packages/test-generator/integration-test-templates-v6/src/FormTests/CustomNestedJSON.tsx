@@ -13,7 +13,16 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './components';
-export * from './generators';
-export * from './themes';
-export * from './forms';
+import { ThemeProvider, View, Heading } from '@aws-amplify/ui-react';
+import { CustomFormCreateNestedJson } from '../ui-components'; // eslint-disable-line import/extensions, max-len
+
+export default function () {
+  return (
+    <ThemeProvider>
+      <Heading>CustomFormCreateNestedJson</Heading>
+      <View id="CustomFormCreateNestedJson">
+        <CustomFormCreateNestedJson onSubmit={() => undefined} />
+      </View>
+    </ThemeProvider>
+  );
+}

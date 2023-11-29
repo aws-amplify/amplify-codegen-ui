@@ -13,4 +13,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export { default as ListingExpanderWithComponentSlot } from './listing-expander-with-component-slot.json';
+import { defineConfig } from 'cypress';
+
+export default defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+      require('@cypress/code-coverage/task')(on, config);
+
+      return config;
+    },
+  },
+  chromeWebSecurity: false,
+  defaultCommandTimeout: 60000,
+});

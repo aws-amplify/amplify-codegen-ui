@@ -8,6 +8,7 @@ module.exports = {
     'commitlint.config.js',
     'packages/integration-test',
     '*.md',
+    '*.css',
   ],
   extends: [
     'plugin:@typescript-eslint/recommended',
@@ -23,7 +24,7 @@ module.exports = {
     ecmaVersion: 6,
   },
   rules: {
-    'max-len': ['error', 120, 2],
+    'max-len': ['error', 120, { ignoreTemplateLiterals: true }],
     'max-classes-per-file': 'off',
     'react/prop-types': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
