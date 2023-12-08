@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.20.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.19.4...v2.20.0) (2023-12-08)
+
+### Bug Fixes
+
+- add amplify js v6 beta canary ([#1139](https://github.com/aws-amplify/amplify-codegen-ui/issues/1139)) ([b20221a](https://github.com/aws-amplify/amplify-codegen-ui/commit/b20221ac6a4fd7e279d8cac770ec44b1d38f24ca))
+- check if import name is a primitive and needs aliasing ([#1142](https://github.com/aws-amplify/amplify-codegen-ui/issues/1142)) ([f9dd802](https://github.com/aws-amplify/amplify-codegen-ui/commit/f9dd802789db47f02b23c26cbcb9931b3b04b7e5))
+- migrate useAuth hook for v6 ([#1137](https://github.com/aws-amplify/amplify-codegen-ui/issues/1137)) ([0ebdca2](https://github.com/aws-amplify/amplify-codegen-ui/commit/0ebdca227e53a9cbfd3df1dbfc968cefbb19fc75))
+- remove beta canaries ([#1141](https://github.com/aws-amplify/amplify-codegen-ui/issues/1141)) ([e2e5f41](https://github.com/aws-amplify/amplify-codegen-ui/commit/e2e5f41aa2342c2a0eefb338273f510952d5827d))
+- v6 cli release canary ([#1140](https://github.com/aws-amplify/amplify-codegen-ui/issues/1140)) ([3064fec](https://github.com/aws-amplify/amplify-codegen-ui/commit/3064fec554d7f3cc46fb07a3daf68176ea8f6d6d))
+
+### Features
+
+- move amplify js v6 to latest ([#1135](https://github.com/aws-amplify/amplify-codegen-ui/issues/1135)) ([69ece2f](https://github.com/aws-amplify/amplify-codegen-ui/commit/69ece2f864d8772870952834c31566840facf8c2))
+
 ## [2.19.4](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.19.3...v2.19.4) (2023-11-02)
 
 ### Bug Fixes
