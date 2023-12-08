@@ -1,0 +1,16 @@
+{
+  "name": "GamesCreateForm",
+  "formActionType": "create",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "Games"
+  },
+  "fields": {},
+  "sectionalElements": {},
+  "style": {},
+  "cta": {
+    "clear": {},
+    "cancel": {},
+    "submit": {}
+  }
+}

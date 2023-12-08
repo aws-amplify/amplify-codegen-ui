@@ -383,6 +383,18 @@ describe('amplify form renderer tests', () => {
       expect(importCollection).toBeDefined();
     });
 
+    it('should contain Text as alias map because its a primitive component name', () => {
+      const { importCollection } = generateComponentOnlyWithAmplifyFormRenderer(
+        'forms/games',
+        'datastore/games',
+        { ...defaultCLIRenderConfig, dependencies: { 'aws-amplify': '^6.0.0' } },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      const aliasMap = importCollection.getAliasMap();
+      expect(aliasMap.model.Text).toBe('Text0');
+    });
+
     it('should 1:1 relationships without types file path - Create amplify js v6', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/owner-dog-create',

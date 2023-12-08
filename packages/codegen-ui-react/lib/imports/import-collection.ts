@@ -113,7 +113,12 @@ export class ImportCollection {
       const modelAlias = createUniqueName(
         importName,
         (input) =>
-          this.importedNames.has(input) || (input.endsWith('Props') && isPrimitive(input.replace(/Props/g, ''))),
+          // Testing if the name is not unique.
+          // Props is for testing the primitive types e.g. "TextProps".
+          // And test for a matching primitive name value e.g. "Text"
+          this.importedNames.has(input) ||
+          (input.endsWith('Props') && isPrimitive(input.replace(/Props/g, ''))) ||
+          isPrimitive(input),
       );
       if (existingPackageAlias) {
         existingPackageAlias.set(importName, modelAlias);

@@ -1,0 +1,101 @@
+{
+  "models": {
+      "Text": {
+          "name": "Text",
+          "fields": {
+              "id": {
+                  "name": "id",
+                  "isArray": false,
+                  "type": "ID",
+                  "isRequired": true,
+                  "attributes": []
+              },
+              "message": {
+                  "name": "message",
+                  "isArray": false,
+                  "type": "String",
+                  "isRequired": false,
+                  "attributes": []
+              },
+              "createdAt": {
+                  "name": "createdAt",
+                  "isArray": false,
+                  "type": "AWSDateTime",
+                  "isRequired": false,
+                  "attributes": [],
+                  "isReadOnly": true
+              },
+              "updatedAt": {
+                  "name": "updatedAt",
+                  "isArray": false,
+                  "type": "AWSDateTime",
+                  "isRequired": false,
+                  "attributes": [],
+                  "isReadOnly": true
+              }
+          },
+          "syncable": true,
+          "pluralName": "Texts",
+          "attributes": [
+              {
+                  "type": "model",
+                  "properties": {}
+              }
+          ]
+      },
+      "Games": {
+          "name": "Games",
+          "fields": {
+              "id": {
+                  "name": "id",
+                  "isArray": false,
+                  "type": "ID",
+                  "isRequired": true,
+                  "attributes": []
+              },
+              "Texts": {
+                  "name": "Texts",
+                  "isArray": true,
+                  "type": {
+                      "model": "Text"
+                  },
+                  "isRequired": false,
+                  "attributes": [],
+                  "isArrayNullable": true,
+                  "association": {
+                      "connectionType": "HAS_MANY",
+                      "associatedWith": "gamesID"
+                  }
+              },
+              "createdAt": {
+                  "name": "createdAt",
+                  "isArray": false,
+                  "type": "AWSDateTime",
+                  "isRequired": false,
+                  "attributes": [],
+                  "isReadOnly": true
+              },
+              "updatedAt": {
+                  "name": "updatedAt",
+                  "isArray": false,
+                  "type": "AWSDateTime",
+                  "isRequired": false,
+                  "attributes": [],
+                  "isReadOnly": true
+              }
+          },
+          "syncable": true,
+          "pluralName": "Games",
+          "attributes": [
+              {
+                  "type": "model",
+                  "properties": {}
+              }
+          ]
+      }
+  },
+  "enums": {},
+  "nonModels": {},
+  "codegenVersion": "3.4.4",
+  "version": "4515c51947749e6e168199ab64837ed3"
+}

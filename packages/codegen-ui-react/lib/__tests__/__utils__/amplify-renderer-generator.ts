@@ -77,6 +77,7 @@ export const generateComponentOnlyWithAmplifyFormRenderer = (
   formJsonFile: string,
   dataSchemaJsonFile: string | undefined,
   renderConfig: ReactRenderConfig = defaultCLIRenderConfig,
+  featureFlags?: FormFeatureFlags,
 ) => {
   let dataSchema: GenericDataSchema | undefined;
   if (dataSchemaJsonFile) {
@@ -84,7 +85,7 @@ export const generateComponentOnlyWithAmplifyFormRenderer = (
     dataSchema = getGenericFromDataStore(dataStoreSchema);
   }
   const rendererFactory = new StudioTemplateRendererFactory(
-    (component: StudioForm) => new AmplifyFormRenderer(component, dataSchema, renderConfig),
+    (component: StudioForm) => new AmplifyFormRenderer(component, dataSchema, renderConfig, featureFlags),
   );
 
   const renderer = rendererFactory.buildRenderer(loadSchemaFromJSONFile<StudioForm>(formJsonFile));
