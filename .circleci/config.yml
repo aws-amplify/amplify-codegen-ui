@@ -100,7 +100,7 @@ workflows:
       - unit-test:
           requires:
             - install
-      - publish:
+      - publish
 
 commands:
   create_concatenated_package_lock:
