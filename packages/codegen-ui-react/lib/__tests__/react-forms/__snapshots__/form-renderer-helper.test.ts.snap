@@ -70,7 +70,7 @@ exports[`form-render utils should generate before & complete types if datastore 
 "{
     clearOnSuccess?: boolean;
     onSubmit?: (fields: mySampleFormInputValues) => mySampleFormInputValues;
-    onSuccess?: (fields: mySampleFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: mySampleFormInputValues, errorMessage: string) => void;
     onChange?: (fields: mySampleFormInputValues) => mySampleFormInputValues;
     onValidate?: mySampleFormValidationValues;
@@ -102,7 +102,7 @@ exports[`form-render utils should render composite primary keys 1`] = `
     };
     post?: Post;
     onSubmit?: (fields: mySampleFormInputValues) => mySampleFormInputValues;
-    onSuccess?: (fields: mySampleFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: mySampleFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: mySampleFormInputValues) => mySampleFormInputValues;

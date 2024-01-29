@@ -362,9 +362,9 @@ export default function CreateOwnerForm(props) {
               );
             }
           }
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -549,7 +549,7 @@ export declare type CreateOwnerFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
-    onSuccess?: (fields: CreateOwnerFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreateOwnerFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
     onValidate?: CreateOwnerFormValidationValues;
@@ -921,9 +921,9 @@ export default function CreateOwnerForm(props) {
               );
             }
           }
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -1108,7 +1108,7 @@ export declare type CreateOwnerFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
-    onSuccess?: (fields: CreateOwnerFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreateOwnerFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
     onValidate?: CreateOwnerFormValidationValues;
@@ -1425,7 +1425,7 @@ export default function MyPostForm(props) {
               ? JSON.parse(modelFields.nonModelField)
               : modelFields.nonModelField,
           };
-          await client.graphql({
+          const result = await client.graphql({
             query: createPost.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -1434,7 +1434,7 @@ export default function MyPostForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -1778,7 +1778,7 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onSuccess?: (fields: MyPostFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
@@ -2095,7 +2095,7 @@ export default function MyPostForm(props) {
               ? JSON.parse(modelFields.nonModelField)
               : modelFields.nonModelField,
           };
-          await API.graphql({
+          const result = await API.graphql({
             query: createPost.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -2104,7 +2104,7 @@ export default function MyPostForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -2448,7 +2448,7 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onSuccess?: (fields: MyPostFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
@@ -2824,7 +2824,7 @@ export default function MyMemberForm(props) {
             teamID: modelFields.teamID,
             teamMembersId: modelFields?.Team?.id,
           };
-          await API.graphql({
+          const result = await API.graphql({
             query: createMember.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -2833,7 +2833,7 @@ export default function MyMemberForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -3123,7 +3123,7 @@ export declare type MyMemberFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: MyMemberFormInputValues) => MyMemberFormInputValues;
-    onSuccess?: (fields: MyMemberFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MyMemberFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyMemberFormInputValues) => MyMemberFormInputValues;
@@ -3502,9 +3502,9 @@ export default function MovieCreateForm(props) {
               return promises;
             }, [])
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -3786,7 +3786,7 @@ export declare type MovieCreateFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: MovieCreateFormInputValues) => MovieCreateFormInputValues;
-    onSuccess?: (fields: MovieCreateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MovieCreateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: MovieCreateFormInputValues) => MovieCreateFormInputValues;
     onValidate?: MovieCreateFormValidationValues;
@@ -4144,9 +4144,9 @@ export default function SchoolCreateForm(props) {
               return promises;
             }, [])
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -4343,7 +4343,7 @@ export declare type SchoolCreateFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: SchoolCreateFormInputValues) => SchoolCreateFormInputValues;
-    onSuccess?: (fields: SchoolCreateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: SchoolCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: SchoolCreateFormInputValues) => SchoolCreateFormInputValues;
@@ -4682,7 +4682,7 @@ export default function BookCreateForm(props) {
             name: modelFields.name,
             authorId: modelFields?.primaryAuthor?.id,
           };
-          await API.graphql({
+          const result = await API.graphql({
             query: createBook.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -4691,7 +4691,7 @@ export default function BookCreateForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -4894,7 +4894,7 @@ export declare type BookCreateFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
-    onSuccess?: (fields: BookCreateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: BookCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
@@ -5206,7 +5206,7 @@ export default function CommentCreateForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
+          const result = await API.graphql({
             query: createComment.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -5215,7 +5215,7 @@ export default function CommentCreateForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -5414,7 +5414,7 @@ export declare type CommentCreateFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CommentCreateFormInputValues) => CommentCreateFormInputValues;
-    onSuccess?: (fields: CommentCreateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CommentCreateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CommentCreateFormInputValues) => CommentCreateFormInputValues;
     onValidate?: CommentCreateFormValidationValues;
@@ -5789,9 +5789,9 @@ export default function TagCreateForm(props) {
               return promises;
             }, [])
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -6053,7 +6053,7 @@ export declare type TagCreateFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: TagCreateFormInputValues) => TagCreateFormInputValues;
-    onSuccess?: (fields: TagCreateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: TagCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: TagCreateFormInputValues) => TagCreateFormInputValues;
@@ -6442,7 +6442,7 @@ export default function BookCreateForm(props) {
             authorId: modelFields?.primaryAuthor?.id,
             titleId: modelFields?.primaryTitle?.id,
           };
-          await API.graphql({
+          const result = await API.graphql({
             query: createBook.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -6451,7 +6451,7 @@ export default function BookCreateForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -6740,7 +6740,7 @@ export declare type BookCreateFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
-    onSuccess?: (fields: BookCreateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: BookCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
@@ -7228,9 +7228,9 @@ export default function CreateCPKTeacherForm(props) {
               return promises;
             }, [])
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -7590,7 +7590,7 @@ export declare type CreateCPKTeacherFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreateCPKTeacherFormInputValues) => CreateCPKTeacherFormInputValues;
-    onSuccess?: (fields: CreateCPKTeacherFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreateCPKTeacherFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreateCPKTeacherFormInputValues) => CreateCPKTeacherFormInputValues;
     onValidate?: CreateCPKTeacherFormValidationValues;
@@ -7934,7 +7934,7 @@ export default function CreateForm(props) {
               ? JSON.parse(modelFields.nmTest)
               : modelFields.nmTest,
           };
-          await API.graphql({
+          const result = await API.graphql({
             query: createBasicTable.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -7943,7 +7943,7 @@ export default function CreateForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -8163,7 +8163,7 @@ export declare type CreateFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreateFormInputValues) => CreateFormInputValues;
-    onSuccess?: (fields: CreateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreateFormInputValues) => CreateFormInputValues;
     onValidate?: CreateFormValidationValues;
@@ -8611,9 +8611,9 @@ export default function PostUpdateForm(props) {
               },
             })
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -8868,7 +8868,7 @@ export declare type PostUpdateFormProps = React.PropsWithChildren<{
     id?: string;
     post?: Post;
     onSubmit?: (fields: PostUpdateFormInputValues) => PostUpdateFormInputValues;
-    onSuccess?: (fields: PostUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: PostUpdateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: PostUpdateFormInputValues) => PostUpdateFormInputValues;
     onValidate?: PostUpdateFormValidationValues;
@@ -9226,7 +9226,7 @@ export default function MyPostForm(props) {
               ? JSON.parse(modelFields.nonModelField)
               : modelFields.nonModelField,
           };
-          await client.graphql({
+          const result = await client.graphql({
             query: updatePost.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -9236,7 +9236,7 @@ export default function MyPostForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -9664,7 +9664,7 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
     id?: string;
     post?: Post;
     onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onSuccess?: (fields: MyPostFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
@@ -10022,7 +10022,7 @@ export default function MyPostForm(props) {
               ? JSON.parse(modelFields.nonModelField)
               : modelFields.nonModelField,
           };
-          await API.graphql({
+          const result = await API.graphql({
             query: updatePost.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -10032,7 +10032,7 @@ export default function MyPostForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -10460,7 +10460,7 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
     id?: string;
     post?: Post;
     onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onSuccess?: (fields: MyPostFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
@@ -10963,9 +10963,9 @@ export default function MovieUpdateForm(props) {
               },
             })
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -11253,7 +11253,7 @@ export declare type MovieUpdateFormProps = React.PropsWithChildren<{
     };
     movie?: Movie;
     onSubmit?: (fields: MovieUpdateFormInputValues) => MovieUpdateFormInputValues;
-    onSuccess?: (fields: MovieUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MovieUpdateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: MovieUpdateFormInputValues) => MovieUpdateFormInputValues;
     onValidate?: MovieUpdateFormValidationValues;
@@ -11754,9 +11754,9 @@ export default function MovieUpdateForm(props) {
               },
             })
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -12044,7 +12044,7 @@ export declare type MovieUpdateFormProps = React.PropsWithChildren<{
     };
     movie?: Movie;
     onSubmit?: (fields: MovieUpdateFormInputValues) => MovieUpdateFormInputValues;
-    onSuccess?: (fields: MovieUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MovieUpdateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: MovieUpdateFormInputValues) => MovieUpdateFormInputValues;
     onValidate?: MovieUpdateFormValidationValues;
@@ -12458,7 +12458,7 @@ export default function CommentUpdateForm(props) {
             postID: modelFields.postID,
             postCommentsId: modelFields?.Post?.id ?? null,
           };
-          await API.graphql({
+          const result = await API.graphql({
             query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -12468,7 +12468,7 @@ export default function CommentUpdateForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -12785,7 +12785,7 @@ export declare type CommentUpdateFormProps = React.PropsWithChildren<{
     id?: string;
     comment?: Comment;
     onSubmit?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
-    onSuccess?: (fields: CommentUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CommentUpdateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
     onValidate?: CommentUpdateFormValidationValues;
@@ -13200,7 +13200,7 @@ export default function CommentUpdateForm(props) {
             postID: modelFields.postID,
             postCommentsId: modelFields?.Post?.id ?? null,
           };
-          await client.graphql({
+          const result = await client.graphql({
             query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -13210,7 +13210,7 @@ export default function CommentUpdateForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -13526,7 +13526,7 @@ export declare type CommentUpdateFormProps = React.PropsWithChildren<{
     id?: string;
     comment?: any;
     onSubmit?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
-    onSuccess?: (fields: CommentUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CommentUpdateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
     onValidate?: CommentUpdateFormValidationValues;
@@ -13940,7 +13940,7 @@ export default function CommentUpdateForm(props) {
             postID: modelFields.postID,
             postCommentsId: modelFields?.Post?.id ?? null,
           };
-          await API.graphql({
+          const result = await API.graphql({
             query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -13950,7 +13950,7 @@ export default function CommentUpdateForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -14266,7 +14266,7 @@ export declare type CommentUpdateFormProps = React.PropsWithChildren<{
     id?: string;
     comment?: any;
     onSubmit?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
-    onSuccess?: (fields: CommentUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CommentUpdateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
     onValidate?: CommentUpdateFormValidationValues;
@@ -14608,7 +14608,7 @@ export default function CommentUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
+          const result = await API.graphql({
             query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -14618,7 +14618,7 @@ export default function CommentUpdateForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -14821,7 +14821,7 @@ export declare type CommentUpdateFormProps = React.PropsWithChildren<{
     id?: string;
     comment?: Comment;
     onSubmit?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
-    onSuccess?: (fields: CommentUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CommentUpdateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
     onValidate?: CommentUpdateFormValidationValues;
@@ -15282,9 +15282,9 @@ export default function ClassUpdateForm(props) {
               },
             })
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -15444,7 +15444,7 @@ export declare type ClassUpdateFormProps = React.PropsWithChildren<{
     id?: string;
     class?: Class;
     onSubmit?: (fields: ClassUpdateFormInputValues) => ClassUpdateFormInputValues;
-    onSuccess?: (fields: ClassUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: ClassUpdateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: ClassUpdateFormInputValues) => ClassUpdateFormInputValues;
     onValidate?: ClassUpdateFormValidationValues;
@@ -15904,9 +15904,9 @@ export default function ClassUpdateForm(props) {
               },
             })
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -16066,7 +16066,7 @@ export declare type ClassUpdateFormProps = React.PropsWithChildren<{
     id?: string;
     class?: Class;
     onSubmit?: (fields: ClassUpdateFormInputValues) => ClassUpdateFormInputValues;
-    onSuccess?: (fields: ClassUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: ClassUpdateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: ClassUpdateFormInputValues) => ClassUpdateFormInputValues;
     onValidate?: ClassUpdateFormValidationValues;
@@ -16437,7 +16437,7 @@ export default function UpdateForm(props) {
               ? JSON.parse(modelFields.nmTest)
               : modelFields.nmTest,
           };
-          await API.graphql({
+          const result = await API.graphql({
             query: updateBasicTable.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -16447,7 +16447,7 @@ export default function UpdateForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -16671,7 +16671,7 @@ export declare type UpdateFormProps = React.PropsWithChildren<{
     id?: string;
     basicTable?: BasicTable;
     onSubmit?: (fields: UpdateFormInputValues) => UpdateFormInputValues;
-    onSuccess?: (fields: UpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: UpdateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: UpdateFormInputValues) => UpdateFormInputValues;
     onValidate?: UpdateFormValidationValues;
@@ -17333,9 +17333,9 @@ export default function UpdateCPKTeacherForm(props) {
               },
             })
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -17698,7 +17698,7 @@ export declare type UpdateCPKTeacherFormProps = React.PropsWithChildren<{
     specialTeacherId?: string;
     cPKTeacher?: CPKTeacher;
     onSubmit?: (fields: UpdateCPKTeacherFormInputValues) => UpdateCPKTeacherFormInputValues;
-    onSuccess?: (fields: UpdateCPKTeacherFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: UpdateCPKTeacherFormInputValues, errorMessage: string) => void;
     onChange?: (fields: UpdateCPKTeacherFormInputValues) => UpdateCPKTeacherFormInputValues;
     onValidate?: UpdateCPKTeacherFormValidationValues;
@@ -18359,9 +18359,9 @@ export default function UpdateCPKTeacherForm(props) {
               },
             })
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -18724,7 +18724,7 @@ export declare type UpdateCPKTeacherFormProps = React.PropsWithChildren<{
     specialTeacherId?: string;
     cPKTeacher?: CPKTeacher;
     onSubmit?: (fields: UpdateCPKTeacherFormInputValues) => UpdateCPKTeacherFormInputValues;
-    onSuccess?: (fields: UpdateCPKTeacherFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: UpdateCPKTeacherFormInputValues, errorMessage: string) => void;
     onChange?: (fields: UpdateCPKTeacherFormInputValues) => UpdateCPKTeacherFormInputValues;
     onValidate?: UpdateCPKTeacherFormValidationValues;
@@ -19123,7 +19123,7 @@ export default function CreateCompositeToyForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
+          const result = await API.graphql({
             query: createCompositeToy.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -19132,7 +19132,7 @@ export default function CreateCompositeToyForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -19514,7 +19514,7 @@ export declare type CreateCompositeToyFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreateCompositeToyFormInputValues) => CreateCompositeToyFormInputValues;
-    onSuccess?: (fields: CreateCompositeToyFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreateCompositeToyFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreateCompositeToyFormInputValues) => CreateCompositeToyFormInputValues;
     onValidate?: CreateCompositeToyFormValidationValues;
@@ -19999,7 +19999,7 @@ export default function CreateCommentForm(props) {
             orgCommentsId: modelFields?.Org?.id,
             postCommentsId: modelFields.postCommentsId,
           };
-          await API.graphql({
+          const result = await API.graphql({
             query: createComment.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -20008,7 +20008,7 @@ export default function CreateCommentForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -20464,7 +20464,7 @@ export declare type CreateCommentFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreateCommentFormInputValues) => CreateCommentFormInputValues;
-    onSuccess?: (fields: CreateCommentFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreateCommentFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreateCommentFormInputValues) => CreateCommentFormInputValues;
     onValidate?: CreateCommentFormValidationValues;
@@ -21084,9 +21084,9 @@ export default function CreateCompositeDogForm(props) {
               return promises;
             }, [])
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -21591,7 +21591,7 @@ export declare type CreateCompositeDogFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreateCompositeDogFormInputValues) => CreateCompositeDogFormInputValues;
-    onSuccess?: (fields: CreateCompositeDogFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreateCompositeDogFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreateCompositeDogFormInputValues) => CreateCompositeDogFormInputValues;
     onValidate?: CreateCompositeDogFormValidationValues;
@@ -21950,9 +21950,9 @@ export default function CreatePostForm(props) {
               return promises;
             }, [])
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -22139,7 +22139,7 @@ export declare type CreatePostFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreatePostFormInputValues) => CreatePostFormInputValues;
-    onSuccess?: (fields: CreatePostFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreatePostFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreatePostFormInputValues) => CreatePostFormInputValues;
     onValidate?: CreatePostFormValidationValues;
@@ -22556,9 +22556,9 @@ export default function UpdatePostForm(props) {
               },
             })
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -22747,7 +22747,7 @@ export declare type UpdatePostFormProps = React.PropsWithChildren<{
     id?: string;
     post?: Post;
     onSubmit?: (fields: UpdatePostFormInputValues) => UpdatePostFormInputValues;
-    onSuccess?: (fields: UpdatePostFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: UpdatePostFormInputValues, errorMessage: string) => void;
     onChange?: (fields: UpdatePostFormInputValues) => UpdatePostFormInputValues;
     onValidate?: UpdatePostFormValidationValues;
@@ -23135,7 +23135,7 @@ export default function ChildItemUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
+          const result = await API.graphql({
             query: updateChildItem.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -23145,7 +23145,7 @@ export default function ChildItemUpdateForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -23374,7 +23374,7 @@ export declare type ChildItemUpdateFormProps = React.PropsWithChildren<{
     id?: string;
     childItem?: ChildItem;
     onSubmit?: (fields: ChildItemUpdateFormInputValues) => ChildItemUpdateFormInputValues;
-    onSuccess?: (fields: ChildItemUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: ChildItemUpdateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: ChildItemUpdateFormInputValues) => ChildItemUpdateFormInputValues;
     onValidate?: ChildItemUpdateFormValidationValues;
@@ -23844,9 +23844,9 @@ export default function PostUpdateForm(props) {
               },
             })
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -24120,7 +24120,7 @@ export declare type PostUpdateFormProps = React.PropsWithChildren<{
     id?: string;
     post?: Post;
     onSubmit?: (fields: PostUpdateFormInputValues) => PostUpdateFormInputValues;
-    onSuccess?: (fields: PostUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: PostUpdateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: PostUpdateFormInputValues) => PostUpdateFormInputValues;
     onValidate?: PostUpdateFormValidationValues;
@@ -24485,9 +24485,9 @@ export default function CreateDogForm(props) {
               }
             }
           }
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -24675,7 +24675,7 @@ export declare type CreateDogFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreateDogFormInputValues) => CreateDogFormInputValues;
-    onSuccess?: (fields: CreateDogFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreateDogFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreateDogFormInputValues) => CreateDogFormInputValues;
     onValidate?: CreateDogFormValidationValues;
@@ -25046,9 +25046,9 @@ export default function CreateOwnerForm(props) {
               );
             }
           }
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -25234,7 +25234,7 @@ export declare type CreateOwnerFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
-    onSuccess?: (fields: CreateOwnerFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreateOwnerFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
     onValidate?: CreateOwnerFormValidationValues;
@@ -25576,7 +25576,7 @@ export default function CommentUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
+          const result = await API.graphql({
             query: updateComment.replaceAll(\\"__typename\\", \\"\\"),
             variables: {
               input: {
@@ -25586,7 +25586,7 @@ export default function CommentUpdateForm(props) {
             },
           });
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -25789,7 +25789,7 @@ export declare type CommentUpdateFormProps = React.PropsWithChildren<{
     id?: string;
     comment?: Comment;
     onSubmit?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
-    onSuccess?: (fields: CommentUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CommentUpdateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
     onValidate?: CommentUpdateFormValidationValues;
@@ -26217,9 +26217,9 @@ export default function UpdateForm(props) {
               },
             })
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -26441,7 +26441,7 @@ export declare type UpdateFormProps = React.PropsWithChildren<{
     mycustomkey?: string;
     customKeyModel?: CustomKeyModel;
     onSubmit?: (fields: UpdateFormInputValues) => UpdateFormInputValues;
-    onSuccess?: (fields: UpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: UpdateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: UpdateFormInputValues) => UpdateFormInputValues;
     onValidate?: UpdateFormValidationValues;
@@ -27289,9 +27289,9 @@ export default function CreateCompositeToyForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(new CompositeToy(modelFields));
+          const result = await DataStore.save(new CompositeToy(modelFields));
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -27633,7 +27633,7 @@ export declare type CreateCompositeToyFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreateCompositeToyFormInputValues) => CreateCompositeToyFormInputValues;
-    onSuccess?: (fields: CreateCompositeToyFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreateCompositeToyFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreateCompositeToyFormInputValues) => CreateCompositeToyFormInputValues;
     onValidate?: CreateCompositeToyFormValidationValues;
@@ -27995,9 +27995,9 @@ export default function CreateCommentForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(new Comment(modelFields));
+          const result = await DataStore.save(new Comment(modelFields));
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -28436,7 +28436,7 @@ export declare type CreateCommentFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreateCommentFormInputValues) => CreateCommentFormInputValues;
-    onSuccess?: (fields: CreateCommentFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreateCommentFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreateCommentFormInputValues) => CreateCommentFormInputValues;
     onValidate?: CreateCommentFormValidationValues;
@@ -28899,9 +28899,9 @@ export default function CreateCompositeDogForm(props) {
               return promises;
             }, [])
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -29401,7 +29401,7 @@ export declare type CreateCompositeDogFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreateCompositeDogFormInputValues) => CreateCompositeDogFormInputValues;
-    onSuccess?: (fields: CreateCompositeDogFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreateCompositeDogFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreateCompositeDogFormInputValues) => CreateCompositeDogFormInputValues;
     onValidate?: CreateCompositeDogFormValidationValues;
@@ -31496,9 +31496,9 @@ export default function MyPostForm(props) {
               ? JSON.parse(modelFields.nonModelField)
               : modelFields.nonModelField,
           };
-          await DataStore.save(new Post(modelFieldsToSave));
+          const result = await DataStore.save(new Post(modelFieldsToSave));
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -31914,7 +31914,7 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onSuccess?: (fields: MyPostFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
@@ -32288,9 +32288,9 @@ export default function UpdateOrgForm(props) {
               })
             )
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -32478,7 +32478,7 @@ export declare type UpdateOrgFormProps = React.PropsWithChildren<{
     id?: string;
     org?: Org;
     onSubmit?: (fields: UpdateOrgFormInputValues) => UpdateOrgFormInputValues;
-    onSuccess?: (fields: UpdateOrgFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: UpdateOrgFormInputValues, errorMessage: string) => void;
     onChange?: (fields: UpdateOrgFormInputValues) => UpdateOrgFormInputValues;
     onValidate?: UpdateOrgFormValidationValues;
@@ -33119,9 +33119,9 @@ export default function UpdateCompositeDogForm(props) {
               })
             )
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -33628,7 +33628,7 @@ export declare type UpdateCompositeDogFormProps = React.PropsWithChildren<{
     };
     compositeDog?: CompositeDog;
     onSubmit?: (fields: UpdateCompositeDogFormInputValues) => UpdateCompositeDogFormInputValues;
-    onSuccess?: (fields: UpdateCompositeDogFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: UpdateCompositeDogFormInputValues, errorMessage: string) => void;
     onChange?: (fields: UpdateCompositeDogFormInputValues) => UpdateCompositeDogFormInputValues;
     onValidate?: UpdateCompositeDogFormValidationValues;
@@ -34164,9 +34164,9 @@ export default function UpdateCPKTeacherForm(props) {
               })
             )
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -34524,7 +34524,7 @@ export declare type UpdateCPKTeacherFormProps = React.PropsWithChildren<{
     specialTeacherId?: string;
     cPKTeacher?: CPKTeacher;
     onSubmit?: (fields: UpdateCPKTeacherFormInputValues) => UpdateCPKTeacherFormInputValues;
-    onSuccess?: (fields: UpdateCPKTeacherFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: UpdateCPKTeacherFormInputValues, errorMessage: string) => void;
     onChange?: (fields: UpdateCPKTeacherFormInputValues) => UpdateCPKTeacherFormInputValues;
     onValidate?: UpdateCPKTeacherFormValidationValues;
@@ -37614,9 +37614,9 @@ export default function UpdateCompositeDogForm(props) {
               })
             )
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -38132,7 +38132,7 @@ export declare type UpdateCompositeDogFormProps = React.PropsWithChildren<{
     };
     compositeDog?: CompositeDog;
     onSubmit?: (fields: UpdateCompositeDogFormInputValues) => UpdateCompositeDogFormInputValues;
-    onSuccess?: (fields: UpdateCompositeDogFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: UpdateCompositeDogFormInputValues, errorMessage: string) => void;
     onChange?: (fields: UpdateCompositeDogFormInputValues) => UpdateCompositeDogFormInputValues;
     onValidate?: UpdateCompositeDogFormValidationValues;
@@ -38652,9 +38652,9 @@ export default function CreateDogForm(props) {
               }
             }
           }
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -38839,7 +38839,7 @@ export declare type CreateDogFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreateDogFormInputValues) => CreateDogFormInputValues;
-    onSuccess?: (fields: CreateDogFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreateDogFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreateDogFormInputValues) => CreateDogFormInputValues;
     onValidate?: CreateDogFormValidationValues;
@@ -39195,9 +39195,9 @@ export default function UpdateDogForm(props) {
               })
             )
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -39385,7 +39385,7 @@ export declare type UpdateDogFormProps = React.PropsWithChildren<{
     id?: string;
     dog?: Dog;
     onSubmit?: (fields: UpdateDogFormInputValues) => UpdateDogFormInputValues;
-    onSuccess?: (fields: UpdateDogFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: UpdateDogFormInputValues, errorMessage: string) => void;
     onChange?: (fields: UpdateDogFormInputValues) => UpdateDogFormInputValues;
     onValidate?: UpdateDogFormValidationValues;
@@ -39709,9 +39709,9 @@ export default function CreateOwnerForm(props) {
               );
             }
           }
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -39894,7 +39894,7 @@ export declare type CreateOwnerFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
-    onSuccess?: (fields: CreateOwnerFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreateOwnerFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
     onValidate?: CreateOwnerFormValidationValues;
@@ -40254,9 +40254,9 @@ export default function UpdateOwnerForm(props) {
               })
             )
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -40442,7 +40442,7 @@ export declare type UpdateOwnerFormProps = React.PropsWithChildren<{
     id?: string;
     owner?: Owner;
     onSubmit?: (fields: UpdateOwnerFormInputValues) => UpdateOwnerFormInputValues;
-    onSuccess?: (fields: UpdateOwnerFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: UpdateOwnerFormInputValues, errorMessage: string) => void;
     onChange?: (fields: UpdateOwnerFormInputValues) => UpdateOwnerFormInputValues;
     onValidate?: UpdateOwnerFormValidationValues;
@@ -40766,9 +40766,9 @@ export default function CreateOwnerForm(props) {
               );
             }
           }
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -40951,7 +40951,7 @@ export declare type CreateOwnerFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
-    onSuccess?: (fields: CreateOwnerFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: CreateOwnerFormInputValues, errorMessage: string) => void;
     onChange?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
     onValidate?: CreateOwnerFormValidationValues;
@@ -41267,9 +41267,9 @@ export default function MyPostForm(props) {
               ? JSON.parse(modelFields.nonModelField)
               : modelFields.nonModelField,
           };
-          await DataStore.save(new Post(modelFieldsToSave));
+          const result = await DataStore.save(new Post(modelFieldsToSave));
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -41612,7 +41612,7 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onSuccess?: (fields: MyPostFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
@@ -41951,9 +41951,9 @@ export default function TagCreateForm(props) {
               return promises;
             }, [])
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -42214,7 +42214,7 @@ export declare type TagCreateFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: TagCreateFormInputValues) => TagCreateFormInputValues;
-    onSuccess?: (fields: TagCreateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: TagCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: TagCreateFormInputValues) => TagCreateFormInputValues;
@@ -42529,9 +42529,9 @@ export default function MyMemberForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(new Member(modelFields));
+          const result = await DataStore.save(new Member(modelFields));
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -42806,7 +42806,7 @@ export declare type MyMemberFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: MyMemberFormInputValues) => MyMemberFormInputValues;
-    onSuccess?: (fields: MyMemberFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MyMemberFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyMemberFormInputValues) => MyMemberFormInputValues;
@@ -43127,9 +43127,9 @@ export default function SchoolCreateForm(props) {
               return promises;
             }, [])
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -43323,7 +43323,7 @@ export declare type SchoolCreateFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: SchoolCreateFormInputValues) => SchoolCreateFormInputValues;
-    onSuccess?: (fields: SchoolCreateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: SchoolCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: SchoolCreateFormInputValues) => SchoolCreateFormInputValues;
@@ -43631,9 +43631,9 @@ export default function BookCreateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(new Book(modelFields));
+          const result = await DataStore.save(new Book(modelFields));
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -43833,7 +43833,7 @@ export declare type BookCreateFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
-    onSuccess?: (fields: BookCreateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: BookCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
@@ -44172,9 +44172,9 @@ export default function TagCreateForm(props) {
               return promises;
             }, [])
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -44435,7 +44435,7 @@ export declare type TagCreateFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: TagCreateFormInputValues) => TagCreateFormInputValues;
-    onSuccess?: (fields: TagCreateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: TagCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: TagCreateFormInputValues) => TagCreateFormInputValues;
@@ -44768,9 +44768,9 @@ export default function BookCreateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(new Book(modelFields));
+          const result = await DataStore.save(new Book(modelFields));
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -45054,7 +45054,7 @@ export declare type BookCreateFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
-    onSuccess?: (fields: BookCreateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: BookCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
@@ -45406,13 +45406,13 @@ export default function MyPostForm(props) {
               ? JSON.parse(modelFields.nonModelField)
               : modelFields.nonModelField,
           };
-          await DataStore.save(
+          const result = await DataStore.save(
             Post.copyOf(postRecord, (updated) => {
               Object.assign(updated, modelFieldsToSave);
             })
           );
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -45839,7 +45839,7 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
     id?: string;
     post?: Post;
     onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onSuccess?: (fields: MyPostFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
@@ -46214,9 +46214,9 @@ export default function SchoolUpdateForm(props) {
               })
             )
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -46412,7 +46412,7 @@ export declare type SchoolUpdateFormProps = React.PropsWithChildren<{
     id?: string;
     school?: School;
     onSubmit?: (fields: SchoolUpdateFormInputValues) => SchoolUpdateFormInputValues;
-    onSuccess?: (fields: SchoolUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: SchoolUpdateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: SchoolUpdateFormInputValues) => SchoolUpdateFormInputValues;
@@ -46792,9 +46792,9 @@ export default function SchoolUpdateForm(props) {
               })
             )
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -47035,7 +47035,7 @@ export declare type SchoolUpdateFormProps = React.PropsWithChildren<{
     id?: string;
     school?: School;
     onSubmit?: (fields: SchoolUpdateFormInputValues) => SchoolUpdateFormInputValues;
-    onSuccess?: (fields: SchoolUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: SchoolUpdateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: SchoolUpdateFormInputValues) => SchoolUpdateFormInputValues;
@@ -47369,7 +47369,7 @@ export default function MyMemberForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(
+          const result = await DataStore.save(
             Member.copyOf(memberRecord, (updated) => {
               Object.assign(updated, modelFields);
               if (!modelFields.Team) {
@@ -47378,7 +47378,7 @@ export default function MyMemberForm(props) {
             })
           );
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -47657,7 +47657,7 @@ export declare type MyMemberFormProps = React.PropsWithChildren<{
     id?: string;
     member?: Member;
     onSubmit?: (fields: MyMemberFormInputValues) => MyMemberFormInputValues;
-    onSuccess?: (fields: MyMemberFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MyMemberFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyMemberFormInputValues) => MyMemberFormInputValues;
@@ -48078,9 +48078,9 @@ export default function TagUpdateForm(props) {
               })
             )
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -48343,7 +48343,7 @@ export declare type TagUpdateFormProps = React.PropsWithChildren<{
     id?: string;
     tag?: Tag;
     onSubmit?: (fields: TagUpdateFormInputValues) => TagUpdateFormInputValues;
-    onSuccess?: (fields: TagUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: TagUpdateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: TagUpdateFormInputValues) => TagUpdateFormInputValues;
@@ -48647,9 +48647,9 @@ export default function MyFlexCreateForm(props) {
             tags: modelFields.tags,
             profile_url: modelFields.profile_url,
           };
-          await DataStore.save(new Flex0(modelFieldsToSave));
+          const result = await DataStore.save(new Flex0(modelFieldsToSave));
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -48942,7 +48942,7 @@ export declare type MyFlexCreateFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: MyFlexCreateFormInputValues) => MyFlexCreateFormInputValues;
-    onSuccess?: (fields: MyFlexCreateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MyFlexCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyFlexCreateFormInputValues) => MyFlexCreateFormInputValues;
@@ -49245,9 +49245,9 @@ export default function BlogCreateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(new Blog(modelFields));
+          const result = await DataStore.save(new Blog(modelFields));
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -49506,7 +49506,7 @@ export declare type BlogCreateFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: BlogCreateFormInputValues) => BlogCreateFormInputValues;
-    onSuccess?: (fields: BlogCreateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: BlogCreateFormInputValues, errorMessage: string) => void;
     onChange?: (fields: BlogCreateFormInputValues) => BlogCreateFormInputValues;
     onValidate?: BlogCreateFormValidationValues;
@@ -49855,9 +49855,9 @@ export default function InputGalleryCreateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(new InputGallery(modelFields));
+          const result = await DataStore.save(new InputGallery(modelFields));
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -50503,7 +50503,7 @@ export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: InputGalleryCreateFormInputValues) => InputGalleryCreateFormInputValues;
-    onSuccess?: (fields: InputGalleryCreateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: InputGalleryCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: InputGalleryCreateFormInputValues) => InputGalleryCreateFormInputValues;
@@ -50852,13 +50852,13 @@ export default function InputGalleryUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(
+          const result = await DataStore.save(
             InputGallery.copyOf(inputGalleryRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -51424,7 +51424,7 @@ export declare type InputGalleryUpdateFormProps = React.PropsWithChildren<{
     id?: string;
     inputGallery?: InputGallery;
     onSubmit?: (fields: InputGalleryUpdateFormInputValues) => InputGalleryUpdateFormInputValues;
-    onSuccess?: (fields: InputGalleryUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: InputGalleryUpdateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: InputGalleryUpdateFormInputValues) => InputGalleryUpdateFormInputValues;
@@ -51750,13 +51750,13 @@ export default function MyFlexUpdateForm(props) {
             tags: modelFields.tags,
             profile_url: modelFields.profile_url,
           };
-          await DataStore.save(
+          const result = await DataStore.save(
             Flex0.copyOf(flexRecord, (updated) => {
               Object.assign(updated, modelFieldsToSave);
             })
           );
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -52106,7 +52106,7 @@ export declare type MyFlexUpdateFormProps = React.PropsWithChildren<{
     id?: string;
     flex?: Flex0;
     onSubmit?: (fields: MyFlexUpdateFormInputValues) => MyFlexUpdateFormInputValues;
-    onSuccess?: (fields: MyFlexUpdateFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MyFlexUpdateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyFlexUpdateFormInputValues) => MyFlexUpdateFormInputValues;
@@ -52435,9 +52435,9 @@ export default function PostCreateFormRow(props) {
               ? JSON.parse(modelFields.nonModelField)
               : modelFields.nonModelField,
           };
-          await DataStore.save(new Post(modelFieldsToSave));
+          const result = await DataStore.save(new Post(modelFieldsToSave));
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -52832,7 +52832,7 @@ export declare type PostCreateFormRowProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: PostCreateFormRowInputValues) => PostCreateFormRowInputValues;
-    onSuccess?: (fields: PostCreateFormRowInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: PostCreateFormRowInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: PostCreateFormRowInputValues) => PostCreateFormRowInputValues;
@@ -53147,9 +53147,9 @@ export default function MyMemberForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(new Member(modelFields));
+          const result = await DataStore.save(new Member(modelFields));
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -53424,7 +53424,7 @@ export declare type MyMemberFormProps = React.PropsWithChildren<{
 } & {
     clearOnSuccess?: boolean;
     onSubmit?: (fields: MyMemberFormInputValues) => MyMemberFormInputValues;
-    onSuccess?: (fields: MyMemberFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: MyMemberFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyMemberFormInputValues) => MyMemberFormInputValues;
@@ -53532,9 +53532,9 @@ export default function CreateProductForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(new Product(modelFields));
+          const result = await DataStore.save(new Product(modelFields));
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
           if (clearOnSuccess) {
             resetStateValues();
@@ -53764,13 +53764,13 @@ export default function UpdateProductForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(
+          const result = await DataStore.save(
             Product.copyOf(productRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -53929,7 +53929,7 @@ export declare type UpdateProductFormProps = React.PropsWithChildren<{
     id?: string;
     product?: Product;
     onSubmit?: (fields: UpdateProductFormInputValues) => UpdateProductFormInputValues;
-    onSuccess?: (fields: UpdateProductFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: UpdateProductFormInputValues, errorMessage: string) => void;
     onChange?: (fields: UpdateProductFormInputValues) => UpdateProductFormInputValues;
     onValidate?: UpdateProductFormValidationValues;
@@ -54053,13 +54053,13 @@ export default function UpdateProductForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(
+          const result = await DataStore.save(
             Product.copyOf(productRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -54903,7 +54903,7 @@ export default function UpdateCarForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(
+          const result = await DataStore.save(
             Car.copyOf(carRecord, (updated) => {
               Object.assign(updated, modelFields);
               if (!modelFields.dealership) {
@@ -54912,7 +54912,7 @@ export default function UpdateCarForm(props) {
             })
           );
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -55102,7 +55102,7 @@ export declare type UpdateCarFormProps = React.PropsWithChildren<{
     id?: string;
     car?: Car;
     onSubmit?: (fields: UpdateCarFormInputValues) => UpdateCarFormInputValues;
-    onSuccess?: (fields: UpdateCarFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: UpdateCarFormInputValues, errorMessage: string) => void;
     onChange?: (fields: UpdateCarFormInputValues) => UpdateCarFormInputValues;
     onValidate?: UpdateCarFormValidationValues;
@@ -55475,9 +55475,9 @@ export default function UpdateDealershipForm(props) {
               })
             )
           );
-          await Promise.all(promises);
+          const result = await Promise.all(promises);
           if (onSuccess) {
-            onSuccess(modelFields);
+            onSuccess(result);
           }
         } catch (err) {
           if (onError) {
@@ -55661,7 +55661,7 @@ export declare type UpdateDealershipFormProps = React.PropsWithChildren<{
     id?: string;
     dealership?: Dealership;
     onSubmit?: (fields: UpdateDealershipFormInputValues) => UpdateDealershipFormInputValues;
-    onSuccess?: (fields: UpdateDealershipFormInputValues) => void;
+    onSuccess?: (result: any) => void;
     onError?: (fields: UpdateDealershipFormInputValues, errorMessage: string) => void;
     onChange?: (fields: UpdateDealershipFormInputValues) => UpdateDealershipFormInputValues;
     onValidate?: UpdateDealershipFormValidationValues;

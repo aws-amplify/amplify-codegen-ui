@@ -289,7 +289,7 @@ export const validationFunctionType = factory.createTypeAliasDeclaration(
     both datastore & custom datasource has onSubmit with the fields
     - onSubmit(fields)
     datastore includes additional hooks
-    - onSuccess(fields)
+    - onSuccess(result)
     - onError(fields, errorMessage)
    */
 export const buildFormPropNode = (
@@ -361,9 +361,9 @@ export const buildFormPropNode = (
               undefined,
               undefined,
               undefined,
-              factory.createIdentifier('fields'),
+              factory.createIdentifier('result'),
               undefined,
-              factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
+              factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
               undefined,
             ),
           ],
