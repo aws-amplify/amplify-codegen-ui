@@ -15,7 +15,7 @@
  */
 import { StudioComponentChild } from '@aws-amplify/codegen-ui';
 import { JsxChild, JsxElement, factory } from 'typescript';
-import { isAliased } from '../helpers';
+import { isAliased, removeAlias } from '../helpers';
 import { ReactComponentRenderer } from '../react-component-renderer';
 
 export default class CustomComponentRenderer<TPropIn> extends ReactComponentRenderer<TPropIn> {
@@ -29,8 +29,8 @@ export default class CustomComponentRenderer<TPropIn> extends ReactComponentRend
 
     if (isAliased(this.component.componentType)) {
       this.importCollection.addImport(
-        `./${this.component.name}`,
-        `${this.component.name} as ${this.component.componentType}`,
+        `./${removeAlias(this.component.componentType)}`,
+        `${removeAlias(this.component.componentType)} as ${this.component.componentType}`,
       );
     } else {
       this.importCollection.addImport(`./${this.component.componentType}`, 'default');
