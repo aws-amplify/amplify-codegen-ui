@@ -371,6 +371,16 @@ describe('amplify render tests', () => {
     });
   });
 
+  describe('component referencing an aliased component', () => {
+    it('should have an import statement referencing non-aliased source path and name for custom component', () => {
+      const { componentText } = generateWithAmplifyRenderer('components/footerWithCustomButton');
+      expect(componentText).toContain('import { Button as ButtonCustom, ButtonProps } from "./Button";');
+      expect(componentText).not.toContain('import { Button16 as ButtonCustom } from "./Button16";');
+      expect(componentText).not.toContain('import { Button18 as ButtonCustom } from "./Button18";');
+      expect(componentText).not.toContain('import { Button110 as ButtonCustom } from "./Button110";');
+    });
+  });
+
   describe('custom render config', () => {
     it('should render ES5', () => {
       expect(

@@ -1,0 +1,180 @@
+{
+  "bindingProperties" : { },
+  "children" : [ {
+    "children" : [ ],
+    "componentType" : "ButtonCustom",
+    "events" : { },
+    "name" : "Button16",
+    "properties" : {
+      "width" : {
+        "value" : "101px"
+      },
+      "height" : {
+        "value" : "31px"
+      },
+      "display" : {
+        "value" : "block"
+      },
+      "gap" : {
+        "value" : "unset"
+      },
+      "alignItems" : {
+        "value" : "unset"
+      },
+      "justifyContent" : {
+        "value" : "unset"
+      },
+      "overflow" : {
+        "value" : "hidden"
+      },
+      "shrink" : {
+        "value" : "0"
+      },
+      "position" : {
+        "value" : "relative"
+      },
+      "borderRadius" : {
+        "value" : "5px"
+      },
+      "padding" : {
+        "value" : "0px 0px 0px 0px"
+      },
+      "backgroundColor" : {
+        "value" : "rgba(218,228,253,1)"
+      }
+    },
+    "sourceId" : "1:6"
+  }, {
+    "children" : [ ],
+    "componentType" : "ButtonCustom",
+    "events" : { },
+    "name" : "Button18",
+    "properties" : {
+      "width" : {
+        "value" : "101px"
+      },
+      "height" : {
+        "value" : "31px"
+      },
+      "display" : {
+        "value" : "block"
+      },
+      "gap" : {
+        "value" : "unset"
+      },
+      "alignItems" : {
+        "value" : "unset"
+      },
+      "justifyContent" : {
+        "value" : "unset"
+      },
+      "overflow" : {
+        "value" : "hidden"
+      },
+      "shrink" : {
+        "value" : "0"
+      },
+      "position" : {
+        "value" : "relative"
+      },
+      "borderRadius" : {
+        "value" : "5px"
+      },
+      "padding" : {
+        "value" : "0px 0px 0px 0px"
+      },
+      "backgroundColor" : {
+        "value" : "rgba(218,228,253,1)"
+      }
+    },
+    "sourceId" : "1:8"
+  }, {
+    "children" : [ ],
+    "componentType" : "ButtonCustom",
+    "events" : { },
+    "name" : "Button110",
+    "properties" : {
+      "width" : {
+        "value" : "101px"
+      },
+      "height" : {
+        "value" : "31px"
+      },
+      "display" : {
+        "value" : "block"
+      },
+      "gap" : {
+        "value" : "unset"
+      },
+      "alignItems" : {
+        "value" : "unset"
+      },
+      "justifyContent" : {
+        "value" : "unset"
+      },
+      "overflow" : {
+        "value" : "hidden"
+      },
+      "shrink" : {
+        "value" : "0"
+      },
+      "position" : {
+        "value" : "relative"
+      },
+      "borderRadius" : {
+        "value" : "5px"
+      },
+      "padding" : {
+        "value" : "0px 0px 0px 0px"
+      },
+      "backgroundColor" : {
+        "value" : "rgba(218,228,253,1)"
+      }
+    },
+    "sourceId" : "1:10"
+  } ],
+  "componentType" : "Flex",
+  "events" : { },
+  "name" : "Footer",
+  "overrides" : { },
+  "properties" : {
+    "gap" : {
+      "value" : "10px"
+    },
+    "direction" : {
+      "value" : "row"
+    },
+    "width" : {
+      "value" : "unset"
+    },
+    "height" : {
+      "value" : "unset"
+    },
+    "justifyContent" : {
+      "value" : "flex-start"
+    },
+    "alignItems" : {
+      "value" : "flex-start"
+    },
+    "overflow" : {
+      "value" : "hidden"
+    },
+    "position" : {
+      "value" : "relative"
+    },
+    "padding" : {
+      "value" : "0px 2px 0px 2px"
+    },
+    "backgroundColor" : {
+      "value" : "rgba(255,255,255,1)"
+    }
+  },
+  "schemaVersion" : "1.0",
+  "sourceId" : "1:12",
+  "variants" : [ ],
+  "id" : "c-ap7piTnlNFRQAVJgxR",
+  "appId" : "d2aj06xxzdz14r",
+  "environmentName" : "staging",
+  "createdAt" : "2024-02-02T23:27:00.983Z",
+  "modifiedAt" : "2024-02-02T23:27:00.983Z"
+}
