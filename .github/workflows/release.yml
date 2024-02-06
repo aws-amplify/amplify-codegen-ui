@@ -24,7 +24,7 @@ jobs:
           COMMIT_MESSAGE: ${{github.event.head_commit.message}}
         run: |
           version_number=$(echo "$COMMIT_MESSAGE" | sed -n "s/.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p")
-          echo "::set-output name=version_number::$version_number"
+          echo "version_number=$version_number" >> "$GITHUB_OUTPUT"
       - name: Get Release Description
         run: npx -y changelog-parser CHANGELOG.md | jq -r '.versions[0].body' > release_description.md
       - name: Create Release
