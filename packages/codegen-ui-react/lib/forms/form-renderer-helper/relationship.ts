@@ -1233,11 +1233,13 @@ export const buildGetRelationshipModels = (
                             factory.createParenthesizedExpression(
                               factory.createAwaitExpression(
                                 factory.createCallExpression(
-                                  factory.createPropertyAccessExpression(
-                                    factory.createPropertyAccessExpression(
+                                  factory.createPropertyAccessChain(
+                                    factory.createPropertyAccessChain(
                                       factory.createIdentifier('record'),
+                                      factory.createToken(SyntaxKind.QuestionDotToken),
                                       factory.createIdentifier(fieldName),
                                     ),
+                                    factory.createToken(SyntaxKind.QuestionDotToken),
                                     factory.createIdentifier('toArray'),
                                   ),
                                   undefined,
@@ -1309,8 +1311,13 @@ export const buildGetRelationshipModels = (
                     factory.createToken(SyntaxKind.QuestionToken),
                     factory.createAwaitExpression(
                       factory.createCallExpression(
-                        factory.createPropertyAccessExpression(
-                          factory.createPropertyAccessExpression(recordIdentifier, factory.createIdentifier(fieldName)),
+                        factory.createPropertyAccessChain(
+                          factory.createPropertyAccessChain(
+                            recordIdentifier,
+                            factory.createToken(SyntaxKind.QuestionDotToken),
+                            factory.createIdentifier(fieldName),
+                          ),
+                          factory.createToken(SyntaxKind.QuestionDotToken),
                           factory.createIdentifier('toArray'),
                         ),
                         undefined,
