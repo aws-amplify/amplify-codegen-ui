@@ -378,13 +378,27 @@ export const buildExpression = (
     );
   }
 
-  const resolvePromisesStatement = factory.createExpressionStatement(
-    factory.createAwaitExpression(
-      factory.createCallExpression(
-        factory.createPropertyAccessExpression(factory.createIdentifier('Promise'), factory.createIdentifier('all')),
-        undefined,
-        [factory.createIdentifier('promises')],
-      ),
+  const resolvePromisesStatement = factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier('result'),
+          undefined,
+          undefined,
+          factory.createAwaitExpression(
+            factory.createCallExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier('Promise'),
+                factory.createIdentifier('all'),
+              ),
+              undefined,
+              [factory.createIdentifier('promises')],
+            ),
+          ),
+        ),
+      ],
+      NodeFlags.Const,
     ),
   );
 
@@ -415,7 +429,22 @@ export const buildExpression = (
           ),
           resolvePromisesStatement,
         ]
-      : [factory.createExpressionStatement(factory.createAwaitExpression(recordUpdateDataStoreCallExpression))];
+      : [
+          factory.createVariableStatement(
+            undefined,
+            factory.createVariableDeclarationList(
+              [
+                factory.createVariableDeclaration(
+                  factory.createIdentifier('result'),
+                  undefined,
+                  undefined,
+                  factory.createAwaitExpression(recordUpdateDataStoreCallExpression),
+                ),
+              ],
+              NodeFlags.Const,
+            ),
+          ),
+        ];
 
     return [...relationshipsPromisesAccessStatements, ...modelObjectToSaveStatements, ...genericUpdateStatement];
   }
@@ -456,7 +485,22 @@ export const buildExpression = (
           ),
         ),
       ]
-    : [factory.createExpressionStatement(factory.createAwaitExpression(recordCreateCallExpression))];
+    : [
+        factory.createVariableStatement(
+          undefined,
+          factory.createVariableDeclarationList(
+            [
+              factory.createVariableDeclaration(
+                factory.createIdentifier('result'),
+                undefined,
+                undefined,
+                factory.createAwaitExpression(recordCreateCallExpression),
+              ),
+            ],
+            NodeFlags.Const,
+          ),
+        ),
+      ];
   const createStatements = [
     ...modelObjectToSaveStatements,
     ...genericCreateStatement,
