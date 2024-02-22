@@ -228,7 +228,7 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('const studentRecords = useDataStoreBinding({');
 
       // check lazy load linked data
-      expect(componentText).toContain('const linkedStudents = record ? await record?.Students?.toArray() : [];');
+      expect(componentText).toContain('(record && (await record.Students?.toArray())) || [];');
 
       // check custom display value is set
       expect(componentText).toContain('Students: (r) => r?.name');
@@ -257,7 +257,7 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('const studentRecords = useDataStoreBinding({');
 
       // check lazy load linked data
-      expect(componentText).toContain('const linkedStudent = record ? await record?.Student?.toArray() : [];');
+      expect(componentText).toContain('const linkedStudent = (record && (await record.Student?.toArray())) || [];');
 
       // check custom display value is set
       expect(componentText).toContain('Student: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,');

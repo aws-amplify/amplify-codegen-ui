@@ -1306,25 +1306,26 @@ export const buildGetRelationshipModels = (
               undefined,
               dataApi === 'GraphQL'
                 ? graphqlLinkedRecordsFallback(fieldName)
-                : factory.createConditionalExpression(
-                    recordIdentifier,
-                    factory.createToken(SyntaxKind.QuestionToken),
-                    factory.createAwaitExpression(
-                      factory.createCallExpression(
-                        factory.createPropertyAccessChain(
+                : factory.createBinaryExpression(
+                    factory.createBinaryExpression(
+                      recordIdentifier,
+                      factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+                      factory.createAwaitExpression(
+                        factory.createCallExpression(
                           factory.createPropertyAccessChain(
-                            recordIdentifier,
+                            factory.createPropertyAccessExpression(
+                              recordIdentifier,
+                              factory.createIdentifier(fieldName),
+                            ),
                             factory.createToken(SyntaxKind.QuestionDotToken),
-                            factory.createIdentifier(fieldName),
+                            factory.createIdentifier('toArray'),
                           ),
-                          factory.createToken(SyntaxKind.QuestionDotToken),
-                          factory.createIdentifier('toArray'),
+                          undefined,
+                          [],
                         ),
-                        undefined,
-                        [],
                       ),
                     ),
-                    factory.createToken(SyntaxKind.ColonToken),
+                    factory.createToken(SyntaxKind.BarBarToken),
                     factory.createArrayLiteralExpression([], false),
                   ),
             ),
