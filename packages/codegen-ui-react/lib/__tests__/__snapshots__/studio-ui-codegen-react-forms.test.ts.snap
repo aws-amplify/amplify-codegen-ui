@@ -32764,11 +32764,11 @@ export default function UpdateCompositeDogForm(props) {
       setLinkedCompositeToys(linkedCompositeToys);
       const linkedCompositeVets = record
         ? await Promise.all(
-            (
-              await record?.CompositeVets?.toArray()
-            ).map((r) => {
-              return r.compositeVet;
-            })
+            ((record && (await record.CompositeVets?.toArray())) || []).map(
+              (r) => {
+                return r.compositeVet;
+              }
+            )
           )
         : [];
       setLinkedCompositeVets(linkedCompositeVets);
@@ -33887,11 +33887,11 @@ export default function UpdateCPKTeacherForm(props) {
       setCPKStudent(CPKStudentRecord);
       const linkedCPKClasses = record
         ? await Promise.all(
-            (
-              await record?.CPKClasses?.toArray()
-            ).map((r) => {
-              return r.cpkClass;
-            })
+            ((record && (await record.CPKClasses?.toArray())) || []).map(
+              (r) => {
+                return r.cpkClass;
+              }
+            )
           )
         : [];
       setLinkedCPKClasses(linkedCPKClasses);
@@ -37260,11 +37260,11 @@ export default function UpdateCompositeDogForm(props) {
       setLinkedCompositeToys(linkedCompositeToys);
       const linkedCompositeVets = record
         ? await Promise.all(
-            (
-              await record?.CompositeVets?.toArray()
-            ).map((r) => {
-              return r.compositeVet;
-            })
+            ((record && (await record.CompositeVets?.toArray())) || []).map(
+              (r) => {
+                return r.compositeVet;
+              }
+            )
           )
         : [];
       setLinkedCompositeVets(linkedCompositeVets);
@@ -47889,9 +47889,7 @@ export default function TagUpdateForm(props) {
       setTagRecord(record);
       const linkedPosts = record
         ? await Promise.all(
-            (
-              await record?.Posts?.toArray()
-            ).map((r) => {
+            ((record && (await record.Posts?.toArray())) || []).map((r) => {
               return r.post;
             })
           )

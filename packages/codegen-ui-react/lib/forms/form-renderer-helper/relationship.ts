@@ -1231,20 +1231,28 @@ export const buildGetRelationshipModels = (
                         factory.createCallExpression(
                           factory.createPropertyAccessExpression(
                             factory.createParenthesizedExpression(
-                              factory.createAwaitExpression(
-                                factory.createCallExpression(
-                                  factory.createPropertyAccessChain(
-                                    factory.createPropertyAccessChain(
-                                      factory.createIdentifier('record'),
-                                      factory.createToken(SyntaxKind.QuestionDotToken),
-                                      factory.createIdentifier(fieldName),
+                              factory.createBinaryExpression(
+                                factory.createBinaryExpression(
+                                  factory.createIdentifier('record'),
+                                  factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+                                  factory.createAwaitExpression(
+                                    factory.createCallChain(
+                                      factory.createPropertyAccessChain(
+                                        factory.createPropertyAccessExpression(
+                                          factory.createIdentifier('record'),
+                                          factory.createIdentifier(fieldName),
+                                        ),
+                                        factory.createToken(SyntaxKind.QuestionDotToken),
+                                        factory.createIdentifier('toArray'),
+                                      ),
+                                      undefined,
+                                      undefined,
+                                      [],
                                     ),
-                                    factory.createToken(SyntaxKind.QuestionDotToken),
-                                    factory.createIdentifier('toArray'),
                                   ),
-                                  undefined,
-                                  [],
                                 ),
+                                factory.createToken(SyntaxKind.BarBarToken),
+                                factory.createArrayLiteralExpression([], false),
                               ),
                             ),
                             factory.createIdentifier('map'),
