@@ -32764,11 +32764,9 @@ export default function UpdateCompositeDogForm(props) {
       setLinkedCompositeToys(linkedCompositeToys);
       const linkedCompositeVets = record
         ? await Promise.all(
-            ((record && (await record.CompositeVets?.toArray())) || []).map(
-              (r) => {
-                return r.compositeVet;
-              }
-            )
+            ((await record.CompositeVets?.toArray()) || []).map((r) => {
+              return r.compositeVet;
+            })
           )
         : [];
       setLinkedCompositeVets(linkedCompositeVets);
@@ -33887,11 +33885,9 @@ export default function UpdateCPKTeacherForm(props) {
       setCPKStudent(CPKStudentRecord);
       const linkedCPKClasses = record
         ? await Promise.all(
-            ((record && (await record.CPKClasses?.toArray())) || []).map(
-              (r) => {
-                return r.cpkClass;
-              }
-            )
+            ((await record.CPKClasses?.toArray()) || []).map((r) => {
+              return r.cpkClass;
+            })
           )
         : [];
       setLinkedCPKClasses(linkedCPKClasses);
@@ -37260,11 +37256,9 @@ export default function UpdateCompositeDogForm(props) {
       setLinkedCompositeToys(linkedCompositeToys);
       const linkedCompositeVets = record
         ? await Promise.all(
-            ((record && (await record.CompositeVets?.toArray())) || []).map(
-              (r) => {
-                return r.compositeVet;
-              }
-            )
+            ((await record.CompositeVets?.toArray()) || []).map((r) => {
+              return r.compositeVet;
+            })
           )
         : [];
       setLinkedCompositeVets(linkedCompositeVets);
@@ -47889,7 +47883,7 @@ export default function TagUpdateForm(props) {
       setTagRecord(record);
       const linkedPosts = record
         ? await Promise.all(
-            ((record && (await record.Posts?.toArray())) || []).map((r) => {
+            ((await record.Posts?.toArray()) || []).map((r) => {
               return r.post;
             })
           )

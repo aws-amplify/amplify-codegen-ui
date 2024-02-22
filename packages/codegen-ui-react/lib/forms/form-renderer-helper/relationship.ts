@@ -1232,23 +1232,19 @@ export const buildGetRelationshipModels = (
                           factory.createPropertyAccessExpression(
                             factory.createParenthesizedExpression(
                               factory.createBinaryExpression(
-                                factory.createBinaryExpression(
-                                  factory.createIdentifier('record'),
-                                  factory.createToken(SyntaxKind.AmpersandAmpersandToken),
-                                  factory.createAwaitExpression(
-                                    factory.createCallChain(
-                                      factory.createPropertyAccessChain(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('record'),
-                                          factory.createIdentifier(fieldName),
-                                        ),
-                                        factory.createToken(SyntaxKind.QuestionDotToken),
-                                        factory.createIdentifier('toArray'),
+                                factory.createAwaitExpression(
+                                  factory.createCallChain(
+                                    factory.createPropertyAccessChain(
+                                      factory.createPropertyAccessExpression(
+                                        factory.createIdentifier('record'),
+                                        factory.createIdentifier(fieldName),
                                       ),
-                                      undefined,
-                                      undefined,
-                                      [],
+                                      factory.createToken(SyntaxKind.QuestionDotToken),
+                                      factory.createIdentifier('toArray'),
                                     ),
+                                    undefined,
+                                    undefined,
+                                    [],
                                   ),
                                 ),
                                 factory.createToken(SyntaxKind.BarBarToken),
