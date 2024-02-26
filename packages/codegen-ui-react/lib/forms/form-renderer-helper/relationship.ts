@@ -1231,18 +1231,24 @@ export const buildGetRelationshipModels = (
                         factory.createCallExpression(
                           factory.createPropertyAccessExpression(
                             factory.createParenthesizedExpression(
-                              factory.createAwaitExpression(
-                                factory.createCallExpression(
-                                  factory.createPropertyAccessExpression(
-                                    factory.createPropertyAccessExpression(
-                                      factory.createIdentifier('record'),
-                                      factory.createIdentifier(fieldName),
+                              factory.createBinaryExpression(
+                                factory.createAwaitExpression(
+                                  factory.createCallChain(
+                                    factory.createPropertyAccessChain(
+                                      factory.createPropertyAccessExpression(
+                                        factory.createIdentifier('record'),
+                                        factory.createIdentifier(fieldName),
+                                      ),
+                                      factory.createToken(SyntaxKind.QuestionDotToken),
+                                      factory.createIdentifier('toArray'),
                                     ),
-                                    factory.createIdentifier('toArray'),
+                                    undefined,
+                                    undefined,
+                                    [],
                                   ),
-                                  undefined,
-                                  [],
                                 ),
+                                factory.createToken(SyntaxKind.BarBarToken),
+                                factory.createArrayLiteralExpression([], false),
                               ),
                             ),
                             factory.createIdentifier('map'),
@@ -1304,20 +1310,26 @@ export const buildGetRelationshipModels = (
               undefined,
               dataApi === 'GraphQL'
                 ? graphqlLinkedRecordsFallback(fieldName)
-                : factory.createConditionalExpression(
-                    recordIdentifier,
-                    factory.createToken(SyntaxKind.QuestionToken),
-                    factory.createAwaitExpression(
-                      factory.createCallExpression(
-                        factory.createPropertyAccessExpression(
-                          factory.createPropertyAccessExpression(recordIdentifier, factory.createIdentifier(fieldName)),
-                          factory.createIdentifier('toArray'),
+                : factory.createBinaryExpression(
+                    factory.createBinaryExpression(
+                      recordIdentifier,
+                      factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+                      factory.createAwaitExpression(
+                        factory.createCallExpression(
+                          factory.createPropertyAccessChain(
+                            factory.createPropertyAccessExpression(
+                              recordIdentifier,
+                              factory.createIdentifier(fieldName),
+                            ),
+                            factory.createToken(SyntaxKind.QuestionDotToken),
+                            factory.createIdentifier('toArray'),
+                          ),
+                          undefined,
+                          [],
                         ),
-                        undefined,
-                        [],
                       ),
                     ),
-                    factory.createToken(SyntaxKind.ColonToken),
+                    factory.createToken(SyntaxKind.BarBarToken),
                     factory.createArrayLiteralExpression([], false),
                   ),
             ),

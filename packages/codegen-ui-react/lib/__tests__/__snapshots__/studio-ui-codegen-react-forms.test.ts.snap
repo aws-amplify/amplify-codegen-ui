@@ -32139,7 +32139,8 @@ export default function UpdateOrgForm(props) {
     const queryData = async () => {
       const record = idProp ? await DataStore.query(Org, idProp) : orgModelProp;
       setOrgRecord(record);
-      const linkedComments = record ? await record.comments.toArray() : [];
+      const linkedComments =
+        (record && (await record.comments?.toArray())) || [];
       setLinkedComments(linkedComments);
     };
     queryData();
@@ -32758,15 +32759,12 @@ export default function UpdateCompositeDogForm(props) {
         ? await record.CompositeOwner
         : undefined;
       setCompositeOwner(CompositeOwnerRecord);
-      const linkedCompositeToys = record
-        ? await record.CompositeToys.toArray()
-        : [];
+      const linkedCompositeToys =
+        (record && (await record.CompositeToys?.toArray())) || [];
       setLinkedCompositeToys(linkedCompositeToys);
       const linkedCompositeVets = record
         ? await Promise.all(
-            (
-              await record.CompositeVets.toArray()
-            ).map((r) => {
+            ((await record.CompositeVets?.toArray()) || []).map((r) => {
               return r.compositeVet;
             })
           )
@@ -33887,17 +33885,14 @@ export default function UpdateCPKTeacherForm(props) {
       setCPKStudent(CPKStudentRecord);
       const linkedCPKClasses = record
         ? await Promise.all(
-            (
-              await record.CPKClasses.toArray()
-            ).map((r) => {
+            ((await record.CPKClasses?.toArray()) || []).map((r) => {
               return r.cpkClass;
             })
           )
         : [];
       setLinkedCPKClasses(linkedCPKClasses);
-      const linkedCPKProjects = record
-        ? await record.CPKProjects.toArray()
-        : [];
+      const linkedCPKProjects =
+        (record && (await record.CPKProjects?.toArray())) || [];
       setLinkedCPKProjects(linkedCPKProjects);
     };
     queryData();
@@ -37256,15 +37251,12 @@ export default function UpdateCompositeDogForm(props) {
         ? await record.CompositeOwner
         : undefined;
       setCompositeOwner(CompositeOwnerRecord);
-      const linkedCompositeToys = record
-        ? await record.CompositeToys.toArray()
-        : [];
+      const linkedCompositeToys =
+        (record && (await record.CompositeToys?.toArray())) || [];
       setLinkedCompositeToys(linkedCompositeToys);
       const linkedCompositeVets = record
         ? await Promise.all(
-            (
-              await record.CompositeVets.toArray()
-            ).map((r) => {
+            ((await record.CompositeVets?.toArray()) || []).map((r) => {
               return r.compositeVet;
             })
           )
@@ -46067,7 +46059,8 @@ export default function SchoolUpdateForm(props) {
         ? await DataStore.query(School, idProp)
         : schoolModelProp;
       setSchoolRecord(record);
-      const linkedStudents = record ? await record.Students.toArray() : [];
+      const linkedStudents =
+        (record && (await record.Students?.toArray())) || [];
       setLinkedStudents(linkedStudents);
     };
     queryData();
@@ -46643,7 +46636,7 @@ export default function SchoolUpdateForm(props) {
         ? await DataStore.query(School, idProp)
         : schoolModelProp;
       setSchoolRecord(record);
-      const linkedStudent = record ? await record.Student.toArray() : [];
+      const linkedStudent = (record && (await record.Student?.toArray())) || [];
       setLinkedStudent(linkedStudent);
     };
     queryData();
@@ -47890,9 +47883,7 @@ export default function TagUpdateForm(props) {
       setTagRecord(record);
       const linkedPosts = record
         ? await Promise.all(
-            (
-              await record.Posts.toArray()
-            ).map((r) => {
+            ((await record.Posts?.toArray()) || []).map((r) => {
               return r.post;
             })
           )
@@ -55329,7 +55320,7 @@ export default function UpdateDealershipForm(props) {
         ? await DataStore.query(Dealership, idProp)
         : dealershipModelProp;
       setDealershipRecord(record);
-      const linkedCars = record ? await record.cars.toArray() : [];
+      const linkedCars = (record && (await record.cars?.toArray())) || [];
       setLinkedCars(linkedCars);
     };
     queryData();
