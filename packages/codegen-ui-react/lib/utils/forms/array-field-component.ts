@@ -1077,6 +1077,26 @@ export const generateArrayFieldComponent = () => {
                                               [factory.createIdentifier('undefined')],
                                             ),
                                           ),
+                                          factory.createExpressionStatement(
+                                            factory.createCallExpression(
+                                              factory.createIdentifier('setErrors'),
+                                              undefined,
+                                              [
+                                                factory.createObjectLiteralExpression(
+                                                  [
+                                                    factory.createSpreadAssignment(factory.createIdentifier('errors')),
+                                                    factory.createPropertyAssignment(
+                                                      factory.createComputedPropertyName(
+                                                        factory.createIdentifier('fieldName'),
+                                                      ),
+                                                      factory.createIdentifier('undefined'),
+                                                    ),
+                                                  ],
+                                                  false,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ],
                                         true,
                                       ),
