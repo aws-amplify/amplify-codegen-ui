@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.20.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.20.0...v2.20.1) (2024-03-28)
+
+### Bug Fixes
+
+- use non-aliased name when importing custom components ([7d68d83](https://github.com/aws-amplify/amplify-codegen-ui/commit/7d68d83a1756606298b606b37b05d72a351da17c))
+
 # [2.20.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.19.4...v2.20.0) (2023-12-08)
 
 ### Bug Fixes
