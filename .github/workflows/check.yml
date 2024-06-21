@@ -28,7 +28,7 @@ jobs:
       - name: Setup Node.js LTS/gallium
         uses: actions/setup-node@v2
         with:
-          node-version: lts/gallium
+          node-version: lts
       - name: Build amplify-codegen-ui
         working-directory: amplify-codegen-ui
         run: |
