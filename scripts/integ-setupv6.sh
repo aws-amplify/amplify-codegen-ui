@@ -26,7 +26,7 @@ lerna add --no-ci --scope integration-test @aws-amplify/codegen-ui-react
 lerna add --no-ci --scope integration-test @aws-amplify/codegen-ui-test-generator
 lerna add --no-ci --scope integration-test react-router-dom
 lerna add --no-ci --scope integration-test @types/react-router-dom
-lerna add --no-ci --dev --scope integration-test cypress@12.14.0
+lerna add --no-ci --dev --scope integration-test cypress@13.0.0
 lerna add --no-ci --dev --scope integration-test @cypress/code-coverage
 lerna add --no-ci --dev --scope integration-test wait-on
 lerna add --no-ci --dev --scope integration-test istanbul-lib-report
