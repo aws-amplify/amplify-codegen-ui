@@ -20,7 +20,7 @@ call lerna add --scope integration-test @aws-amplify/codegen-ui-react
 call lerna add --scope integration-test @aws-amplify/codegen-ui-test-generator
 call lerna add --no-ci --scope integration-test react-router-dom
 call lerna add --no-ci --scope integration-test @types/react-router-dom
-call lerna add --no-ci --dev --scope integration-test cypress@12.14.0
+call lerna add --no-ci --dev --scope integration-test cypress@13.0.0
 call lerna add --no-ci --dev --scope integration-test wait-on
 call lerna add --no-ci --scope integration-test os-browserify
 call lerna add --no-ci --scope integration-test path-browserify
