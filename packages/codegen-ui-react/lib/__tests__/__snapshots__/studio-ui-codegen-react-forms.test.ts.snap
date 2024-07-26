@@ -187,8 +187,8 @@ export default function CreateOwnerForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    Dog: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    Dog: overrides.Dog && overrides.Dog.value ? overrides.Dog.value : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Dog, setDog] = React.useState(initialValues.Dog);
@@ -746,8 +746,8 @@ export default function CreateOwnerForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    Dog: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    Dog: overrides.Dog && overrides.Dog.value ? overrides.Dog.value : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Dog, setDog] = React.useState(initialValues.Dog);
@@ -1305,13 +1305,34 @@ export default function MyPostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    caption: \\"\\",
-    username: \\"\\",
-    post_url: \\"\\",
-    metadata: \\"\\",
-    profile_url: \\"\\",
-    nonModelField: \\"\\",
-    nonModelFieldArray: [],
+    caption:
+      overrides.caption && overrides.caption.value
+        ? overrides.caption.value
+        : \\"\\",
+    username:
+      overrides.username && overrides.username.value
+        ? overrides.username.value
+        : \\"\\",
+    post_url:
+      overrides.post_url && overrides.post_url.value
+        ? overrides.post_url.value
+        : \\"\\",
+    metadata:
+      overrides.metadata && overrides.metadata.value
+        ? overrides.metadata.value
+        : \\"\\",
+    profile_url:
+      overrides.profile_url && overrides.profile_url.value
+        ? overrides.profile_url.value
+        : \\"\\",
+    nonModelField:
+      overrides.nonModelField && overrides.nonModelField.value
+        ? overrides.nonModelField.value
+        : \\"\\",
+    nonModelFieldArray:
+      overrides.nonModelFieldArray && overrides.nonModelFieldArray.value
+        ? overrides.nonModelFieldArray.value
+        : [],
   };
   const [caption, setCaption] = React.useState(initialValues.caption);
   const [username, setUsername] = React.useState(initialValues.username);
@@ -1975,13 +1996,34 @@ export default function MyPostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    caption: \\"\\",
-    username: \\"\\",
-    post_url: \\"\\",
-    metadata: \\"\\",
-    profile_url: \\"\\",
-    nonModelField: \\"\\",
-    nonModelFieldArray: [],
+    caption:
+      overrides.caption && overrides.caption.value
+        ? overrides.caption.value
+        : \\"\\",
+    username:
+      overrides.username && overrides.username.value
+        ? overrides.username.value
+        : \\"\\",
+    post_url:
+      overrides.post_url && overrides.post_url.value
+        ? overrides.post_url.value
+        : \\"\\",
+    metadata:
+      overrides.metadata && overrides.metadata.value
+        ? overrides.metadata.value
+        : \\"\\",
+    profile_url:
+      overrides.profile_url && overrides.profile_url.value
+        ? overrides.profile_url.value
+        : \\"\\",
+    nonModelField:
+      overrides.nonModelField && overrides.nonModelField.value
+        ? overrides.nonModelField.value
+        : \\"\\",
+    nonModelFieldArray:
+      overrides.nonModelFieldArray && overrides.nonModelFieldArray.value
+        ? overrides.nonModelFieldArray.value
+        : [],
   };
   const [caption, setCaption] = React.useState(initialValues.caption);
   const [username, setUsername] = React.useState(initialValues.username);
@@ -2646,9 +2688,13 @@ export default function MyMemberForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    teamID: undefined,
-    Team: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    teamID:
+      overrides.teamID && overrides.teamID.value
+        ? overrides.teamID.value
+        : undefined,
+    Team:
+      overrides.Team && overrides.Team.value ? overrides.Team.value : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [teamID, setTeamID] = React.useState(initialValues.teamID);
@@ -3320,11 +3366,17 @@ export default function MovieCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    movieKey: \\"\\",
-    title: \\"\\",
-    genre: \\"\\",
-    rating: \\"\\",
-    tags: [],
+    movieKey:
+      overrides.movieKey && overrides.movieKey.value
+        ? overrides.movieKey.value
+        : \\"\\",
+    title:
+      overrides.title && overrides.title.value ? overrides.title.value : \\"\\",
+    genre:
+      overrides.genre && overrides.genre.value ? overrides.genre.value : \\"\\",
+    rating:
+      overrides.rating && overrides.rating.value ? overrides.rating.value : \\"\\",
+    tags: overrides.tags && overrides.tags.value ? overrides.tags.value : [],
   };
   const [movieKey, setMovieKey] = React.useState(initialValues.movieKey);
   const [title, setTitle] = React.useState(initialValues.title);
@@ -3983,8 +4035,11 @@ export default function SchoolCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    Students: [],
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    Students:
+      overrides.Students && overrides.Students.value
+        ? overrides.Students.value
+        : [],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Students, setStudents] = React.useState(initialValues.Students);
@@ -4541,8 +4596,11 @@ export default function BookCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    primaryAuthor: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    primaryAuthor:
+      overrides.primaryAuthor && overrides.primaryAuthor.value
+        ? overrides.primaryAuthor.value
+        : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [primaryAuthor, setPrimaryAuthor] = React.useState(
@@ -5091,8 +5149,14 @@ export default function CommentCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    content: \\"\\",
-    postID: undefined,
+    content:
+      overrides.content && overrides.content.value
+        ? overrides.content.value
+        : \\"\\",
+    postID:
+      overrides.postID && overrides.postID.value
+        ? overrides.postID.value
+        : undefined,
   };
   const [content, setContent] = React.useState(initialValues.content);
   const [postID, setPostID] = React.useState(initialValues.postID);
@@ -5612,9 +5676,14 @@ export default function TagCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    label: \\"\\",
-    Posts: [],
-    statuses: [],
+    label:
+      overrides.label && overrides.label.value ? overrides.label.value : \\"\\",
+    Posts:
+      overrides.Posts && overrides.Posts.value ? overrides.Posts.value : [],
+    statuses:
+      overrides.statuses && overrides.statuses.value
+        ? overrides.statuses.value
+        : [],
   };
   const [label, setLabel] = React.useState(initialValues.label);
   const [Posts, setPosts] = React.useState(initialValues.Posts);
@@ -6251,9 +6320,15 @@ export default function BookCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    primaryAuthor: undefined,
-    primaryTitle: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    primaryAuthor:
+      overrides.primaryAuthor && overrides.primaryAuthor.value
+        ? overrides.primaryAuthor.value
+        : undefined,
+    primaryTitle:
+      overrides.primaryTitle && overrides.primaryTitle.value
+        ? overrides.primaryTitle.value
+        : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [primaryAuthor, setPrimaryAuthor] = React.useState(
@@ -6945,10 +7020,22 @@ export default function CreateCPKTeacherForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    specialTeacherId: \\"\\",
-    CPKStudent: undefined,
-    CPKClasses: [],
-    CPKProjects: [],
+    specialTeacherId:
+      overrides.specialTeacherId && overrides.specialTeacherId.value
+        ? overrides.specialTeacherId.value
+        : \\"\\",
+    CPKStudent:
+      overrides.CPKStudent && overrides.CPKStudent.value
+        ? overrides.CPKStudent.value
+        : undefined,
+    CPKClasses:
+      overrides.CPKClasses && overrides.CPKClasses.value
+        ? overrides.CPKClasses.value
+        : [],
+    CPKProjects:
+      overrides.CPKProjects && overrides.CPKProjects.value
+        ? overrides.CPKProjects.value
+        : [],
   };
   const [specialTeacherId, setSpecialTeacherId] = React.useState(
     initialValues.specialTeacherId
@@ -7787,9 +7874,13 @@ export default function CreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    nmTest: \\"\\",
-    parentTable: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    nmTest:
+      overrides.nmTest && overrides.nmTest.value ? overrides.nmTest.value : \\"\\",
+    parentTable:
+      overrides.parentTable && overrides.parentTable.value
+        ? overrides.parentTable.value
+        : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [nmTest, setNmTest] = React.useState(initialValues.nmTest);
@@ -8360,10 +8451,17 @@ export default function PostUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    title: \\"\\",
-    body: \\"\\",
-    publishDate: \\"\\",
-    Comments: [],
+    title:
+      overrides.title && overrides.title.value ? overrides.title.value : \\"\\",
+    body: overrides.body && overrides.body.value ? overrides.body.value : \\"\\",
+    publishDate:
+      overrides.publishDate && overrides.publishDate.value
+        ? overrides.publishDate.value
+        : \\"\\",
+    Comments:
+      overrides.Comments && overrides.Comments.value
+        ? overrides.Comments.value
+        : [],
   };
   const [title, setTitle] = React.useState(initialValues.title);
   const [body, setBody] = React.useState(initialValues.body);
@@ -9067,14 +9165,38 @@ export default function MyPostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    TextAreaFieldbbd63464: \\"\\",
-    caption: \\"\\",
-    username: \\"\\",
-    profile_url: \\"\\",
-    post_url: \\"\\",
-    metadata: \\"\\",
-    nonModelField: \\"\\",
-    nonModelFieldArray: [],
+    TextAreaFieldbbd63464:
+      overrides.TextAreaFieldbbd63464 && overrides.TextAreaFieldbbd63464.value
+        ? overrides.TextAreaFieldbbd63464.value
+        : \\"\\",
+    caption:
+      overrides.caption && overrides.caption.value
+        ? overrides.caption.value
+        : \\"\\",
+    username:
+      overrides.username && overrides.username.value
+        ? overrides.username.value
+        : \\"\\",
+    profile_url:
+      overrides.profile_url && overrides.profile_url.value
+        ? overrides.profile_url.value
+        : \\"\\",
+    post_url:
+      overrides.post_url && overrides.post_url.value
+        ? overrides.post_url.value
+        : \\"\\",
+    metadata:
+      overrides.metadata && overrides.metadata.value
+        ? overrides.metadata.value
+        : \\"\\",
+    nonModelField:
+      overrides.nonModelField && overrides.nonModelField.value
+        ? overrides.nonModelField.value
+        : \\"\\",
+    nonModelFieldArray:
+      overrides.nonModelFieldArray && overrides.nonModelFieldArray.value
+        ? overrides.nonModelFieldArray.value
+        : [],
   };
   const [TextAreaFieldbbd63464, setTextAreaFieldbbd63464] = React.useState(
     initialValues.TextAreaFieldbbd63464
@@ -9863,14 +9985,38 @@ export default function MyPostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    TextAreaFieldbbd63464: \\"\\",
-    caption: \\"\\",
-    username: \\"\\",
-    profile_url: \\"\\",
-    post_url: \\"\\",
-    metadata: \\"\\",
-    nonModelField: \\"\\",
-    nonModelFieldArray: [],
+    TextAreaFieldbbd63464:
+      overrides.TextAreaFieldbbd63464 && overrides.TextAreaFieldbbd63464.value
+        ? overrides.TextAreaFieldbbd63464.value
+        : \\"\\",
+    caption:
+      overrides.caption && overrides.caption.value
+        ? overrides.caption.value
+        : \\"\\",
+    username:
+      overrides.username && overrides.username.value
+        ? overrides.username.value
+        : \\"\\",
+    profile_url:
+      overrides.profile_url && overrides.profile_url.value
+        ? overrides.profile_url.value
+        : \\"\\",
+    post_url:
+      overrides.post_url && overrides.post_url.value
+        ? overrides.post_url.value
+        : \\"\\",
+    metadata:
+      overrides.metadata && overrides.metadata.value
+        ? overrides.metadata.value
+        : \\"\\",
+    nonModelField:
+      overrides.nonModelField && overrides.nonModelField.value
+        ? overrides.nonModelField.value
+        : \\"\\",
+    nonModelFieldArray:
+      overrides.nonModelFieldArray && overrides.nonModelFieldArray.value
+        ? overrides.nonModelFieldArray.value
+        : [],
   };
   const [TextAreaFieldbbd63464, setTextAreaFieldbbd63464] = React.useState(
     initialValues.TextAreaFieldbbd63464
@@ -10668,11 +10814,17 @@ export default function MovieUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    movieKey: \\"\\",
-    title: \\"\\",
-    genre: \\"\\",
-    rating: \\"\\",
-    tags: [],
+    movieKey:
+      overrides.movieKey && overrides.movieKey.value
+        ? overrides.movieKey.value
+        : \\"\\",
+    title:
+      overrides.title && overrides.title.value ? overrides.title.value : \\"\\",
+    genre:
+      overrides.genre && overrides.genre.value ? overrides.genre.value : \\"\\",
+    rating:
+      overrides.rating && overrides.rating.value ? overrides.rating.value : \\"\\",
+    tags: overrides.tags && overrides.tags.value ? overrides.tags.value : [],
   };
   const [movieKey, setMovieKey] = React.useState(initialValues.movieKey);
   const [title, setTitle] = React.useState(initialValues.title);
@@ -11459,11 +11611,17 @@ export default function MovieUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    movieKey: \\"\\",
-    title: \\"\\",
-    genre: \\"\\",
-    rating: \\"\\",
-    tags: [],
+    movieKey:
+      overrides.movieKey && overrides.movieKey.value
+        ? overrides.movieKey.value
+        : \\"\\",
+    title:
+      overrides.title && overrides.title.value ? overrides.title.value : \\"\\",
+    genre:
+      overrides.genre && overrides.genre.value ? overrides.genre.value : \\"\\",
+    rating:
+      overrides.rating && overrides.rating.value ? overrides.rating.value : \\"\\",
+    tags: overrides.tags && overrides.tags.value ? overrides.tags.value : [],
   };
   const [movieKey, setMovieKey] = React.useState(initialValues.movieKey);
   const [title, setTitle] = React.useState(initialValues.title);
@@ -12241,10 +12399,17 @@ export default function CommentUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    content: \\"\\",
-    postID: undefined,
-    Post: undefined,
-    post: \\"\\",
+    content:
+      overrides.content && overrides.content.value
+        ? overrides.content.value
+        : \\"\\",
+    postID:
+      overrides.postID && overrides.postID.value
+        ? overrides.postID.value
+        : undefined,
+    Post:
+      overrides.Post && overrides.Post.value ? overrides.Post.value : undefined,
+    post: overrides.post && overrides.post.value ? overrides.post.value : \\"\\",
   };
   const [content, setContent] = React.useState(initialValues.content);
   const [postID, setPostID] = React.useState(initialValues.postID);
@@ -12983,10 +13148,17 @@ export default function CommentUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    content: \\"\\",
-    postID: undefined,
-    Post: undefined,
-    post: \\"\\",
+    content:
+      overrides.content && overrides.content.value
+        ? overrides.content.value
+        : \\"\\",
+    postID:
+      overrides.postID && overrides.postID.value
+        ? overrides.postID.value
+        : undefined,
+    Post:
+      overrides.Post && overrides.Post.value ? overrides.Post.value : undefined,
+    post: overrides.post && overrides.post.value ? overrides.post.value : \\"\\",
   };
   const [content, setContent] = React.useState(initialValues.content);
   const [postID, setPostID] = React.useState(initialValues.postID);
@@ -13723,10 +13895,17 @@ export default function CommentUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    content: \\"\\",
-    postID: undefined,
-    Post: undefined,
-    post: \\"\\",
+    content:
+      overrides.content && overrides.content.value
+        ? overrides.content.value
+        : \\"\\",
+    postID:
+      overrides.postID && overrides.postID.value
+        ? overrides.postID.value
+        : undefined,
+    Post:
+      overrides.Post && overrides.Post.value ? overrides.Post.value : undefined,
+    post: overrides.post && overrides.post.value ? overrides.post.value : \\"\\",
   };
   const [content, setContent] = React.useState(initialValues.content);
   const [postID, setPostID] = React.useState(initialValues.postID);
@@ -14463,8 +14642,14 @@ export default function CommentUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    content: \\"\\",
-    postID: undefined,
+    content:
+      overrides.content && overrides.content.value
+        ? overrides.content.value
+        : \\"\\",
+    postID:
+      overrides.postID && overrides.postID.value
+        ? overrides.postID.value
+        : undefined,
   };
   const [content, setContent] = React.useState(initialValues.content);
   const [postID, setPostID] = React.useState(initialValues.postID);
@@ -15027,7 +15212,10 @@ export default function ClassUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    students: [],
+    students:
+      overrides.students && overrides.students.value
+        ? overrides.students.value
+        : [],
   };
   const [students, setStudents] = React.useState(initialValues.students);
   const [studentsLoading, setStudentsLoading] = React.useState(false);
@@ -15649,7 +15837,10 @@ export default function ClassUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    students: [],
+    students:
+      overrides.students && overrides.students.value
+        ? overrides.students.value
+        : [],
   };
   const [students, setStudents] = React.useState(initialValues.students);
   const [studentsLoading, setStudentsLoading] = React.useState(false);
@@ -16264,9 +16455,13 @@ export default function UpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    nmTest: \\"\\",
-    parentTable: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    nmTest:
+      overrides.nmTest && overrides.nmTest.value ? overrides.nmTest.value : \\"\\",
+    parentTable:
+      overrides.parentTable && overrides.parentTable.value
+        ? overrides.parentTable.value
+        : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [nmTest, setNmTest] = React.useState(initialValues.nmTest);
@@ -16881,10 +17076,22 @@ export default function UpdateCPKTeacherForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    specialTeacherId: \\"\\",
-    CPKStudent: undefined,
-    CPKClasses: [],
-    CPKProjects: [],
+    specialTeacherId:
+      overrides.specialTeacherId && overrides.specialTeacherId.value
+        ? overrides.specialTeacherId.value
+        : \\"\\",
+    CPKStudent:
+      overrides.CPKStudent && overrides.CPKStudent.value
+        ? overrides.CPKStudent.value
+        : undefined,
+    CPKClasses:
+      overrides.CPKClasses && overrides.CPKClasses.value
+        ? overrides.CPKClasses.value
+        : [],
+    CPKProjects:
+      overrides.CPKProjects && overrides.CPKProjects.value
+        ? overrides.CPKProjects.value
+        : [],
   };
   const [specialTeacherId, setSpecialTeacherId] = React.useState(
     initialValues.specialTeacherId
@@ -17907,10 +18114,22 @@ export default function UpdateCPKTeacherForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    specialTeacherId: \\"\\",
-    CPKStudent: undefined,
-    CPKClasses: [],
-    CPKProjects: [],
+    specialTeacherId:
+      overrides.specialTeacherId && overrides.specialTeacherId.value
+        ? overrides.specialTeacherId.value
+        : \\"\\",
+    CPKStudent:
+      overrides.CPKStudent && overrides.CPKStudent.value
+        ? overrides.CPKStudent.value
+        : undefined,
+    CPKClasses:
+      overrides.CPKClasses && overrides.CPKClasses.value
+        ? overrides.CPKClasses.value
+        : [],
+    CPKProjects:
+      overrides.CPKProjects && overrides.CPKProjects.value
+        ? overrides.CPKProjects.value
+        : [],
   };
   const [specialTeacherId, setSpecialTeacherId] = React.useState(
     initialValues.specialTeacherId
@@ -18920,10 +19139,19 @@ export default function CreateCompositeToyForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    kind: \\"\\",
-    color: \\"\\",
-    compositeDogCompositeToysName: undefined,
-    compositeDogCompositeToysDescription: undefined,
+    kind: overrides.kind && overrides.kind.value ? overrides.kind.value : \\"\\",
+    color:
+      overrides.color && overrides.color.value ? overrides.color.value : \\"\\",
+    compositeDogCompositeToysName:
+      overrides.compositeDogCompositeToysName &&
+      overrides.compositeDogCompositeToysName.value
+        ? overrides.compositeDogCompositeToysName.value
+        : undefined,
+    compositeDogCompositeToysDescription:
+      overrides.compositeDogCompositeToysDescription &&
+      overrides.compositeDogCompositeToysDescription.value
+        ? overrides.compositeDogCompositeToysDescription.value
+        : undefined,
   };
   const [kind, setKind] = React.useState(initialValues.kind);
   const [color, setColor] = React.useState(initialValues.color);
@@ -19710,11 +19938,16 @@ export default function CreateCommentForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    post: undefined,
-    User: undefined,
-    Org: undefined,
-    postCommentsId: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    post:
+      overrides.post && overrides.post.value ? overrides.post.value : undefined,
+    User:
+      overrides.User && overrides.User.value ? overrides.User.value : undefined,
+    Org: overrides.Org && overrides.Org.value ? overrides.Org.value : undefined,
+    postCommentsId:
+      overrides.postCommentsId && overrides.postCommentsId.value
+        ? overrides.postCommentsId.value
+        : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [post, setPost] = React.useState(initialValues.post);
@@ -20671,12 +20904,27 @@ export default function CreateCompositeDogForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    description: \\"\\",
-    CompositeBowl: undefined,
-    CompositeOwner: undefined,
-    CompositeToys: [],
-    CompositeVets: [],
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    description:
+      overrides.description && overrides.description.value
+        ? overrides.description.value
+        : \\"\\",
+    CompositeBowl:
+      overrides.CompositeBowl && overrides.CompositeBowl.value
+        ? overrides.CompositeBowl.value
+        : undefined,
+    CompositeOwner:
+      overrides.CompositeOwner && overrides.CompositeOwner.value
+        ? overrides.CompositeOwner.value
+        : undefined,
+    CompositeToys:
+      overrides.CompositeToys && overrides.CompositeToys.value
+        ? overrides.CompositeToys.value
+        : [],
+    CompositeVets:
+      overrides.CompositeVets && overrides.CompositeVets.value
+        ? overrides.CompositeVets.value
+        : [],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
@@ -21787,8 +22035,11 @@ export default function CreatePostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    comments: [],
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    comments:
+      overrides.comments && overrides.comments.value
+        ? overrides.comments.value
+        : [],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [comments, setComments] = React.useState(initialValues.comments);
@@ -22336,8 +22587,11 @@ export default function UpdatePostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    comments: [],
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    comments:
+      overrides.comments && overrides.comments.value
+        ? overrides.comments.value
+        : [],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [comments, setComments] = React.useState(initialValues.comments);
@@ -22948,8 +23202,15 @@ export default function ChildItemUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    content: \\"\\",
-    customKeyModelChildrenMycustomkey: undefined,
+    content:
+      overrides.content && overrides.content.value
+        ? overrides.content.value
+        : \\"\\",
+    customKeyModelChildrenMycustomkey:
+      overrides.customKeyModelChildrenMycustomkey &&
+      overrides.customKeyModelChildrenMycustomkey.value
+        ? overrides.customKeyModelChildrenMycustomkey.value
+        : undefined,
   };
   const [content, setContent] = React.useState(initialValues.content);
   const [
@@ -23571,9 +23832,14 @@ export default function PostUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    title: \\"\\",
-    blog: undefined,
-    comments: [],
+    title:
+      overrides.title && overrides.title.value ? overrides.title.value : \\"\\",
+    blog:
+      overrides.blog && overrides.blog.value ? overrides.blog.value : undefined,
+    comments:
+      overrides.comments && overrides.comments.value
+        ? overrides.comments.value
+        : [],
   };
   const [title, setTitle] = React.useState(initialValues.title);
   const [blog, setBlog] = React.useState(initialValues.blog);
@@ -24316,8 +24582,11 @@ export default function CreateDogForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    owner: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    owner:
+      overrides.owner && overrides.owner.value
+        ? overrides.owner.value
+        : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [owner, setOwner] = React.useState(initialValues.owner);
@@ -24871,8 +25140,8 @@ export default function CreateOwnerForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    Dog: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    Dog: overrides.Dog && overrides.Dog.value ? overrides.Dog.value : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Dog, setDog] = React.useState(initialValues.Dog);
@@ -25431,8 +25700,14 @@ export default function CommentUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    content: \\"\\",
-    postID: undefined,
+    content:
+      overrides.content && overrides.content.value
+        ? overrides.content.value
+        : \\"\\",
+    postID:
+      overrides.postID && overrides.postID.value
+        ? overrides.postID.value
+        : undefined,
   };
   const [content, setContent] = React.useState(initialValues.content);
   const [postID, setPostID] = React.useState(initialValues.postID);
@@ -25986,9 +26261,18 @@ export default function UpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    mycustomkey: \\"\\",
-    content: \\"\\",
-    children: [],
+    mycustomkey:
+      overrides.mycustomkey && overrides.mycustomkey.value
+        ? overrides.mycustomkey.value
+        : \\"\\",
+    content:
+      overrides.content && overrides.content.value
+        ? overrides.content.value
+        : \\"\\",
+    children:
+      overrides.children && overrides.children.value
+        ? overrides.children.value
+        : [],
   };
   const [mycustomkey, setMycustomkey] = React.useState(
     initialValues.mycustomkey
@@ -26626,10 +26910,20 @@ export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: \\"John Doe\\",
-    email: [\\"johndoe@amplify.com\\"],
-    phone: [\\"+1-401-152-6995\\"],
-    city: undefined,
+    name:
+      overrides.name && overrides.name.value
+        ? overrides.name.value
+        : \\"John Doe\\",
+    email:
+      overrides.email && overrides.email.value
+        ? overrides.email.value
+        : [\\"johndoe@amplify.com\\"],
+    phone:
+      overrides.phone && overrides.phone.value
+        ? overrides.phone.value
+        : [\\"+1-401-152-6995\\"],
+    city:
+      overrides.city && overrides.city.value ? overrides.city.value : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -27169,10 +27463,19 @@ export default function CreateCompositeToyForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    kind: \\"\\",
-    color: \\"\\",
-    compositeDogCompositeToysName: undefined,
-    compositeDogCompositeToysDescription: undefined,
+    kind: overrides.kind && overrides.kind.value ? overrides.kind.value : \\"\\",
+    color:
+      overrides.color && overrides.color.value ? overrides.color.value : \\"\\",
+    compositeDogCompositeToysName:
+      overrides.compositeDogCompositeToysName &&
+      overrides.compositeDogCompositeToysName.value
+        ? overrides.compositeDogCompositeToysName.value
+        : undefined,
+    compositeDogCompositeToysDescription:
+      overrides.compositeDogCompositeToysDescription &&
+      overrides.compositeDogCompositeToysDescription.value
+        ? overrides.compositeDogCompositeToysDescription.value
+        : undefined,
   };
   const [kind, setKind] = React.useState(initialValues.kind);
   const [color, setColor] = React.useState(initialValues.color);
@@ -27833,11 +28136,16 @@ export default function CreateCommentForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    post: undefined,
-    User: undefined,
-    Org: undefined,
-    postCommentsId: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    post:
+      overrides.post && overrides.post.value ? overrides.post.value : undefined,
+    User:
+      overrides.User && overrides.User.value ? overrides.User.value : undefined,
+    Org: overrides.Org && overrides.Org.value ? overrides.Org.value : undefined,
+    postCommentsId:
+      overrides.postCommentsId && overrides.postCommentsId.value
+        ? overrides.postCommentsId.value
+        : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [post, setPost] = React.useState(initialValues.post);
@@ -28643,12 +28951,27 @@ export default function CreateCompositeDogForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    description: \\"\\",
-    CompositeBowl: undefined,
-    CompositeOwner: undefined,
-    CompositeToys: [],
-    CompositeVets: [],
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    description:
+      overrides.description && overrides.description.value
+        ? overrides.description.value
+        : \\"\\",
+    CompositeBowl:
+      overrides.CompositeBowl && overrides.CompositeBowl.value
+        ? overrides.CompositeBowl.value
+        : undefined,
+    CompositeOwner:
+      overrides.CompositeOwner && overrides.CompositeOwner.value
+        ? overrides.CompositeOwner.value
+        : undefined,
+    CompositeToys:
+      overrides.CompositeToys && overrides.CompositeToys.value
+        ? overrides.CompositeToys.value
+        : [],
+    CompositeVets:
+      overrides.CompositeVets && overrides.CompositeVets.value
+        ? overrides.CompositeVets.value
+        : [],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
@@ -29428,12 +29751,24 @@ export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: \\"John Doe\\",
-    email: \\"johndoe@amplify.com\\",
-    city: \\"\\",
-    category: undefined,
-    pages: 0,
-    phone: \\"+1-401-152-6995\\",
+    name:
+      overrides.name && overrides.name.value
+        ? overrides.name.value
+        : \\"John Doe\\",
+    email:
+      overrides.email && overrides.email.value
+        ? overrides.email.value
+        : \\"johndoe@amplify.com\\",
+    city: overrides.city && overrides.city.value ? overrides.city.value : \\"\\",
+    category:
+      overrides.category && overrides.category.value
+        ? overrides.category.value
+        : undefined,
+    pages: overrides.pages && overrides.pages.value ? overrides.pages.value : 0,
+    phone:
+      overrides.phone && overrides.phone.value
+        ? overrides.phone.value
+        : \\"+1-401-152-6995\\",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -29833,12 +30168,24 @@ export default function CustomDataForm(props) {
     props;
   const { tokens } = useTheme();
   const initialValues = {
-    name: \\"John Doe\\",
-    email: \\"johndoe@amplify.com\\",
-    city: \\"\\",
-    category: undefined,
-    pages: 0,
-    phone: \\"+1-401-152-6995\\",
+    name:
+      overrides.name && overrides.name.value
+        ? overrides.name.value
+        : \\"John Doe\\",
+    email:
+      overrides.email && overrides.email.value
+        ? overrides.email.value
+        : \\"johndoe@amplify.com\\",
+    city: overrides.city && overrides.city.value ? overrides.city.value : \\"\\",
+    category:
+      overrides.category && overrides.category.value
+        ? overrides.category.value
+        : undefined,
+    pages: overrides.pages && overrides.pages.value ? overrides.pages.value : 0,
+    phone:
+      overrides.phone && overrides.phone.value
+        ? overrides.phone.value
+        : \\"+1-401-152-6995\\",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -30394,10 +30741,20 @@ export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: \\"John Doe\\",
-    email: [\\"johndoe@amplify.com\\"],
-    phone: [\\"+1-401-152-6995\\"],
-    city: undefined,
+    name:
+      overrides.name && overrides.name.value
+        ? overrides.name.value
+        : \\"John Doe\\",
+    email:
+      overrides.email && overrides.email.value
+        ? overrides.email.value
+        : [\\"johndoe@amplify.com\\"],
+    phone:
+      overrides.phone && overrides.phone.value
+        ? overrides.phone.value
+        : [\\"+1-401-152-6995\\"],
+    city:
+      overrides.city && overrides.city.value ? overrides.city.value : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -30772,12 +31129,24 @@ export default function CustomDataForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"John Doe\\",
-    email: \\"johndoe@amplify.com\\",
-    \\"metadata-field\\": \\"\\",
-    city: \\"\\",
-    category: undefined,
-    pages: 0,
+    name:
+      overrides.name && overrides.name.value
+        ? overrides.name.value
+        : \\"John Doe\\",
+    email:
+      overrides.email && overrides.email.value
+        ? overrides.email.value
+        : \\"johndoe@amplify.com\\",
+    \\"metadata-field\\":
+      overrides[\\"metadata-field\\"] && overrides[\\"metadata-field\\"].value
+        ? overrides[\\"metadata-field\\"].value
+        : \\"\\",
+    city: overrides.city && overrides.city.value ? overrides.city.value : \\"\\",
+    category:
+      overrides.category && overrides.category.value
+        ? overrides.category.value
+        : undefined,
+    pages: overrides.pages && overrides.pages.value ? overrides.pages.value : 0,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -31361,14 +31730,38 @@ export default function MyPostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: \\"\\",
-    caption: \\"\\",
-    Customtags: [],
-    post_url: \\"\\",
-    metadata: \\"\\",
-    profile_url: \\"\\",
-    nonModelField: \\"\\",
-    nonModelFieldArray: [],
+    username:
+      overrides.username && overrides.username.value
+        ? overrides.username.value
+        : \\"\\",
+    caption:
+      overrides.caption && overrides.caption.value
+        ? overrides.caption.value
+        : \\"\\",
+    Customtags:
+      overrides.Customtags && overrides.Customtags.value
+        ? overrides.Customtags.value
+        : [],
+    post_url:
+      overrides.post_url && overrides.post_url.value
+        ? overrides.post_url.value
+        : \\"\\",
+    metadata:
+      overrides.metadata && overrides.metadata.value
+        ? overrides.metadata.value
+        : \\"\\",
+    profile_url:
+      overrides.profile_url && overrides.profile_url.value
+        ? overrides.profile_url.value
+        : \\"\\",
+    nonModelField:
+      overrides.nonModelField && overrides.nonModelField.value
+        ? overrides.nonModelField.value
+        : \\"\\",
+    nonModelFieldArray:
+      overrides.nonModelFieldArray && overrides.nonModelFieldArray.value
+        ? overrides.nonModelFieldArray.value
+        : [],
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -32116,8 +32509,11 @@ export default function UpdateOrgForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    comments: [],
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    comments:
+      overrides.comments && overrides.comments.value
+        ? overrides.comments.value
+        : [],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [comments, setComments] = React.useState(initialValues.comments);
@@ -32687,12 +33083,27 @@ export default function UpdateCompositeDogForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    description: \\"\\",
-    CompositeBowl: undefined,
-    CompositeOwner: undefined,
-    CompositeToys: [],
-    CompositeVets: [],
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    description:
+      overrides.description && overrides.description.value
+        ? overrides.description.value
+        : \\"\\",
+    CompositeBowl:
+      overrides.CompositeBowl && overrides.CompositeBowl.value
+        ? overrides.CompositeBowl.value
+        : undefined,
+    CompositeOwner:
+      overrides.CompositeOwner && overrides.CompositeOwner.value
+        ? overrides.CompositeOwner.value
+        : undefined,
+    CompositeToys:
+      overrides.CompositeToys && overrides.CompositeToys.value
+        ? overrides.CompositeToys.value
+        : [],
+    CompositeVets:
+      overrides.CompositeVets && overrides.CompositeVets.value
+        ? overrides.CompositeVets.value
+        : [],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
@@ -33833,10 +34244,22 @@ export default function UpdateCPKTeacherForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    specialTeacherId: \\"\\",
-    CPKStudent: undefined,
-    CPKClasses: [],
-    CPKProjects: [],
+    specialTeacherId:
+      overrides.specialTeacherId && overrides.specialTeacherId.value
+        ? overrides.specialTeacherId.value
+        : \\"\\",
+    CPKStudent:
+      overrides.CPKStudent && overrides.CPKStudent.value
+        ? overrides.CPKStudent.value
+        : undefined,
+    CPKClasses:
+      overrides.CPKClasses && overrides.CPKClasses.value
+        ? overrides.CPKClasses.value
+        : [],
+    CPKProjects:
+      overrides.CPKProjects && overrides.CPKProjects.value
+        ? overrides.CPKProjects.value
+        : [],
   };
   const [specialTeacherId, setSpecialTeacherId] = React.useState(
     initialValues.specialTeacherId
@@ -34706,8 +35129,14 @@ export default function HappyPathJSONCreate(props) {
   const initialValues = {
     basics: {},
     favoriteThings: {},
-    active: false,
-    enabled: false,
+    active:
+      overrides.active && overrides.active.value
+        ? overrides.active.value
+        : false,
+    enabled:
+      overrides.enabled && overrides.enabled.value
+        ? overrides.enabled.value
+        : false,
   };
   const [basics, setBasics] = React.useState(initialValues.basics);
   const [favoriteThings, setFavoriteThings] = React.useState(
@@ -35302,8 +35731,14 @@ export default function HappyPathJSONUpdate(props) {
   const initialValues = {
     basics: {},
     favoriteThings: {},
-    active: false,
-    enabled: false,
+    active:
+      overrides.active && overrides.active.value
+        ? overrides.active.value
+        : false,
+    enabled:
+      overrides.enabled && overrides.enabled.value
+        ? overrides.enabled.value
+        : false,
   };
   const [basics, setBasics] = React.useState(initialValues.basics);
   const [favoriteThings, setFavoriteThings] = React.useState(
@@ -35909,12 +36344,27 @@ export default function NestedJson(props) {
   const { onSubmit, onValidate, onChange, overrides, ...rest } = props;
   const { tokens } = useTheme();
   const initialValues = {
-    \\"first-Name\\": \\"\\",
-    lastName: \\"\\",
+    \\"first-Name\\":
+      overrides[\\"first-Name\\"] && overrides[\\"first-Name\\"].value
+        ? overrides[\\"first-Name\\"].value
+        : \\"\\",
+    lastName:
+      overrides.lastName && overrides.lastName.value
+        ? overrides.lastName.value
+        : \\"\\",
     bio: {},
-    Nicknames1: [],
-    \\"nick-names2\\": [],
-    \\"first Name\\": \\"\\",
+    Nicknames1:
+      overrides.Nicknames1 && overrides.Nicknames1.value
+        ? overrides.Nicknames1.value
+        : [],
+    \\"nick-names2\\":
+      overrides[\\"nick-names2\\"] && overrides[\\"nick-names2\\"].value
+        ? overrides[\\"nick-names2\\"].value
+        : [],
+    \\"first Name\\":
+      overrides[\\"first Name\\"] && overrides[\\"first Name\\"].value
+        ? overrides[\\"first Name\\"].value
+        : \\"\\",
     options: {},
   };
   const [firstName, setFirstName] = React.useState(initialValues[\\"first-Name\\"]);
@@ -36643,9 +37093,18 @@ export default function NestedJson(props) {
   const { initialData, onSubmit, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    firstName: \\"\\",
-    \\"last-Name\\": \\"\\",
-    lastName: [],
+    firstName:
+      overrides.firstName && overrides.firstName.value
+        ? overrides.firstName.value
+        : \\"\\",
+    \\"last-Name\\":
+      overrides[\\"last-Name\\"] && overrides[\\"last-Name\\"].value
+        ? overrides[\\"last-Name\\"].value
+        : \\"\\",
+    lastName:
+      overrides.lastName && overrides.lastName.value
+        ? overrides.lastName.value
+        : [],
     bio: {},
   };
   const [firstName, setFirstName] = React.useState(initialValues.firstName);
@@ -37182,12 +37641,28 @@ export default function UpdateCompositeDogForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    description: \\"\\",
-    CompositeOwner: undefined,
-    CompositeToys: [],
-    CompositeVets: [],
-    compositeDogCompositeBowlShape: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    description:
+      overrides.description && overrides.description.value
+        ? overrides.description.value
+        : \\"\\",
+    CompositeOwner:
+      overrides.CompositeOwner && overrides.CompositeOwner.value
+        ? overrides.CompositeOwner.value
+        : undefined,
+    CompositeToys:
+      overrides.CompositeToys && overrides.CompositeToys.value
+        ? overrides.CompositeToys.value
+        : [],
+    CompositeVets:
+      overrides.CompositeVets && overrides.CompositeVets.value
+        ? overrides.CompositeVets.value
+        : [],
+    compositeDogCompositeBowlShape:
+      overrides.compositeDogCompositeBowlShape &&
+      overrides.compositeDogCompositeBowlShape.value
+        ? overrides.compositeDogCompositeBowlShape.value
+        : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
@@ -38150,7 +38625,7 @@ export default function CustomWithSectionalElements(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: \\"\\",
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [errors, setErrors] = React.useState({});
@@ -38523,8 +38998,11 @@ export default function CreateDogForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    owner: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    owner:
+      overrides.owner && overrides.owner.value
+        ? overrides.owner.value
+        : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [owner, setOwner] = React.useState(initialValues.owner);
@@ -39032,8 +39510,11 @@ export default function UpdateDogForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    owner: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    owner:
+      overrides.owner && overrides.owner.value
+        ? overrides.owner.value
+        : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [owner, setOwner] = React.useState(initialValues.owner);
@@ -39577,8 +40058,8 @@ export default function CreateOwnerForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    Dog: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    Dog: overrides.Dog && overrides.Dog.value ? overrides.Dog.value : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Dog, setDog] = React.useState(initialValues.Dog);
@@ -40087,8 +40568,8 @@ export default function UpdateOwnerForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    Dog: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    Dog: overrides.Dog && overrides.Dog.value ? overrides.Dog.value : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Dog, setDog] = React.useState(initialValues.Dog);
@@ -40634,8 +41115,8 @@ export default function CreateOwnerForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    Dog: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    Dog: overrides.Dog && overrides.Dog.value ? overrides.Dog.value : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Dog, setDog] = React.useState(initialValues.Dog);
@@ -41139,13 +41620,34 @@ export default function MyPostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    caption: \\"\\",
-    username: \\"\\",
-    post_url: \\"\\",
-    metadata: \\"\\",
-    profile_url: \\"\\",
-    nonModelField: \\"\\",
-    nonModelFieldArray: [],
+    caption:
+      overrides.caption && overrides.caption.value
+        ? overrides.caption.value
+        : \\"\\",
+    username:
+      overrides.username && overrides.username.value
+        ? overrides.username.value
+        : \\"\\",
+    post_url:
+      overrides.post_url && overrides.post_url.value
+        ? overrides.post_url.value
+        : \\"\\",
+    metadata:
+      overrides.metadata && overrides.metadata.value
+        ? overrides.metadata.value
+        : \\"\\",
+    profile_url:
+      overrides.profile_url && overrides.profile_url.value
+        ? overrides.profile_url.value
+        : \\"\\",
+    nonModelField:
+      overrides.nonModelField && overrides.nonModelField.value
+        ? overrides.nonModelField.value
+        : \\"\\",
+    nonModelFieldArray:
+      overrides.nonModelFieldArray && overrides.nonModelFieldArray.value
+        ? overrides.nonModelFieldArray.value
+        : [],
   };
   const [caption, setCaption] = React.useState(initialValues.caption);
   const [username, setUsername] = React.useState(initialValues.username);
@@ -41807,9 +42309,14 @@ export default function TagCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    label: \\"\\",
-    Posts: [],
-    statuses: [],
+    label:
+      overrides.label && overrides.label.value ? overrides.label.value : \\"\\",
+    Posts:
+      overrides.Posts && overrides.Posts.value ? overrides.Posts.value : [],
+    statuses:
+      overrides.statuses && overrides.statuses.value
+        ? overrides.statuses.value
+        : [],
   };
   const [label, setLabel] = React.useState(initialValues.label);
   const [Posts, setPosts] = React.useState(initialValues.Posts);
@@ -42408,9 +42915,13 @@ export default function MyMemberForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    teamID: undefined,
-    Team: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    teamID:
+      overrides.teamID && overrides.teamID.value
+        ? overrides.teamID.value
+        : undefined,
+    Team:
+      overrides.Team && overrides.Team.value ? overrides.Team.value : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [teamID, setTeamID] = React.useState(initialValues.teamID);
@@ -43000,8 +43511,11 @@ export default function SchoolCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    Students: [],
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    Students:
+      overrides.Students && overrides.Students.value
+        ? overrides.Students.value
+        : [],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Students, setStudents] = React.useState(initialValues.Students);
@@ -43517,8 +44031,11 @@ export default function BookCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    primaryAuthor: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    primaryAuthor:
+      overrides.primaryAuthor && overrides.primaryAuthor.value
+        ? overrides.primaryAuthor.value
+        : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [primaryAuthor, setPrimaryAuthor] = React.useState(
@@ -44028,9 +44545,14 @@ export default function TagCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    label: \\"\\",
-    Posts: [],
-    statuses: [],
+    label:
+      overrides.label && overrides.label.value ? overrides.label.value : \\"\\",
+    Posts:
+      overrides.Posts && overrides.Posts.value ? overrides.Posts.value : [],
+    statuses:
+      overrides.statuses && overrides.statuses.value
+        ? overrides.statuses.value
+        : [],
   };
   const [label, setLabel] = React.useState(initialValues.label);
   const [Posts, setPosts] = React.useState(initialValues.Posts);
@@ -44629,9 +45151,15 @@ export default function BookCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    primaryAuthor: undefined,
-    primaryTitle: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    primaryAuthor:
+      overrides.primaryAuthor && overrides.primaryAuthor.value
+        ? overrides.primaryAuthor.value
+        : undefined,
+    primaryTitle:
+      overrides.primaryTitle && overrides.primaryTitle.value
+        ? overrides.primaryTitle.value
+        : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [primaryAuthor, setPrimaryAuthor] = React.useState(
@@ -45244,14 +45772,38 @@ export default function MyPostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    TextAreaFieldbbd63464: \\"\\",
-    caption: \\"\\",
-    username: \\"\\",
-    profile_url: \\"\\",
-    post_url: \\"\\",
-    metadata: \\"\\",
-    nonModelField: \\"\\",
-    nonModelFieldArray: [],
+    TextAreaFieldbbd63464:
+      overrides.TextAreaFieldbbd63464 && overrides.TextAreaFieldbbd63464.value
+        ? overrides.TextAreaFieldbbd63464.value
+        : \\"\\",
+    caption:
+      overrides.caption && overrides.caption.value
+        ? overrides.caption.value
+        : \\"\\",
+    username:
+      overrides.username && overrides.username.value
+        ? overrides.username.value
+        : \\"\\",
+    profile_url:
+      overrides.profile_url && overrides.profile_url.value
+        ? overrides.profile_url.value
+        : \\"\\",
+    post_url:
+      overrides.post_url && overrides.post_url.value
+        ? overrides.post_url.value
+        : \\"\\",
+    metadata:
+      overrides.metadata && overrides.metadata.value
+        ? overrides.metadata.value
+        : \\"\\",
+    nonModelField:
+      overrides.nonModelField && overrides.nonModelField.value
+        ? overrides.nonModelField.value
+        : \\"\\",
+    nonModelFieldArray:
+      overrides.nonModelFieldArray && overrides.nonModelFieldArray.value
+        ? overrides.nonModelFieldArray.value
+        : [],
   };
   const [TextAreaFieldbbd63464, setTextAreaFieldbbd63464] = React.useState(
     initialValues.TextAreaFieldbbd63464
@@ -46034,8 +46586,11 @@ export default function SchoolUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    Students: [],
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    Students:
+      overrides.Students && overrides.Students.value
+        ? overrides.Students.value
+        : [],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Students, setStudents] = React.useState(initialValues.Students);
@@ -46608,9 +47163,15 @@ export default function SchoolUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    Student: [],
-    Students: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    Student:
+      overrides.Student && overrides.Student.value
+        ? overrides.Student.value
+        : [],
+    Students:
+      overrides.Students && overrides.Students.value
+        ? overrides.Students.value
+        : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Student, setStudent] = React.useState(initialValues.Student);
@@ -47231,9 +47792,13 @@ export default function MyMemberForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    teamID: undefined,
-    Team: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    teamID:
+      overrides.teamID && overrides.teamID.value
+        ? overrides.teamID.value
+        : undefined,
+    Team:
+      overrides.Team && overrides.Team.value ? overrides.Team.value : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [teamID, setTeamID] = React.useState(initialValues.teamID);
@@ -47854,9 +48419,14 @@ export default function TagUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    label: \\"\\",
-    Posts: [],
-    statuses: [],
+    label:
+      overrides.label && overrides.label.value ? overrides.label.value : \\"\\",
+    Posts:
+      overrides.Posts && overrides.Posts.value ? overrides.Posts.value : [],
+    statuses:
+      overrides.statuses && overrides.statuses.value
+        ? overrides.statuses.value
+        : [],
   };
   const [label, setLabel] = React.useState(initialValues.label);
   const [Posts, setPosts] = React.useState(initialValues.Posts);
@@ -48530,11 +49100,23 @@ export default function MyFlexCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: \\"\\",
-    caption: \\"\\",
-    Customtags: [],
-    tags: [],
-    profile_url: \\"\\",
+    username:
+      overrides.username && overrides.username.value
+        ? overrides.username.value
+        : \\"\\",
+    caption:
+      overrides.caption && overrides.caption.value
+        ? overrides.caption.value
+        : \\"\\",
+    Customtags:
+      overrides.Customtags && overrides.Customtags.value
+        ? overrides.Customtags.value
+        : [],
+    tags: overrides.tags && overrides.tags.value ? overrides.tags.value : [],
+    profile_url:
+      overrides.profile_url && overrides.profile_url.value
+        ? overrides.profile_url.value
+        : \\"\\",
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -49129,11 +49711,24 @@ export default function BlogCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    title: \\"\\",
-    content: \\"\\",
-    switch: false,
-    published: \\"\\",
-    editedAt: [],
+    title:
+      overrides.title && overrides.title.value ? overrides.title.value : \\"\\",
+    content:
+      overrides.content && overrides.content.value
+        ? overrides.content.value
+        : \\"\\",
+    switch:
+      overrides.switch && overrides.switch.value
+        ? overrides.switch.value
+        : false,
+    published:
+      overrides.published && overrides.published.value
+        ? overrides.published.value
+        : \\"\\",
+    editedAt:
+      overrides.editedAt && overrides.editedAt.value
+        ? overrides.editedAt.value
+        : [],
   };
   const [title, setTitle] = React.useState(initialValues.title);
   const [content, setContent] = React.useState(initialValues.content);
@@ -49697,17 +50292,44 @@ export default function InputGalleryCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    num: \\"\\",
-    rootbeer: \\"\\",
-    attend: undefined,
-    maybeSlide: false,
-    maybeCheck: false,
-    arrayTypeField: [],
-    jsonArray: [],
-    jsonField: \\"\\",
-    timestamp: \\"\\",
-    ippy: \\"\\",
-    timeisnow: \\"\\",
+    num: overrides.num && overrides.num.value ? overrides.num.value : \\"\\",
+    rootbeer:
+      overrides.rootbeer && overrides.rootbeer.value
+        ? overrides.rootbeer.value
+        : \\"\\",
+    attend:
+      overrides.attend && overrides.attend.value
+        ? overrides.attend.value
+        : undefined,
+    maybeSlide:
+      overrides.maybeSlide && overrides.maybeSlide.value
+        ? overrides.maybeSlide.value
+        : false,
+    maybeCheck:
+      overrides.maybeCheck && overrides.maybeCheck.value
+        ? overrides.maybeCheck.value
+        : false,
+    arrayTypeField:
+      overrides.arrayTypeField && overrides.arrayTypeField.value
+        ? overrides.arrayTypeField.value
+        : [],
+    jsonArray:
+      overrides.jsonArray && overrides.jsonArray.value
+        ? overrides.jsonArray.value
+        : [],
+    jsonField:
+      overrides.jsonField && overrides.jsonField.value
+        ? overrides.jsonField.value
+        : \\"\\",
+    timestamp:
+      overrides.timestamp && overrides.timestamp.value
+        ? overrides.timestamp.value
+        : \\"\\",
+    ippy: overrides.ippy && overrides.ippy.value ? overrides.ippy.value : \\"\\",
+    timeisnow:
+      overrides.timeisnow && overrides.timeisnow.value
+        ? overrides.timeisnow.value
+        : \\"\\",
   };
   const [num, setNum] = React.useState(initialValues.num);
   const [rootbeer, setRootbeer] = React.useState(initialValues.rootbeer);
@@ -50696,17 +51318,44 @@ export default function InputGalleryUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    num: \\"\\",
-    rootbeer: \\"\\",
-    attend: undefined,
-    maybeSlide: false,
-    maybeCheck: false,
-    arrayTypeField: [],
-    jsonArray: [],
-    jsonField: \\"\\",
-    timestamp: \\"\\",
-    ippy: \\"\\",
-    timeisnow: \\"\\",
+    num: overrides.num && overrides.num.value ? overrides.num.value : \\"\\",
+    rootbeer:
+      overrides.rootbeer && overrides.rootbeer.value
+        ? overrides.rootbeer.value
+        : \\"\\",
+    attend:
+      overrides.attend && overrides.attend.value
+        ? overrides.attend.value
+        : undefined,
+    maybeSlide:
+      overrides.maybeSlide && overrides.maybeSlide.value
+        ? overrides.maybeSlide.value
+        : false,
+    maybeCheck:
+      overrides.maybeCheck && overrides.maybeCheck.value
+        ? overrides.maybeCheck.value
+        : false,
+    arrayTypeField:
+      overrides.arrayTypeField && overrides.arrayTypeField.value
+        ? overrides.arrayTypeField.value
+        : [],
+    jsonArray:
+      overrides.jsonArray && overrides.jsonArray.value
+        ? overrides.jsonArray.value
+        : [],
+    jsonField:
+      overrides.jsonField && overrides.jsonField.value
+        ? overrides.jsonField.value
+        : \\"\\",
+    timestamp:
+      overrides.timestamp && overrides.timestamp.value
+        ? overrides.timestamp.value
+        : \\"\\",
+    ippy: overrides.ippy && overrides.ippy.value ? overrides.ippy.value : \\"\\",
+    timeisnow:
+      overrides.timeisnow && overrides.timeisnow.value
+        ? overrides.timeisnow.value
+        : \\"\\",
   };
   const [num, setNum] = React.useState(initialValues.num);
   const [rootbeer, setRootbeer] = React.useState(initialValues.rootbeer);
@@ -51612,12 +52261,27 @@ export default function MyFlexUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: \\"\\",
-    caption: \\"\\",
-    Customtags: [],
-    Autocomplete: undefined,
-    tags: [],
-    profile_url: \\"\\",
+    username:
+      overrides.username && overrides.username.value
+        ? overrides.username.value
+        : \\"\\",
+    caption:
+      overrides.caption && overrides.caption.value
+        ? overrides.caption.value
+        : \\"\\",
+    Customtags:
+      overrides.Customtags && overrides.Customtags.value
+        ? overrides.Customtags.value
+        : [],
+    Autocomplete:
+      overrides.Autocomplete && overrides.Autocomplete.value
+        ? overrides.Autocomplete.value
+        : undefined,
+    tags: overrides.tags && overrides.tags.value ? overrides.tags.value : [],
+    profile_url:
+      overrides.profile_url && overrides.profile_url.value
+        ? overrides.profile_url.value
+        : \\"\\",
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -52295,14 +52959,36 @@ export default function PostCreateFormRow(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: \\"\\",
-    caption: \\"\\",
-    post_url: \\"\\",
-    profile_url: \\"\\",
-    status: \\"\\",
-    metadata: \\"\\",
-    nonModelField: \\"\\",
-    nonModelFieldArray: [],
+    username:
+      overrides.username && overrides.username.value
+        ? overrides.username.value
+        : \\"\\",
+    caption:
+      overrides.caption && overrides.caption.value
+        ? overrides.caption.value
+        : \\"\\",
+    post_url:
+      overrides.post_url && overrides.post_url.value
+        ? overrides.post_url.value
+        : \\"\\",
+    profile_url:
+      overrides.profile_url && overrides.profile_url.value
+        ? overrides.profile_url.value
+        : \\"\\",
+    status:
+      overrides.status && overrides.status.value ? overrides.status.value : \\"\\",
+    metadata:
+      overrides.metadata && overrides.metadata.value
+        ? overrides.metadata.value
+        : \\"\\",
+    nonModelField:
+      overrides.nonModelField && overrides.nonModelField.value
+        ? overrides.nonModelField.value
+        : \\"\\",
+    nonModelFieldArray:
+      overrides.nonModelFieldArray && overrides.nonModelFieldArray.value
+        ? overrides.nonModelFieldArray.value
+        : [],
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -53025,9 +53711,13 @@ export default function MyMemberForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    teamID: undefined,
-    Team: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    teamID:
+      overrides.teamID && overrides.teamID.value
+        ? overrides.teamID.value
+        : undefined,
+    Team:
+      overrides.Team && overrides.Team.value ? overrides.Team.value : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [teamID, setTeamID] = React.useState(initialValues.teamID);
@@ -53451,8 +54141,11 @@ export default function CreateProductForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    imgKeys: [],
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    imgKeys:
+      overrides.imgKeys && overrides.imgKeys.value
+        ? overrides.imgKeys.value
+        : [],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [imgKeys, setImgKeys] = React.useState(initialValues.imgKeys);
@@ -53669,8 +54362,11 @@ export default function UpdateProductForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    imgKeys: [],
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    imgKeys:
+      overrides.imgKeys && overrides.imgKeys.value
+        ? overrides.imgKeys.value
+        : [],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [imgKeys, setImgKeys] = React.useState(initialValues.imgKeys);
@@ -53956,8 +54652,11 @@ export default function UpdateProductForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    singleImgKey: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    singleImgKey:
+      overrides.singleImgKey && overrides.singleImgKey.value
+        ? overrides.singleImgKey.value
+        : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [singleImgKey, setSingleImgKey] = React.useState(
@@ -54254,12 +54953,24 @@ export default function CustomDataForm(
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: \\"John Doe\\",
-    email: \\"johndoe@amplify.com\\",
-    city: \\"\\",
-    category: undefined,
-    pages: 0,
-    phone: \\"+1-401-152-6995\\",
+    name:
+      overrides.name && overrides.name.value
+        ? overrides.name.value
+        : \\"John Doe\\",
+    email:
+      overrides.email && overrides.email.value
+        ? overrides.email.value
+        : \\"johndoe@amplify.com\\",
+    city: overrides.city && overrides.city.value ? overrides.city.value : \\"\\",
+    category:
+      overrides.category && overrides.category.value
+        ? overrides.category.value
+        : undefined,
+    pages: overrides.pages && overrides.pages.value ? overrides.pages.value : 0,
+    phone:
+      overrides.phone && overrides.phone.value
+        ? overrides.phone.value
+        : \\"+1-401-152-6995\\",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -54778,8 +55489,11 @@ export default function UpdateCarForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    dealership: undefined,
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    dealership:
+      overrides.dealership && overrides.dealership.value
+        ? overrides.dealership.value
+        : undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [dealership, setDealership] = React.useState(initialValues.dealership);
@@ -55294,8 +56008,8 @@ export default function UpdateDealershipForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    cars: [],
+    name: overrides.name && overrides.name.value ? overrides.name.value : \\"\\",
+    cars: overrides.cars && overrides.cars.value ? overrides.cars.value : [],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [cars, setCars] = React.useState(initialValues.cars);
