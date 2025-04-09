@@ -20,7 +20,7 @@ import {
   ComponentMetadata,
   ConcatenatedStudioComponentProperty,
 } from '@aws-amplify/codegen-ui';
-import ts, { factory } from 'typescript';
+import { factory } from 'typescript';
 import {
   getFixedComponentPropValueExpression,
   getComponentPropName,

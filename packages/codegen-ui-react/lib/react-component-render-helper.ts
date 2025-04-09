@@ -146,10 +146,10 @@ export function isActionEvent(event: StudioComponentEvent): event is ActionStudi
  *
  * @example
  * // Safe string
- * validateString("Hello World"); // returns "Hello World"
+ * escapePropertyValue("Hello World"); // returns "Hello World"
  *
  * // Dangerous string
- * validateString("eval('alert(1)')"); // returns ""
+ * escapePropertyValue("eval('alert(1)')"); // returns ""
  */
 export function filterDangerousPatterns(str: string): string {
   if (typeof str !== 'string') {
