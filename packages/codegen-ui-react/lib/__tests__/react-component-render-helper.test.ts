@@ -20,6 +20,7 @@ import {
   ComponentMetadata,
   ConcatenatedStudioComponentProperty,
 } from '@aws-amplify/codegen-ui';
+import ts, { factory } from 'typescript';
 import {
   getFixedComponentPropValueExpression,
   getComponentPropName,
@@ -36,6 +37,10 @@ import {
   hasChildrenProp,
   buildConcatExpression,
   parseNumberOperand,
+  getStateName,
+  escapePropertyValue,
+  buildBindingExpression,
+  filterDangerousPatterns,
 } from '../react-component-render-helper';
 
 import { assertASTMatchesSnapshot } from './__utils__';
@@ -355,6 +360,279 @@ describe('react-component-render-helper', () => {
       expect(parseNumberOperand('10.01', { dataType: 'Float', readOnly: false, required: false, isArray: false })).toBe(
         10.01,
       );
+    });
+  });
+
+  describe('getStateName', () => {
+    it('should correctly format state name by combining component name and property', () => {
+      const stateReference = {
+        componentName: 'UserProfile',
+        property: 'firstName',
+      };
+
+      const result = getStateName(stateReference);
+
+      expect(result).toBe('userProfileFirstName');
+    });
+
+    it('should handle single word component names and properties', () => {
+      const stateReference = {
+        componentName: 'Button',
+        property: 'active',
+      };
+
+      const result = getStateName(stateReference);
+
+      expect(result).toBe('buttonActive');
+    });
+
+    it('should handle empty strings', () => {
+      const stateReference = {
+        componentName: '',
+        property: '',
+      };
+
+      const result = getStateName(stateReference);
+
+      expect(result).toBe('');
+    });
+
+    it('should handle special characters if sanitizeName is implemented', () => {
+      const stateReference = {
+        componentName: 'User$Profile',
+        property: 'first@Name',
+      };
+
+      const result = getStateName(stateReference);
+
+      expect(result).toBe('userDollarProfileFirstAtSymbolName');
+    });
+  });
+
+  describe('sanitizeString', () => {
+    it('should keep alphanumeric characters', () => {
+      expect(filterDangerousPatterns('abc123')).toBe('abc123');
+      expect(filterDangerousPatterns('ABC789')).toBe('ABC789');
+    });
+
+    it('should keep allowed special characters', () => {
+      expect(filterDangerousPatterns('hello.world')).toBe('hello.world');
+      expect(filterDangerousPatterns('first,second')).toBe('first,second');
+      expect(filterDangerousPatterns('under_score')).toBe('under_score');
+      expect(filterDangerousPatterns('dash-here')).toBe('dash-here');
+    });
+
+    it('should remove disallowed special characters', () => {
+      expect(filterDangerousPatterns('hello@world')).toBe('hello@world');
+      expect(filterDangerousPatterns('test#123')).toBe('test#123');
+      expect(filterDangerousPatterns('special!chars')).toBe('special!chars');
+      expect(filterDangerousPatterns('remove$signs')).toBe('remove$signs');
+    });
+
+    it('should handle spaces correctly', () => {
+      expect(filterDangerousPatterns('hello world')).toBe('hello world');
+      expect(filterDangerousPatterns('  extra spaces  ')).toBe('extra spaces');
+      expect(filterDangerousPatterns('\ttab\nspace')).toBe('tab\nspace');
+    });
+
+    it('should handle eval strings', () => {
+      expect(filterDangerousPatterns("eval('if(!window.x){alert(document.domain);window.x=1}')")).toBe('');
+      // This is an intentional test of DANGEROUS CODE!!!
+      // If you run this in your browser a hacker could get you!!!
+      // eslint-disable-next-line no-script-url
+      expect(filterDangerousPatterns('javascript:alert(1)')).toBe('');
+    });
+
+    it('should handle empty strings', () => {
+      expect(filterDangerousPatterns('')).toBe('');
+      expect(filterDangerousPatterns('   ')).toBe('');
+    });
+
+    it('should handle non-string inputs', () => {
+      expect(filterDangerousPatterns(null as any)).toBe('');
+      expect(filterDangerousPatterns(undefined as any)).toBe('');
+      expect(filterDangerousPatterns(123 as any)).toBe('');
+      expect(filterDangerousPatterns({} as any)).toBe('');
+      expect(filterDangerousPatterns([] as any)).toBe('');
+    });
+
+    it('should handle mixed content correctly', () => {
+      expect(filterDangerousPatterns('Hello, World! @ #123')).toBe('Hello, World! @ #123');
+      expect(filterDangerousPatterns('user.name@domain.com')).toBe('user.name@domain.com');
+      expect(filterDangerousPatterns('path/to/file.txt')).toBe('path/to/file.txt');
+    });
+
+    it('should preserve multiple allowed special characters', () => {
+      expect(filterDangerousPatterns('item1,item2.item3-item4_item5')).toBe('item1,item2.item3-item4_item5');
+    });
+
+    it('should handle unicode characters', () => {
+      expect(filterDangerousPatterns('héllo wörld')).toBe('héllo wörld');
+      expect(filterDangerousPatterns('←↑→↓')).toBe('←↑→↓');
+      expect(filterDangerousPatterns('🌟star')).toBe('🌟star');
+    });
+
+    it('should handle complex combinations', () => {
+      const complexInput = `
+        Hello! This is a "complex" test-case...
+        With @multiple# lines & special chars.
+        123_456-789.000
+      `;
+
+      expect(filterDangerousPatterns(complexInput)).toBe(
+        `Hello! This is a "complex" test-case...
+        With @multiple# lines & special chars.
+        123_456-789.000`,
+      );
+    });
+  });
+
+  describe('escapePropertyName', () => {
+    describe('Reserved Keywords', () => {
+      it('should append "Prop" to JavaScript reserved keywords', () => {
+        expect(escapePropertyValue('class')).toBe('classProp');
+        expect(escapePropertyValue('function')).toBe('functionProp');
+        expect(escapePropertyValue('var')).toBe('varProp');
+      });
+
+      it('should not modify non-reserved words', () => {
+        expect(escapePropertyValue('user')).toBe('user');
+        expect(escapePropertyValue('name')).toBe('name');
+        expect(escapePropertyValue('address')).toBe('address');
+      });
+    });
+
+    describe('Sanitization', () => {
+      it('should sanitize invalid JavaScript identifiers', () => {
+        expect(escapePropertyValue('user-name')).toBe('user-name');
+        expect(escapePropertyValue('first.last')).toBe('first.last');
+        expect(escapePropertyValue('special@char')).toBe('special@char');
+      });
+
+      it('should handle spaces in property names', () => {
+        expect(escapePropertyValue('first name')).toBe('first name');
+        expect(escapePropertyValue('  spaced  ')).toBe('spaced');
+      });
+
+      it('should preserve valid characters', () => {
+        expect(escapePropertyValue('validName123')).toBe('validName123');
+        expect(escapePropertyValue('_privateVar')).toBe('_privateVar');
+        expect(escapePropertyValue('$specialVar')).toBe('$specialVar');
+      });
+    });
+  });
+
+  describe('buildBindingExpression', () => {
+    it('should return an empty string with dangerous text', () => {
+      const propertyValue = "eval('if(!window.x){alert(document.domain);window.x=1}')";
+      const prop = {
+        bindingProperties: {
+          property: propertyValue,
+        },
+      };
+
+      const result = buildBindingExpression(prop);
+
+      expect((result as any).text).toBe('');
+    });
+
+    it('should create property access chain for data attributes', () => {
+      const prop = {
+        bindingProperties: {
+          property: 'value',
+          field: 'data-test',
+        },
+      };
+
+      const result = buildBindingExpression(prop);
+
+      expect(result.kind).toBe(204);
+      expect((result as any).name.escapedText).toBe('data-test');
+    });
+
+    it('should return original string containing similar, but not dangerous text', () => {
+      const propertyValue = 'evaluate if window alert document domain window';
+      const prop = {
+        bindingProperties: {
+          property: propertyValue,
+        },
+      };
+
+      const result = buildBindingExpression(prop);
+
+      expect((result as any).text).toBe(propertyValue);
+    });
+
+    it('should create a simple identifier when no field is present', () => {
+      const prop = {
+        bindingProperties: {
+          property: 'userName',
+        },
+      };
+
+      const result = buildBindingExpression(prop);
+
+      // Check that it's an identifier with the correct text
+      expect(result.kind).toBe(factory.createIdentifier('').kind);
+      expect((result as any).text).toBe('userName');
+    });
+
+    it('should handle reserved JavaScript keywords in property names', () => {
+      const prop = {
+        bindingProperties: {
+          property: 'class', // 'class' is a reserved keyword
+        },
+      };
+
+      const result = buildBindingExpression(prop);
+
+      // Should be escaped as 'classProp'
+      expect((result as any).text).toBe('classProp');
+    });
+
+    it('should sanitize invalid characters in property names', () => {
+      const prop = {
+        bindingProperties: {
+          property: 'user@name!',
+        },
+      };
+
+      const result = buildBindingExpression(prop);
+
+      // Should be sanitized
+      expect((result as any).text).toBe('user@name!');
+    });
+
+    it('should generate snapshot for simple property', () => {
+      const prop = {
+        bindingProperties: {
+          property: 'simpleProperty',
+        },
+      };
+
+      assertASTMatchesSnapshot(buildBindingExpression(prop));
+    });
+
+    it('should generate snapshot for property with field', () => {
+      const prop = {
+        bindingProperties: {
+          property: 'user',
+          field: 'address',
+        },
+      };
+
+      assertASTMatchesSnapshot(buildBindingExpression(prop));
+    });
+
+    it('should generate snapshot for property with nested field access', () => {
+      const prop = {
+        bindingProperties: {
+          property: 'data',
+          field: 'nested.field',
+        },
+      };
+
+      assertASTMatchesSnapshot(buildBindingExpression(prop));
     });
   });
 });
