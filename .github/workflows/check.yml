@@ -100,7 +100,7 @@ jobs:
           REACT_APP_USER_PASSWORD: ${{ secrets.E2E_TEST_USER_PASSWORD }}
       - name: Upload Cypress videos
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
           path: /home/runner/work/amplify-codegen-ui/amplify-codegen-ui/e2e-test-app/cypress/videos
@@ -193,7 +193,7 @@ jobs:
           REACT_APP_USER_PASSWORD: ${{ secrets.E2E_TEST_USER_PASSWORD }}
       - name: Upload Cypress videos
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
           path: /home/runner/work/amplify-codegen-ui/amplify-codegen-ui/e2e-test-app-v6/cypress/videos
@@ -224,7 +224,7 @@ jobs:
           config-file: cypress.config.ts
       - name: Upload Cypress videos
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
           path: /home/runner/work/amplify-codegen-ui/amplify-codegen-ui/packages/integration-test/cypress/videos
@@ -258,7 +258,7 @@ jobs:
           config-file: cypress.config.ts
       - name: Upload Cypress videos
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
           path: /home/runner/work/amplify-codegen-ui/amplify-codegen-ui/packages/integration-test/cypress/videos
