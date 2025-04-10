@@ -178,10 +178,10 @@ export const getDefaultValueExpression = (
   return factory.createIdentifier('undefined');
 };
 /* ex. const initialValues = {
-  name: undefined,
-  isChecked: false
-}
-*/
+    name: undefined,
+    isChecked: false
+  }
+  */
 export const getInitialValues = (
   fieldConfigs: Record<string, FieldConfigMetadata>,
   component: StudioForm,
@@ -194,10 +194,33 @@ export const getInitialValues = (
       const stateName = name.split('.')[0];
       const defaultValue = getControlledComponentDefaultValue(component.fields, componentType, name);
       let initialValue = getDefaultValueExpression(name, componentType, dataType, isArray, false, defaultValue);
+
+      // Determine whether to use createPropertyAccessExpression or createElementAccessExpression
+      const overrideExpression = isValidVariableName(name)
+        ? factory.createPropertyAccessExpression(factory.createIdentifier('overrides'), factory.createIdentifier(name))
+        : factory.createElementAccessExpression(
+            factory.createIdentifier('overrides'),
+            factory.createStringLiteral(name),
+          );
+
+      // Check if the override exists and has a value, otherwise use the initial value
+      initialValue = factory.createConditionalExpression(
+        factory.createBinaryExpression(
+          overrideExpression,
+          factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+          factory.createPropertyAccessExpression(overrideExpression, factory.createIdentifier('value')),
+        ),
+        factory.createToken(SyntaxKind.QuestionToken),
+        factory.createPropertyAccessExpression(overrideExpression, factory.createIdentifier('value')),
+        factory.createToken(SyntaxKind.ColonToken),
+        initialValue,
+      );
+
       if (isNested) {
         // if nested, just set up an empty object for the top-level key
         initialValue = factory.createObjectLiteralExpression();
       }
+
       if (!stateNames.has(stateName)) {
         acc.push(
           factory.createPropertyAssignment(
