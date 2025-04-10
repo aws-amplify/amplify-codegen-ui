@@ -25,10 +25,10 @@ jobs:
         with:
           path: amplify-cli
           repository: aws-amplify/amplify-cli
-      - name: Setup Node.js LTS/gallium
-        uses: actions/setup-node@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: lts/gallium
+          node-version: lts/*
       - name: Build amplify-codegen-ui
         working-directory: amplify-codegen-ui
         run: |
@@ -100,7 +100,7 @@ jobs:
           REACT_APP_USER_PASSWORD: ${{ secrets.E2E_TEST_USER_PASSWORD }}
       - name: Upload Cypress videos
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
           path: /home/runner/work/amplify-codegen-ui/amplify-codegen-ui/e2e-test-app/cypress/videos
@@ -118,10 +118,10 @@ jobs:
         with:
           path: amplify-cli
           repository: aws-amplify/amplify-cli
-      - name: Setup Node.js LTS/gallium
-        uses: actions/setup-node@v2
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v4
         with:
-          node-version: lts/gallium
+          node-version: lts/*
       - name: Build amplify-codegen-ui
         working-directory: amplify-codegen-ui
         run: |
@@ -193,7 +193,7 @@ jobs:
           REACT_APP_USER_PASSWORD: ${{ secrets.E2E_TEST_USER_PASSWORD }}
       - name: Upload Cypress videos
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
           path: /home/runner/work/amplify-codegen-ui/amplify-codegen-ui/e2e-test-app-v6/cypress/videos
@@ -204,7 +204,7 @@ jobs:
       - name: Checkout Studio Codegen
         uses: actions/checkout@v2
       - name: Setup Node.js LTS
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: lts/*
       - name: Install packages
@@ -224,7 +224,7 @@ jobs:
           config-file: cypress.config.ts
       - name: Upload Cypress videos
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
           path: /home/runner/work/amplify-codegen-ui/amplify-codegen-ui/packages/integration-test/cypress/videos
@@ -238,7 +238,7 @@ jobs:
       - name: Checkout Studio Codegen
         uses: actions/checkout@v2
       - name: Setup Node.js LTS
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: lts/*
       - name: Install packages
@@ -258,7 +258,7 @@ jobs:
           config-file: cypress.config.ts
       - name: Upload Cypress videos
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
           path: /home/runner/work/amplify-codegen-ui/amplify-codegen-ui/packages/integration-test/cypress/videos
