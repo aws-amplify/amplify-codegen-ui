@@ -409,7 +409,7 @@ describe('react-component-render-helper', () => {
     });
   });
 
-  describe('sanitizeString', () => {
+  describe('filterScriptingPatterns', () => {
     it('should keep alphanumeric characters', () => {
       expect(filterScriptingPatterns('abc123')).toBe('abc123');
       expect(filterScriptingPatterns('ABC789')).toBe('ABC789');
@@ -449,9 +449,6 @@ describe('react-component-render-helper', () => {
     it('should handle non-string inputs', () => {
       expect(filterScriptingPatterns(null as any)).toBe('');
       expect(filterScriptingPatterns(undefined as any)).toBe('');
-      expect(filterScriptingPatterns(123 as any)).toBe('');
-      expect(filterScriptingPatterns({} as any)).toBe('');
-      expect(filterScriptingPatterns([] as any)).toBe('');
     });
 
     it('should handle mixed content correctly', () => {

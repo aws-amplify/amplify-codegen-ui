@@ -150,6 +150,8 @@ export function isActionEvent(event: StudioComponentEvent): event is ActionStudi
  * filterScriptingPatterns("eval('alert(1)')"); // returns ""
  */
 export function filterScriptingPatterns(str: string): string {
+  if (!str) return '';
+
   // Check for dangerous JavaScript patterns
   if (scriptingPatterns.some((pattern) => pattern.test(str))) {
     return '';
