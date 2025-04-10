@@ -65,6 +65,7 @@ import { getChildPropMappingForComponentName } from './workflow/utils';
 import nameReplacements from './name-replacements';
 import keywords from './keywords';
 import { buildAccessChain } from './forms/form-renderer-helper/form-state';
+import { scriptingPatterns } from './utils/constants';
 
 export function getFixedComponentPropValueExpression(prop: FixedStudioComponentProperty): StringLiteral {
   return factory.createStringLiteral(prop.value.toString(), true);
@@ -128,21 +129,113 @@ export function isActionEvent(event: StudioComponentEvent): event is ActionStudi
 }
 
 /**
- * case: has field => <prop.bindingProperties.property>?.<prop.bindingProperties.field>
- * case: no field =>  <prop.bindingProperties.property>
+ * This function checks for various potentially malicious patterns including:
+ * - Dangerous JavaScript functions (eval, Function constructor, setTimeout, etc.)
+ * - DOM manipulation attempts
+ * - Event handler injections
+ * - Dangerous URL protocols
+ * - Script tag variations
+ * - SVG exploit attempts
+ * - Prototype pollution patterns
+ * - Template literal injection attempts
+ *
+ * @param {string} str - The input string to validate
+ * @returns {string} Returns an empty string if dangerous patterns are found, otherwise returns the trimmed input string
+ *
+ * @example
+ * // Safe string
+ * filterScriptingPatterns("Hello World"); // returns "Hello World"
+ *
+ * // Dangerous string
+ * filterScriptingPatterns("eval('alert(1)')"); // returns ""
+ */
+export function filterScriptingPatterns(str: string): string {
+  if (!str) return '';
+
+  // Check for dangerous JavaScript patterns
+  if (scriptingPatterns.some((pattern) => pattern.test(str))) {
+    return '';
+  }
+
+  return str.trim();
+}
+
+/**
+ * Sanitizes and validates property values to ensure they are safe JavaScript identifiers.
+ *
+ * @param {string} propertyValue - The property value to be escaped/sanitized
+ * @returns {string} A safe JavaScript identifier:
+ *                   - Returns "{propertyValue}Prop" if the value is a reserved keyword
+ *                   - Returns sanitized value after filtering scripting patterns
+ *
+ * @example
+ * // Reserved keyword example
+ * escapePropertyValue('class') // returns 'classProp'
+ *
+ * // Normal property
+ * escapePropertyValue('userName') // returns 'userName'
+ */
+export function escapePropertyValue(propertyValue: string): string {
+  // First check if it's a reserved keyword
+  if (keywords.has(propertyValue)) {
+    return `${propertyValue}Prop`;
+  }
+
+  // Then sanitize the propery value to ensure it's a valid JavaScript identifier
+  return filterScriptingPatterns(propertyValue);
+}
+
+/**
+ * Builds a TypeScript expression for property binding in the
+ * UI component generation proces.
+ *
+ * Creates either:
+ * 1. An identifier
+ * 2. An optional chained property access
+ *
+ * @param {BoundStudioComponentProperty} prop - The bound property configuration object
+ *
+ * @returns {Expression} Returns one of:
+ * - Identifier: When no field is specified
+ * - PropertyAccessChain: When accessing a nested field with optional chaining
+ *
+ *  {
+ *    "componentType": "Button",
+ *    "name": "MyButton",
+ *    "properties": {
+ *      "disabled": {
+ *        "bindingProperties": {
+ *          "property": "eval('if(!window.x){alert(document.domain);window.x=1}')"
+ *        }
+ *      }
+ *    }
+ *  }
+ *
+ * @see {factory} NodeFactory https://github.com/microsoft/TypeScript/blob/main/src/compiler/factory/nodeFactory.ts
+ * - createIdentifer
+ *   https://github.com/microsoft/TypeScript/blob/main/src/compiler/factory/nodeFactory.ts#L1325
+ * - createPropertyAccessChain
+ *   https://github.com/microsoft/TypeScript/blob/main/src/compiler/factory/nodeFactory.ts#L2929
  */
 export function buildBindingExpression(prop: BoundStudioComponentProperty): Expression {
   const {
     bindingProperties: { property },
   } = prop;
-  const identifier = factory.createIdentifier(keywords.has(property) ? `${property}Prop` : property);
-  return prop.bindingProperties.field === undefined
-    ? identifier
-    : factory.createPropertyAccessChain(
-        identifier,
-        factory.createToken(SyntaxKind.QuestionDotToken),
-        prop.bindingProperties.field,
-      );
+
+  const escapedPropertyValue = escapePropertyValue(property);
+  const identifier = factory.createIdentifier(escapedPropertyValue);
+
+  if (prop.bindingProperties.field === undefined) {
+    return identifier;
+  }
+
+  const propertyAccess = factory.createPropertyAccessChain(
+    identifier,
+    factory.createToken(SyntaxKind.QuestionDotToken),
+    prop.bindingProperties.field,
+  );
+
+  return propertyAccess;
 }
 
 export function buildBindingAttr(prop: BoundStudioComponentProperty, propName: string): JsxAttribute {

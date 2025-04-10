@@ -22,3 +22,47 @@ export const STORAGE_FILE_ALGO_TYPE = 'SHA-1';
 export const AMPLIFY_JS_V5 = '5.0.0';
 
 export const AMPLIFY_JS_V6 = '6.0.0';
+
+export const scriptingPatterns = [
+  // JavaScript functions
+  /eval\s*\(/i,
+  /Function\s*\(/i,
+  /setTimeout\s*\(/i,
+  /setInterval\s*\(/i,
+  /new\s+Function/i,
+  /import\s*\(/i,
+  /require\s*\(/i,
+
+  // DOM manipulation
+  /document\./i,
+  /window\./i,
+  /location\./i,
+
+  // Event handlers
+  /on\w+\s*=/i, // matches onerror=, onload=, etc.
+
+  // Dangerous protocols
+  /javascript:/i,
+  /data:/i,
+  /vbscript:/i,
+
+  // Script tags and variations
+  /<script/i,
+  /<\/script/i,
+  /<x:script/i,
+
+  // SVG exploits
+  /<svg/i,
+  /xlink:href/i,
+
+  // Object prototype attacks
+  /\[\s*Symbol\s*\./i,
+  /__proto__/i,
+  /prototype\s*\./i,
+
+  // Template literal attacks
+  /\$\{/i,
+
+  // Base64 indicators
+  /base64/i,
+];

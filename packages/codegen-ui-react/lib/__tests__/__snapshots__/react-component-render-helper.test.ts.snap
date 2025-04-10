@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`react-component-render-helper buildBindingExpression should generate snapshot for property with field 1`] = `"user?.address"`;
+
+exports[`react-component-render-helper buildBindingExpression should generate snapshot for property with nested field access 1`] = `"data?.nested.field"`;
+
+exports[`react-component-render-helper buildBindingExpression should generate snapshot for simple property 1`] = `"simpleProperty"`;
+
 exports[`react-component-render-helper buildChildElement bound property 1`] = `
 NodeObject {
   "dotDotDotToken": undefined,
