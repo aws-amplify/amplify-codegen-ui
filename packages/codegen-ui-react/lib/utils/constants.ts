@@ -37,8 +37,6 @@ export const scriptingPatterns = [
   /document\./i,
   /window\./i,
   /location\./i,
-  /localStorage\./i,
-  /sessionStorage\./i,
 
   // Event handlers
   /on\w+\s*=/i, // matches onerror=, onload=, etc.

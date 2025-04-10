@@ -129,9 +129,6 @@ export function isActionEvent(event: StudioComponentEvent): event is ActionStudi
 }
 
 /**
- * Validates a string against known dangerous JavaScript patterns and security vulnerabilities.
- * https://t.corp.amazon.com/P216078244
- *
  * This function checks for various potentially malicious patterns including:
  * - Dangerous JavaScript functions (eval, Function constructor, setTimeout, etc.)
  * - DOM manipulation attempts
@@ -153,10 +150,6 @@ export function isActionEvent(event: StudioComponentEvent): event is ActionStudi
  * filterScriptingPatterns("eval('alert(1)')"); // returns ""
  */
 export function filterScriptingPatterns(str: string): string {
-  if (typeof str !== 'string') {
-    return '';
-  }
-
   // Check for dangerous JavaScript patterns
   if (scriptingPatterns.some((pattern) => pattern.test(str))) {
     return '';
