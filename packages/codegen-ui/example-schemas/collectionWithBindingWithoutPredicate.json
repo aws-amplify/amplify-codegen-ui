@@ -7,16 +7,20 @@
       "componentType": "ListingCard",
       "properties": {
         "marginRight": {
-          "value": "0"
+          "value": "0",
+          "configured": true
         },
         "marginBottom": {
-          "value": "0"
+          "value": "0",
+          "configured": true
         },
         "marginTop": {
-          "value": "0"
+          "value": "0",
+          "configured": true
         },
         "marginLeft": {
-          "value": "0"
+          "value": "0",
+          "configured": true
         }
       },
       "overrides": {},
