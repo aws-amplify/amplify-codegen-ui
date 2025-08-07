@@ -1,12 +1,12 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@5.1.0
+  node: circleci/node@7.1.1
 
 jobs:
   install:
     docker:
-      - image: cimg/node:16.14
+      - image: cimg/node:18.20
     steps:
       - checkout
       - run: sudo npm install -g lerna@6.4.1
@@ -26,7 +26,7 @@ jobs:
 
   style:
     docker:
-      - image: cimg/node:16.14
+      - image: cimg/node:18.20
     steps:
       - checkout
       - restore_node_modules
@@ -45,7 +45,7 @@ jobs:
 
   build:
     docker:
-      - image: cimg/node:16.14
+      - image: cimg/node:18.20
     steps:
       - checkout
       - restore_node_modules
@@ -59,7 +59,7 @@ jobs:
 
   unit-test:
     docker:
-      - image: cimg/node:16.14
+      - image: cimg/node:18.20
     resource_class: large
     steps:
       - checkout
@@ -73,7 +73,7 @@ jobs:
 
   publish:
     docker:
-      - image: cimg/node:16.14
+      - image: cimg/node:18.20
     steps:
       - checkout
       - restore_node_modules
