@@ -77,11 +77,12 @@
     ]
   },
   "overrides": {
-    "parse-url": ">=6.0.1",
-    "hermes-engine": ">=0.10.0",
+    "axios": ">=1.6.4",
+    "form-data": "^4.0.4",
     "got": ">=11.8.5",
+    "hermes-engine": ">=0.10.0",
+    "parse-url": ">=6.0.1",
     "shell-quote": ">=1.7.3",
-    "tough-cookie": ">=4.1.3",
-    "axios": ">=1.6.4"
+    "tough-cookie": ">=4.1.3"    
   }
 }

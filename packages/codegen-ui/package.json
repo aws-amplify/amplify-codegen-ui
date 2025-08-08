@@ -54,6 +54,7 @@
     ]
   },
   "overrides": {
+    "form-data": "^4.0.4",
     "hermes-engine": ">=0.10.0",
     "shell-quote": ">=1.7.3"
   }
