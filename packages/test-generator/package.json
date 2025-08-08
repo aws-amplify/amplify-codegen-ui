@@ -34,8 +34,9 @@
     "pascalcase": "1.0.0"
   },
   "overrides": {
+    "follow-redirects": ">=1.15.4",
+    "form-data": "^4.0.4",
     "hermes-engine": ">=0.10.0",
-    "shell-quote": ">=1.7.3",
-    "follow-redirects": ">=1.15.4"
+    "shell-quote": ">=1.7.3"
   }
 }
