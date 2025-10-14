@@ -73,10 +73,12 @@
       "name": "ReneButton",
       "properties": {
         "width": {
-          "value": "293px"
+          "value": "293px",
+          "configured": true
         },
         "height": {
-          "value": "45px"
+          "value": "45px",
+          "configured": true
         }
       }
     },
