@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildBindingEvent should generate snapshot for safe binding event 1`] = `"onClick={handleSubmit}"`;
+
+exports[`buildBindingEvent should generate snapshot for sanitized malicious binding event 1`] = `"onClick={}"`;

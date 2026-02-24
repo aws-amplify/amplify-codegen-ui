@@ -16,7 +16,7 @@
 import { StudioGenericEvent, StudioComponentEvent, BoundStudioComponentEvent } from '@aws-amplify/codegen-ui';
 import { factory, JsxAttribute, SyntaxKind } from 'typescript';
 import { getActionIdentifier } from './action';
-import { isBoundEvent, isActionEvent } from '../react-component-render-helper';
+import { isBoundEvent, isActionEvent, escapePropertyValue } from '../react-component-render-helper';
 import { Primitive, PrimitiveLevelPropConfiguration } from '../primitive';
 
 /*
@@ -69,7 +69,8 @@ export function buildBindingEvent(
   event: BoundStudioComponentEvent,
   eventName: string,
 ): JsxAttribute {
-  const expr = factory.createIdentifier(event.bindingEvent);
+  const sanitizedBindingEvent = escapePropertyValue(event.bindingEvent);
+  const expr = factory.createIdentifier(sanitizedBindingEvent);
   return factory.createJsxAttribute(
     factory.createIdentifier(mapGenericEventToReact(componentType as Primitive, eventName as StudioGenericEvent)),
     factory.createJsxExpression(undefined, expr),

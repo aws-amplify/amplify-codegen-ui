@@ -1,0 +1,84 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "MaliciousEvents",
+  "bindingProperties": {
+    "onClick": {
+      "type": "Event"
+    }
+  },
+  "properties": {},
+  "children": [
+    {
+      "componentType": "Button",
+      "name": "EvalInjection",
+      "properties": {
+        "label": {
+          "value": "Click me"
+        }
+      },
+      "events": {
+        "onClick": {
+          "bindingEvent": "eval('alert(document.domain)')"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "DocumentAccess",
+      "properties": {
+        "label": {
+          "value": "Steal cookies"
+        }
+      },
+      "events": {
+        "onClick": {
+          "bindingEvent": "document.cookie"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "WindowLocation",
+      "properties": {
+        "label": {
+          "value": "Redirect"
+        }
+      },
+      "events": {
+        "onClick": {
+          "bindingEvent": "window.location='http://evil.com'"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "ScriptTag",
+      "properties": {
+        "label": {
+          "value": "XSS"
+        }
+      },
+      "events": {
+        "onClick": {
+          "bindingEvent": "<script>alert(1)</script>"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "SafeHandler",
+      "properties": {
+        "label": {
+          "value": "Safe"
+        }
+      },
+      "events": {
+        "onClick": {
+          "bindingEvent": "onClick"
+        }
+      }
+    }
+  ],
+  "schemaVersion": "1.0"
+}

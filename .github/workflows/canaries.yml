@@ -21,7 +21,7 @@ jobs:
       - name: Setup Node.js LTS
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 22
       - name: Install Latest Amplfy CLI
         run: npm i -g @aws-amplify/cli@latest
       - name: Create a test react app
@@ -103,7 +103,7 @@ jobs:
       - name: Setup Node.js LTS
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 22
       - name: Install Latest Amplfy CLI
         run: npm i -g @aws-amplify/cli@latest
       - name: Create a test react app

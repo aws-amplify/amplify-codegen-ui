@@ -229,10 +229,11 @@ export function buildBindingExpression(prop: BoundStudioComponentProperty): Expr
     return identifier;
   }
 
+  const escapedFieldValue = escapePropertyValue(prop.bindingProperties.field);
   const propertyAccess = factory.createPropertyAccessChain(
     identifier,
     factory.createToken(SyntaxKind.QuestionDotToken),
-    prop.bindingProperties.field,
+    escapedFieldValue,
   );
 
   return propertyAccess;
@@ -262,13 +263,14 @@ export function buildBindingWithDefaultExpression(
   defaultValue: string,
 ): Expression {
   const rightExpr = factory.createStringLiteral(defaultValue);
+  const escapedProperty = escapePropertyValue(prop.bindingProperties.property);
   const leftExpr =
     prop.bindingProperties.field === undefined
-      ? factory.createIdentifier(prop.bindingProperties.property)
+      ? factory.createIdentifier(escapedProperty)
       : factory.createPropertyAccessChain(
-          factory.createIdentifier(prop.bindingProperties.property),
+          factory.createIdentifier(escapedProperty),
           factory.createToken(SyntaxKind.QuestionDotToken),
-          prop.bindingProperties.field,
+          escapePropertyValue(prop.bindingProperties.field),
         );
 
   return factory.createBinaryExpression(leftExpr, factory.createToken(SyntaxKind.BarBarToken), rightExpr);
@@ -357,7 +359,10 @@ export function buildFixedAttr(prop: FixedStudioComponentProperty, propName: str
 export function buildCollectionBindingExpression(prop: CollectionStudioComponentProperty): Expression {
   return prop.collectionBindingProperties.field === undefined
     ? factory.createIdentifier('item')
-    : factory.createPropertyAccessExpression(factory.createIdentifier('item'), prop.collectionBindingProperties.field);
+    : factory.createPropertyAccessExpression(
+        factory.createIdentifier('item'),
+        escapePropertyValue(prop.collectionBindingProperties.field),
+      );
 }
 
 export function buildCollectionBindingAttr(prop: CollectionStudioComponentProperty, propName: string): JsxAttribute {
@@ -379,7 +384,7 @@ export function buildCollectionBindingWithDefaultExpression(
       ? factory.createIdentifier('item')
       : factory.createPropertyAccessExpression(
           factory.createIdentifier('item'),
-          prop.collectionBindingProperties.field,
+          escapePropertyValue(prop.collectionBindingProperties.field),
         );
 
   return factory.createBinaryExpression(leftExpr, factory.createToken(SyntaxKind.BarBarToken), rightExpr);

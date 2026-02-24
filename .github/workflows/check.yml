@@ -28,7 +28,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 22
       - name: Build amplify-codegen-ui
         working-directory: amplify-codegen-ui
         run: |
@@ -121,7 +121,7 @@ jobs:
       - name: Setup Node.js LTS
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 22
       - name: Build amplify-codegen-ui
         working-directory: amplify-codegen-ui
         run: |
@@ -206,7 +206,7 @@ jobs:
       - name: Setup Node.js LTS
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 22
       - name: Install packages
         run: npm ci
       - name: Lerna bootstrap
@@ -240,7 +240,7 @@ jobs:
       - name: Setup Node.js LTS
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 22
       - name: Install packages
         run: npm ci
       - name: Lerna bootstrap
