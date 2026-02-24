@@ -41,6 +41,9 @@ import {
   escapePropertyValue,
   buildBindingExpression,
   filterScriptingPatterns,
+  buildBindingWithDefaultExpression,
+  buildCollectionBindingExpression,
+  buildCollectionBindingWithDefaultExpression,
 } from '../react-component-render-helper';
 
 import { assertASTMatchesSnapshot } from './__utils__';
@@ -628,6 +631,171 @@ describe('react-component-render-helper', () => {
       };
 
       assertASTMatchesSnapshot(buildBindingExpression(prop));
+    });
+
+    it('should sanitize malicious field value', () => {
+      const prop = {
+        bindingProperties: {
+          property: 'user',
+          field: "eval('alert(1)')",
+        },
+      };
+
+      const result = buildBindingExpression(prop);
+      // With a sanitized empty field, the result should still be a property access chain
+      // but the field name should be empty
+      expect((result as any).name.escapedText).toBe('');
+    });
+
+    it('should sanitize document access in field value', () => {
+      const prop = {
+        bindingProperties: {
+          property: 'data',
+          field: 'document.cookie',
+        },
+      };
+
+      const result = buildBindingExpression(prop);
+      expect((result as any).name.escapedText).toBe('');
+    });
+
+    it('should allow safe field values', () => {
+      const prop = {
+        bindingProperties: {
+          property: 'user',
+          field: 'firstName',
+        },
+      };
+
+      const result = buildBindingExpression(prop);
+      expect((result as any).name.escapedText).toBe('firstName');
+    });
+
+    it('should escape reserved keyword in field value', () => {
+      const prop = {
+        bindingProperties: {
+          property: 'data',
+          field: 'class',
+        },
+      };
+
+      const result = buildBindingExpression(prop);
+      expect((result as any).name.escapedText).toBe('classProp');
+    });
+  });
+
+  describe('buildBindingWithDefaultExpression', () => {
+    it('should sanitize malicious property value', () => {
+      const prop = {
+        bindingProperties: {
+          property: "eval('alert(1)')",
+        },
+      };
+
+      const result = buildBindingWithDefaultExpression(prop, 'default');
+      // Left side of || should have sanitized identifier
+      expect((result as any).left.escapedText).toBe('');
+    });
+
+    it('should sanitize malicious field value', () => {
+      const prop = {
+        bindingProperties: {
+          property: 'user',
+          field: "document.cookie",
+        },
+      };
+
+      const result = buildBindingWithDefaultExpression(prop, 'default');
+      // Left side is a property access chain; the field name should be sanitized
+      expect((result as any).left.name.escapedText).toBe('');
+    });
+
+    it('should allow safe property and field values', () => {
+      const prop = {
+        bindingProperties: {
+          property: 'user',
+          field: 'name',
+        },
+      };
+
+      const result = buildBindingWithDefaultExpression(prop, 'Anonymous');
+      expect((result as any).left.expression.escapedText).toBe('user');
+      expect((result as any).left.name.escapedText).toBe('name');
+    });
+  });
+
+  describe('buildCollectionBindingExpression', () => {
+    it('should sanitize malicious field value', () => {
+      const prop = {
+        collectionBindingProperties: {
+          property: 'items',
+          field: "eval('alert(1)')",
+        },
+      };
+
+      const result = buildCollectionBindingExpression(prop);
+      expect((result as any).name.escapedText).toBe('');
+    });
+
+    it('should sanitize window access in field value', () => {
+      const prop = {
+        collectionBindingProperties: {
+          property: 'items',
+          field: "window.location",
+        },
+      };
+
+      const result = buildCollectionBindingExpression(prop);
+      expect((result as any).name.escapedText).toBe('');
+    });
+
+    it('should allow safe field value', () => {
+      const prop = {
+        collectionBindingProperties: {
+          property: 'items',
+          field: 'title',
+        },
+      };
+
+      const result = buildCollectionBindingExpression(prop);
+      expect((result as any).name.escapedText).toBe('title');
+    });
+
+    it('should return item identifier when no field', () => {
+      const prop = {
+        collectionBindingProperties: {
+          property: 'items',
+        },
+      };
+
+      const result = buildCollectionBindingExpression(prop);
+      expect((result as any).escapedText).toBe('item');
+    });
+  });
+
+  describe('buildCollectionBindingWithDefaultExpression', () => {
+    it('should sanitize malicious field value', () => {
+      const prop = {
+        collectionBindingProperties: {
+          property: 'items',
+          field: "javascript:alert(1)",
+        },
+      };
+
+      const result = buildCollectionBindingWithDefaultExpression(prop, 'default');
+      expect((result as any).left.name.escapedText).toBe('');
+    });
+
+    it('should allow safe field value with default', () => {
+      const prop = {
+        collectionBindingProperties: {
+          property: 'items',
+          field: 'description',
+        },
+      };
+
+      const result = buildCollectionBindingWithDefaultExpression(prop, 'No description');
+      expect((result as any).left.name.escapedText).toBe('description');
     });
   });
 });

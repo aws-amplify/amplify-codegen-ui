@@ -8432,6 +8432,81 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
 "
 `;
 
+exports[`amplify render tests malicious event binding sanitization should generate snapshot for malicious event binding component 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import * as React from \\"react\\";
+import { getOverrideProps } from \\"./utils\\";
+import { Button, ButtonProps, Flex, FlexProps } from \\"@aws-amplify/ui-react\\";
+import { SyntheticEvent } from \\"react\\";
+
+export type EscapeHatchProps = {
+  [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+
+export type VariantValues = { [key: string]: string };
+export type Variant = {
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type MaliciousEventsOverridesProps = {
+  MaliciousEvents?: PrimitiveOverrideProps<FlexProps>;
+  EvalInjection?: PrimitiveOverrideProps<ButtonProps>;
+  DocumentAccess?: PrimitiveOverrideProps<ButtonProps>;
+  WindowLocation?: PrimitiveOverrideProps<ButtonProps>;
+  ScriptTag?: PrimitiveOverrideProps<ButtonProps>;
+  SafeHandler?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
+export type MaliciousEventsProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    onClick?: (event: SyntheticEvent) => void;
+  } & {
+    overrides?: MaliciousEventsOverridesProps | undefined | null;
+  }
+>;
+export default function MaliciousEvents(
+  props: MaliciousEventsProps
+): React.ReactElement {
+  const { onClick, overrides, ...rest } = props;
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex {...getOverrideProps(overrides, \\"MaliciousEvents\\")} {...rest}>
+      <Button
+        children=\\"Click me\\"
+        onClick={}
+        {...getOverrideProps(overrides, \\"EvalInjection\\")}
+      ></Button>
+      <Button
+        children=\\"Steal cookies\\"
+        onClick={}
+        {...getOverrideProps(overrides, \\"DocumentAccess\\")}
+      ></Button>
+      <Button
+        children=\\"Redirect\\"
+        onClick={}
+        {...getOverrideProps(overrides, \\"WindowLocation\\")}
+      ></Button>
+      <Button
+        children=\\"XSS\\"
+        onClick={}
+        {...getOverrideProps(overrides, \\"ScriptTag\\")}
+      ></Button>
+      <Button
+        children=\\"Safe\\"
+        onClick={onClick}
+        {...getOverrideProps(overrides, \\"SafeHandler\\")}
+      ></Button>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests mutations controls an input that is modified by a button 1`] = `
 Object {
   "componentText": "/* eslint-disable */
