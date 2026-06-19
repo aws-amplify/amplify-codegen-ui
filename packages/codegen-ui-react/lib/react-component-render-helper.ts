@@ -176,13 +176,14 @@ export function filterScriptingPatterns(str: string): string {
  * escapePropertyValue('userName') // returns 'userName'
  */
 export function escapePropertyValue(propertyValue: string): string {
-  // First check if it's a reserved keyword
   if (keywords.has(propertyValue)) {
     return `${propertyValue}Prop`;
   }
-
-  // Then sanitize the propery value to ensure it's a valid JavaScript identifier
-  return filterScriptingPatterns(propertyValue);
+  // Allowlist: only valid JS identifiers or dot-notation paths (e.g., 'user.name')
+  if (/^[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)*$/.test(propertyValue)) {
+    return propertyValue;
+  }
+  return '';
 }
 
 /**

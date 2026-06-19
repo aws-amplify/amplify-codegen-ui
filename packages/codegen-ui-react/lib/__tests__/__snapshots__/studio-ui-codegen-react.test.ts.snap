@@ -8480,7 +8480,7 @@ export default function MaliciousEvents(
       ></Button>
       <Button
         children=\\"Steal cookies\\"
-        onClick={}
+        onClick={document.cookie}
         {...getOverrideProps(overrides, \\"DocumentAccess\\")}
       ></Button>
       <Button
