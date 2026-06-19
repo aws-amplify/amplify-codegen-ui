@@ -16,7 +16,8 @@
 import { StudioGenericEvent, StudioComponentEvent, BoundStudioComponentEvent } from '@aws-amplify/codegen-ui';
 import { factory, JsxAttribute, SyntaxKind } from 'typescript';
 import { getActionIdentifier } from './action';
-import { isBoundEvent, isActionEvent, escapePropertyValue } from '../react-component-render-helper';
+import { isBoundEvent, isActionEvent } from '../react-component-render-helper';
+import keywords from '../keywords';
 import { Primitive, PrimitiveLevelPropConfiguration } from '../primitive';
 
 /*
@@ -69,7 +70,15 @@ export function buildBindingEvent(
   event: BoundStudioComponentEvent,
   eventName: string,
 ): JsxAttribute {
-  const sanitizedBindingEvent = escapePropertyValue(event.bindingEvent);
+  // Event bindings become direct JSX expressions (e.g., onClick={value}).
+  // Only simple identifiers (function references) are safe here — dot-paths
+  // like document.cookie would access browser globals at runtime.
+  let bindingEvent = event.bindingEvent;
+  if (keywords.has(bindingEvent)) {
+    bindingEvent = `${bindingEvent}Prop`;
+  }
+  const isValidIdentifier = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(bindingEvent);
+  const sanitizedBindingEvent = isValidIdentifier ? bindingEvent : '';
   const expr = factory.createIdentifier(sanitizedBindingEvent);
   return factory.createJsxAttribute(
     factory.createIdentifier(mapGenericEventToReact(componentType as Primitive, eventName as StudioGenericEvent)),

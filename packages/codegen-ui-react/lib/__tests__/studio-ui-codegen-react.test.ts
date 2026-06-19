@@ -515,6 +515,8 @@ describe('amplify render tests', () => {
       expect(componentText).not.toContain('eval(');
       expect(componentText).not.toContain('<script>');
       expect(componentText).not.toContain('alert(');
+      // Dot-notation paths that access browser globals must be blocked
+      expect(componentText).not.toContain('document.cookie');
 
       // Safe handler should still be present
       expect(componentText).toContain('onClick');

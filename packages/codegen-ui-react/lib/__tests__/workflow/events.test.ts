@@ -30,15 +30,15 @@ describe('buildBindingEvent', () => {
     expect(jsxExpr.expression.escapedText).toBe('');
   });
 
-  it('should allow document.cookie as a valid dot-path in codegen context', () => {
+  it('should block document.cookie dot-path in bindingEvent', () => {
     const event: BoundStudioComponentEvent = {
       bindingEvent: 'document.cookie',
     };
 
     const result = buildBindingEvent('Button', event, 'onClick');
     const jsxExpr = (result as any).initializer;
-    // dot-notation paths are valid identifiers in codegen context (not executable)
-    expect(jsxExpr.expression.escapedText).toBe('document.cookie');
+    // dot-notation paths are rejected — only simple identifiers allowed
+    expect(jsxExpr.expression.escapedText).toBe('');
   });
 
   it('should sanitize window.location injection in bindingEvent', () => {
@@ -103,15 +103,15 @@ describe('buildBindingEvent', () => {
     expect(jsxExpr.expression.escapedText).toBe('');
   });
 
-  it('should allow __proto__.polluted as a valid dot-path (structurally safe in codegen context)', () => {
+  it('should block __proto__.polluted dot-path in bindingEvent', () => {
     const event: BoundStudioComponentEvent = {
       bindingEvent: '__proto__.polluted',
     };
 
     const result = buildBindingEvent('Button', event, 'onClick');
     const jsxExpr = (result as any).initializer;
-    // TypeScript adds an extra _ prefix to __-prefixed identifiers in escapedText
-    expect(jsxExpr.expression.escapedText).toBe('___proto__.polluted');
+    // dot-notation paths are rejected — only simple identifiers allowed
+    expect(jsxExpr.expression.escapedText).toBe('');
   });
 
   it('should sanitize import() in bindingEvent', () => {
