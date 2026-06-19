@@ -745,7 +745,7 @@ describe('react-component-render-helper', () => {
       const prop = {
         bindingProperties: {
           property: 'user',
-          field: "document.cookie",
+          field: 'document.cookie',
         },
       };
 
@@ -785,7 +785,7 @@ describe('react-component-render-helper', () => {
       const prop = {
         collectionBindingProperties: {
           property: 'items',
-          field: "window.location",
+          field: 'window.location',
         },
       };
 
@@ -822,7 +822,7 @@ describe('react-component-render-helper', () => {
       const prop = {
         collectionBindingProperties: {
           property: 'items',
-          field: "javascript:alert(1)",
+          field: 'javascript:alert(1)',
         },
       };
 
