@@ -73,7 +73,7 @@ export function buildBindingEvent(
   // Event bindings become direct JSX expressions (e.g., onClick={value}).
   // Only simple identifiers (function references) are safe here — dot-paths
   // like document.cookie would access browser globals at runtime.
-  let bindingEvent = event.bindingEvent;
+  let { bindingEvent } = event;
   if (keywords.has(bindingEvent)) {
     bindingEvent = `${bindingEvent}Prop`;
   }
