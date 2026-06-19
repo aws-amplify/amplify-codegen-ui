@@ -541,6 +541,7 @@ describe('react-component-render-helper', () => {
     });
 
     it('should block template literal injection', () => {
+      // eslint-disable-next-line no-template-curly-in-string
       expect(escapePropertyValue('${malicious}')).toBe('');
     });
 
@@ -822,6 +823,7 @@ describe('react-component-render-helper', () => {
       const prop = {
         collectionBindingProperties: {
           property: 'items',
+          // eslint-disable-next-line no-script-url
           field: 'javascript:alert(1)',
         },
       };
