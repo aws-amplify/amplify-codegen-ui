@@ -30,13 +30,14 @@ describe('buildBindingEvent', () => {
     expect(jsxExpr.expression.escapedText).toBe('');
   });
 
-  it('should sanitize document.cookie access in bindingEvent', () => {
+  it('should block document.cookie dot-path in bindingEvent', () => {
     const event: BoundStudioComponentEvent = {
       bindingEvent: 'document.cookie',
     };
 
     const result = buildBindingEvent('Button', event, 'onClick');
     const jsxExpr = (result as any).initializer;
+    // dot-notation paths are rejected — only simple identifiers allowed
     expect(jsxExpr.expression.escapedText).toBe('');
   });
 
@@ -102,13 +103,14 @@ describe('buildBindingEvent', () => {
     expect(jsxExpr.expression.escapedText).toBe('');
   });
 
-  it('should sanitize __proto__ pollution in bindingEvent', () => {
+  it('should block __proto__.polluted dot-path in bindingEvent', () => {
     const event: BoundStudioComponentEvent = {
       bindingEvent: '__proto__.polluted',
     };
 
     const result = buildBindingEvent('Button', event, 'onClick');
     const jsxExpr = (result as any).initializer;
+    // dot-notation paths are rejected — only simple identifiers allowed
     expect(jsxExpr.expression.escapedText).toBe('');
   });
 

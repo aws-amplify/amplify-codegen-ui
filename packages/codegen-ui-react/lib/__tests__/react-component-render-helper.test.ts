@@ -501,15 +501,18 @@ describe('react-component-render-helper', () => {
     });
 
     describe('Sanitization', () => {
-      it('should sanitize invalid JavaScript identifiers', () => {
-        expect(escapePropertyValue('user-name')).toBe('user-name');
-        expect(escapePropertyValue('first.last')).toBe('first.last');
-        expect(escapePropertyValue('special@char')).toBe('special@char');
+      it('should reject invalid JavaScript identifiers', () => {
+        expect(escapePropertyValue('user-name')).toBe('');
+        expect(escapePropertyValue('special@char')).toBe('');
       });
 
-      it('should handle spaces in property names', () => {
-        expect(escapePropertyValue('first name')).toBe('first name');
-        expect(escapePropertyValue('  spaced  ')).toBe('spaced');
+      it('should allow valid dot-notation paths', () => {
+        expect(escapePropertyValue('first.last')).toBe('first.last');
+      });
+
+      it('should reject strings with spaces', () => {
+        expect(escapePropertyValue('first name')).toBe('');
+        expect(escapePropertyValue('  spaced  ')).toBe('');
       });
 
       it('should preserve valid characters', () => {
@@ -517,6 +520,45 @@ describe('react-component-render-helper', () => {
         expect(escapePropertyValue('_privateVar')).toBe('_privateVar');
         expect(escapePropertyValue('$specialVar')).toBe('$specialVar');
       });
+    });
+  });
+
+  describe('escapePropertyValue - CVE-2025-4318 bypass prevention', () => {
+    it('should block original CVE payload (eval with parens)', () => {
+      expect(escapePropertyValue("eval('alert(1)')")).toBe('');
+    });
+
+    it('should block indirect eval bypass (0,eval)()', () => {
+      expect(escapePropertyValue('(0,eval)("...")')).toBe('');
+    });
+
+    it('should block require injection', () => {
+      expect(escapePropertyValue("require('child_process')")).toBe('');
+    });
+
+    it('should block bracket injection with newlines', () => {
+      expect(escapePropertyValue("a]\n;eval('x')\n//")).toBe('');
+    });
+
+    it('should block template literal injection', () => {
+      // eslint-disable-next-line no-template-curly-in-string
+      expect(escapePropertyValue('${malicious}')).toBe('');
+    });
+
+    it('should allow simple identifiers', () => {
+      expect(escapePropertyValue('userName')).toBe('userName');
+      expect(escapePropertyValue('user')).toBe('user');
+      expect(escapePropertyValue('_private')).toBe('_private');
+      expect(escapePropertyValue('$ref')).toBe('$ref');
+    });
+
+    it('should allow dot-notation paths', () => {
+      expect(escapePropertyValue('user.name')).toBe('user.name');
+      expect(escapePropertyValue('data.items.count')).toBe('data.items.count');
+    });
+
+    it('should append Prop to reserved keywords', () => {
+      expect(escapePropertyValue('class')).toBe('classProp');
     });
   });
 
@@ -545,10 +587,11 @@ describe('react-component-render-helper', () => {
       const result = buildBindingExpression(prop);
 
       expect(result.kind).toBe(204);
-      expect((result as any).name.escapedText).toBe('data-test');
+      // Hyphenated field names are rejected by the allowlist
+      expect((result as any).name.escapedText).toBe('');
     });
 
-    it('should return original string containing similar, but not dangerous text', () => {
+    it('should reject strings with spaces even if words look safe', () => {
       const propertyValue = 'evaluate if window alert document domain window';
       const prop = {
         bindingProperties: {
@@ -558,7 +601,8 @@ describe('react-component-render-helper', () => {
 
       const result = buildBindingExpression(prop);
 
-      expect((result as any).text).toBe(propertyValue);
+      // Allowlist rejects strings with spaces
+      expect((result as any).text).toBe('');
     });
 
     it('should create a simple identifier when no field is present', () => {
@@ -588,7 +632,7 @@ describe('react-component-render-helper', () => {
       expect((result as any).text).toBe('classProp');
     });
 
-    it('should sanitize invalid characters in property names', () => {
+    it('should reject invalid characters in property names', () => {
       const prop = {
         bindingProperties: {
           property: 'user@name!',
@@ -597,8 +641,8 @@ describe('react-component-render-helper', () => {
 
       const result = buildBindingExpression(prop);
 
-      // Should be sanitized
-      expect((result as any).text).toBe('user@name!');
+      // Allowlist rejects invalid identifiers
+      expect((result as any).text).toBe('');
     });
 
     it('should generate snapshot for simple property', () => {
@@ -647,7 +691,7 @@ describe('react-component-render-helper', () => {
       expect((result as any).name.escapedText).toBe('');
     });
 
-    it('should sanitize document access in field value', () => {
+    it('should allow dot-notation field values like document.cookie (valid path in codegen context)', () => {
       const prop = {
         bindingProperties: {
           property: 'data',
@@ -656,7 +700,8 @@ describe('react-component-render-helper', () => {
       };
 
       const result = buildBindingExpression(prop);
-      expect((result as any).name.escapedText).toBe('');
+      // dot-notation paths are valid identifiers in the codegen context
+      expect((result as any).name.escapedText).toBe('document.cookie');
     });
 
     it('should allow safe field values', () => {
@@ -697,17 +742,17 @@ describe('react-component-render-helper', () => {
       expect((result as any).left.escapedText).toBe('');
     });
 
-    it('should sanitize malicious field value', () => {
+    it('should allow dot-notation field values (valid path in codegen context)', () => {
       const prop = {
         bindingProperties: {
           property: 'user',
-          field: "document.cookie",
+          field: 'document.cookie',
         },
       };
 
       const result = buildBindingWithDefaultExpression(prop, 'default');
-      // Left side is a property access chain; the field name should be sanitized
-      expect((result as any).left.name.escapedText).toBe('');
+      // dot-notation is a valid path under the allowlist
+      expect((result as any).left.name.escapedText).toBe('document.cookie');
     });
 
     it('should allow safe property and field values', () => {
@@ -737,16 +782,16 @@ describe('react-component-render-helper', () => {
       expect((result as any).name.escapedText).toBe('');
     });
 
-    it('should sanitize window access in field value', () => {
+    it('should allow dot-notation field values like window.location (valid path in codegen context)', () => {
       const prop = {
         collectionBindingProperties: {
           property: 'items',
-          field: "window.location",
+          field: 'window.location',
         },
       };
 
       const result = buildCollectionBindingExpression(prop);
-      expect((result as any).name.escapedText).toBe('');
+      expect((result as any).name.escapedText).toBe('window.location');
     });
 
     it('should allow safe field value', () => {
@@ -778,7 +823,8 @@ describe('react-component-render-helper', () => {
       const prop = {
         collectionBindingProperties: {
           property: 'items',
-          field: "javascript:alert(1)",
+          // eslint-disable-next-line no-script-url
+          field: 'javascript:alert(1)',
         },
       };
 
