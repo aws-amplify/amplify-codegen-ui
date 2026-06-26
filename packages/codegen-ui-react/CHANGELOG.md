@@ -3,16 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [2.20.4](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.20.3...v2.20.4) (2026-02-24)
-
+## [2.20.5](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.20.4...v2.20.5) (2026-06-26)
 
 ### Bug Fixes
 
-* sanitize event bindingEvent and binding field values ([#1196](https://github.com/aws-amplify/amplify-codegen-ui/issues/1196)) ([7ce5200](https://github.com/aws-amplify/amplify-codegen-ui/commit/7ce520071ba6a579234379a041dcb1697f7b4bfd))
+- replace scripting pattern blacklist with allowlist ([#1198](https://github.com/aws-amplify/amplify-codegen-ui/issues/1198)) ([a04b816](https://github.com/aws-amplify/amplify-codegen-ui/commit/a04b816b9ce7d0fc8c01c57e6c9e6ee245815334))
 
+## [2.20.4](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.20.3...v2.20.4) (2026-02-24)
 
+### Bug Fixes
 
-
+- sanitize event bindingEvent and binding field values ([#1196](https://github.com/aws-amplify/amplify-codegen-ui/issues/1196)) ([7ce5200](https://github.com/aws-amplify/amplify-codegen-ui/commit/7ce520071ba6a579234379a041dcb1697f7b4bfd))
 
 ## [2.20.3](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.20.2...v2.20.3) (2025-04-10)
 
