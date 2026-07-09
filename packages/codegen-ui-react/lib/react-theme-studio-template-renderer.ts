@@ -18,6 +18,7 @@ import {
   factory,
   EmitHint,
   ExportAssignment,
+  Identifier,
   ObjectLiteralExpression,
   StringLiteral,
   PropertyAssignment,
@@ -46,6 +47,14 @@ import {
 export type ReactThemeStudioTemplateRendererOptions = {
   renderDefaultTheme?: boolean;
 };
+
+// Theme keys can be arbitrary strings, but factory.createIdentifier() emits its
+// argument verbatim as source. Emit only valid JS identifiers as identifiers;
+// any other key is emitted as a (properly escaped) string-literal key instead,
+// which keeps the generated object literal well-formed.
+function buildThemePropertyName(key: string): Identifier | StringLiteral {
+  return /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? factory.createIdentifier(key) : factory.createStringLiteral(key);
+}
 
 export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -162,9 +171,9 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
   splitAndBuildThemeValues(values: StudioThemeValues[]): PropertyAssignment[] {
     return values.map(({ key, value }) => {
       if (key !== 'breakpoints') {
-        return factory.createPropertyAssignment(factory.createIdentifier(key), this.buildThemeValue(value));
+        return factory.createPropertyAssignment(buildThemePropertyName(key), this.buildThemeValue(value));
       }
-      return factory.createPropertyAssignment(factory.createIdentifier(key), this.buildThemeBreakpointValue(value));
+      return factory.createPropertyAssignment(buildThemePropertyName(key), this.buildThemeBreakpointValue(value));
     });
   }
 
@@ -178,7 +187,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
    */
   private buildThemeValues(values: StudioThemeValues[]): PropertyAssignment[] {
     return values.map(({ key, value }) =>
-      factory.createPropertyAssignment(factory.createIdentifier(key), this.buildThemeValue(value)),
+      factory.createPropertyAssignment(buildThemePropertyName(key), this.buildThemeValue(value)),
     );
   }
 
@@ -207,7 +216,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
    */
   buildThemeBreakpointValues(values: StudioThemeValues[]): PropertyAssignment[] {
     return values.map(({ key, value }) =>
-      factory.createPropertyAssignment(factory.createIdentifier(key), this.buildThemeBreakpointValue(value)),
+      factory.createPropertyAssignment(buildThemePropertyName(key), this.buildThemeBreakpointValue(value)),
     );
   }
 

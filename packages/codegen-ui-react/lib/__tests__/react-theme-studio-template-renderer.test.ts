@@ -91,4 +91,23 @@ describe('react theme renderer tests', () => {
       expect(themeObject.breakpoints.defaultBreakpoint).toBe('base');
     });
   });
+
+  describe('theme keys that are not valid identifiers', () => {
+    it('should emit a non-identifier key as a quoted string-literal key', () => {
+      const nonIdentifierKey = 'foo("bar")';
+      const theme: StudioTheme = {
+        name: 'MyTheme',
+        values: [{ key: nonIdentifierKey, value: { value: 'red' } }],
+      };
+      const rendererFactory = new StudioTemplateRendererFactory(
+        (t: StudioTheme) => new ReactThemeStudioTemplateRenderer(t, {}),
+      );
+      const { componentText } = rendererFactory.buildRenderer(theme).renderComponent();
+
+      // The key is emitted as a quoted, escaped string-literal key, keeping the
+      // generated object literal well-formed rather than emitting it verbatim.
+      expect(componentText).toContain('\'foo("bar")\': "red"');
+      expect(componentText).not.toContain('foo("bar"): ');
+    });
+  });
 });
