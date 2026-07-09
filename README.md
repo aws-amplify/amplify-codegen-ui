@@ -13,6 +13,13 @@
 [![Open Bugs](https://img.shields.io/github/issues/aws-amplify/amplify-codegen-ui/bug?color=d73a4a&label=bugs)](https://github.com/aws-amplify/amplify-codegen-ui/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
 [![Feature Requests](https://img.shields.io/github/issues/aws-amplify/amplify-codegen-ui/feature-request?color=ff9001&label=feature%20requests)](https://github.com/aws-amplify/amplify-codegen-ui/issues?q=is%3Aissue+label%3Afeature-request+is%3Aopen)
 
+> [!IMPORTANT]
+> **Maintenance mode.** Amplify Gen 1 — including Amplify Studio and this UI
+> component generator — is in maintenance mode. As of **May 1, 2026** it receives
+> only critical bug fixes and security patches; **end of life is May 1, 2027**.
+> See the [official announcement](https://github.com/aws-amplify/amplify-cli/issues/14881)
+> and the [Gen 1 → Gen 2 migration guide](https://docs.amplify.aws/react/start/migrate-to-gen2/).
+
 Generate React components for use in an AWS Amplify project.
 
 ## Usage
