@@ -33,6 +33,7 @@ import {
   InvalidInputError,
   handleCodegenErrors,
 } from '@aws-amplify/codegen-ui';
+import { SIMPLE_JS_IDENTIFIER_RE } from './utils/identifiers';
 import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
 import { ImportCollection, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
@@ -48,12 +49,21 @@ export type ReactThemeStudioTemplateRendererOptions = {
   renderDefaultTheme?: boolean;
 };
 
-// Theme keys can be arbitrary strings, but factory.createIdentifier() emits its
-// argument verbatim as source. Emit only valid JS identifiers as identifiers;
-// any other key is emitted as a (properly escaped) string-literal key instead,
-// which keeps the generated object literal well-formed.
-function buildThemePropertyName(key: string): Identifier | StringLiteral {
-  return /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? factory.createIdentifier(key) : factory.createStringLiteral(key);
+// SECURITY: passing attacker-controlled StudioTheme keys directly to
+// factory.createIdentifier() allows code injection in generated .tsx output
+// (CVE-2025-4318 class -- theme-renderer surface). createIdentifier() emits its
+// argument verbatim as source, so only valid JS identifiers are emitted as
+// identifiers; any other key is emitted as a (properly escaped) string-literal
+// key instead.
+//
+// Note: unlike escapePropertyValue()/buildBindingEvent() in the component path
+// -- which fall back to '' (an empty identifier) -- we intentionally fall back
+// to the full key as a string literal. This keeps the generated object literal
+// well-formed (valid syntax, no empty identifier) and preserves legitimate
+// non-identifier CSS token keys such as '--spacing-1' and '2xl'. Do not
+// normalize this to the '' fallback.
+export function buildThemePropertyName(key: string): Identifier | StringLiteral {
+  return SIMPLE_JS_IDENTIFIER_RE.test(key) ? factory.createIdentifier(key) : factory.createStringLiteral(key);
 }
 
 export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<

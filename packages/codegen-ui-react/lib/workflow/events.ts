@@ -19,6 +19,7 @@ import { getActionIdentifier } from './action';
 import { isBoundEvent, isActionEvent } from '../react-component-render-helper';
 import keywords from '../keywords';
 import { Primitive, PrimitiveLevelPropConfiguration } from '../primitive';
+import { SIMPLE_JS_IDENTIFIER_RE } from '../utils/identifiers';
 
 /*
  * Temporary hardcoded mapping of generic to react events, long-term this will be exported by amplify-ui.
@@ -77,7 +78,7 @@ export function buildBindingEvent(
   if (keywords.has(bindingEvent)) {
     bindingEvent = `${bindingEvent}Prop`;
   }
-  const isValidIdentifier = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(bindingEvent);
+  const isValidIdentifier = SIMPLE_JS_IDENTIFIER_RE.test(bindingEvent);
   const sanitizedBindingEvent = isValidIdentifier ? bindingEvent : '';
   const expr = factory.createIdentifier(sanitizedBindingEvent);
   return factory.createJsxAttribute(
