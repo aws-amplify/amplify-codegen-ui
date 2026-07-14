@@ -18,6 +18,7 @@ import {
   factory,
   EmitHint,
   ExportAssignment,
+  Identifier,
   ObjectLiteralExpression,
   StringLiteral,
   PropertyAssignment,
@@ -32,6 +33,7 @@ import {
   InvalidInputError,
   handleCodegenErrors,
 } from '@aws-amplify/codegen-ui';
+import { SIMPLE_JS_IDENTIFIER_RE } from './utils/identifiers';
 import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
 import { ImportCollection, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
@@ -46,6 +48,23 @@ import {
 export type ReactThemeStudioTemplateRendererOptions = {
   renderDefaultTheme?: boolean;
 };
+
+// SECURITY: passing attacker-controlled StudioTheme keys directly to
+// factory.createIdentifier() allows code injection in generated .tsx output
+// (CVE-2025-4318 class -- theme-renderer surface). createIdentifier() emits its
+// argument verbatim as source, so only valid JS identifiers are emitted as
+// identifiers; any other key is emitted as a (properly escaped) string-literal
+// key instead.
+//
+// Note: unlike escapePropertyValue()/buildBindingEvent() in the component path
+// -- which fall back to '' (an empty identifier) -- we intentionally fall back
+// to the full key as a string literal. This keeps the generated object literal
+// well-formed (valid syntax, no empty identifier) and preserves legitimate
+// non-identifier CSS token keys such as '--spacing-1' and '2xl'. Do not
+// normalize this to the '' fallback.
+export function buildThemePropertyName(key: string): Identifier | StringLiteral {
+  return SIMPLE_JS_IDENTIFIER_RE.test(key) ? factory.createIdentifier(key) : factory.createStringLiteral(key);
+}
 
 export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -162,9 +181,9 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
   splitAndBuildThemeValues(values: StudioThemeValues[]): PropertyAssignment[] {
     return values.map(({ key, value }) => {
       if (key !== 'breakpoints') {
-        return factory.createPropertyAssignment(factory.createIdentifier(key), this.buildThemeValue(value));
+        return factory.createPropertyAssignment(buildThemePropertyName(key), this.buildThemeValue(value));
       }
-      return factory.createPropertyAssignment(factory.createIdentifier(key), this.buildThemeBreakpointValue(value));
+      return factory.createPropertyAssignment(buildThemePropertyName(key), this.buildThemeBreakpointValue(value));
     });
   }
 
@@ -178,7 +197,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
    */
   private buildThemeValues(values: StudioThemeValues[]): PropertyAssignment[] {
     return values.map(({ key, value }) =>
-      factory.createPropertyAssignment(factory.createIdentifier(key), this.buildThemeValue(value)),
+      factory.createPropertyAssignment(buildThemePropertyName(key), this.buildThemeValue(value)),
     );
   }
 
@@ -207,7 +226,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
    */
   buildThemeBreakpointValues(values: StudioThemeValues[]): PropertyAssignment[] {
     return values.map(({ key, value }) =>
-      factory.createPropertyAssignment(factory.createIdentifier(key), this.buildThemeBreakpointValue(value)),
+      factory.createPropertyAssignment(buildThemePropertyName(key), this.buildThemeBreakpointValue(value)),
     );
   }
 
