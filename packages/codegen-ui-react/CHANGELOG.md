@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.20.6](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.20.5...v2.20.6) (2026-07-14)
+
+### Bug Fixes
+
+- **codegen-ui-react:** emit non-identifier theme keys as string literals ([#1202](https://github.com/aws-amplify/amplify-codegen-ui/issues/1202)) ([062c3a5](https://github.com/aws-amplify/amplify-codegen-ui/commit/062c3a5856da08b19e535b4e25e302f994b11be7)), closes [aws-amplify/amplify-cli#14881](https://github.com/aws-amplify/amplify-cli/issues/14881)
+
 ## [2.20.5](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.20.4...v2.20.5) (2026-06-26)
 
 ### Bug Fixes
