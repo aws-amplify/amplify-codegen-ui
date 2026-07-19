@@ -13,10 +13,12 @@
       "name": "MyInputString",
       "properties": {
         "id": {
-          "value": "string-value"
+          "value": "string-value",
+          "configured": true
         },
         "value": {
-          "value": "raw string value"
+          "value": "raw string value",
+          "configured": true
         }
       }
     },
@@ -25,10 +27,12 @@
       "name": "MyInputNumber",
       "properties": {
         "id": {
-          "value": "number-value"
+          "value": "number-value",
+          "configured": true
         },
         "value": {
-          "value": "67548"
+          "value": "67548",
+          "configured": true
         }
       }
     },
@@ -37,11 +41,13 @@
       "name": "MyInputParsedNumber",
       "properties": {
         "id": {
-          "value": "parsed-number-value"
+          "value": "parsed-number-value",
+          "configured": true
         },
         "value": {
           "value": "67548",
-          "type": "Number"
+          "type": "Number",
+          "configured": true
         }
       }
     },
@@ -50,10 +56,12 @@
       "name": "MyInputBoolean",
       "properties": {
         "id": {
-          "value": "boolean-value"
+          "value": "boolean-value",
+          "configured": true
         },
         "value": {
-          "value": "true"
+          "value": "true",
+          "configured": true
         }
       }
     },
@@ -62,11 +70,13 @@
       "name": "MyInputPrasedBoolean",
       "properties": {
         "id": {
-          "value": "parsed-boolean-value"
+          "value": "parsed-boolean-value",
+          "configured": true
         },
         "value": {
           "value": "true",
-          "type": "Boolean"
+          "type": "Boolean",
+          "configured": true
         }
       }
     },
@@ -75,10 +85,12 @@
       "name": "MyInputJson",
       "properties": {
         "id": {
-          "value": "json-value"
+          "value": "json-value",
+          "configured": true
         },
         "value": {
-          "value": "{\"foo\": \"bar\"}"
+          "value": "{\"foo\": \"bar\"}",
+          "configured": true
         }
       }
     },
@@ -87,11 +99,13 @@
       "name": "MyInputParsedJson",
       "properties": {
         "id": {
-          "value": "parsed-json-value"
+          "value": "parsed-json-value",
+          "configured": true
         },
         "value": {
           "value": "{\"foo\": \"bar\"}",
-          "type": "Object"
+          "type": "Object",
+          "configured": true
         }
       }
     },
@@ -100,10 +114,12 @@
       "name": "MyInputArray",
       "properties": {
         "id": {
-          "value": "array-value"
+          "value": "array-value",
+          "configured": true
         },
         "value": {
-          "value": "[1,2,3]"
+          "value": "[1,2,3]",
+          "configured": true
         }
       }
     },
@@ -112,11 +128,13 @@
       "name": "MyInputParsedArray",
       "properties": {
         "id": {
-          "value": "parsed-array-value"
+          "value": "parsed-array-value",
+          "configured": true
         },
         "value": {
           "value": "[1,2,3]",
-          "type": "Object"
+          "type": "Object",
+          "configured": true
         }
       }
     },
@@ -125,10 +143,12 @@
       "name": "MyInputNull",
       "properties": {
         "id": {
-          "value": "null-value"
+          "value": "null-value",
+          "configured": true
         },
         "value": {
-          "value": "null"
+          "value": "null",
+          "configured": true
         }
       }
     },
@@ -137,11 +157,13 @@
       "name": "MyInputParsedNull",
       "properties": {
         "id": {
-          "value": "parsed-null-value"
+          "value": "parsed-null-value",
+          "configured": true
         },
         "value": {
           "value": "null",
-          "type": "Object"
+          "type": "Object",
+          "configured": true
         }
       }
     }

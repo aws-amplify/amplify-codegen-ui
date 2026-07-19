@@ -18,7 +18,8 @@
             {
               "value": "Value!"
             }
-          ]
+          ],
+          "configured": true
         }
       }
     }

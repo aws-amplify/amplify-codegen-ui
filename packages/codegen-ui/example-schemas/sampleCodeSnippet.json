@@ -14,14 +14,17 @@
       "name": "MyCustomButton",
       "properties": {
         "color": {
-          "value": "#ff0000"
+          "value": "#ff0000",
+          "configured": true
         },
         "width": {
-          "value": "20px"
+          "value": "20px",
+          "configured": true
         },
         "buttonText": {
           "exposedAs": "buttonText",
-          "value": "Click Me"
+          "value": "Click Me",
+          "configured": true
         }
       }
     }

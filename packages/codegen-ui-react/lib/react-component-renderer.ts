@@ -20,6 +20,7 @@ import {
   StudioComponentChild,
   ComponentMetadata,
   StudioGenericEvent,
+  StudioComponentProperty,
 } from '@aws-amplify/codegen-ui';
 import {
   JsxAttributeLike,
@@ -47,6 +48,7 @@ import { addFormAttributes } from './forms';
 import { shouldWrapInArrayField, renderArrayFieldComponent, getDecoratedLabel } from './forms/form-renderer-helper';
 import { getIsRequiredValue } from './forms/form-renderer-helper/label-decorator';
 import { renderStorageFieldComponent } from './utils/forms/storage-field-component';
+import { Primitive } from './primitive';
 
 export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
   TPropIn,
@@ -131,38 +133,56 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       this.componentMetadata.stateReferences,
     );
 
-    const propertyAttributes = Object.entries(this.component.properties).map(([key, value]) => {
-      if (key in localStateReferences) {
-        const stateName = getStateName({ componentName: this.component.name, property: key });
-        return buildOpeningElementProperties(
-          this.componentMetadata,
-          { bindingProperties: { property: stateName } },
-          key,
-        );
-      }
-      if (
-        this.componentMetadata.formMetadata &&
-        this.componentMetadata.formMetadata.fieldConfigs[this.component.name]
-      ) {
-        const {
-          labelDecorator,
-          fieldConfigs: {
-            [this.component.name]: { isArray },
-          },
-        } = this.componentMetadata.formMetadata;
-        const isRequired = getIsRequiredValue(this.component.properties.isRequired);
-        if (
-          ((key === 'children' && this.component.componentType === 'ToggleButton') || key === 'label') &&
-          ((labelDecorator && labelDecorator === 'required' && isRequired) ||
-            (labelDecorator === 'optional' && !isRequired)) &&
-          'value' in value &&
-          !isArray
-        ) {
-          return getDecoratedLabel(key, value.value.toString(), labelDecorator);
+    const primitivesTypes = Object.values(Primitive);
+
+    const isPrimitive = primitivesTypes.includes(this.component.componentType as Primitive);
+    const isHTML = this.component.componentType[0].match(/[a-z]/);
+
+    const shouldForwardProperty = ([key, value]: [string, StudioComponentProperty]) => {
+      return (
+        isPrimitive ||
+        isHTML ||
+        key in localStateReferences ||
+        'collectionBindingProperties' in value ||
+        'concat' in value ||
+        value.configured
+      );
+    };
+
+    const propertyAttributes = Object.entries(this.component.properties)
+      .filter(shouldForwardProperty)
+      .map(([key, value]) => {
+        if (key in localStateReferences) {
+          const stateName = getStateName({ componentName: this.component.name, property: key });
+          return buildOpeningElementProperties(
+            this.componentMetadata,
+            { bindingProperties: { property: stateName } },
+            key,
+          );
         }
-      }
-      return buildOpeningElementProperties(this.componentMetadata, value, key);
-    });
+        if (
+          this.componentMetadata.formMetadata &&
+          this.componentMetadata.formMetadata.fieldConfigs[this.component.name]
+        ) {
+          const {
+            labelDecorator,
+            fieldConfigs: {
+              [this.component.name]: { isArray },
+            },
+          } = this.componentMetadata.formMetadata;
+          const isRequired = getIsRequiredValue(this.component.properties.isRequired);
+          if (
+            ((key === 'children' && this.component.componentType === 'ToggleButton') || key === 'label') &&
+            ((labelDecorator && labelDecorator === 'required' && isRequired) ||
+              (labelDecorator === 'optional' && !isRequired)) &&
+            'value' in value &&
+            !isArray
+          ) {
+            return getDecoratedLabel(key, value.value.toString(), labelDecorator);
+          }
+        }
+        return buildOpeningElementProperties(this.componentMetadata, value, key);
+      });
 
     // Reverse, and create element properties for localStateReferences which are not yet defined props
     const unmodeledPropertyAttributes = Object.entries(localStateReferences)
