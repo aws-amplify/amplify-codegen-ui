@@ -32,6 +32,7 @@ import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { getChildPropMappingForComponentName } from './utils';
 import { DataApiKind } from '../react-render-config';
 import { ActionType, getGraphqlCallExpression } from '../utils/graphql';
+import { buildIdentifierOrStringLiteral } from '../utils/identifiers';
 
 enum Action {
   'Amplify.Navigation' = 'Amplify.Navigation',
@@ -281,7 +282,7 @@ function buildActionArgument(
 ): ObjectLiteralExpression {
   const properties = Object.entries(action.parameters).map(([key, value]) =>
     factory.createPropertyAssignment(
-      factory.createIdentifier(key),
+      buildIdentifierOrStringLiteral(key),
       getActionParameterValue(componentMetadata, key, value, importCollection),
     ),
   );
@@ -305,7 +306,7 @@ function assignFieldProperties(
 ): PropertyAssignment[] {
   return Object.entries(fieldsValue).map(([nestedKey, nestedValue]) =>
     factory.createPropertyAssignment(
-      factory.createIdentifier(nestedKey),
+      buildIdentifierOrStringLiteral(nestedKey),
       getActionParameterValue(componentMetadata, nestedKey, nestedValue, importCollection),
     ),
   );

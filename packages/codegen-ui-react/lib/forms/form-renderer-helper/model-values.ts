@@ -47,6 +47,7 @@ import { getElementAccessExpression, getValidProperty } from './invalid-variable
 import { isEnumDataType, isModelDataType } from './render-checkers';
 import { DataApiKind } from '../../react-render-config';
 import { capitalizeFirstLetter } from '../../helpers';
+import { assertIdentifierPath } from '../../utils/identifiers';
 
 export const getDisplayValueObjectName = 'getDisplayValue';
 
@@ -593,7 +594,7 @@ export function getIDValueObject(idValueFunctions: PropertyAssignment[]) {
 }
 // this is a measure to not show `undefined` the way `bquildConcatExpression` would if the first field is undefined
 // `${r?.humanReadable ? r?.humanReadable + ' - ' : ""}${r?.key}-${r?.anotherKey}`
-function buildDefaultModelDisplayValue({ displayValue }: { displayValue: ConcatenatedStudioComponentProperty }) {
+export function buildDefaultModelDisplayValue({ displayValue }: { displayValue: ConcatenatedStudioComponentProperty }) {
   const { concat: concatArray } = displayValue;
   const humanReadableFieldExists =
     concatArray[1] && isFixedPropertyWithValue(concatArray[1]) && concatArray[1].value === ' - ';
@@ -603,7 +604,18 @@ function buildDefaultModelDisplayValue({ displayValue }: { displayValue: Concate
       throw new InternalError(`Wrong default value mapping shape for human-readable field`);
     }
 
-    const { property: propertyName } = humanReadableField.bindingProperties;
+    /*
+     * SECURITY: this display-value mapping comes from the form schema and its
+     * property/field are emitted as identifiers below.
+     */
+    const propertyName = assertIdentifierPath(
+      humanReadableField.bindingProperties.property,
+      'displayValue bindingProperties.property',
+    );
+    const humanReadableFieldName = assertIdentifierPath(
+      humanReadableField.bindingProperties.field,
+      'displayValue bindingProperties.field',
+    );
 
     const templateSpans: TemplateSpan[] = [];
 
@@ -613,14 +625,14 @@ function buildDefaultModelDisplayValue({ displayValue }: { displayValue: Concate
           factory.createPropertyAccessChain(
             factory.createIdentifier(propertyName),
             factory.createToken(SyntaxKind.QuestionDotToken),
-            factory.createIdentifier(humanReadableField.bindingProperties.field),
+            factory.createIdentifier(humanReadableFieldName),
           ),
           factory.createToken(SyntaxKind.QuestionToken),
           factory.createBinaryExpression(
             factory.createPropertyAccessChain(
               factory.createIdentifier(propertyName),
               factory.createToken(SyntaxKind.QuestionDotToken),
-              factory.createIdentifier(humanReadableField.bindingProperties.field),
+              factory.createIdentifier(humanReadableFieldName),
             ),
             factory.createToken(SyntaxKind.PlusToken),
             factory.createStringLiteral(' - '),
@@ -643,7 +655,7 @@ function buildDefaultModelDisplayValue({ displayValue }: { displayValue: Concate
           factory.createPropertyAccessChain(
             factory.createIdentifier(propertyName),
             factory.createToken(SyntaxKind.QuestionDotToken),
-            factory.createIdentifier(key.bindingProperties.field),
+            factory.createIdentifier(assertIdentifierPath(key.bindingProperties.field, 'displayValue key field')),
           ),
           index === filteredPrimaryKeys.length - 1
             ? factory.createTemplateTail('', '')

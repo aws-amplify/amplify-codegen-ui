@@ -33,7 +33,7 @@ import {
   InvalidInputError,
   handleCodegenErrors,
 } from '@aws-amplify/codegen-ui';
-import { SIMPLE_JS_IDENTIFIER_RE } from './utils/identifiers';
+import { buildIdentifierOrStringLiteral } from './utils/identifiers';
 import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
 import { ImportCollection, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
@@ -63,7 +63,7 @@ export type ReactThemeStudioTemplateRendererOptions = {
 // non-identifier CSS token keys such as '--spacing-1' and '2xl'. Do not
 // normalize this to the '' fallback.
 export function buildThemePropertyName(key: string): Identifier | StringLiteral {
-  return SIMPLE_JS_IDENTIFIER_RE.test(key) ? factory.createIdentifier(key) : factory.createStringLiteral(key);
+  return buildIdentifierOrStringLiteral(key);
 }
 
 export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<

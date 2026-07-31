@@ -67,6 +67,7 @@ import {
   needsFormatter,
 } from '../react-table-renderer-helper';
 import { overrideTypesString } from '../utils-file-functions';
+import { buildIdentifierOrStringLiteral } from '../utils/identifiers';
 
 export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -437,7 +438,7 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
     return factory.createObjectLiteralExpression(
       Object.entries(predicate).map(([key, value]) => {
         return factory.createPropertyAssignment(
-          factory.createIdentifier(key),
+          buildIdentifierOrStringLiteral(key),
           key === 'and' || key === 'or'
             ? factory.createArrayLiteralExpression(
                 (value as StudioComponentPredicate[]).map(
