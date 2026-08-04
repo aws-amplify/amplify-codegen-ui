@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.20.7](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.20.6...v2.20.7) (2026-08-04)
+
+### Bug Fixes
+
+- **codegen-ui-react:** validate schema-supplied strings before emitting identifiers ([#1204](https://github.com/aws-amplify/amplify-codegen-ui/issues/1204)) ([0f774ee](https://github.com/aws-amplify/amplify-codegen-ui/commit/0f774eea43ec85faa9b7fe5e87788a1f0f5c650e))
+
 ## [2.20.6](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.20.5...v2.20.6) (2026-07-14)
 
 ### Bug Fixes
