@@ -66,6 +66,12 @@ import nameReplacements from './name-replacements';
 import keywords from './keywords';
 import { buildAccessChain } from './forms/form-renderer-helper/form-state';
 import { scriptingPatterns } from './utils/constants';
+import {
+  assertIdentifierPath,
+  escapeIdentifierPath,
+  isSafeJsxAttributeName,
+  safeIdentifierEntries,
+} from './utils/identifiers';
 
 export function getFixedComponentPropValueExpression(prop: FixedStudioComponentProperty): StringLiteral {
   return factory.createStringLiteral(prop.value.toString(), true);
@@ -180,10 +186,7 @@ export function escapePropertyValue(propertyValue: string): string {
     return `${propertyValue}Prop`;
   }
   // Allowlist: only valid JS identifiers or dot-notation paths (e.g., 'user.name')
-  if (/^[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)*$/.test(propertyValue)) {
-    return propertyValue;
-  }
-  return '';
+  return escapeIdentifierPath(propertyValue);
 }
 
 /**
@@ -627,11 +630,11 @@ export function buildConditionalExpression(
   const propertyAccess =
     field !== undefined
       ? factory.createPropertyAccessChain(
-          factory.createIdentifier(property),
+          factory.createIdentifier(assertIdentifierPath(property, 'condition.property')),
           factory.createToken(SyntaxKind.QuestionDotToken),
-          factory.createIdentifier(field),
+          factory.createIdentifier(assertIdentifierPath(field, 'condition.field')),
         )
-      : factory.createIdentifier(property);
+      : factory.createIdentifier(assertIdentifierPath(property, 'condition.property'));
 
   return factory.createConditionalExpression(
     factory.createBinaryExpression(
@@ -687,11 +690,25 @@ export function buildChildElement(
   return expression && factory.createJsxExpression(undefined, expression);
 }
 
+/**
+ * Builds the JSX attribute for a single schema-declared component property.
+ *
+ * SECURITY: `name` is a schema-supplied property key and is emitted as a JSX
+ * attribute name via factory.createIdentifier(), which writes its argument
+ * verbatim into the generated source. This is the single
+ * funnel through which schema-derived attribute names reach the attribute
+ * builders below, so the name is validated here once. Names outside the JSX
+ * attribute-name grammar are not expressible in JSX at all, so the attribute is
+ * omitted (fail closed) rather than emitted as executable source.
+ */
 export function buildOpeningElementProperties(
   componentMetadata: ComponentMetadata,
   prop: StudioComponentProperty,
   name: string,
-): JsxAttribute {
+): JsxAttribute | undefined {
+  if (!isSafeJsxAttributeName(name)) {
+    return undefined;
+  }
   if (isFixedPropertyWithValue(prop)) {
     return buildFixedAttr(prop, name);
   }
@@ -770,7 +787,7 @@ export function addBindingPropertiesImports(
   importCollection: ImportCollection,
 ) {
   if (typeof component === 'object' && 'bindingProperties' in component) {
-    Object.entries(component.bindingProperties).forEach(([, binding]) => {
+    safeIdentifierEntries(component.bindingProperties).forEach(([, binding]) => {
       if (typeof binding === 'object' && 'bindingProperties' in binding && 'model' in binding.bindingProperties) {
         importCollection.addModelImport(binding.bindingProperties.model);
       }

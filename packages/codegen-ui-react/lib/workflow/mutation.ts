@@ -42,6 +42,7 @@ import {
   PrimitiveDefaultPropertyValue,
 } from '../primitive';
 import { DataApiKind } from '../react-render-config';
+import { assertIdentifierPath } from '../utils/identifiers';
 
 type EventHandlerBuilder = (setStateName: string, stateName: string) => JsxExpression;
 
@@ -70,7 +71,16 @@ export function buildUseEffectStatements(
   return componentMetadata.stateReferences
     .filter(({ dataDependencies }) => dataDependencies.length > 0)
     .map((stateReference) => {
-      const { reference, dataDependencies } = stateReference;
+      const { reference } = stateReference;
+      /*
+       * SECURITY: dataDependencies are raw schema strings -- computeDataDependencies*
+       * in codegen-ui copies bindingProperties.property and condition.property in
+       * verbatim -- and are emitted here as bare identifiers, both in the useEffect
+       * guard and in its dependency array.
+       */
+      const dataDependencies = stateReference.dataDependencies.map((dataDependency) =>
+        assertIdentifierPath(dataDependency, 'stateReference dataDependency'),
+      );
       const dependencyConditions = dataDependencies.flatMap((dataDependency) => [
         // prevents components from changing to an uncontrolled state
         factory.createBinaryExpression(

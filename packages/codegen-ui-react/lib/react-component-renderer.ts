@@ -22,6 +22,7 @@ import {
   StudioGenericEvent,
 } from '@aws-amplify/codegen-ui';
 import {
+  JsxAttribute,
   JsxAttributeLike,
   JsxElement,
   JsxOpeningElement,
@@ -191,12 +192,12 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
         ),
       );
 
-    const attributes = [
+    const attributes: JsxAttributeLike[] = [
       ...propertyAttributes,
       ...unmodeledPropertyAttributes,
       ...eventAttributes,
       ...controlEventAttributes,
-    ];
+    ].filter((attribute): attribute is JsxAttribute => attribute !== undefined);
 
     if (this.componentMetadata.formMetadata) {
       attributes.push(

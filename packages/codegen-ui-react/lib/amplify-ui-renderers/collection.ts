@@ -37,6 +37,7 @@ import { ImportCollection, ImportValue } from '../imports';
 import { DataApiKind, ReactRenderConfig } from '../react-render-config';
 import { defaultRenderConfig } from '../react-studio-template-renderer-helper';
 import { getAmplifyJSAPIImport } from '../helpers/amplify-js-versioning';
+import { safeIdentifierEntries } from '../utils/identifiers';
 
 export default class CollectionRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -73,7 +74,8 @@ export default class CollectionRenderer extends ReactComponentRenderer<BaseCompo
           return acc;
         }
       }
-      return [...acc, buildOpeningElementProperties(this.componentMetadata, value, key)];
+      const attribute = buildOpeningElementProperties(this.componentMetadata, value, key);
+      return attribute === undefined ? acc : [...acc, attribute];
     }, []);
 
     let itemsAttribute: JsxAttribute;
@@ -160,7 +162,7 @@ export default class CollectionRenderer extends ReactComponentRenderer<BaseCompo
       }
       let keys = ['id'];
       if (isStudioComponentWithCollectionProperties(this.component)) {
-        const firstCollectionProp = Object.entries(this.component.collectionProperties ?? {})[0];
+        const firstCollectionProp = safeIdentifierEntries(this.component.collectionProperties)[0];
         if (firstCollectionProp) {
           const [, { model }] = firstCollectionProp;
           const primaryKeys = this.componentMetadata.dataSchemaMetadata?.models[model]?.primaryKeys;
@@ -181,9 +183,16 @@ export default class CollectionRenderer extends ReactComponentRenderer<BaseCompo
     });
   }
 
+  /**
+   * SECURITY: the returned name is emitted as a bare identifier via
+   * factory.createIdentifier() (the collection's `items={<name> || []}`
+   * attribute), so it must be a valid JS identifier. collectionProperties keys
+   * come straight from the schema and are not constrained by schema validation,
+   * so invalid keys are skipped and the caller falls back to `items`
+   */
   private findItemsVariableName(): string | undefined {
     if (isStudioComponentWithCollectionProperties(this.component)) {
-      const collectionProps = Object.entries(this.component.collectionProperties ?? {});
+      const collectionProps = safeIdentifierEntries(this.component.collectionProperties);
       return collectionProps.length > 0 ? collectionProps[0][0] : undefined;
     }
     return undefined;

@@ -29,6 +29,7 @@ import {
 import { ImportCollection, ImportSource } from './imports';
 import { Primitive } from './primitive';
 import { objectToExpression, stringFormatToType } from './react-table-renderer-helper';
+import { assertIdentifierPath } from './utils/identifiers';
 
 export class ReactTableRenderer {
   private requiredUIReactImports = [
@@ -191,7 +192,7 @@ export class ReactTableRenderer {
     return factory.createPropertyAccessChain(
       factory.createIdentifier(identifier),
       factory.createToken(SyntaxKind.QuestionDotToken),
-      factory.createIdentifier(field),
+      factory.createIdentifier(assertIdentifierPath(field, 'view column field')),
     );
   }
 
@@ -241,7 +242,7 @@ export class ReactTableRenderer {
             factory.createCallExpression(
               factory.createPropertyAccessExpression(
                 factory.createIdentifier('format'),
-                factory.createIdentifier(columnId),
+                factory.createIdentifier(assertIdentifierPath(columnId, 'view column header')),
               ),
               undefined,
               [this.createFieldAccessExpression('item', columnId)],

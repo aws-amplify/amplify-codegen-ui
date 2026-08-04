@@ -45,6 +45,7 @@ import ts, {
 import { createDefaultMapFromNodeModules, createSystem, createVirtualCompilerHost } from '@typescript/vfs';
 import path from 'path';
 import { ReactRenderConfig, ScriptKind, ScriptTarget, ModuleKind } from './react-render-config';
+import { assertIdentifierPath } from './utils/identifiers';
 
 export const defaultRenderConfig = {
   script: ScriptKind.TSX,
@@ -165,7 +166,10 @@ export const buildSortFunction = (model: string, sort: StudioComponentSort[]): A
   let expr: Identifier | CallExpression = factory.createIdentifier('s');
   sort.forEach((sortPredicate) => {
     expr = factory.createCallExpression(
-      factory.createPropertyAccessExpression(expr, factory.createIdentifier(sortPredicate.field)),
+      factory.createPropertyAccessExpression(
+        expr,
+        factory.createIdentifier(assertIdentifierPath(sortPredicate.field, 'sort.field')),
+      ),
       undefined,
       [sortPredicate.direction === 'ASC' ? ascendingSortDirection : descendingSortDirection],
     );

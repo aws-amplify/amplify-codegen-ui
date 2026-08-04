@@ -19,7 +19,7 @@ import { getActionIdentifier } from './action';
 import { isBoundEvent, isActionEvent } from '../react-component-render-helper';
 import keywords from '../keywords';
 import { Primitive, PrimitiveLevelPropConfiguration } from '../primitive';
-import { SIMPLE_JS_IDENTIFIER_RE } from '../utils/identifiers';
+import { isSafeJsxAttributeName, SIMPLE_JS_IDENTIFIER_RE } from '../utils/identifiers';
 
 /*
  * Temporary hardcoded mapping of generic to react events, long-term this will be exported by amplify-ui.
@@ -50,12 +50,19 @@ const genericEventToReactEventMappingOverrides: PrimitiveLevelPropConfiguration<
   },
 };
 
+/**
+ * SECURITY: the bound and action paths below emit an attribute name resolved
+ * through mapGenericEventToReact(), which only ever returns a value from a
+ * compile-time mapping (and throws otherwise). The final fallback emits the raw
+ * schema-supplied event name, so it is validated and dropped when it is not
+ * expressible as a JSX attribute name.
+ */
 export function buildOpeningElementEvents(
   componentType: string,
   event: StudioComponentEvent,
   name: string,
   componentName: string,
-): JsxAttribute {
+): JsxAttribute | undefined {
   if (isBoundEvent(event)) {
     return buildBindingEvent(componentType, event, name);
   }
@@ -63,6 +70,9 @@ export function buildOpeningElementEvents(
     return buildActionEvent(componentType, name, componentName);
   }
 
+  if (!isSafeJsxAttributeName(name)) {
+    return undefined;
+  }
   return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
 }
 

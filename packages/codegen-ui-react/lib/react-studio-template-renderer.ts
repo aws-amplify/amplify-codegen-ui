@@ -126,6 +126,7 @@ import { ActionType, getGraphqlCallExpression, getGraphqlQueryForModel, isGraphq
 import { AMPLIFY_JS_V5, AMPLIFY_JS_V6 } from './utils/constants';
 import { getAmplifyJSVersionToRender } from './helpers/amplify-js-versioning';
 import { overrideTypesString } from './utils-file-functions';
+import { buildIdentifierOrStringLiteral, safeIdentifierEntries } from './utils/identifiers';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -535,7 +536,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       );
       return factory.createPropertySignature(
         undefined,
-        factory.createIdentifier(key),
+        buildIdentifierOrStringLiteral(key),
         factory.createToken(ts.SyntaxKind.QuestionToken),
         factory.createUnionTypeNode(valueTypeNodes),
       );
@@ -553,7 +554,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       );
       return factory.createPropertySignature(
         undefined,
-        factory.createIdentifier(key),
+        buildIdentifierOrStringLiteral(key),
         factory.createToken(ts.SyntaxKind.QuestionToken),
         factory.createUnionTypeNode(valueTypeNodes),
       );
@@ -565,7 +566,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   private buildComponentPropNode(component: StudioComponent): TypeNode | undefined {
     const propSignatures: PropertySignature[] = [];
     if (component.bindingProperties !== undefined && isStudioComponentWithBinding(component)) {
-      Object.entries(component.bindingProperties).forEach(([propName, binding]) => {
+      safeIdentifierEntries(component.bindingProperties).forEach(([propName, binding]) => {
         if (isSimplePropertyBinding(binding)) {
           const propSignature = factory.createPropertySignature(
             undefined,
@@ -689,7 +690,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const statements: Statement[] = [];
     const elements: BindingElement[] = [];
     if (isStudioComponentWithBinding(component)) {
-      Object.entries(component.bindingProperties).forEach((entry) => {
+      safeIdentifierEntries(component.bindingProperties).forEach((entry) => {
         const [propName, binding] = entry;
         if (
           isSimplePropertyBinding(binding) ||
@@ -1019,7 +1020,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   private buildCollectionBindingStatements(component: StudioComponent): Statement[] {
     const statements: Statement[] = [];
     if (isStudioComponentWithCollectionProperties(component)) {
-      Object.entries(component.collectionProperties).forEach((collectionProp) => {
+      safeIdentifierEntries(component.collectionProperties).forEach((collectionProp) => {
         const [propName, { model, sort, predicate }] = collectionProp;
         const modelName = this.importCollection.addModelImport(model);
 
@@ -1330,7 +1331,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     // generate for single record binding
     if (component.bindingProperties !== undefined) {
-      Object.entries(component.bindingProperties).forEach((compBindingProp) => {
+      safeIdentifierEntries(component.bindingProperties).forEach((compBindingProp) => {
         const [propName, binding] = compBindingProp;
         if (isDataPropertyBinding(binding)) {
           const { bindingProperties } = binding;
@@ -1566,11 +1567,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     ) {
       objectAssignments = [
         factory.createPropertyAssignment(
-          factory.createIdentifier(filteredPredicate.field),
+          buildIdentifierOrStringLiteral(filteredPredicate.field),
           factory.createObjectLiteralExpression(
             [
               factory.createPropertyAssignment(
-                factory.createIdentifier(filteredPredicate.operator),
+                buildIdentifierOrStringLiteral(filteredPredicate.operator),
                 getConditionalOperandExpression(
                   parseNumberOperand(
                     filteredPredicate.operand,
@@ -1588,7 +1589,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       objectAssignments = Object.entries(filteredPredicate).map(([key, value]) => {
         if (key === 'and' || key === 'or' || key === 'not') {
           return factory.createPropertyAssignment(
-            factory.createIdentifier(key),
+            buildIdentifierOrStringLiteral(key),
             factory.createArrayLiteralExpression(
               (predicate[key] as StudioComponentPredicate[]).map(
                 (pred: StudioComponentPredicate) => this.predicateToObjectLiteralExpression(pred, model),
@@ -1599,7 +1600,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         }
         if (key === 'operand' && typeof value === 'string') {
           return factory.createPropertyAssignment(
-            factory.createIdentifier(key),
+            buildIdentifierOrStringLiteral(key),
             getConditionalOperandExpression(
               parseNumberOperand(
                 value,
@@ -1610,7 +1611,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           );
         }
         return factory.createPropertyAssignment(
-          factory.createIdentifier(key),
+          buildIdentifierOrStringLiteral(key),
           typeof value === 'string' ? factory.createStringLiteral(value) : factory.createIdentifier('undefined'),
         );
       });
@@ -1934,7 +1935,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       const loadedFieldStatements: Statement[] = [];
       const amplifyJSVersion = getAmplifyJSVersionToRender(this.renderConfig.dependencies);
 
-      Object.entries(component.collectionProperties).forEach((collectionProp) => {
+      safeIdentifierEntries(component.collectionProperties).forEach((collectionProp) => {
         const [, { model: modelName, predicate }] = collectionProp;
         modelQuery = getGraphqlQueryForModel(ActionType.LIST, modelName);
         this.importCollection.addGraphqlQueryImport(modelQuery);

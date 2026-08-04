@@ -17,6 +17,7 @@ import { StudioView } from '@aws-amplify/codegen-ui/lib/types';
 import { factory, JsxChild, JsxElement, SyntaxKind } from 'typescript';
 import { ImportCollection, ImportSource } from './imports';
 import { Primitive } from './primitive';
+import { assertIdentifierPath, isSafeJsxAttributeName, SIMPLE_JS_IDENTIFIER_RE } from './utils/identifiers';
 
 export class ReactExpanderRenderer {
   private requiredUIReactImports = [Primitive.Expander, Primitive.ExpanderItem];
@@ -93,24 +94,32 @@ export class ReactExpanderRenderer {
           throw new Error('componentName must be defined');
         }
         const { componentSlot } = viewConfiguration.collection.body.content;
+        if (!SIMPLE_JS_IDENTIFIER_RE.test(componentSlot.componentName)) {
+          // SECURITY: emitted as a JSX element name via createIdentifier(), which
+          // writes its argument verbatim as source. A tag name has no literal
+          // form, so an unusable name must be rejected rather than emitted.
+          throw new Error(`componentName is not a valid identifier: ${componentSlot.componentName}`);
+        }
         this.imports.addImport(ImportSource.UI_REACT, componentSlot.componentName);
 
-        const attributes = Object.entries(componentSlot.bindingProperties).map(([key, value]) => {
-          const attributeValue = value.field
-            ? factory.createPropertyAccessExpression(
-                factory.createIdentifier(value.property),
-                factory.createIdentifier(value.field),
-              )
-            : factory.createIdentifier(value.property);
+        const attributes = Object.entries(componentSlot.bindingProperties)
+          .filter(([key]) => isSafeJsxAttributeName(key))
+          .map(([key, value]) => {
+            const attributeValue = value.field
+              ? factory.createPropertyAccessExpression(
+                  factory.createIdentifier(assertIdentifierPath(value.property, 'componentSlot binding property')),
+                  factory.createIdentifier(assertIdentifierPath(value.field, 'componentSlot binding field')),
+                )
+              : factory.createIdentifier(assertIdentifierPath(value.property, 'componentSlot binding property'));
 
-          return factory.createJsxAttribute(
-            factory.createIdentifier(key),
-            factory.createJsxExpression(undefined, attributeValue),
-          );
-        });
+            return factory.createJsxAttribute(
+              factory.createIdentifier(key),
+              factory.createJsxExpression(undefined, attributeValue),
+            );
+          });
 
         return factory.createJsxSelfClosingElement(
-          factory.createIdentifier(viewConfiguration.collection.body.content.componentSlot.componentName),
+          factory.createIdentifier(componentSlot.componentName),
           undefined,
           factory.createJsxAttributes(attributes),
         );
@@ -125,7 +134,10 @@ export class ReactExpanderRenderer {
         }
         return factory.createJsxExpression(
           undefined,
-          factory.createPropertyAccessExpression(factory.createIdentifier(property), factory.createIdentifier(field)),
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier(assertIdentifierPath(property, 'bindingProperty.property')),
+            factory.createIdentifier(assertIdentifierPath(field, 'bindingProperty.field')),
+          ),
         );
       }
       default: {
@@ -152,7 +164,12 @@ export class ReactExpanderRenderer {
                    * but the user can still set this in the schema.
                    */
                   factory.createIdentifier('item'),
-                  factory.createIdentifier(viewConfiguration.collection.title.content.bindingProperty.field),
+                  factory.createIdentifier(
+                    assertIdentifierPath(
+                      viewConfiguration.collection.title.content.bindingProperty.field,
+                      'collection.title bindingProperty.field',
+                    ),
+                  ),
                 ),
               ),
             ),

@@ -15,6 +15,7 @@
  */
 import { StringFormat, TableConfiguration, ViewValueFormatting } from '@aws-amplify/codegen-ui/lib/types';
 import { CallExpression, factory, ObjectLiteralExpression, SyntaxKind } from 'typescript';
+import { buildIdentifierOrStringLiteral } from './utils/identifiers';
 
 export const getFilterName = (model: string) => `${model.toLowerCase()}Filter`;
 export const getPredicateName = (model: string) => `${model.toLowerCase()}Predicate`;
@@ -101,7 +102,7 @@ export const objectToExpression = (object: { [key: string]: string | any }): Obj
   return factory.createObjectLiteralExpression(
     Object.entries(object).map(([key, value]) =>
       factory.createPropertyAssignment(
-        factory.createIdentifier(key),
+        buildIdentifierOrStringLiteral(key),
         typeof value === 'string' ? factory.createStringLiteral(value) : objectToExpression(value),
       ),
     ),

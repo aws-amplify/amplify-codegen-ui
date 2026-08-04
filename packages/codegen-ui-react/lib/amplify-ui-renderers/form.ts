@@ -91,9 +91,9 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
   }
 
   private renderCollectionOpeningElement(): JsxOpeningElement {
-    const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
-      buildOpeningElementProperties(this.componentMetadata, value, key),
-    );
+    const propsArray = Object.entries(this.component.properties)
+      .map(([key, value]) => buildOpeningElementProperties(this.componentMetadata, value, key))
+      .filter((attribute): attribute is JsxAttribute => attribute !== undefined);
 
     propsArray.push(...buildFormLayoutProperties(this.componentMetadata.formMetadata));
 
