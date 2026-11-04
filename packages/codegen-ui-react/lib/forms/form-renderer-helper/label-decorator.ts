@@ -18,7 +18,7 @@ import { factory } from 'typescript';
 
 /**
  <span style={{ display: \\"inline-flex\\" }}>
-  <span>City</span>
+  <span>{\\"City\\"}</span>
   <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
     {\\" \\"}
     - optional
@@ -60,7 +60,8 @@ export const getDecoratedLabel = (attribute: string, value: string, labelDecorat
               undefined,
               factory.createJsxAttributes([]),
             ),
-            [factory.createJsxText(value, false)],
+            // Emit the label as a string literal so it renders as text.
+            [factory.createJsxExpression(undefined, factory.createStringLiteral(value))],
             factory.createJsxClosingElement(factory.createIdentifier('span')),
           ),
           generateLabelDecorator(labelDecorator),
