@@ -37,19 +37,28 @@ describe('FormTests - DSCPKTeacher', () => {
         cy.contains('Submit').click();
         cy.contains('CPKStudent is required');
 
+        // Related records load asynchronously, so wait for each option to render
+        // before selecting it with the keyboard.
+
         // hasOne
         getArrayFieldButtonByLabel('Cpk student').click();
-        typeInAutocomplete('Her{downArrow}{enter}');
+        typeInAutocomplete('Her');
+        cy.contains('[role="option"]', 'Hermione').should('be.visible');
+        typeInAutocomplete('{downArrow}{enter}');
         clickAddToArray();
 
         // manyToMany
         getArrayFieldButtonByLabel('Cpk classes').click();
-        typeInAutocomplete('English{downArrow}{enter}');
+        typeInAutocomplete('English');
+        cy.contains('[role="option"]', 'English').should('be.visible');
+        typeInAutocomplete('{downArrow}{enter}');
         clickAddToArray();
 
         // hasMany
         getArrayFieldButtonByLabel('Cpk projects').click();
-        typeInAutocomplete('Either{downArrow}{enter}');
+        typeInAutocomplete('Either');
+        cy.contains('[role="option"]', 'Either/Or').should('be.visible');
+        typeInAutocomplete('{downArrow}{enter}');
         clickAddToArray();
 
         cy.contains('Submit').click();
