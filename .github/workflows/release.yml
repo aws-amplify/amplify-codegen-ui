@@ -19,7 +19,8 @@ permissions: {}
 
 # Runs in one group run one at a time, and GitHub keeps only the newest pending run per group.
 # Pushes and manual runs use separate groups, so a pending manual release is never replaced by a push;
-# in the push group a newer pending prerelease replaces an older pending one.
+# in the push group a newer pending prerelease replaces an older pending one. The push run started by a
+# release's `chore(release): v<version>` commit is in the push group too; publish.sh skips it.
 concurrency:
   group: release-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: false
@@ -68,15 +69,27 @@ jobs:
     environment: npm-publish
     # id-token is granted only to this job, which runs no package install or build scripts:
     # dependencies are installed with --ignore-scripts and the build output comes from the build job.
+    # The version commit, tag and GitHub Release are made with the GitHub App token below,
+    # so GITHUB_TOKEN only needs to read the repository.
     permissions:
-      contents: write # push the version commit and tag to main, create GitHub Releases
+      contents: read
       id-token: write # npm trusted publishing (OIDC)
     steps:
+      # The aws-amplify-ops-app GitHub App is allowed to push to the protected `main` branch.
+      # Its installation token is minted for each run and expires after an hour.
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: Iv23lil6abCFOvhL0fxO
+          private-key: ${{ secrets.AWS_AMPLIFY_OPS_APP_PRIVATE_KEY }}
+          permission-contents: write
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # lerna needs the full history and tags to compute versions and the changelog.
-          # Credentials stay persisted so `lerna publish` can push the version commit and tag.
+          # The App token stays persisted so `lerna publish` pushes the version commit and tag as the App.
+          token: ${{ steps.app-token.outputs.token }}
           fetch-depth: 0
           fetch-tags: true
           persist-credentials: true
@@ -103,15 +116,18 @@ jobs:
           path: packages
       - name: Configure git identity
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "aws-amplify-ops-app[bot]"
+          git config user.email "336707698+aws-amplify-ops-app[bot]@users.noreply.github.com"
       # Pushes to main publish a prerelease; manual runs use the selected mode (see publish.sh).
+      # The App's push of `chore(release): v<version>` to main starts a new push run, which
+      # publish.sh skips.
       - name: Publish
         run: ./.github/scripts/publish.sh
         env:
           PUBLISH_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'prerelease' }}
           DRY_RUN: ${{ inputs.dry_run }}
-          GH_TOKEN: ${{ github.token }}
+          # Used by `lerna publish --create-release github` to create the GitHub Release as the App.
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           # Fallback token for publishing until trusted publishing is verified; remove it afterwards.
           # lerna exchanges the GitHub OIDC token for a publish token and uses this one only if that fails.
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

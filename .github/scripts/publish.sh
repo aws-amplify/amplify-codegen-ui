@@ -50,8 +50,8 @@ publish_recover() {
     --yes
 }
 
-# Requires that main accepts a direct push of the version commit and tag from this workflow's token.
-# `--create-release github` reads the token from GH_TOKEN.
+# Pushes the version commit and tag to main with the GitHub App token the checkout persisted.
+# `--create-release github` reads the App token from GH_TOKEN.
 publish_release() {
   npx lerna publish \
     --conventional-commits \
@@ -93,9 +93,9 @@ case "$PUBLISH_MODE" in
     ;;
   prerelease)
     SUBJECT="$(git log --format=%s -n 1)"
-    # Lerna's version commit is already published under `latest`. Pushes made with the workflow's
-    # GITHUB_TOKEN do not start new workflow runs, so this only applies if that commit reaches main
-    # some other way.
+    # Lerna's version commit is already published under `latest`. The GitHub App's push of that
+    # commit to main starts a new push run; skipping it here keeps that run from publishing a
+    # prerelease for it.
     if [[ "$SUBJECT" =~ ^chore\(release\):\ v ]]; then
       echo "Skipping prerelease for release commit: ${SUBJECT}"
       exit 0
