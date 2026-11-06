@@ -91,7 +91,8 @@ Then execute an import script in StudioUI to pull the latest external code into 
 
 Packages are published to npm by the [Release GitHub workflow](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/release.yml),
 using [npm trusted publishing](https://docs.npmjs.com/trusted-publishers).
-The workflow builds and tests the packages, then publishes them from the `npm-publish` environment.
+The workflow builds and unit tests the packages and runs the [Check workflow](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/check.yml)
+(Amplify CLI and functional tests) for the same commit. It publishes from the `npm-publish` environment only after both pass.
 
 #### Publish a Release
 
@@ -136,6 +137,7 @@ A pre-release is automatically published to NPM when the following cirteria are 
 
 - A commit is pushed to the `main` branch.
 - The commit is not a release commit (i.e. `chore(release): v...`).
+- The build, unit tests and the Check workflow pass for the commit.
 
 The pre-release will increment the patch version of each package and append meta information including the short commit hash.
 These changes will **NOT** be pushed back to the GitHub repo.

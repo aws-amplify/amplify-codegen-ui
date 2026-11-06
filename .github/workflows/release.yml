@@ -63,8 +63,22 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
+  # Runs the Check workflow (Amplify CLI and functional tests) for the commit being released.
+  # The push run started by a release's `chore(release): v<version>` commit does not publish
+  # (publish.sh skips it), so the tests are skipped for it too; publish then skips with them.
+  # The tests need `id-token: write` to request AWS credentials. That does not let them publish
+  # to npm: the trusted publisher is bound to the `npm-publish` environment, which only the
+  # publish job uses.
+  tests:
+    if: "${{ !(github.event_name == 'push' && startsWith(github.event.head_commit.message, 'chore(release): v')) }}"
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/check.yml
+    secrets: inherit
+
   publish:
-    needs: build
+    needs: [build, tests]
     runs-on: ubuntu-latest
     environment: npm-publish
     # id-token is granted only to this job, which runs no package install or build scripts:
