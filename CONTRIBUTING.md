@@ -89,6 +89,10 @@ There are 3 keys steps, first you need to create a new tagged release version of
 After that you'll need to update the CLI repo to point to this new version.
 Then execute an import script in StudioUI to pull the latest external code into their service.
 
+Packages are published to npm by the [Release GitHub workflow](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/release.yml)
+on every push to `main` and `tagged-release/*`, using [npm trusted publishing](https://docs.npmjs.com/trusted-publishers).
+The workflow builds and tests the packages, then publishes them from the `npm-publish` environment.
+
 #### Publish a Release
 
 1. Ensure you've pulled main, including tags: `git fetch origin && git checkout main && git pull`
@@ -99,13 +103,19 @@ Then execute an import script in StudioUI to pull the latest external code into 
 1. Squash and merge PR after approval.
    Ensure the commit message follows the pattern: `chore(release): v{version_number}`.
    The Release GitHub workflow will not work if the commit message is not formated correctly.
-1. Wait for the [Release GithHub workflow](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/release.yml) to complete and verify the correct verify the correct release artifacts were created.
-1. `github-release` will create a new release on [the releases
-   page](https://github.com/aws-amplify/amplify-codegen-ui/releases).
-1. `npm-release` will publish the packages to the public NPM registry.
+1. Wait for the [Release GitHub workflow](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/release.yml) to complete and verify the correct release artifacts were created.
+   For a release commit, the `publish` job:
 
-   - https://www.npmjs.com/package/@aws-amplify/codegen-ui
-   - https://www.npmjs.com/package/@aws-amplify/codegen-ui-react
+   - creates and pushes the `v{version_number}` tag,
+   - creates a new release on [the releases page](https://github.com/aws-amplify/amplify-codegen-ui/releases) from the `CHANGELOG.md` section for the version,
+   - publishes the packages to the public NPM registry under the `latest` dist tag.
+
+     - https://www.npmjs.com/package/@aws-amplify/codegen-ui
+     - https://www.npmjs.com/package/@aws-amplify/codegen-ui-react
+
+If publishing fails after the version is tagged, run the Release workflow manually on `main`.
+It publishes the package versions from `package.json` that are not yet on npm under the `latest` dist tag.
+With `dry_run` checked (the default) it only lists which versions would be published.
 
 #### Update Amplify CLI
 
@@ -126,7 +136,7 @@ Studio UI does not yet consume Codegen UI from NPM and instead the Codegen UI so
 
 A pre-release is automatically published to NPM when the following cirteria are met:
 
-- A commit is pushed to then `main` or `develop` branch.
+- A commit is pushed to the `main` branch.
 - The commit is not a release commit (i.e. `chore(release): v...`).
 
 The pre-release will increment the patch version of each package and append meta information including the short commit hash.
