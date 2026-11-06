@@ -5,18 +5,23 @@ on:
     branches: [main]
   workflow_dispatch:
     inputs:
+      mode:
+        description: 'release: version, tag, create the GitHub Release and publish to `latest`. recover: publish versions from package.json that are not yet on npm.'
+        type: choice
+        options: [release, recover]
+        default: release
       dry_run:
-        description: 'Only report which package versions would be published from package.json'
+        description: 'recover only: report which package versions would be published, without publishing'
         type: boolean
         default: true
 
 permissions: {}
 
-# Runs for one ref are serialized, and GitHub keeps only the newest pending run per group.
-# Each release commit gets its own group so a later push cannot replace its pending run;
-# other pushes share the `stream` group, where only the newest pending prerelease runs.
+# Runs in one group run one at a time, and GitHub keeps only the newest pending run per group.
+# Pushes and manual runs use separate groups, so a pending manual release is never replaced by a push;
+# in the push group a newer pending prerelease replaces an older pending one.
 concurrency:
-  group: "release-${{ github.ref }}-${{ startsWith(github.event.head_commit.message, 'chore(release): v') && github.sha || 'stream' }}"
+  group: release-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: false
 
 jobs:
@@ -64,15 +69,17 @@ jobs:
     # id-token is granted only to this job, which runs no package install or build scripts:
     # dependencies are installed with --ignore-scripts and the build output comes from the build job.
     permissions:
-      contents: write # push release tags and create GitHub Releases
+      contents: write # push the version commit and tag to main, create GitHub Releases
       id-token: write # npm trusted publishing (OIDC)
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          # lerna needs the full history and tags to compute versions and find release tags
+          # lerna needs the full history and tags to compute versions and the changelog.
+          # Credentials stay persisted so `lerna publish` can push the version commit and tag.
           fetch-depth: 0
           fetch-tags: true
+          persist-credentials: true
       - name: Setup Node.js
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -98,13 +105,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      # On a release commit the script tags HEAD (and pushes the tag) before `lerna publish from-git`,
-      # because from-git only publishes versions tagged on HEAD and the squash-merged commit is untagged.
-      # Other commits on main publish a prerelease; manual runs use from-package.
+      # Pushes to main publish a prerelease; manual runs use the selected mode (see publish.sh).
       - name: Publish
         run: ./.github/scripts/publish.sh
         env:
-          PUBLISH_MODE: ${{ github.event_name == 'workflow_dispatch' && 'from-package' || 'push' }}
+          PUBLISH_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'prerelease' }}
           DRY_RUN: ${{ inputs.dry_run }}
           GH_TOKEN: ${{ github.token }}
           # Fallback token for publishing until trusted publishing is verified; remove it afterwards.

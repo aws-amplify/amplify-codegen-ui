@@ -15,7 +15,6 @@
     "setup-dev": "npm install && lerna run build",
     "clean": "lerna run clean && lerna exec npm run rimraf tsconfig.tsbuildinfo && lerna clean --yes && npm run rimraf node_modules",
     "prepare": "husky install",
-    "version": "npm run integ:clean && lerna version --conventional-commits --no-commit-hooks --no-push",
     "format": "prettier --write 'packages/*/lib/**/*.{js,jsx,ts,tsx}' '**/*.{yml,yaml}'",
     "format:check": "prettier --check 'packages/*/lib/**/*.{js,jsx,ts,tsx}' '**/*.{yml,yaml}'",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",

@@ -89,31 +89,29 @@ There are 3 keys steps, first you need to release a new version of the packages 
 After that you'll need to update the CLI repo to point to this new version.
 Then execute an import script in StudioUI to pull the latest external code into their service.
 
-Packages are published to npm by the [Release GitHub workflow](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/release.yml)
-on every push to `main`, using [npm trusted publishing](https://docs.npmjs.com/trusted-publishers).
+Packages are published to npm by the [Release GitHub workflow](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/release.yml),
+using [npm trusted publishing](https://docs.npmjs.com/trusted-publishers).
 The workflow builds and tests the packages, then publishes them from the `npm-publish` environment.
 
 #### Publish a Release
 
-1. Ensure you've pulled main, including tags: `git fetch origin && git checkout main && git pull`
-1. Ensure you have the latest tags: `git pull --tags -f`
-1. Create new branch: `git checkout -b new-release`
-1. Run version command: `npm run version`
-1. Create new PR with the new branch to mainline: `gh pr create`
-1. Squash and merge PR after approval.
-   Ensure the commit message follows the pattern: `chore(release): v{version_number}`.
-   The Release GitHub workflow will not work if the commit message is not formated correctly.
-1. Wait for the [Release GitHub workflow](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/release.yml) to complete and verify the correct release artifacts were created.
-   For a release commit, the `publish` job:
+Releases are cut by the Release workflow, not from a local checkout.
 
-   - creates and pushes the `v{version_number}` tag,
-   - creates a new release on [the releases page](https://github.com/aws-amplify/amplify-codegen-ui/releases) from the `CHANGELOG.md` section for the version,
+1. Open [Actions → Release](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/release.yml), choose **Run workflow** on `main` and select mode `release`.
+1. Wait for the workflow to complete. The `publish` job runs `lerna publish`, which:
+
+   - determines the next version from the [conventional commits](https://www.conventionalcommits.org/) since the last release,
+   - updates the `CHANGELOG.md` files,
+   - commits `chore(release): v{version_number}`, tags it `v{version_number}` and pushes both to `main`,
+   - creates a new release on [the releases page](https://github.com/aws-amplify/amplify-codegen-ui/releases),
    - publishes the packages to the public NPM registry under the `latest` dist tag.
 
      - https://www.npmjs.com/package/@aws-amplify/codegen-ui
      - https://www.npmjs.com/package/@aws-amplify/codegen-ui-react
 
-If publishing fails after the version is tagged, run the Release workflow manually on `main`.
+1. Verify the release commit, tag, GitHub Release and npm versions.
+
+If publishing fails after the version commit and tag are pushed, run the Release workflow on `main` with mode `recover`.
 It publishes the package versions from `package.json` that are not yet on npm under the `latest` dist tag.
 With `dry_run` checked (the default) it only lists which versions would be published.
 
