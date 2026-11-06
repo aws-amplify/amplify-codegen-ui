@@ -26713,7 +26713,7 @@ export default function CustomDataForm(props) {
       <TextField
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>name</span>
+            <span>{\\"name\\"}</span>
             <span style={{ color: \\"red\\" }}>*</span>
           </span>
         }
@@ -26760,7 +26760,7 @@ export default function CustomDataForm(props) {
         currentFieldValue={currentEmailValue}
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>E-mail</span>
+            <span>{\\"E-mail\\"}</span>
             <span style={{ color: \\"red\\" }}>*</span>
           </span>
         }
@@ -26812,7 +26812,7 @@ export default function CustomDataForm(props) {
         currentFieldValue={currentPhoneValue}
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>phone</span>
+            <span>{\\"phone\\"}</span>
             <span style={{ color: \\"red\\" }}>*</span>
           </span>
         }
@@ -30481,7 +30481,7 @@ export default function CustomDataForm(props) {
       <TextField
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>name</span>
+            <span>{\\"name\\"}</span>
             <span style={{ color: \\"red\\" }}>*</span>
           </span>
         }
@@ -30528,7 +30528,7 @@ export default function CustomDataForm(props) {
         currentFieldValue={currentEmailValue}
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>E-mail</span>
+            <span>{\\"E-mail\\"}</span>
             <span style={{ color: \\"red\\" }}>*</span>
           </span>
         }
@@ -30580,7 +30580,7 @@ export default function CustomDataForm(props) {
         currentFieldValue={currentPhoneValue}
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>phone</span>
+            <span>{\\"phone\\"}</span>
             <span style={{ color: \\"red\\" }}>*</span>
           </span>
         }
@@ -49865,7 +49865,7 @@ export default function InputGalleryCreateForm(props) {
       <TextField
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>Num</span>
+            <span>{\\"Num\\"}</span>
             <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
               {\\" \\"}
               - optional
@@ -49911,7 +49911,7 @@ export default function InputGalleryCreateForm(props) {
       <TextField
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>Rootbeer</span>
+            <span>{\\"Rootbeer\\"}</span>
             <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
               {\\" \\"}
               - optional
@@ -49957,7 +49957,7 @@ export default function InputGalleryCreateForm(props) {
       <RadioGroupField
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>Attend</span>
+            <span>{\\"Attend\\"}</span>
             <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
               {\\" \\"}
               - optional
@@ -50010,7 +50010,7 @@ export default function InputGalleryCreateForm(props) {
       <ToggleButton
         children={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>Maybe Slide</span>
+            <span>{\\"Maybe Slide\\"}</span>
             <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
               {\\" \\"}
               - optional
@@ -50052,7 +50052,7 @@ export default function InputGalleryCreateForm(props) {
       <CheckboxField
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>Maybe check</span>
+            <span>{\\"Maybe check\\"}</span>
             <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
               {\\" \\"}
               - optional
@@ -50118,7 +50118,7 @@ export default function InputGalleryCreateForm(props) {
         currentFieldValue={currentArrayTypeFieldValue}
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>Array type field</span>
+            <span>{\\"Array type field\\"}</span>
             <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
               {\\" \\"}
               - optional
@@ -50183,7 +50183,7 @@ export default function InputGalleryCreateForm(props) {
         currentFieldValue={currentJsonArrayValue}
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>Json array</span>
+            <span>{\\"Json array\\"}</span>
             <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
               {\\" \\"}
               - optional
@@ -50223,7 +50223,7 @@ export default function InputGalleryCreateForm(props) {
       <TextAreaField
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>Json field</span>
+            <span>{\\"Json field\\"}</span>
             <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
               {\\" \\"}
               - optional
@@ -50264,7 +50264,7 @@ export default function InputGalleryCreateForm(props) {
       <TextField
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>Timestamp</span>
+            <span>{\\"Timestamp\\"}</span>
             <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
               {\\" \\"}
               - optional
@@ -50308,7 +50308,7 @@ export default function InputGalleryCreateForm(props) {
       <TextField
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>Ippy</span>
+            <span>{\\"Ippy\\"}</span>
             <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
               {\\" \\"}
               - optional
@@ -50350,7 +50350,7 @@ export default function InputGalleryCreateForm(props) {
       <TextField
         label={
           <span style={{ display: \\"inline-flex\\" }}>
-            <span>Timeisnow</span>
+            <span>{\\"Timeisnow\\"}</span>
             <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
               {\\" \\"}
               - optional

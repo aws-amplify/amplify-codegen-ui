@@ -30,10 +30,10 @@ exports[`amplify table renderer tests should generate a non-datastore table elem
   {!disableHeaders && (
     <TableHead>
       <TableRow>
-        <TableCell as=\\"th\\">name</TableCell>
-        <TableCell as=\\"th\\">age</TableCell>
-        <TableCell as=\\"th\\">address</TableCell>
-        <TableCell as=\\"th\\">birthday</TableCell>
+        <TableCell as=\\"th\\">{\\"name\\"}</TableCell>
+        <TableCell as=\\"th\\">{\\"age\\"}</TableCell>
+        <TableCell as=\\"th\\">{\\"address\\"}</TableCell>
+        <TableCell as=\\"th\\">{\\"birthday\\"}</TableCell>
       </TableRow>
     </TableHead>
   )}
@@ -62,10 +62,10 @@ exports[`amplify table renderer tests should generate a table element 1`] = `
   {!disableHeaders && (
     <TableHead>
       <TableRow>
-        <TableCell as=\\"th\\">hireDate</TableCell>
-        <TableCell as=\\"th\\">comments</TableCell>
-        <TableCell as=\\"th\\">createdAt</TableCell>
-        <TableCell as=\\"th\\">updatedAt</TableCell>
+        <TableCell as=\\"th\\">{\\"hireDate\\"}</TableCell>
+        <TableCell as=\\"th\\">{\\"comments\\"}</TableCell>
+        <TableCell as=\\"th\\">{\\"createdAt\\"}</TableCell>
+        <TableCell as=\\"th\\">{\\"updatedAt\\"}</TableCell>
       </TableRow>
     </TableHead>
   )}
@@ -158,14 +158,14 @@ export default function MyPostTable(props) {
       {!disableHeaders && (
         <TableHead>
           <TableRow>
-            <TableCell as=\\"th\\">id</TableCell>
-            <TableCell as=\\"th\\">caption</TableCell>
-            <TableCell as=\\"th\\">username</TableCell>
-            <TableCell as=\\"th\\">post_url</TableCell>
-            <TableCell as=\\"th\\">profile_url</TableCell>
-            <TableCell as=\\"th\\">status</TableCell>
-            <TableCell as=\\"th\\">createdAt</TableCell>
-            <TableCell as=\\"th\\">updatedAt</TableCell>
+            <TableCell as=\\"th\\">{\\"id\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"caption\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"username\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"post_url\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"profile_url\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"status\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"createdAt\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"updatedAt\\"}</TableCell>
           </TableRow>
         </TableHead>
       )}
@@ -261,10 +261,10 @@ export default function CustomTable(props) {
       {!disableHeaders && (
         <TableHead>
           <TableRow>
-            <TableCell as=\\"th\\">name</TableCell>
-            <TableCell as=\\"th\\">age</TableCell>
-            <TableCell as=\\"th\\">address</TableCell>
-            <TableCell as=\\"th\\">birthday</TableCell>
+            <TableCell as=\\"th\\">{\\"name\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"age\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"address\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"birthday\\"}</TableCell>
           </TableRow>
         </TableHead>
       )}
@@ -358,14 +358,14 @@ export default function MyPostTable(props) {
       {!disableHeaders && (
         <TableHead>
           <TableRow>
-            <TableCell as=\\"th\\">id</TableCell>
-            <TableCell as=\\"th\\">caption</TableCell>
-            <TableCell as=\\"th\\">username</TableCell>
-            <TableCell as=\\"th\\">post_url</TableCell>
-            <TableCell as=\\"th\\">profile_url</TableCell>
-            <TableCell as=\\"th\\">status</TableCell>
-            <TableCell as=\\"th\\">createdAt</TableCell>
-            <TableCell as=\\"th\\">updatedAt</TableCell>
+            <TableCell as=\\"th\\">{\\"id\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"caption\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"username\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"post_url\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"profile_url\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"status\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"createdAt\\"}</TableCell>
+            <TableCell as=\\"th\\">{\\"updatedAt\\"}</TableCell>
           </TableRow>
         </TableHead>
       )}

@@ -101,7 +101,8 @@ export class ReactTableRenderer {
             factory.createJsxAttribute(factory.createIdentifier('as'), factory.createStringLiteral('th')),
           ]),
         ),
-        [factory.createJsxText(column.label ?? column.header, false)],
+        // Emit the label as a string literal so it renders as text.
+        [factory.createJsxExpression(undefined, factory.createStringLiteral(column.label ?? column.header))],
         factory.createJsxClosingElement(factory.createIdentifier(Primitive.TableCell)),
       );
     });
