@@ -1,19 +1,22 @@
 name: Check
 
+# Commits pushed to main are tested by the Release workflow, which calls this workflow
+# and publishes only after it passes.
 on:
-  push:
-    branches: [main, develop, feature/*]
   pull_request:
     branches: [main, develop, feature/*]
+  workflow_call:
 
-# These permissions are needed to interact with GitHub's OIDC Token endpoint.
-permissions:
-  id-token: write # This is required for requesting the JWT
-  contents: read # This is required for actions/checkout
+# Every job declares its own permissions. When this workflow is called, the calling job's
+# permissions are the ceiling for these jobs.
+permissions: {}
 
 jobs:
   amplify-cli-tests-v5:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # actions/checkout
+      id-token: write # AWS credentials through GitHub OIDC
     steps:
       - name: Checkout Studio Codegen
         uses: actions/checkout@v2
@@ -106,6 +109,9 @@ jobs:
 
   amplify-cli-tests-v6:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # actions/checkout
+      id-token: write # AWS credentials through GitHub OIDC
     steps:
       - name: Checkout Studio Codegen
         uses: actions/checkout@v2
@@ -198,6 +204,8 @@ jobs:
 
   functional-tests-v5:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # actions/checkout
     steps:
       - name: Checkout Studio Codegen
         uses: actions/checkout@v2
@@ -230,6 +238,8 @@ jobs:
 
   functional-tests-v6:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # actions/checkout
     steps:
       - name: Checkout Studio Codegen
         uses: actions/checkout@v2
