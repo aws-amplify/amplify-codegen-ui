@@ -12,7 +12,7 @@
     "test:ci": "lerna run test:ci --stream",
     "test:update": "lerna run test:update --stream",
     "build": "lerna run build --stream",
-    "setup-dev": "npm install && lerna bootstrap && lerna run build",
+    "setup-dev": "npm install && lerna run build",
     "clean": "lerna run clean && lerna exec npm run rimraf tsconfig.tsbuildinfo && lerna clean --yes && npm run rimraf node_modules",
     "prepare": "husky install",
     "version": "npm run integ:clean && lerna version --conventional-commits --no-commit-hooks --no-push",
@@ -38,14 +38,17 @@
     "integ:test": "run-script-os",
     "integ:test:default": "./scripts/integ-test.sh",
     "integ:test:win32": "scripts\\integ-test.bat",
-    "integ:clean": "npx rimraf packages/integration-test",
-    "bootstrap": "lerna bootstrap"
+    "integ:clean": "npx rimraf packages/integration-test"
   },
+  "workspaces": [
+    "packages/codegen-ui",
+    "packages/codegen-ui-react",
+    "packages/test-generator"
+  ],
   "files": [],
   "devDependencies": {
     "@commitlint/cli": "^17.5.1",
     "@commitlint/config-conventional": "^17.4.4",
-    "@commitlint/config-lerna-scopes": "^17.4.2",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@types/jest": "^27.5.1",
     "@types/node": "^15.14.0",
@@ -59,7 +62,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "husky": ">=6",
     "jest": "^27.0.6",
-    "lerna": "6.4.1",
+    "lerna": "^9.0.7",
     "lint-staged": "^11.2.0",
     "nodemon": "^2.0.14",
     "nyc": "^15.1.0",

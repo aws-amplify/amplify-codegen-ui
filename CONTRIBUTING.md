@@ -18,8 +18,7 @@ npm run setup-dev
 
 # Or, if you'd like to run steps manually
 npm install
-lerna bootstrap
-lerna run build
+npx lerna run build
 ```
 
 ### Unit Testing
@@ -69,7 +68,7 @@ The following steps assume you're testing with no a priori repo for CLI or Codeg
 git clone git@github.com:aws-amplify/amplify-codegen-ui.git
 git clone git@github.com:aws-amplify/amplify-cli.git
 # Build and package latest codegen
-(cd amplify-codegen-ui && npm ci && lerna bootstrap && npm run build && lerna exec npm pack)
+(cd amplify-codegen-ui && npm ci && npm run build && npx lerna exec npm pack)
 # Build and load codegen tarballs into cli
 (cd amplify-cli && yarn setup-dev)
 (cd amplify-cli/packages/amplify-util-uibuilder && npm install ../../../amplify-codegen-ui/packages/codegen-ui/aws-amplify-codegen-ui-*.tgz && npm install ../../../amplify-codegen-ui/packages/codegen-ui-react/aws-amplify-codegen-ui-react-*.tgz)

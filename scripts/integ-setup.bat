@@ -11,21 +11,11 @@ chdir ..
 call npm run integ:templates
 
 :: install
-call lerna bootstrap
-call lerna add --scope integration-test aws-amplify@^5.0.0
-call lerna add --scope integration-test @aws-amplify/ui-react@^5.0.0
-call lerna add --scope integration-test @aws-amplify/datastore@^4.0.0
-call lerna add --scope integration-test @aws-amplify/codegen-ui
-call lerna add --scope integration-test @aws-amplify/codegen-ui-react
-call lerna add --scope integration-test @aws-amplify/codegen-ui-test-generator
-call lerna add --no-ci --scope integration-test react-router-dom
-call lerna add --no-ci --scope integration-test @types/react-router-dom
-call lerna add --no-ci --dev --scope integration-test cypress@13.0.0
-call lerna add --no-ci --dev --scope integration-test wait-on
-call lerna add --no-ci --scope integration-test os-browserify
-call lerna add --no-ci --scope integration-test path-browserify
-call lerna add --no-ci --scope integration-test @types/node
-call lerna add --no-ci --scope integration-test react-app-rewired
+:: integration-test is not a workspace; local packages are linked from their package directories
+chdir packages\integration-test
+call npm install aws-amplify@^5.0.0 @aws-amplify/ui-react@^5.0.0 @aws-amplify/datastore@^4.0.0 ..\codegen-ui ..\codegen-ui-react ..\test-generator react-router-dom @types/react-router-dom os-browserify path-browserify @types/node react-app-rewired
+call npm install --save-dev cypress@13.0.0 wait-on
+chdir ..\..
 
 chdir packages\integration-test
 call jq ".scripts.start = \"react-app-rewired start\" | .scripts.build = \"react-app-rewired build\" | .scripts.test = \"react-app-rewired test\"" package.json > tmp.json
