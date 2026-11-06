@@ -3,38 +3,131 @@ name: Release
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'release: version, tag, create the GitHub Release and publish to `latest`. recover: publish versions from package.json that are not yet on npm.'
+        type: choice
+        options: [release, recover]
+        default: release
+      dry_run:
+        description: 'recover only: report which package versions would be published, without publishing'
+        type: boolean
+        default: true
 
-permissions:
-  contents: write
+permissions: {}
+
+# Runs in one group run one at a time, and GitHub keeps only the newest pending run per group.
+# Pushes and manual runs use separate groups, so a pending manual release is never replaced by a push;
+# in the push group a newer pending prerelease replaces an older pending one. The push run started by a
+# release's `chore(release): v<version>` commit is in the push group too; publish.sh skips it.
+concurrency:
+  group: release-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: false
 
 jobs:
-  github-release:
+  build:
     runs-on: ubuntu-latest
-    if: "contains(github.event.head_commit.message, 'chore(release): v')"
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Setup Node.js LTS
-        uses: actions/setup-node@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
-      - name: Get Version Number
-        id: get-version-number
-        env:
-          COMMIT_MESSAGE: ${{github.event.head_commit.message}}
-        run: |
-          version_number=$(echo "$COMMIT_MESSAGE" | sed -n "s/.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p")
-          echo "::set-output name=version_number::$version_number"
-      - name: Get Release Description
-        run: npx -y changelog-parser CHANGELOG.md | jq -r '.versions[0].body' > release_description.md
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          cache: npm
+      - name: Install packages
+        run: npm ci
+      - name: Prettier
+        run: npm run format:check
+      - name: ESLint
+        run: npm run lint
+      - name: Commit Message
+        run: git log --format=%s -n 1 | npx --no-install commitlint
+      - name: Build
+        run: npm run build
+      - name: Unit Test
+        run: npm run test:ci
+      # Only the dist output of the published packages is needed to publish.
+      - name: Upload build output
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          tag_name: v${{steps.get-version-number.outputs.version_number}}
-          release_name: Release v${{steps.get-version-number.outputs.version_number}}
-          body_path: release_description.md
-          draft: false
-          prerelease: false
+          name: dist
+          path: |
+            packages/codegen-ui/dist
+            packages/codegen-ui-react/dist
+          if-no-files-found: error
+          retention-days: 1
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    # id-token is granted only to this job, which runs no package install or build scripts:
+    # dependencies are installed with --ignore-scripts and the build output comes from the build job.
+    # The version commit, tag and GitHub Release are made with the GitHub App token below,
+    # so GITHUB_TOKEN only needs to read the repository.
+    permissions:
+      contents: read
+      id-token: write # npm trusted publishing (OIDC)
+    steps:
+      # The aws-amplify-ops-app GitHub App is allowed to push to the protected `main` branch.
+      # Its installation token is minted for each run and expires after an hour.
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: Iv23lil6abCFOvhL0fxO
+          private-key: ${{ secrets.AWS_AMPLIFY_OPS_APP_PRIVATE_KEY }}
+          permission-contents: write
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # lerna needs the full history and tags to compute versions and the changelog.
+          # The App token stays persisted so `lerna publish` pushes the version commit and tag as the App.
+          token: ${{ steps.app-token.outputs.token }}
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: true
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      # lerna performs the OIDC exchange itself, so this npm version is not what lerna publishes with.
+      # It applies to npm CLI commands run in this job: `npm view` in the dry run, and any `npm publish`
+      # or `npm dist-tag`, which need npm 11.5.1 or later for trusted publishing.
+      - name: Ensure npm supports trusted publishing
+        run: |
+          if ! node -e 'const [a, b, c] = process.argv[1].split(".").map(Number); process.exit(a > 11 || (a === 11 && (b > 5 || (b === 5 && c >= 1))) ? 0 : 1)' "$(npm -v)"; then
+            npm install -g npm@^11.5.1
+          fi
+          npm -v
+      - name: Install packages
+        run: npm ci --ignore-scripts
+      - name: Download build output
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist
+          path: packages
+      - name: Configure git identity
+        run: |
+          git config user.name "aws-amplify-ops-app[bot]"
+          git config user.email "336707698+aws-amplify-ops-app[bot]@users.noreply.github.com"
+      # Pushes to main publish a prerelease; manual runs use the selected mode (see publish.sh).
+      # The App's push of `chore(release): v<version>` to main starts a new push run, which
+      # publish.sh skips.
+      - name: Publish
+        run: ./.github/scripts/publish.sh
+        env:
+          PUBLISH_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'prerelease' }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          # Used by `lerna publish --create-release github` to create the GitHub Release as the App.
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          # Fallback token for publishing until trusted publishing is verified; remove it afterwards.
+          # lerna exchanges the GitHub OIDC token for a publish token and uses this one only if that fails.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -47,6 +47,16 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'class-methods-use-this': 'off',
   },
+  overrides: [
+    {
+      // Golden files are reference output, not a package with its own dependency list.
+      // Workspace packages they import are linked into the root node_modules.
+      files: ['codegen-ui-golden-files/**'],
+      rules: {
+        'import/no-extraneous-dependencies': 'off',
+      },
+    },
+  ],
   settings: {
     'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
     'import/resolver': {

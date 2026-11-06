@@ -16,24 +16,15 @@ rm -r packages/instrumented
 npm run integ:templatesv6
 
 # install
-lerna bootstrap
-lerna add --no-ci --scope integration-test typescript@4.4.4
-lerna add --no-ci --scope integration-test aws-amplify@^6.0.0
-lerna add --no-ci --scope integration-test @aws-amplify/ui-react@^6.0.0
-lerna add --no-ci --scope integration-test @aws-amplify/datastore
-lerna add --no-ci --scope integration-test @aws-amplify/codegen-ui
-lerna add --no-ci --scope integration-test @aws-amplify/codegen-ui-react
-lerna add --no-ci --scope integration-test @aws-amplify/codegen-ui-test-generator
-lerna add --no-ci --scope integration-test react-router-dom
-lerna add --no-ci --scope integration-test @types/react-router-dom
-lerna add --no-ci --dev --scope integration-test cypress@13.0.0
-lerna add --no-ci --dev --scope integration-test @cypress/code-coverage@^3
-lerna add --no-ci --dev --scope integration-test wait-on
-lerna add --no-ci --dev --scope integration-test istanbul-lib-report
-lerna add --no-ci --dev --scope integration-test istanbul-reports
-lerna add --no-ci --scope integration-test os-browserify
-lerna add --no-ci --scope integration-test path-browserify
-lerna add --no-ci --scope integration-test react-app-rewired
+# integration-test is not a workspace; local packages are linked from their package directories
+(cd packages/integration-test && \
+  npm install \
+    typescript@4.4.4 aws-amplify@^6.0.0 @aws-amplify/ui-react@^6.0.0 @aws-amplify/datastore \
+    ../codegen-ui ../codegen-ui-react ../test-generator \
+    react-router-dom @types/react-router-dom os-browserify path-browserify react-app-rewired && \
+  npm install --save-dev \
+    cypress@13.0.0 @cypress/code-coverage@^3 wait-on istanbul-lib-report istanbul-reports \
+)
 
 (cd packages/integration-test && \
   jq '.scripts.start = "react-app-rewired start" | .scripts.build = "react-app-rewired build" | .scripts.test = "react-app-rewired test"' package.json > tmp.json && \

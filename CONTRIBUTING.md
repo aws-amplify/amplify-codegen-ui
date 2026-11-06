@@ -18,8 +18,7 @@ npm run setup-dev
 
 # Or, if you'd like to run steps manually
 npm install
-lerna bootstrap
-lerna run build
+npx lerna run build
 ```
 
 ### Unit Testing
@@ -69,7 +68,7 @@ The following steps assume you're testing with no a priori repo for CLI or Codeg
 git clone git@github.com:aws-amplify/amplify-codegen-ui.git
 git clone git@github.com:aws-amplify/amplify-cli.git
 # Build and package latest codegen
-(cd amplify-codegen-ui && npm ci && lerna bootstrap && npm run build && lerna exec npm pack)
+(cd amplify-codegen-ui && npm ci && npm run build && npx lerna exec npm pack)
 # Build and load codegen tarballs into cli
 (cd amplify-cli && yarn setup-dev)
 (cd amplify-cli/packages/amplify-util-uibuilder && npm install ../../../amplify-codegen-ui/packages/codegen-ui/aws-amplify-codegen-ui-*.tgz && npm install ../../../amplify-codegen-ui/packages/codegen-ui-react/aws-amplify-codegen-ui-react-*.tgz)
@@ -86,27 +85,35 @@ npm start
 
 ### Release Process
 
-There are 3 keys steps, first you need to create a new tagged release version of the packages which will be used by our dependencies to consume the latest code.
+There are 3 keys steps, first you need to release a new version of the packages which will be used by our dependencies to consume the latest code.
 After that you'll need to update the CLI repo to point to this new version.
 Then execute an import script in StudioUI to pull the latest external code into their service.
 
+Packages are published to npm by the [Release GitHub workflow](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/release.yml),
+using [npm trusted publishing](https://docs.npmjs.com/trusted-publishers).
+The workflow builds and tests the packages, then publishes them from the `npm-publish` environment.
+
 #### Publish a Release
 
-1. Ensure you've pulled main, including tags: `git fetch origin && git checkout main && git pull`
-1. Ensure you have the latest tags: `git pull --tags -f`
-1. Create new branch: `git checkout -b new-release`
-1. Run version command: `npm run version`
-1. Create new PR with the new branch to mainline: `gh pr create`
-1. Squash and merge PR after approval.
-   Ensure the commit message follows the pattern: `chore(release): v{version_number}`.
-   The Release GitHub workflow will not work if the commit message is not formated correctly.
-1. Wait for the [Release GithHub workflow](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/release.yml) to complete and verify the correct verify the correct release artifacts were created.
-1. `github-release` will create a new release on [the releases
-   page](https://github.com/aws-amplify/amplify-codegen-ui/releases).
-1. `npm-release` will publish the packages to the public NPM registry.
+Releases are cut by the Release workflow, not from a local checkout.
 
-   - https://www.npmjs.com/package/@aws-amplify/codegen-ui
-   - https://www.npmjs.com/package/@aws-amplify/codegen-ui-react
+1. Open [Actions → Release](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/release.yml), choose **Run workflow** on `main` and select mode `release`.
+1. Wait for the workflow to complete. The `publish` job runs `lerna publish`, which:
+
+   - determines the next version from the [conventional commits](https://www.conventionalcommits.org/) since the last release,
+   - updates the `CHANGELOG.md` files,
+   - commits `chore(release): v{version_number}`, tags it `v{version_number}` and pushes both to `main`,
+   - creates a new release on [the releases page](https://github.com/aws-amplify/amplify-codegen-ui/releases),
+   - publishes the packages to the public NPM registry under the `latest` dist tag.
+
+     - https://www.npmjs.com/package/@aws-amplify/codegen-ui
+     - https://www.npmjs.com/package/@aws-amplify/codegen-ui-react
+
+1. Verify the release commit, tag, GitHub Release and npm versions.
+
+If publishing fails after the version commit and tag are pushed, run the Release workflow on `main` with mode `recover`.
+It publishes the package versions from `package.json` that are not yet on npm under the `latest` dist tag.
+With `dry_run` checked (the default) it only lists which versions would be published.
 
 #### Update Amplify CLI
 
@@ -127,7 +134,7 @@ Studio UI does not yet consume Codegen UI from NPM and instead the Codegen UI so
 
 A pre-release is automatically published to NPM when the following cirteria are met:
 
-- A commit is pushed to then `main` or `develop` branch.
+- A commit is pushed to the `main` branch.
 - The commit is not a release commit (i.e. `chore(release): v...`).
 
 The pre-release will increment the patch version of each package and append meta information including the short commit hash.
@@ -147,14 +154,3 @@ npm install @aws-amplify/codegen-ui-react@next
 ```
 
 See [lerna publish docs](https://github.com/lerna/lerna/tree/main/commands/publish) for further detail.
-
-### Tagged Release
-
-A tagged release is used to release emergent or prototype changes without merging into `main`.
-To create a tagged release create a pull request or push directly to a branch with the prefix `tagged-release/`.
-(Ex. `tagged-release/fix-properties`).
-The branch name must not contain any additional forward slashes after `tagged-release/`.
-The tagged release will use the same versioning process as the pre-release except:
-
-- the preid will inlcude the branch name with `tagged-release/` removed. (Ex. `1.1.1-fix-properties-2baaca9.0`)
-- the release will be published with the dist tag as the tagged release name. (Ex. `fix-properties`)
