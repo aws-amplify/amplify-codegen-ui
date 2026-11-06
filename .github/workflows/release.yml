@@ -12,8 +12,11 @@ on:
 
 permissions: {}
 
+# Runs for one ref are serialized, and GitHub keeps only the newest pending run per group.
+# Each release commit gets its own group so a later push cannot replace its pending run;
+# other pushes share the `stream` group, where only the newest pending prerelease runs.
 concurrency:
-  group: release-${{ github.ref }}
+  group: "release-${{ github.ref }}-${{ startsWith(github.event.head_commit.message, 'chore(release): v') && github.sha || 'stream' }}"
   cancel-in-progress: false
 
 jobs:
@@ -75,6 +78,9 @@ jobs:
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
+      # lerna performs the OIDC exchange itself, so this npm version is not what lerna publishes with.
+      # It applies to npm CLI commands run in this job: `npm view` in the dry run, and any `npm publish`
+      # or `npm dist-tag`, which need npm 11.5.1 or later for trusted publishing.
       - name: Ensure npm supports trusted publishing
         run: |
           if ! node -e 'const [a, b, c] = process.argv[1].split(".").map(Number); process.exit(a > 11 || (a === 11 && (b > 5 || (b === 5 && c >= 1))) ? 0 : 1)' "$(npm -v)"; then

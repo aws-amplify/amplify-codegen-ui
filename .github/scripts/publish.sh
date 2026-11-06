@@ -11,6 +11,9 @@
 #                   under the `latest` dist tag. With DRY_RUN=true only report what would be published.
 #
 # Prerelease versions are committed and tagged locally only (`lerna version --amend` does not push).
+#
+# `lerna publish` runs with `--loglevel verbose` so the logs show whether the OIDC exchange succeeded.
+# Keep it until trusted publishing is verified; it can be dropped afterwards.
 set -euo pipefail
 
 PUBLISH_MODE="${PUBLISH_MODE:-push}"
@@ -40,8 +43,8 @@ publish_from_package() {
     return
   fi
   npx lerna publish from-package \
+    --loglevel verbose \
     --ignore-scripts \
-    --no-verify-access \
     --dist-tag latest \
     --yes
 }
@@ -97,8 +100,8 @@ publish_release() {
   create_github_release "$version"
 
   npx lerna publish from-git \
+    --loglevel verbose \
     --ignore-scripts \
-    --no-verify-access \
     --dist-tag latest \
     --yes
 }
@@ -113,8 +116,8 @@ publish_prerelease() {
     --preid "$preid" \
     --yes
   npx lerna publish from-git \
+    --loglevel verbose \
     --ignore-scripts \
-    --no-verify-access \
     --pre-dist-tag "$dist_tag" \
     --yes
 }
@@ -135,6 +138,10 @@ if [[ "$BRANCH" == "main" && "$SUBJECT" =~ ^chore\(release\):\ v.* ]]; then
 elif [[ "$BRANCH" =~ ^tagged-release\/.* ]]; then
   # tagged release: the dist tag is the branch name without the tagged-release/ prefix
   TAGGED_RELEASE_NAME="$(echo "$BRANCH" | sed 's:.*/::')"
+  if [[ ! "$TAGGED_RELEASE_NAME" =~ ^[0-9A-Za-z-]+$ || "$TAGGED_RELEASE_NAME" == "latest" || "$TAGGED_RELEASE_NAME" == "next" ]]; then
+    echo "Invalid tagged release name '${TAGGED_RELEASE_NAME}': use only letters, digits and hyphens, and not 'latest' or 'next'." >&2
+    exit 1
+  fi
   publish_prerelease "${TAGGED_RELEASE_NAME}-${SHORT_SHA1}" "$TAGGED_RELEASE_NAME"
 elif [[ "$BRANCH" == "main" ]]; then
   # pre-release
