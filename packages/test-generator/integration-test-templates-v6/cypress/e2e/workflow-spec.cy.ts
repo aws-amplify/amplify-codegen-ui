@@ -130,14 +130,16 @@ describe('Workflow', () => {
   describe('Actions', () => {
     describe('Navigation', () => {
       it('supports hard navigation events', () => {
-        cy.visit(TEST_ROUTE);
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(3000);
+        // The button performs a full-page navigation to an external site. Stubbing window.open
+        // checks the generated call without leaving the app under test.
+        cy.visit(TEST_ROUTE, {
+          onBeforeLoad(win) {
+            cy.stub(win, 'open').as('open');
+          },
+        });
         cy.url().should('include', '/workflow-tests');
         cy.get('#hard-navigate').click();
-        cy.url().should('eq', 'https://www.amazon.com/');
-        // This shouldn't be necessary given the `before` code, but that's not taking us back as expected
-        cy.visit(TEST_ROUTE);
+        cy.get('@open').should('have.been.calledOnceWith', 'https://www.amazon.com/', '_self', 'noopener noreferrer');
       });
 
       it('supports anchor navigation events', () => {
