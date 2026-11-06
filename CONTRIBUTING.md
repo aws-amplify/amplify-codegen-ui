@@ -85,12 +85,12 @@ npm start
 
 ### Release Process
 
-There are 3 keys steps, first you need to create a new tagged release version of the packages which will be used by our dependencies to consume the latest code.
+There are 3 keys steps, first you need to release a new version of the packages which will be used by our dependencies to consume the latest code.
 After that you'll need to update the CLI repo to point to this new version.
 Then execute an import script in StudioUI to pull the latest external code into their service.
 
 Packages are published to npm by the [Release GitHub workflow](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/release.yml)
-on every push to `main` and `tagged-release/*`, using [npm trusted publishing](https://docs.npmjs.com/trusted-publishers).
+on every push to `main`, using [npm trusted publishing](https://docs.npmjs.com/trusted-publishers).
 The workflow builds and tests the packages, then publishes them from the `npm-publish` environment.
 
 #### Publish a Release
@@ -156,14 +156,3 @@ npm install @aws-amplify/codegen-ui-react@next
 ```
 
 See [lerna publish docs](https://github.com/lerna/lerna/tree/main/commands/publish) for further detail.
-
-### Tagged Release
-
-A tagged release is used to release emergent or prototype changes without merging into `main`.
-To create a tagged release create a pull request or push directly to a branch with the prefix `tagged-release/`.
-(Ex. `tagged-release/fix-properties`).
-The branch name must not contain any additional forward slashes after `tagged-release/`.
-The tagged release will use the same versioning process as the pre-release except:
-
-- the preid will inlcude the branch name with `tagged-release/` removed. (Ex. `1.1.1-fix-properties-2baaca9.0`)
-- the release will be published with the dist tag as the tagged release name. (Ex. `fix-properties`)

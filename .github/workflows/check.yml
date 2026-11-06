@@ -2,9 +2,9 @@ name: Check
 
 on:
   push:
-    branches: [main, develop, feature/*, tagged-release/*]
+    branches: [main, develop, feature/*]
   pull_request:
-    branches: [main, develop, feature/*, tagged-release/*]
+    branches: [main, develop, feature/*]
 
 # These permissions are needed to interact with GitHub's OIDC Token endpoint.
 permissions:

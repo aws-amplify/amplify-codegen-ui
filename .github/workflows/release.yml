@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    branches: [main, 'tagged-release/**']
+    branches: [main]
   workflow_dispatch:
     inputs:
       dry_run:
@@ -70,7 +70,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          # lerna needs the full history and tags to compute versions and find tagged releases
+          # lerna needs the full history and tags to compute versions and find release tags
           fetch-depth: 0
           fetch-tags: true
       - name: Setup Node.js
@@ -100,7 +100,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       # On a release commit the script tags HEAD (and pushes the tag) before `lerna publish from-git`,
       # because from-git only publishes versions tagged on HEAD and the squash-merged commit is untagged.
-      # Other commits on main and tagged-release/* publish a prerelease; manual runs use from-package.
+      # Other commits on main publish a prerelease; manual runs use from-package.
       - name: Publish
         run: ./.github/scripts/publish.sh
         env:

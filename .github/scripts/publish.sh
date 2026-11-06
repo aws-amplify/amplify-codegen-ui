@@ -2,11 +2,10 @@
 # Publishes packages to npm from the Release GitHub workflow.
 #
 # Modes (selected by PUBLISH_MODE):
-#   push          - triggered by a push to main or tagged-release/*:
+#   push          - triggered by a push to main:
 #                   * release commit (`chore(release): v<version>`) on main: tag the commit, create the
 #                     GitHub Release from CHANGELOG.md and publish under the `latest` dist tag.
 #                   * any other commit on main: publish a prerelease under the `next` dist tag.
-#                   * tagged-release/<name>: publish a prerelease under the `<name>` dist tag.
 #   from-package  - manual recovery: publish package versions that are in package.json but not yet on npm,
 #                   under the `latest` dist tag. With DRY_RUN=true only report what would be published.
 #
@@ -135,14 +134,6 @@ SUBJECT="$(git log --format=%s -n 1)"
 if [[ "$BRANCH" == "main" && "$SUBJECT" =~ ^chore\(release\):\ v.* ]]; then
   # production release
   publish_release "$SUBJECT"
-elif [[ "$BRANCH" =~ ^tagged-release\/.* ]]; then
-  # tagged release: the dist tag is the branch name without the tagged-release/ prefix
-  TAGGED_RELEASE_NAME="$(echo "$BRANCH" | sed 's:.*/::')"
-  if [[ ! "$TAGGED_RELEASE_NAME" =~ ^[0-9A-Za-z-]+$ || "$TAGGED_RELEASE_NAME" == "latest" || "$TAGGED_RELEASE_NAME" == "next" ]]; then
-    echo "Invalid tagged release name '${TAGGED_RELEASE_NAME}': use only letters, digits and hyphens, and not 'latest' or 'next'." >&2
-    exit 1
-  fi
-  publish_prerelease "${TAGGED_RELEASE_NAME}-${SHORT_SHA1}" "$TAGGED_RELEASE_NAME"
 elif [[ "$BRANCH" == "main" ]]; then
   # pre-release
   publish_prerelease "$SHORT_SHA1" next
