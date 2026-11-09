@@ -28,7 +28,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
       - name: Build amplify-codegen-ui
         working-directory: amplify-codegen-ui
         run: |
@@ -120,7 +120,7 @@ jobs:
       - name: Setup Node.js LTS
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
       - name: Build amplify-codegen-ui
         working-directory: amplify-codegen-ui
         run: |
@@ -204,7 +204,7 @@ jobs:
       - name: Setup Node.js LTS
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
       - name: Install packages
         run: npm ci
       - name: Setup Integration Test
@@ -236,7 +236,7 @@ jobs:
       - name: Setup Node.js LTS
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
       - name: Install packages
         run: npm ci
       - name: Setup Integration Test

@@ -38,7 +38,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
       - name: Install packages
         run: npm ci
@@ -96,17 +96,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://registry.npmjs.org
-      # lerna performs the OIDC exchange itself, so this npm version is not what lerna publishes with.
-      # It applies to npm CLI commands run in this job: `npm view` in the dry run, and any `npm publish`
-      # or `npm dist-tag`, which need npm 11.5.1 or later for trusted publishing.
-      - name: Ensure npm supports trusted publishing
-        run: |
-          if ! node -e 'const [a, b, c] = process.argv[1].split(".").map(Number); process.exit(a > 11 || (a === 11 && (b > 5 || (b === 5 && c >= 1))) ? 0 : 1)' "$(npm -v)"; then
-            npm install -g npm@^11.5.1
-          fi
-          npm -v
       - name: Install packages
         run: npm ci --ignore-scripts
       - name: Download build output
