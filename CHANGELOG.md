@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.20.8](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.20.7...v2.20.8) (2026-11-09)
+
+### Bug Fixes
+
+- **codegen-ui-react:** emit view and form labels as string literals so they render as text ([#1209](https://github.com/aws-amplify/amplify-codegen-ui/issues/1209)) ([74e306d](https://github.com/aws-amplify/amplify-codegen-ui/commit/74e306d5b5279f6c919ed5a94883304dab54f846))
+
 ## [2.20.7](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.20.6...v2.20.7) (2026-08-04)
 
 ### Bug Fixes
